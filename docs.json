@@ -54,6 +54,7 @@
             "group": "Sobre",
             "icon": "code",
             "pages": [
+              "es/about/about-transifya",
               "es/about/about-flows",
               "es/about/about-signers",
               "es/about/about-accept"
