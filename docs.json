@@ -11,11 +11,11 @@
   "navigation": {
     "tabs": [
       {
-        "tab": "Guides",
+        "tab": "Guias",
         "groups": [
           {
-            "group": "Get Started",
-            "pages": ["introduction", "quickstart", "development"]
+            "group": "Comience con Transfiya SPI",
+            "pages": ["quickstart", "development"]
           },
           {
             "group": "Essentials",
