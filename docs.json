@@ -1,7 +1,7 @@
 {
   "$schema": "https://mintlify.com/docs.json",
   "theme": "mint",
-  "name": "Transfiya SPI Guide",
+  "name": "Transfiya Guide",
   "colors": {
     "primary": "#16A34A",
     "light": "#07C983",
@@ -17,22 +17,29 @@
             "group": "Comience con Transfiya",
             "pages": [
               {
-                "group": "Transfiya para Bre-B",
+                "group": "Para Personas (breb.ya)",
                 "icon": "paper-plane",
                 "pages": [
-                  "es/transfiya-breb/breb-about",
-                  "es/transfiya-breb/breb-directory",
-                  "es/transfiya-breb/breb-transfers",
-                  "es/transfiya-breb/breb-transfers-other",
-                  "es/transfiya-breb/breb-participants"
+                  "es/ya-p2p/p2p-about",
+                  "es/ya-p2p/p2p-directory",
+                  "es/ya-p2p/p2p-transfers",
+                  "es/ya-p2p/p2p-ux",
+                  "es/ya-p2p/p2p-participants",
+                  "es/ya-p2p/p2p-a2a",
+                  "es/ya-p2p/p2p-accept"
                 ]
               },
               {
-                "group": "Transfiya para Empreasas",
+                "group": "Para Empresas (pse.ya)",
                 "icon": "briefcase",
-                "pages": ["es/transfiya-biz/biz-about.mdx"]
+                "pages": ["es/ya-biz/biz-about"]
               }
             ]
+          },
+          {
+            "group": "Como trabajar con llaves",
+            "icon": "code",
+            "pages": ["es/guides/how-to-keys"]
           }
         ]
       },
