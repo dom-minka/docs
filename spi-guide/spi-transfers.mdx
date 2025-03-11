@@ -4,18 +4,87 @@ sidebarTitle: "Sobre flujos"
 description: "Resumen sobre el flujo de transferencias regulados y no regulados"
 ---
 
-# ¿Qué es SPI?
+# Sobre flujos
 
-SPI es una regulación que se aplica a las empresas de servicios de pago en línea (PLS) en España. La regulación establece normas y requisitos para garantizar la seguridad y la transparencia en las transacciones de pago en línea.
+## ¿Como funciona un flujo de pago en Transfiya?
 
-# ¿Qué es Transfiya?
+Un sistema de pagos en tiempo real es responsable para orchestrar transferencias entre las participantes, calcular posiciones de participantes y realizar pagos en tiempo real.
 
-Transfiya es una empresa de servicios de pago en línea que cumple con la regulación de SPI. La empresa ofrece una plataforma segura y confiable para realizar pagos en línea y transferencias de fondos.
+Transfiya usa el modelo de orchestracion que coordina debitos, creditos y sistemas externos usando un modelo de flujos.
 
-# ¿Qué es Transfiya?
 
-Transfiya es una empresa de servicios de pago en línea que cumple con la regulación de SPI. La empresa ofrece una plataforma segura y confiable para realizar pagos en línea y transferencias de fondos.
 
-# ¿Qué es Transfiya?
+Flujo de transferencias en tiempo real incluye los siguientes pasos:
+1. **Resolución de destino**: El sistema de pagos en tiempo real verifica la validez de la cuenta destino. (Opcional)
+2. **Iniciacion de transferncia**: El sistema calcula las posiciones de las participantes en función de las transferencias realizadas.
+3. **Compensación (debito)**: El sistema orchestra el debito por parte de participantes.
+4. **Validacion de cuenta destino**: El sistema valida la cuenta destino usando el proceso de aceptacion automatico o manual por lado del usuario. (Aceptacion)
+5. **Liquidacion (Confirmacion)**: El sistema realiza los pagos en tiempo real a las participantes. (Sobre garantias)
+6. **Compensacion (creidto)**: El sistema realiza los pagos en tiempo real a las participantes.
+7. **Notificaciones**: El sistema realiza los pagos en tiempo real a las participantes.
+
+
+```mermaid
+sequenceDiagram
+    participant Origen as Origen (Entidad)
+    participant tya as T.YA (SPBVI)
+    participant Terceros as Terceros (Antifraude)
+    participant Destino as Destino (Entidad)
+
+    Note over Origen, tya: 1. Resolución de destino (GET /signers)
+    Note over Origen, tya: 2. Iniciar transferencia (POST /transfers)
+    Note over tya, Origen: 3. Compensación (POST /debits)
+    Note over tya, Destino: 4. Verificar destino o aceptacion (POST /status)
+    Note over tya, Destino: 5. Compensación (POST /credits)
+    Note over tya, Terceros: 6. Liquidación (update.balance)
+    Note over Origen, Destino: 7. Notificaciones (POST /status)
+```
+
+Siguiendo mejores prácticas, Transfiya coordina los débitos para todos los casos de uso, incluyendo pagos Pull y solicitudes de pago.
+
+El modelo de aceptación de Transfiya permite transferencias a cuentas o llaves no registradas en el sistema.
+
+Transfiya implementa un modelo de garantías que asegura la liquidación en tiempo real para todos los participantes.
+
+## ¿Que diferencias tiene flujo regulado?
+
+Sistema Bre-B no regula los interaciones internas de sistemas de SPBVI y es enfocado en temas de interoperabilidad de directorios y liquidacion.
+
+Las diferencias clave entre el flujo actual de Transfiya y el flujo regulado incluyen: la resolución de destino obligatoria, la validación obligatoria de la cuenta destino, y la liquidación a través de un sistema de banco central.
+
+> El flujo actual de los participantes, que incluye procesos de débito, crédito y aceptación (verificación), permite que las entidades cumplan con los requisitos operativos sin necesidad de realizar cambios en la integración de sus sistemas core.
+
+Flujo de transferencias regulados tiene siguientes cambios:
+1. **Resolución de destino**: El sistema de pagos en tiempo real verifica la validez de la cuenta destino. (Resolucion de llave)
+2. **Iniciacion de transferencia**: El sistema calcula las posiciones de las participantes en función de las transferencias realizadas.
+3. **Compensación (debito)**: El sistema realiza los pagos en tiempo real a las participantes. (Regulacion actual asume que debito fue realizado)
+4. **Validacion de cuenta destino**: El sistema realiza los pagos en tiempo real a las participantes. (Verificacion de cuenta)
+5. **Liquidacion (Confirmacion)**: El sistema realiza los pagos en tiempo real a las participantes. (Sobre Mol)
+6. **Compensacion (credito)**: El sistema realiza los pagos en tiempo real a las participantes.
+7. **Notificaciones**: El sistema realiza los pagos en tiempo real a las participantes.
+
+```mermaid
+sequenceDiagram
+    participant Origen as Origen (Entidad)
+    participant tya as T.YA (SPBVI)
+    participant Terceros as Terceros (Antifraude, MOL)
+    participant Destino as Destino (Entidad)
+
+    Note over Origen, tya: 1. Resolución de destino (GET /signers)
+    Note over Origen, tya: 2. Iniciar transferencia (POST /transfers)
+    Note over tya, Origen: 3. Compensación (POST /debits)
+    Note over tya, Destino: 4. Verificar destino o aceptacion (POST /status)
+    Note over tya, Destino: 5. Compensación (POST /credits)
+    Note over tya, Terceros: 6. Liquidación (pacs.008)
+    Note over Origen, Destino: 7. Notificaciones (POST /status)
+```
+
+
+## ¿Como funcionan transfernecias entre sistemas SPBVI ?
+
+
+
+
+## ¿Cual es la diferencia entre flujos regulados y no regulados?
 
 Transfiya es una empresa de servicios de pago en línea que cumple con la regulación de SPI. La empresa ofrece una plataforma segura y confiable para realizar pagos en línea y transferencias de fondos.
