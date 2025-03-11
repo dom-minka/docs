@@ -16,6 +16,7 @@
           {
             "group": "Comience con Transfiya",
             "pages": [
+              "es/about-transifya",
               {
                 "group": "Para Personas (breb.ya)",
                 "icon": "paper-plane",
