@@ -20,24 +20,22 @@
                 "group": "Transfiya para Bre-B",
                 "icon": "paper-plane",
                 "pages": [
-                  "es/spi-about/spi-about",
-                  "es/spi-about/spi-directory",
-                  "es/spi-about/spi-transfers",
-                  "es/spi-about/spi-transfers-other",
-                  "es/spi-about/spi-participants"
+                  "es/transfiya-breb/breb-about",
+                  "es/transfiya-breb/breb-directory",
+                  "es/transfiya-breb/breb-transfers",
+                  "es/transfiya-breb/breb-transfers-other",
+                  "es/transfiya-breb/breb-participants"
                 ]
               },
               {
                 "group": "Transfiya para Empreasas",
                 "icon": "briefcase",
                 "pages": [
-                  "guides/markdown",
-                  "guides/latex",
-                  "guides/mermaid",
-                  "guides/mermaid"
+                  "es/transfiya-biz/biz-about.mdx"
                 ]
               }
-            ]
+            ],
+            ""
           }
         ]
       },
