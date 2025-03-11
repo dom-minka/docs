@@ -30,12 +30,9 @@
               {
                 "group": "Transfiya para Empreasas",
                 "icon": "briefcase",
-                "pages": [
-                  "es/transfiya-biz/biz-about.mdx"
-                ]
+                "pages": ["es/transfiya-biz/biz-about.mdx"]
               }
-            ],
-            ""
+            ]
           }
         ]
       },
