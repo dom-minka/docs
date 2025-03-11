@@ -14,19 +14,19 @@
         "tab": "Guias",
         "groups": [
           {
-            "group": "Comience con Transfiya SPI",
-            "pages": ["quickstart", "development"]
-          },
-          {
-            "group": "Essentials",
+            "group": "Comience con SPI",
             "pages": [
-              "essentials/markdown",
-              "essentials/code",
-              "essentials/images",
-              "essentials/settings",
-              "essentials/navigation",
-              "essentials/reusable-snippets"
+              "spi-guide/spi-about",
+              "spi-guide/spi-directory",
+              "spi-guide/spi-transfers",
+              "spi-guide/spi-transfers-other",
+              "spi-guide/spi-participants"
             ]
+          },
+
+          {
+            "group": "Guias",
+            "pages": ["guides/markdown"]
           }
         ]
       },
