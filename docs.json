@@ -14,19 +14,30 @@
         "tab": "Guias",
         "groups": [
           {
-            "group": "Comience con SPI",
+            "group": "Comience con Transfiya",
             "pages": [
-              "spi-guide/spi-about",
-              "spi-guide/spi-directory",
-              "spi-guide/spi-transfers",
-              "spi-guide/spi-transfers-other",
-              "spi-guide/spi-participants"
+              {
+                "group": "Transfiya para Bre-B",
+                "icon": "paper-plane",
+                "pages": [
+                  "es/spi-about/spi-about",
+                  "es/spi-about/spi-directory",
+                  "es/spi-about/spi-transfers",
+                  "es/spi-about/spi-transfers-other",
+                  "es/spi-about/spi-participants"
+                ]
+              },
+              {
+                "group": "Transfiya para Empreasas",
+                "icon": "briefcase",
+                "pages": [
+                  "guides/markdown",
+                  "guides/latex",
+                  "guides/mermaid",
+                  "guides/mermaid"
+                ]
+              }
             ]
-          },
-
-          {
-            "group": "Guias",
-            "pages": ["guides/markdown"]
           }
         ]
       },
