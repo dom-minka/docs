@@ -1,55 +1,29 @@
 ---
 title: "breb.ya"
 sidebarTitle: "Sobre Transfiya y Breb"
-description: "Guia sobre Transifya y la nueva regulación de SPI"
+description: "Guia sobre Transifya con la nueva regulación de SPI, flujos vigentes y envio en tiempo real cuenta a cuenta"
 ---
-# Resumen
 
-Transfiya es uno de los sistemas de pagos inmediatos más avanzados a nivel mundial y es uno de los participantes principales del Sistema de Pagos Inmediatos e Interoperables en Colombia, Bre-B.
+### Bre-B
 
+A partir del 1 de septiembre, Bre-B se convertirá en el estándar para las transacciones P2P mediante el uso de llaves (identificadores únicos). Los usuarios podrán iniciar a vincular sus llaves a cuentas bancarias a partir del 1 de Julio. Para garantizar una transición sin problemas, Transfiya permitirá que las instituciones financiera, tanto conectadas como no conectadas, prueben el flujo regulado en un entorno controlado. Las pruebas comenzarán en el entorno de staging el 1 de abril, seguidas por las marchas blancas en Mayo para acciones relacionadas con llaves con DICE (consulta, creación y cancelación). En junio se realizará la prueba del flujo transaccional a través de MOL.
 
-Transfiya, en su diseño, incorpora un modelo de directorio federado y admite tanto flujos regulados como no regulados reusando el misma integración actual de sus participantes. Estos flujos incluyen pagos presenciales y no presenciales, transferencias, cobranzas y dispersión de fondos.
+### Envio a llaves antes de Bre-B
 
-> Actualmente, la plataforma cuenta con 99.99% de disponibilidad, baja latencia y flexibilidad de casos de uso, que la pone como plataforma de pagos en tiempo real líder en la región.
+Antes del lanzamiento oficial de Bre-B, Transfiya introducirá la funcionalidad multillave el 1 de abril, permitiendo la creación, consulta y cancelación de llaves asociadas a números de teléfono, cédula, direcciones de correo electrónico y códigos alfanuméricos únicos en su propio directorio federado y red de transferencias.
 
-Los participantes actuales de Transfiya no tienen que crear cambios en su integración actual para cumplir con la regulación a nivel de flujo.
+Siguiendo la iniciativa de Redeban con algunas instituciones financieras, alentamos a las entidades a desarrollar la experiencia de llaves Bre-B sin mostrar la marca Bre-B (que no puede exhibirse antes del 1 de Julio), para que los usuarios se familiaricen con la experiencia de asignar llaves a sus cuentas y enviar dinero a ellas.
 
-Los cambios para participantes de Transfiya incluyen actualización de su experiencia de usuario y consumo del directorio federado de Transfiya para cumplir con los casos regulatorios.
+A diferencia de otras redes de pago, Transfiya ya permite transacciones en tiempo real entre más de 26 instituciones financieras. Con la implementación del soporte multillave, los bancos pueden crear una experiencia interoperable alineada con los requisitos futuros de Bre-B, manteniendo al mismo tiempo el flujo tradicional de Transfiya que los usuarios ya conocen, teniendo interoperabilidad entre la experiencia llaves y envio de dinero a telefono-con-aceptación. Las instituciones que ya han integrado el proceso de registro y transaccional de llaves de Redeban pueden extender esta experiencia a Transfiya con un esfuerzo mínimo de desarrollo adicional.
 
->TransfiYa es el riel de pago en tiempo real más usado de los colombianos en 2025.
+### Continuidad del flujo transacional de Transfiya (hasta que sale Bre-b)
 
-## ¿Qué es Bre-B?
+El flujo de transacciones de Transfiya basado en el número de teléfono seguirá disponible hasta que las transacciones Bre-B estén funcionando el 1 de septiembre. En caso de retrasos o problemas operativos en el lanzamiento de Bre-B, Transfiya servirá como una experiencia de respaldo.
 
-Bre-B es la nueva marca establecida por el Banco de la República que identifica el Sistema de Pagos Inmediatos e Interoperables en Colombia.
+A medida que las instituciones fomentan el registro de llaves antes del lanzamiento oficial de Bre-B, algunos usuarios pueden intentar realizar transacciones utilizando llaves de destinatarios no registrados. Para evitar fallos en las experiencia, el flujo tradicional de envío a número de teléfono de Transfiya seguirá disponible como una opción alternativa, asegurando que los usuarios puedan continuar enviando dinero en tiempo real.
 
-En los flujos regulatorios actuales, que incluyen pagos entre personas y pagos a comercios, se implementará la marca Bre-B en la experiencia de usuario de todos los participantes del sistema.
+### Envio a cuenta en tiempo real
 
-Los participantes de Bre-B o SPI son las Sistemas de Pago de Bajo Valor Inmediatos(SPBVI) que incluye Transfiya de ACH Colombia.
+Actualmente, más de 12 millones de cuentas están registradas en Transfiya. Para fortalecer esta base, Transfiya está mejorando las transferencias cuenta a cuenta integrando su flujo de transacciones en tiempo real con los procesos tradicionales de A2A. Las instituciones financieras seguirán ofreciendo transacciones A2A a través de sus canales existentes. Si la cuenta del destinatario está vinculada a Transfiya, la transacción se liquidará en tiempo real; de lo contrario, seguirá el proceso tradicional de procesamiento por lotes.
 
-> Entidades financieras no tienen acceso directo al sistema de Bre-B pero participan en el sistema a traves de SPBVI como Transfiya.
-
-Bre-B tiene el rol de definir el marco regulatorio sobre la interoperabilidad entre los SPBVI y establecer las reglas de negocio relacionadas con pagos en tiempo real, lo que incluye tiempos de respuesta, montos máximos de transacción y los protocolos de intercambio de directorio.
-
-Bre-B va proveer nuevo modelo de liquidacion para los participantes de Bre-B para transferencias regulados. Conectividad con el Modulo Opoerativo de Liquidacion es responsabilidad de SPBVI, en este caso Transfiya.
-
-
-## ¿Que es Transfiya?
-
-Transfiya es un sistema de pagos inmediatos con el objetivo de mejorar como Colombia interactua con el dinero.
-
-Con casi 90% de entidades del pais, millones de usuarios, miles de millones de interacciones con la plataforma en 99.99% de disponibilidad es uno de los mas inovativos y avanzados sistemas de pagos en línea a nivel mundial.
-
-Transfiya fue diseñado con mejoras prácticas en seguridad, tecnologias nativas a la nube y experiencia de usuario en mente. Es agnostico a caso de uso y hoy en dia milliones de Colombianos mejoraron su forma de interactuar con el dinero usando transfiya para transferir dinero usando solamente numero de celular sin costo, realizar pagos en línea, pagos en tiendas, recibir salarios y para pagos de servicios en tiempo real.
-
-Pricinipal caso de uso de Transfiya hoy en dia es pagar por empanada en la esquina o recargar su billetera de cualquier banco en el pais.
-
-En su base Transfiya fue disenado como una plataforma multi llave, agnostico a caso de uso, orchestrando participantes y compatible con el protocolo de ISO20022. Por eso cumplir con SPI no es un reto ni para participantes de Transfiya ni para usuarios.
-
-
-## ¿Qué es minka_?
-
-Minka es una plataforma de desarrollo y un nuevo protocolo de pago usado por Transfiya. Fue inspirado por casos de uso de pagos en tiempo real desde MPesa en Kenya, SEPA en Europa, Pix en Brasil y otros sistemas de pagos en el mundo donde equipo tuvo oportunidad de participar en el diseño de estos sistemas.
-
-Pricipalmente el protocolo es basado en tecnologías web - JSON Web Tokens (JWT), criptografía asimétrica y orchestración de participantes en base de confirmación de dos pasos (two phase commit). Protocolo incluye mensajería, capa de seguridad y
-
-Transfiya fue diseñado por los principales entidades participantes del país y versión actual de protocolo de integración incluye mensajería que permite cualquier canal o caso de uso.
+Para optimizar aún más esta experiencia, en mayo se lanzará una nueva función de prevalidación de cuentas. Esto permitirá a las instituciones financieras verificar el estado de una cuenta antes de ejecutar una transacción, asegurando que cualquier cuenta dentro del sistema financiero—independientemente de su actividad previa en Transfiya—pueda recibir fondos al instante. Esta mejora tiene como objetivo hacer que los pagos cuenta a cuenta en tiempo real sean el estándar en todas las instituciones participantes.
