@@ -1,7 +1,7 @@
 ---
 title: 'Como enviar pagos BreB'
 description: 'Como iniciar un flujo regulatorio en Transfiya'
-icon: 'arrow-right'
+icon: 'valut'
 ---
 
 ## Modelo Transfer
@@ -18,23 +18,20 @@ Este modelo es agnóstico al caso de uso y soporta cualquier tipo de movimiento 
 
 ### Origen y destino de transferencia
 
-En caso de modelo regulado origen y destino de transferencia son conocidos por proceso previo de resolucion de llaves. El parte
+En caso de modelo regulado origen y destino de transferencia son conocidos por proceso previo de [resolucion de llaves](../es/guides/how-to-keys).
 
-### Flujos de dinero relulado
+Mas sobre [signers](../es/about/about-signers).
 
-Cuando se inicia un transfer se activa uno de los flujos de pago orchestrados por
+### Flujos de dinero regulados
 
-Cada flujo de pago que se va usar para cumplir con el modelo de liquidacion de fondos con MOL es un flujo de pago nombrado SENDMOL.
+Cuando se inicia un transfer se activa uno de los flujos de pago orchestrados por la plataforma.
+
+Flujo que se va usar en la marcha blanca y despues de 1 de Semptiembre para flujo regulatorio es **SENDMOL**.
 
 <ResponseField name="labels.type" type="string[SENDMOL]">
     Tipo de transferencia.
 </ResponseField>
 
-Cambio principal de este flujo comparado con envio no regulado es en modelo de liquidacion de fondos con MOL.
-
-
-
-
-Tipos de flujos disponibles actualmente en Transfiya:
+Cambio principal de este flujo comparado con envio no regulado es en modelo de [liquidacion](../about/about-settelement) de fondos con MOL y [confirmacion de la cuenta](../about/about-accept).
 
 Mas sobre flujos pueden conocer [aqui](../es/about/about-flows).
