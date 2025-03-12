@@ -33,19 +33,12 @@
           {
             "group": "Guias de uso",
             "icon": "book",
-            "pages": [
-              "es/guides/how-to-keys",
-              "es/guides/how-to-send",
-              "es/guides/how-to-send-mol",
-              "es/guides/how-to-request",
-              "es/guides/how-to-validate"
-            ]
+            "pages": ["es/guides/how-to-keys", "es/guides/how-to-send-mol"]
           },
           {
             "group": "Sobre",
             "icon": "code",
             "pages": [
-              "es/about/about-transifya",
               "es/about/about-flows",
               "es/about/about-signers",
               "es/about/about-accept",
