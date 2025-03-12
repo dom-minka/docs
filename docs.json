@@ -1,5 +1,5 @@
 {
-  "$schema": "https://mintlify.com/docs.json",
+  "$schema": "https://schema.mintlify.com/docs.json",
   "theme": "mint",
   "name": "Transfiya Guide",
   "colors": {
@@ -7,7 +7,6 @@
     "light": "#07C983",
     "dark": "#15803D"
   },
-  "favicon": "/favicon.svg",
   "navigation": {
     "tabs": [
       {
@@ -24,9 +23,7 @@
                   "es/ya-p2p/p2p-directory",
                   "es/ya-p2p/p2p-transfers",
                   "es/ya-p2p/p2p-ux",
-                  "es/ya-p2p/p2p-participants",
-                  "es/ya-p2p/p2p-a2a",
-                  "es/ya-p2p/p2p-accept"
+                  "es/ya-p2p/p2p-participants"
                 ]
               },
               {
@@ -55,6 +52,7 @@
             "icon": "code",
             "pages": [
               "es/about/about-transifya",
+              "es/about/about-settlement",
               "es/about/about-flows",
               "es/about/about-signers",
               "es/about/about-accept"
@@ -84,7 +82,7 @@
       "anchors": [
         {
           "anchor": "Community",
-          "href": "https://mintlify.com/community",
+          "href": "https://www.slack.com/minkainc",
           "icon": "slack"
         }
       ]
@@ -98,14 +96,9 @@
     "links": [
       {
         "label": "Support",
-        "href": "mailto:hi@mintlify.com"
+        "href": "mailto:support@minka.io"
       }
-    ],
-    "primary": {
-      "type": "button",
-      "label": "Dashboard",
-      "href": "https://dashboard.mintlify.com"
-    }
+    ]
   },
   "footer": {
     "socials": {

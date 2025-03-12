@@ -1,0 +1,32 @@
+---
+title: 'Sobre Liquidación'
+description: 'Guia sobre modelos de liquidación en transfiya'
+icon: 'handshake'
+---
+
+## Sobre Liquidación
+
+En el contexto bancario, la liquidación (o settlement) es el proceso mediante el cual se completan las transacciones financieras entre entidades bancarias. Este proceso implica la transferencia efectiva de fondos para saldar obligaciones entre instituciones financieras.
+
+### Terminología
+
+**Compensación (clearing)**:
+Proceso previo donde se calculan posiciones netas entre entidades en tiempo real.
+
+**Liquidación bruta**:
+Cada transacción se liquida individualmente y en tiempo real.
+
+**Liquidación neta**:
+Las transacciones se acumulan durante un período y se liquidan por el valor neto.
+
+### Sistema de liquidación en Transfiya
+
+Transfiya implementa un modelo de liquidación neta basado en garantías. La plataforma opera mediante un sofisticado sistema de compensación en tiempo real que calcula con precisión las posiciones netas entre entidades participantes.
+
+Las garantías dentro del sistema se establecen mediante un mecanismo de prefondeo en las cuentas CUD del banco central, las cuales funcionan como respaldo financiero para todas las transacciones efectuadas en la plataforma.
+
+<Note>Este sistema tiene ventajas en términos de felxibilidad de casos de uso.</Note>
+
+### Sistema de liquidación en BreB
+
+BreB implementa un sistema de liquidación bruta en tiempo real para sus participantes. En este modelo, cada transferencia procesada bajo el marco regulatorio es canalizada a través del banco central, donde se debita automáticamente la posición financiera de los participantes durante el proceso completo de la transacción.
