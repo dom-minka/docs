@@ -1,7 +1,7 @@
 ---
 title: 'Como enviar pagos BreB'
 description: 'Como iniciar un flujo regulatorio en Transfiya'
-icon: 'valut'
+icon: 'vault'
 ---
 
 ## Envio con liquidacion en MOL
@@ -28,7 +28,7 @@ Las transferencias reguladas se definen como transferencias de cuenta a cuenta. 
 
 El modelo actual de Transfiya facilita las transacciones de cuenta a cuenta mediante el uso de credenciales de pago (signer handles) como origen y destino de una transferencia.
 
-En caso de modelo regulado origen y destino de transferencia son conocidos por proceso previo de [resolucion de llaves](../es/guides/how-to-keys) y se realiza una cuenta a cuenta.
+En caso de modelo regulado origen y destino de transferencia son conocidos por proceso previo de [resolucion de llaves](how-to-keys) y se realiza una cuenta a cuenta.
 
 Mas sobre [signers](../es/about/about-signers).
 
@@ -40,8 +40,6 @@ Transfiya utiliza el concepto de "transfer" para iniciar pagos en el sistema agn
 <Note>
   El uso del modelo de transfer para iniciar pagos en el sistema permite emplear el mismo protocolo y REST API para cualquier caso de uso o flujo de dinero, incluyendo el nuevo flujo regulatorio.
 </Note>
-
-TODO: Add transfer example
 
 ### Identificador de flujo
 
@@ -57,6 +55,118 @@ Cambio principal de este flujo comparado con envio no regulado es en modelo de [
 
 Mas sobre flujos pueden conocer [aqui](../es/about/about-flows).
 
+### Ejemplo de un tranfer regulatorio
+
+Para realizar un tansfer con modelo regulatorio es necesario definir que el modelo de flujo y asegurar envio de marca de timepo de inicio.
+
+<Tabs>
+    <Tab title="Interfaz API">
+    ```
+    curl -X POST \
+      -H "Content-Type: application/json" \
+      -H "x-api-key: API_KEY" \
+      -H "Authorization: Bearer TOKEN" \
+      -d '{}' "URL/v1/transfer"
+    ```
+    </Tab>
+  <Tab title="Request">
+     {
+          "source": "wXxwpxB32saqfmfMxAQD4SVWWhhn6akLC2",
+          "target": "wfvmRir8XxRtoEuUBDkv3BP4T7BQezwm1f", // destino es cuenta
+          "symbol": "$tin",
+          "amount": "100",
+          "labels": {
+            "description": "Prueba de envio regulatorio",
+            "domain": "tin",
+            "type": "SEND", //Flujo usando MOL
+            "sourceChannel": "APP",
+            "initaited": "2025-01-14T20:40:57.322-05:00", // marca de tiempo usuario
+            "deviceFingerPrint": {
+              "hash": "26fff5af6441f8e15a71e8d62c361714484b1b308c99e8eb68ca85e2a7e0dc58",
+              "ipAddress": "2001:0db8:85a3:0000:0000:8a2e:0370:7334",
+              "country": "Colombia",
+              "city": "Bogotá",
+              "mobileDevice": "990000862471854",
+              "SIMCardId": "8991101200003204510",
+              "model": "Huawei Mate 20 Pro",
+              "operator": "Bharti Airtel Limited"
+            }
+          }
+        }
+  </Tab>
+  <Tab title="Response">
+      {
+        "source": "wXxwpxB32saqfmfMxAQD4SVWWhhn6akLC2",
+        "target": "wfvmRir8XxRtoEuUBDkv3BP4T7BQezwm1f",
+        "amount": "100.00",
+        "symbol": "$tin",
+        "labels": {
+          "hash": "PENDING",
+          "type": "SEND",
+          "domain": "tin",
+          "flowId": "Lf13jsK83omPv3bOt",
+          "status": "PENDING",
+          "tx_ref": "Lf13jsK83omPv3bOt",
+          "tx_mol": "20250114890915944TFY123456789012345", // identifidoar unico
+          "created": "2025-01-14T20:40:57.322-05:00",
+          "updated": "2025-01-14T20:40:57.322-05:00",
+          "description": "Prueba envio mol",
+          "sourceChannel": "APP",
+          "deviceFingerPrint": {
+            "city": "Bogotá",
+            "hash": "26fff5af6441f8e15a71e8d62c361714484b1b308c99e8eb68ca85e2a7e0dc58",
+            "model": "Huawei Mate 20 Pro",
+            "country": "Colombia",
+            "operator": "Bharti Airtel Limited",
+            "SIMCardId": "8991101200003204510",
+            "ipAddress": "2001:0db8:85a3:0000:0000:8a2e:0370:7334",
+            "mobileDevice": "990000862471854"
+          }
+        },
+        "snapshot": {
+          "source": {
+            "signer": {
+              "handle": "wXxwpxB32saqfmfMxAQD4SVWWhhn6akLC2",
+              "labels": {
+                "name": "Jorge Alejandro Fernandez Garcia",
+                "proprietary": "CC",
+      	        "identification": "1010101010",
+                "bankAccountType": "SVGS",
+                "bankAccountNumber": "12345654321",
+         	      "bankId": "891234918",
+                "targetSpbviCode": "TFY",
+                "created": "2022-04-12T16:17:49.322-05:00",
+                "createdBy": "tcYV0MRoklTXUwSFFkkQ",
+                "description": "new descr",
+                "routerReference": "$bancorojo"
+              }
+            },
+          },
+          "target": {
+            "signer": {
+             "handle": "wfvmRir8XxRtoEuUBDkv3BP4T7BQezwm1f",
+              "labels": {
+                "name": "Jorge Alejandro Fernandez Garcia",
+                "proprietary": "CC",
+                "identification": "1010101010",
+                "bankAccountType": "SVGS",
+                "bankAccountNumber": "12345654321",
+         	      "bankId": "891234918",
+                "targetSpbviCode": "TFY"
+              }
+            },
+          }
+        },
+        "error": {
+          "code": 0,
+          "message": "Success"
+        },
+        "action_id": "35de4d3d-3aba-4fb3-b110-d004ce2aabb2",
+        "id": "35de4d3d-3aba-4fb3-b110-d004ce2aabb2"
+      }
+  </Tab>
+</Tabs>
+
 ## Modelo de liquidación
 
 Una vez que MOL entre en funcionamiento, cada transferencia deberá enviarse a MOL para su procesamiento y se pausará el procesamiento interno hasta recibir una llamada de continuación desde MOL.
@@ -66,7 +176,6 @@ Transfiya ya cuenta con un sistema de procesamiento asíncrono que continúa med
 Mas sobre liquidación pueden ver [aca](../about/about-settelement)
 
 Cambios de flujo que incluyen llamadas a MOL e orchestraacion con otros sistemas de pago se manejan por parte de plataforma usando [orchestracion de flujos](../about/about-flows).
-
 
 
 ### Diagrama de flujo
