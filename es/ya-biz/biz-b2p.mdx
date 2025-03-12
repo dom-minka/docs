@@ -1,0 +1,45 @@
+---
+title: "B2P - Dispersiones en tiempo real"
+sidebarTitle: "B2P - Cash-out"
+description: "Multiples formas de utilizar transfiya para dispersar en tiempo real "
+---
+
+Permitir empresas iniciar transacciones con destino a personas en tiempo real moderniza y vuelve más eficiente flujos que durante mucho tiempo han tenido hacks operativos para semejar movimiento de dinero al instante, casos simples como un pago de nomina o proveedores, durante muchos años se han visto enmarcados por frases tipo “Te vamos a abrir una cuenta de nomina para que te llegue la plata el mismo día y tengamos menos esfuerzo operativo” o “Si tienes cuenta en nuestro mismo banco la plata te llega de una, si no se demora un poco”. Esto con la interoperabilidad de los pagos en tiempo real de ACH ya no representara un gran esfuerzo operativo para las empresas y generara una satisfacción transaccional para sus clientes y proveedores.
+
+Ademas de modernizar los flujos “de toda la vida” los pagos desde empresas a personas en tiempo real crean nuevas oportunidades para bancos y empresas para crear productos novedosos que satisfacen y asombran a sus clientes, generando mas valor o reduciendo sus costos operativos. Por ejemplo los desembolsos de créditos en tiempo real 24/7 para fintechs o entidades enfocadas en este servicio, empresas con venta digital que tienen que realizar devoluciones ahora las pueden hacer al instante una vez reciben el producto de vuelta y retiro de efectivo en puntos físicos o cajeros son algunas de las posibilidades que activan los pagos en tiempo real.
+
+A continuación encontrarás una lista de formas en las cuales se podrán realizar transacciones **empresas > personas** al igual que los casos de uso en los que aplica.
+
+### **Carga de archivos masivos con transacciones**
+
+Este formato de envío consiste en la carga de un archivo plano donde cada fila representa una transacción, el archivo incluye en cada fila el valor transaccional y destino (llave o cuenta), este tipo de formato transaccional a través de transfiya se podrá habilitar en el portal empresarial de empresas de cada entidad, a través de una conexión API que el banco habilita a sus clientes empresas o a través del portal transaccional de ACH para carga de archivos, a continuación encontraras una lista de casos de uso por canal de carga masiva:
+
+| Canal | Casos de uso |
+| --- | --- |
+| Archivos en portal empresarial de la entidad o portal ACH | - Pago de nomina
+- Pago de proveedores
+- Subsidios
+- Bonos y dividendos |
+| Archivos via API | - Devoluciones masivas
+- Pago de comisiones automatizadas
+- Desembolsos automáticos |
+
+### **Envio 1a1 a destino**
+
+Este formato consiste en crear transacciones bajo demanda, donde el negocio puede cargar los datos manualmente en la aplicación/portal de su entidad financiera o utilizar una conexión a través de un API para conectar sus propias aplicaciones o sistemas desde el cual se hará la iniciación de pago.
+
+| Canal | Casos de uso |
+| --- | --- |
+| 1-1 App o portal | - Pagos de emergencia a provedores
+- Pagos de emergencia a empleados
+- Pago de viáticos |
+| 1-1 via API | - Devoluciones por demanda
+- Cambio de millas y puntos
+- Retiro de cuenta (wallets fuera de entidades financieras)
+- Retiros en efectivo en ATM
+- Retiro en efectivo punto fisico
+- Retiro de cesantias
+- Desembolso de créditos
+- Desembolso de comisiones
+- Pago de productos a comercios en marketplaces
+- Remesas y giros internacionales |
