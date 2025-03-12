@@ -4,25 +4,46 @@ description: 'Como iniciar un flujo regulatorio en Transfiya'
 icon: 'valut'
 ---
 
-## Modelo Transfer
+## Envio con liquidacion en MOL
 
-### Concepto Transfer
+### Resumen de cambios para entidad
+Para cumplir con el flujo regulatorio, se implementará la misma integración del participante utilizando el concepto de Transfer para iniciar transferencias.
 
-Transfiya utiliza el concepto de "transfer" para iniciar pagos en el sistema.
-El *Transfer* es un inciacion de pago compuesta de transacciones que representan dos o más movimientos de dinero entre los participantes.
+<Note>
+Las interfaces de interacción no cambian para la entidad, ya que la plataforma cumple actualmente con la mayoría de los requisitos regulatorios.
+</Note>
 
-Este modelo es agnóstico al caso de uso y soporta cualquier tipo de movimiento de fondos, dependiendo de las reglas configuradas del sistema y del nivel de origen y destino del envío.
+La liquidación con MOL y el manejo de tiempos ya están gestionados por la plataforma y no requieren cambios por parte de los participantes.
 
-<Note> El uso del modelo de transfer para iniciar pagos en el sistema permite emplear el mismo protocolo y REST API para cualquier caso de uso o flujo de dinero, incluyendo el nuevo flujo regulatorio. </Note>
+Los participantes únicamente deben asegurar:
 
+- **Utilizar APIs e integración actual**: Mantener la misma integración para iniciar transferencias y procesar créditos y débitos
+- **Especificar tipo de transferencia**: Durante la marcha blanca, identificar las transferencias que se comunican con MOL usando "label.type":"SENDMOL"
+- **Incluir marcas de tiempo**: Agregar dos marcas de tiempo externas a la plataforma: "initiated" y "notified"
+- **Validar la cuenta de destino**: Aceptar la transferencia utilizando el mismo modelo de aceptación para garantizar que la cuenta destino es válida
 
 ### Origen y destino de transferencia
 
-En caso de modelo regulado origen y destino de transferencia son conocidos por proceso previo de [resolucion de llaves](../es/guides/how-to-keys).
+Las transferencias reguladas se definen como transferencias de cuenta a cuenta. Estas transacciones no deberían diferenciarse de las tranferencias actuales entre cuentas en Transfiya. La resolución de alias debe realizarse antes de crear una transferencia.
+
+El modelo actual de Transfiya facilita las transacciones de cuenta a cuenta mediante el uso de credenciales de pago (signer handles) como origen y destino de una transferencia.
+
+En caso de modelo regulado origen y destino de transferencia son conocidos por proceso previo de [resolucion de llaves](../es/guides/how-to-keys) y se realiza una cuenta a cuenta.
 
 Mas sobre [signers](../es/about/about-signers).
 
-### Flujos de dinero regulados
+
+### Concepto Transfer
+
+Transfiya utiliza el concepto de "transfer" para iniciar pagos en el sistema agnosticos a caso a uso o tipo de transferencia.
+
+<Note>
+  El uso del modelo de transfer para iniciar pagos en el sistema permite emplear el mismo protocolo y REST API para cualquier caso de uso o flujo de dinero, incluyendo el nuevo flujo regulatorio.
+</Note>
+
+TODO: Add transfer example
+
+### Identificador de flujo
 
 Cuando se inicia un transfer se activa uno de los flujos de pago orchestrados por la plataforma.
 
@@ -35,3 +56,17 @@ Flujo que se va usar en la marcha blanca y despues de 1 de Semptiembre para fluj
 Cambio principal de este flujo comparado con envio no regulado es en modelo de [liquidacion](../about/about-settelement) de fondos con MOL y [confirmacion de la cuenta](../about/about-accept).
 
 Mas sobre flujos pueden conocer [aqui](../es/about/about-flows).
+
+## Modelo de liquidación
+
+Una vez que MOL entre en funcionamiento, cada transferencia deberá enviarse a MOL para su procesamiento y se pausará el procesamiento interno hasta recibir una llamada de continuación desde MOL.
+
+Transfiya ya cuenta con un sistema de procesamiento asíncrono que continúa mediante llamadas API. El procesamiento de transferencias está implementado como un flujo de múltiples pasos, por lo que para soportar este cambio solo necesitamos extender el sistema internamente añadiendo nuevos pasos asíncronos al proceso, lo cual resulta sencillo gracias a la arquitectura actual.
+
+Mas sobre liquidación pueden ver [aca](../about/about-settelement)
+
+Cambios de flujo que incluyen llamadas a MOL e orchestraacion con otros sistemas de pago se manejan por parte de plataforma usando [orchestracion de flujos](../about/about-flows).
+
+
+
+### Diagrama de flujo
