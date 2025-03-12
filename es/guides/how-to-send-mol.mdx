@@ -1,12 +1,12 @@
 ---
-title: 'Como iniciar transferencias'
+title: 'Como enviar pagos (push)'
 description: 'Como iniciar un flujo regulatorio en Transfiya'
 icon: 'arrow-right'
 ---
 
 ## Modelo Transfer
 
-### Concepto POST /transfers
+### Concepto Transfer
 
 Transfiya utiliza el concepto de "transfer" para iniciar pagos en el sistema.
 El *Transfer* es un inciacion de pago compuesta de transacciones que representan dos o más movimientos de dinero entre los participantes.
@@ -17,9 +17,6 @@ Este modelo es agnóstico al caso de uso y soporta cualquier tipo de movimiento 
 
 Plataforma de Transfiya permite envios entre diferentes llaves en el sistema desde su inicio. Principal uso de origen y destino es simplificar el proceso de envio y hacerlo agnostico a caso de uso.
 
-
-
-
 <Note> El modelo de aceptación simplifica significativamente el proceso de incorporación de clientes, ya que elimina la necesidad de crear una llave de manera previa.</Note>
 
 <Tip> Paso de aceptacion no es necesario para procesar el pago con destino conocido.</Tip>
@@ -28,7 +25,7 @@ Plataforma de Transfiya permite envios entre diferentes llaves en el sistema des
 
 Cuando se inicia un transfer se activa un flujo de pago.
 
-Cada flujo de pago inicia una máquina de estados que se encarga de gestionar la operación entre participantes y sistemas externos. Maquina de estados se define durante inciacion de transfer usando campo transfer.labeles.type:
+Cada flujo de pago inicia una máquina de estados que se encarga de gestionar la operación entre participantes y sistemas externos. Maquina de estados se define durante inciacion de transfer usando:
 
 <ResponseField name="labels.type" type="string[SEND, SENDMOL, REQUEST, ONBOARDING]">
     Tipo de transferencia.

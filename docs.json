@@ -21,7 +21,7 @@
                 "pages": [
                   "es/ya-p2p/p2p-about",
                   "es/ya-p2p/p2p-directory",
-                  "es/ya-p2p/p2p-transfers",
+                  "es/ya-p2p/p2p-regulatory",
                   "es/ya-p2p/p2p-ux",
                   "es/ya-p2p/p2p-participants"
                 ]
@@ -42,9 +42,11 @@
             "icon": "book",
             "pages": [
               "es/guides/how-to-keys",
+              "es/guides/how-to-send",
               "es/guides/how-to-request",
-              "es/guides/how-to-breb-flow",
-              "es/guides/how-to-validate"
+              "es/guides/how-to-validate",
+              "es/guides/how-to-validations",
+              "es/guides/how-to-target"
             ]
           },
           {
@@ -52,10 +54,11 @@
             "icon": "code",
             "pages": [
               "es/about/about-transifya",
-              "es/about/about-settlement",
               "es/about/about-flows",
               "es/about/about-signers",
-              "es/about/about-accept"
+              "es/about/about-accept",
+              "es/about/about-settlement",
+              "es/about/about-timestamps"
             ]
           }
         ]
