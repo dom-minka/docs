@@ -1,5 +1,5 @@
 ---
-title: 'Como enviar pagos (push)'
+title: 'Como enviar pagos BreB'
 description: 'Como iniciar un flujo regulatorio en Transfiya'
 icon: 'arrow-right'
 ---
@@ -13,66 +13,28 @@ El *Transfer* es un inciacion de pago compuesta de transacciones que representan
 
 Este modelo es agnóstico al caso de uso y soporta cualquier tipo de movimiento de fondos, dependiendo de las reglas configuradas del sistema y del nivel de origen y destino del envío.
 
+<Note> El uso del modelo de transfer para iniciar pagos en el sistema permite emplear el mismo protocolo y REST API para cualquier caso de uso o flujo de dinero, incluyendo el nuevo flujo regulatorio. </Note>
+
+
 ### Origen y destino de transferencia
 
-Plataforma de Transfiya permite envios entre diferentes llaves en el sistema desde su inicio. Principal uso de origen y destino es simplificar el proceso de envio y hacerlo agnostico a caso de uso.
+En caso de modelo regulado origen y destino de transferencia son conocidos por proceso previo de resolucion de llaves. El parte
 
-<Note> El modelo de aceptación simplifica significativamente el proceso de incorporación de clientes, ya que elimina la necesidad de crear una llave de manera previa.</Note>
+### Flujos de dinero relulado
 
-<Tip> Paso de aceptacion no es necesario para procesar el pago con destino conocido.</Tip>
+Cuando se inicia un transfer se activa uno de los flujos de pago orchestrados por
 
-### Flujos de dinero
+Cada flujo de pago que se va usar para cumplir con el modelo de liquidacion de fondos con MOL es un flujo de pago nombrado SENDMOL.
 
-Cuando se inicia un transfer se activa un flujo de pago.
-
-Cada flujo de pago inicia una máquina de estados que se encarga de gestionar la operación entre participantes y sistemas externos. Maquina de estados se define durante inciacion de transfer usando:
-
-<ResponseField name="labels.type" type="string[SEND, SENDMOL, REQUEST, ONBOARDING]">
+<ResponseField name="labels.type" type="string[SENDMOL]">
     Tipo de transferencia.
 </ResponseField>
 
-La máquina de estados permite controlar y orquestar el flujo mediante pasos específicos que dependen de la definición de los pasos del flujo, el entorno y el tipo de participantes representados por el firmante (signer).
+Cambio principal de este flujo comparado con envio no regulado es en modelo de liquidacion de fondos con MOL.
 
-<Note> El uso del modelo de transfer para iniciar pagos en el sistema permite emplear el mismo protocolo y REST API para cualquier caso de uso o flujo de dinero, incluyendo el nuevo flujo regulatorio. </Note>
+
+
 
 Tipos de flujos disponibles actualmente en Transfiya:
 
-<CardGroup cols={2}>
-  <Card title="SEND" icon="share-from-square">
-      Flujo de envio de cuenta o llave a cuenta o llave.
-  </Card>
-  <Card title="REQUEST" icon="inbox">
-      Flujo de solicitud a un llave.
-  </Card>
-  <Card title="SENDMOL" icon="share">
-      Flujo de envio a cuenta usando liquidación en mol.
-  </Card>
-  <Card title="ONBOARDING" icon="check">
-      Flujo de validacion de cuenta bancaria.
-  </Card>
-</CardGroup>
-
-Flujo se basa en
-
-
-
-
-## Crear Transfencia Envio (SEND o push)
-
-## Crear Transferencia Solicitud (REQUEST o pull)
-
-## Crear Transferencias regulatorias (SENDMOL o push mol)
-
-Todos los movimientos de dinero utilizan el mismo concepto de transferencia para iniciar los flujos.
-
-Para identificar las transferencias que utilizan el modelo de liquidación con MOL, el sistema emplea un flujo específico SENDMOL.
-
-<Note> La única diferencia entre el flujo de envío estándar y el flujo regulatorio radica en que este último requiere una autorización adicional del banco central para completar el proceso de liquidación. </Note>
-
-El otro punto de flujo regulatorio propuesto exige la resolución de la llave antes de iniciar la transferencia.
-
-> Esto implica que dicho flujo no permite iniciar transferencias con participantes que no tengan una llave previamente registrada en el sistema.
-
-Es importante destacar que la mayoría de las entidades financieras replicarán sus llaves en varios sistemas SPI. Como consecuencia, la mayor parte de las transferencias operarán bajo un modelo intersistema o dentro del propio ecosistema de Transfiya.
-
-### Como crear transferencias entre diferentes sistemas (SENDMOL)
+Mas sobre flujos pueden conocer [aqui](../es/about/about-flows).

@@ -13,27 +13,22 @@
         "tab": "Guias",
         "groups": [
           {
-            "group": "Comience con Transfiya",
+            "group": "Para Personas (breb.ya)",
+            "icon": "briefcase",
             "pages": [
-              {
-                "group": "Para Personas (breb.ya)",
-                "icon": "paper-plane",
-                "pages": [
-                  "es/ya-p2p/p2p-about",
-                  "es/ya-p2p/p2p-regulatory",
-                  "es/ya-p2p/p2p-ux",
-                  "es/ya-p2p/p2p-directory"
-                ]
-              },
-              {
-                "group": "Para Empresas (pse.ya)",
-                "icon": "briefcase",
-                "pages": [
-                  "es/ya-biz/biz-about",
-                  "es/ya-biz/biz-b2p",
-                  "es/ya-biz/biz-p2b"
-                ]
-              }
+              "es/ya-p2p/p2p-about",
+              "es/ya-p2p/p2p-regulatory",
+              "es/ya-p2p/p2p-ux",
+              "es/ya-p2p/p2p-directory"
+            ]
+          },
+          {
+            "group": "Para Empresas (pse.ya)",
+            "icon": "briefcase",
+            "pages": [
+              "es/ya-biz/biz-about",
+              "es/ya-biz/biz-b2p",
+              "es/ya-biz/biz-p2b"
             ]
           },
           {
@@ -42,11 +37,9 @@
             "pages": [
               "es/guides/how-to-keys",
               "es/guides/how-to-send",
+              "es/guides/how-to-send-mol",
               "es/guides/how-to-request",
-              "es/guides/how-to-validate",
-              "es/guides/how-to-validations",
-              "es/guides/how-to-target",
-              "es/guides/how-to-add-business"
+              "es/guides/how-to-validate"
             ]
           },
           {
