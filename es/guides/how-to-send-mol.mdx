@@ -7,7 +7,7 @@ icon: 'vault'
 ## Envio con liquidacion en MOL
 
 ### Resumen de cambios para entidad
-Para cumplir con el flujo regulatorio, se implementará la misma integración del participante utilizando el concepto de Transfer para iniciar transferencias.
+Para cumplir con el flujo regulatorio, se usaría la misma integración del participante utilizando el concepto de Transfer para iniciar transferencias.
 
 <Note>
 Las interfaces de interacción no cambian para la entidad, ya que la plataforma cumple actualmente con la mayoría de los requisitos regulatorios.
@@ -17,15 +17,19 @@ La liquidación con MOL y el manejo de tiempos ya están gestionados por la plat
 
 Los participantes únicamente deben asegurar para envio de transferencias:
 
-- **Utilizar API de transferencias**: Mantener la misma integración para iniciar transferencias y procesar créditos y débitos
+- **Utilizar API de transferencias**: Mantener la misma integración para iniciar transferencias
 - **Especificar tipo de transferencia**: Durante la marcha blanca, identificar las transferencias que se comunican con MOL usando "label.type":"SENDMOL"
-- **Incluir marcas de tiempo**: Agregar dos marcas de tiempo externas a la plataforma: "initiated" y "notified"
+- **Incluir marcas de tiempo**: Agregar marca de tiempo externa a la plataforma: "initiated" para notificar tiempo de inicio de transferncia
 
 ### Origen y destino de transferencia
 
-Las transferencias reguladas se definen como transferencias de cuenta a cuenta. Estas transacciones no deberían diferenciarse de las tranferencias actuales entre cuentas en Transfiya. La resolución de alias debe realizarse antes de crear una transferencia.
+Las transferencias reguladas se definen como transferencias de cuenta a cuenta. Estas transacciones no deberían diferenciarse de las transferencias actuales entre cuentas en Transfiya.
 
-El modelo actual de Transfiya facilita las transacciones de cuenta a cuenta mediante el uso de credenciales de pago (signer handles) como origen y destino de una transferencia.
+<Note>
+  La resolución de llaves debe realizarse antes de crear una transferencia.
+</Note>
+
+El modelo actual de Transfiya facilita las transferencias de cuenta a cuenta mediante el uso de credenciales de pago (signer handles) como origen y destino de una transferencia.
 
 En caso de modelo regulado origen y destino de transferencia son conocidos por proceso previo de [resolucion de llaves](how-to-keys) y se realiza una cuenta a cuenta.
 
