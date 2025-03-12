@@ -8,9 +8,13 @@ description: "Resumen sobre los cambios regulatorios"
 
 ## Requisitos de la regulación
 
-La mayoría de los requerimientos regulatorios se inspiran en las plataformas Transfiya y Pix, aunque incorporan elementos distintivos como la resolución obligatoria de llaves y un nuevo modelo de liquidación que los diferencian del esquema actual.
+La mayoría de los requerimientos regulatorios Bre-B se inspiran en las plataformas Pix y el mismo Transfiya, aunque incorporan elementos distintivos como la resolución obligatoria de llaves y un nuevo modelo de liquidación.
 
-La regulación se centra exclusivamente en aspectos fundamentales de interoperabilidad entre sistemas de pago, sin intervenir en la operación de los sistemas existentes. Esto permite que tanto las integraciones actuales de los participantes como la plataforma Transfiya mantengan su funcionamiento esencial sin alteraciones significativas.
+[Sobre Bre-B](../about/about-breb)
+
+La regulación se centra exclusivamente en aspectos fundamentales de interoperabilidad entre sistemas de pago, sin intervenir en la operación de los sistemas existentes.
+
+Esto permite que tanto las integraciones actuales de los participantes como la plataforma Transfiya mantengan su funcionamiento esencial sin alteraciones significativas.
 
 <Nota>
     Esta diferencia permite a las entidades financieras que ya están integrados con Transfiya cumplir con la regulacion sin cambios en nivel de integración.
@@ -18,15 +22,13 @@ La regulación se centra exclusivamente en aspectos fundamentales de interoperab
 
 Los siguientes parágrafos explican los cambios a nivel de plataforma y participantes para cumplir con la regulación.
 
-[Sobre Breb](../about/about-breb)
-
 ### Resolucion de llaves antes de transferencia a cuentas (UX)
 
 
 
 ### Tiempos de respusta regulados
 
-Los tiempos de respuesta estarán regulados y supervisados por los operadores de sistemas de pago como Transfiya. La definición actual establece un tiempo máximo de procesamiento de 20 segundos, que es superior al tiempo promedio que actualmente maneja Transfiya para sus transferencias.
+Los tiempos de respuesta estarán regulados y supervisados por los operadores de sistemas de pago como Transfiya. La definición actual establece un tiempo máximo de procesamiento de 20 segundos, que es superior al tiempo promedio que actualmente maneja Transfiya.
 
 En el caso específico de Transfiya, el sistema ya monitorea los tiempos de inicio y respuesta de las interacciones con un nivel de detalle superior al exigido por la regulación.
 
@@ -40,22 +42,31 @@ Las entidades financieras quedan exentas de registrar los tiempos de respuesta d
 
 ### Implementacion de flujo push
 
-La regulacion actual solo regula los casos de uso iniciados por parte de usuario o push.
+La regulacion actual solo regula los casos de uso iniciados por parte de usuario o transferencias push. El flujo actual propuesto por la regulacion entre participantes es basado en modelo de credito ISO y no incluye los llamadas al debito.
+
+Las diferencias clave entre el flujo actual de Transfiya y el flujo regulado incluyen: la resolución de destino obligatoria, la validación obligatoria de la cuenta destino, y la liquidación a través de un sistema de banco central.
+
+<Note>
+    Estas diferenencias son soportadas por los interfaces de la plataforma e integraacion actual de participantes. Cambio principal es en el modelo de multillave que es obligatorio para el flujo regulado.
+</Note>
+
+Flujo de transferencias en tiempo real incluye los siguientes pasos:
+1. **Resolución de llaves (destino)**: El sistema de pagos en tiempo real verifica la validez de la cuenta destino. (Opcional)
+2. **Iniciacion de transferncia**: El sistema calcula las posiciones de las participantes en función de las transferencias realizadas.
+3. **Validacion de cuenta destino**: El sistema valida la cuenta destino usando el proceso de aceptacion automatico o manual por lado del usuario. (Aceptacion)
+4. **Liquidacion (Confirmacion)**: El sistema realiza los pagos en tiempo real a las participantes. (Sobre garantias)
+5. **Compensacion (creidto)**: El sistema realiza los pagos en tiempo real a las participantes.
+6. **Notificaciones**: El sistema realiza los pagos en tiempo real a las participantes.
+
+Transfiya usa modelo de flujos regulados que incluye la resolución de destino obligatoria, la validación obligatoria de la cuenta destino, y la liquidación a través de un sistema de banco central.
+
+<Nota>
+    Ultimas mesas de trabajo estan incluyendo el modelo pull or request que require orchestracion de debito de los participantes igual a modelo Transfiya.
+</Nota>
 
 ### Liquidacion con MOL
 
-
-
-
-Flujo de transferencias en tiempo real incluye los siguientes pasos:
-1. **Resolución de destino**: El sistema de pagos en tiempo real verifica la validez de la cuenta destino. (Opcional)
-2. **Iniciacion de transferncia**: El sistema calcula las posiciones de las participantes en función de las transferencias realizadas.
-3. **Compensación (debito)**: El sistema orchestra el debito por parte de participantes.
-4. **Validacion de cuenta destino**: El sistema valida la cuenta destino usando el proceso de aceptacion automatico o manual por lado del usuario. (Aceptacion)
-5. **Liquidacion (Confirmacion)**: El sistema realiza los pagos en tiempo real a las participantes. (Sobre garantias)
-6. **Compensacion (creidto)**: El sistema realiza los pagos en tiempo real a las participantes.
-7. **Notificaciones**: El sistema realiza los pagos en tiempo real a las participantes.
-
+[Sobre liquidacion](../about/about-settelment)
 
 ```mermaid
 sequenceDiagram
