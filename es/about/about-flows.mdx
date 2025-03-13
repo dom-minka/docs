@@ -1,7 +1,7 @@
 ---
 title: 'Sobre Flujos'
 description: 'Guia sobre los flujos y orchestracion en Transfiya'
-icon: 'arrow-right'
+icon: 'compass'
 ---
 
 
@@ -26,6 +26,10 @@ Tipos de flujos disponibles actualmente en Transfiya:
 </Note>
 
 ### Flujo de envio SEND
+
+<Note>
+    El modelo de flujo regulado no requiere modificaciones por parte de la entidad participante. Para su habilitación, es necesario que el sistema de liquidación del banco central esté disponible y operativo.
+</Note>
 
 El flujo de procesamiento actual para transferencias tipo `SEND` en Transfiya se visualiza de la siguiente manera:
 
@@ -276,5 +280,47 @@ El participante debe validar la cuenta del destinatario antes de enviar la trans
         ty ->> +monitor: Monitor+ complete
         monitor -->> -ty: Monitor+ response
       ```
+  </Tab>
+  <Tab title="Flujo BanRep">
+      ```mermaid
+      sequenceDiagram
+          autonumber
+          participant orClient as Originating - Client
+          participant orBank as Originating - Bank
+          participant spbvi as SPBVI (Transfiya)
+          participant mol as Operational Mechanism for Settlement (MOL)
+          participant tgSpbvi as Target - SPBVI
+          participant tgBank as Target - Bank
+          participant tgClient as Target - Client
+
+          Note over orClient,tgClient: PREVIOUS PROCESSES:<br>1. Resource allocation by the Originating Bank in the MOL <br>2. Client fund reservation <br>3. Prior key resolution
+
+          orBank ->> spbvi: Authorize and send payment instruction (pacs.008)<br>Create transfer
+          spbvi ->> spbvi: Execute risk controls
+          spbvi ->> mol: Clearing and send payment instruction (pacs.008)
+
+
+          mol ->> mol: Operational validations <br> Reserve funds
+          mol ->> tgSpbvi: Route validated payment instruction (pacs.008)
+          tgSpbvi ->> tgBank: Send validated payment instruction (pacs.008)
+          tgBank ->> tgBank: Validate account status <br> Validate amounts
+          tgBank ->> tgSpbvi: Confirmation (pacs.002)
+          tgSpbvi ->> mol:  Confirmation (pacs.002)
+          mol ->> spbvi: Confirmation (pacs.002)
+
+          Note over orClient,tgClient: Acceptance
+	  mol ->> mol: Execute settlement
+         par settlement origin
+	   mol ->> spbvi: Settlement confirmation (pacs.002)
+           spbvi ->> orBank: Debit confirmation (pacs.002)
+           orBank ->> orBank: Debit funds
+           orBank ->> orClient: Debit [success message]
+         and settlement target
+           mol ->> tgSpbvi: Settlement confirmation (pacs.002)
+           tgSpbvi ->> tgBank: Credit confirmation (pacs.002)
+           tgBank ->> tgBank: Credit funds
+           tgBank ->> tgClient: Credit [success message]
+	 end
+         ```
   </Tab>
 </Tabs>
