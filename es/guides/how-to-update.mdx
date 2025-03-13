@@ -51,13 +51,13 @@ sequenceDiagram
   <Tab title="Request">
       ```Diff
         curl -X PUT \
- -H "x-api-key: <API_KEY>" \
- -H "Authorization: Bearer <TOKEN>" \
- -H "Content-Type: application/json" \
- -d '{
-   "labels": { 
-	   "bankAccountType": "DBMO",
-	   "bankAccountNumber": "302058294920"
+    -H "x-api-key: <API_KEY>" \
+    -H "Authorization: Bearer <TOKEN>" \
+    -H "Content-Type: application/json" \
+    -d '{
+        "labels": { 
+	        "bankAccountType": "DBMO",
+	        "bankAccountNumber": "302058294920"
    }
  }' "URL/v1/signer/wRFmYXS2sP9ho9VCZ3j4FuP1j55ABeFvsF"
       ```
