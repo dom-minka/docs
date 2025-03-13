@@ -1,0 +1,103 @@
+---
+title: 'Como modificar llaves'
+description: 'Como hacer modificasción de las llaves'
+icon: 'code'
+---
+
+## Para actualizar las llaves, basta con actualizar un signer y el directorio de alias de Transfiya sincronizará automáticamente este cambio con el directorio centralizado. En caso de cualquier error de validación, esta llamada fallará y el error será reportado al llamador.
+
+El flujo actual para actualizar el alias con el que está vinculada la cuenta implica eliminar un firmante de un wallet y agregarlo a otra diferente:
+
+```mermaid
+sequenceDiagram 
+	autonumber
+	participant b as Bank
+	participant ty as TransfiYa
+
+  b ->> +ty: Get currently linked wallet
+  ty -->> -b: Return wallet
+  b ->> +ty: Update wallet (remove signer)
+  ty -->> -b: Return updated wallet
+  b ->> +ty: Get new wallet to link
+  ty -->> -b: Return wallet
+  alt wallet exists
+    b ->> +ty: Update new wallet with signer
+    ty ->> ty: Update wallet
+    ty -->> -b: Return updated wallet
+  else wallet doesn't exist
+    b ->> +ty: Create a new wallet with signer
+    ty ->> ty: Create wallet
+    ty -->> -b: Return new wallet
+  end
+  ```
+
+El nuevo modelo no utiliza wallets, por lo que este proceso se simplifica a solo actualizar un signer:
+
+```mermaid
+sequenceDiagram 
+	autonumber
+	participant b as Bank
+	participant ty as TransfiYa
+  participant cd as Centralized<br />Directory
+
+  b ->> +ty: Update signer
+  ty ->> +cd: Validate with centralized directory
+  cd -->> -ty: Directory response
+  ty ->> ty: Update signer
+  ty -->> -b: Return signer
+```
+
+<Tabs>
+  <Tab title="Request">
+      ```Diff
+        curl -X PUT \
+ -H "x-api-key: <API_KEY>" \
+ -H "Authorization: Bearer <TOKEN>" \
+ -H "Content-Type: application/json" \
+ -d '{
+   "labels": { 
+	   "bankAccountType": "DBMO",
+	   "bankAccountNumber": "302058294920"
+   }
+ }' "URL/v1/signer/wRFmYXS2sP9ho9VCZ3j4FuP1j55ABeFvsF"
+      ```
+  </Tab>
+  <Tab title="Response">
+      ```Diff
+{
+  "signer_id": "4c57ac39-16f0-489b-89d9-bddfcd352a36",
+  "handle": "wRFmYXS2sP9ho9VCZ3j4FuP1j55ABeFvsF",
+  "labels": {
+    "aliasType": "ALPHANUM",
+    "aliasValue": "@JORGE22",
+    "status": "INACTIVE",
+    "type": "PERSON",
+    "firstName": "Jorge",
+    "proprietary": "CC",
+    "identification": "1010101010",
+    "bankAccountType": "DBMO",
+    "bankAccountNumber": "302058294920",
+    "bankBicfi": "7095",
+    "bankName": "Banco Rojo",
+		"bankId": "891234918",
+    "routerReference": "$bancorojo",
+    "createdBy": "$minka",
+	  "targetSpbviCode": "TFY"
+    "created": "2024-10-11T11:59:24.241-05:00",
+    "updated": "2024-10-11T12:01:11.121-05:00",
+    "consented": "2024-10-11T11:59:24.241-05:00"
+  },
+  "keeper": [
+    {
+      "scheme": "ecdsa-ed25519",
+      "public": "0463e75c8b975f069813ca8e6c36c0b6fd246eac708affb7ed2c6480fa201defe8725322d6380ec66e94f6dcb49f635c0ca51296e48da4a12b3ec66582a1297adf"
+    }
+  ],
+  "error": {
+    "code": 0,
+    "message": "Success"
+  }
+}
+      ```
+  </Tab>
+</Tabs>

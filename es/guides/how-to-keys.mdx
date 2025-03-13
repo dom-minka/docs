@@ -34,6 +34,23 @@ sequenceDiagram
   end
   ```
 
+Las actualizaciones del flujo lo hacen mucho más sencillo, requiere que eliminemos las llamadas relacionadas con el wallet y dejemos el proceso de firma tal como está:
+
+```mermaid
+sequenceDiagram 
+	autonumber
+	participant b as Bank
+	participant ty as TransfiYa
+	participant cd as Centralized<br />Directory
+
+  b ->> b: Generate keeper (pubKey, privKey)
+  b ->> +ty: Create signer (register pubKey)
+  ty ->> +cd: Register key
+  cd -->> -ty: Directory response
+  ty ->> ty: Create signer
+  ty -->> -b: Return signer
+  ```
+
 ### Ejemplo de creación de llave
 Para la creación de llaves, se utilizará la interfaz de aplicación destinada a la creación de firmantes.
 
