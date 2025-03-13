@@ -22,20 +22,6 @@ Esto permite que tanto las integraciones actuales de los participantes como la p
 
 Los siguientes parágrafos explican los cambios a nivel de plataforma y participantes para cumplir con la regulación.
 
-### Implementacion de flujo push
-
-La regulacion actual solo regula los casos de uso iniciados por parte de usuario o transferencias push.
-
-Las diferencias clave entre el flujo actual de Transfiya y el flujo regulado incluyen: la resolución de destino obligatoria (directorio), la validación obligatoria de la cuenta destino, y la liquidación a través de un sistema de banco central.
-
-Los participantes de Transfiya pueden usar la misma integracion y los interfaces para cumplir con el flujo regulatorio.
-
-Para entender como funcionan los flujos actualmente en transfiya pueden revisar [Sobre Flujos](../about/about-flows)
-
-<Note>
-    Estas diferenencias son soportadas por los interfaces de la plataforma e integraacion actual de participantes. Cambio principal es en el modelo de multillave que es obligatorio para el flujo regulado.
-</Note>
-
 
 ### 1. Iniciar envío en zona Bre-B
 
@@ -78,6 +64,20 @@ Modelo de transfiya actual es completamente compatible con el modelo de BreB.
 Principal diferencia se encuetra en el resolucion de llaves y uso de directorio federado soportado por Transfiya.
 
 Los participantes no tienen que cambiar su integración con Transfiya para utilizar el modelo regulado.
+
+### Implementacion de flujo push
+
+La regulacion actual solo regula los casos de uso iniciados por parte de usuario o transferencias push.
+
+Las diferencias clave entre el flujo actual de Transfiya y el flujo regulado incluyen: la resolución de destino obligatoria (directorio), la validación obligatoria de la cuenta destino, y la liquidación a través de un sistema de banco central.
+
+Los participantes de Transfiya pueden usar la misma integracion y los interfaces para cumplir con el flujo regulatorio.
+
+Para entender como funcionan los flujos actualmente en transfiya pueden revisar [Sobre Flujos](../about/about-flows)
+
+<Note>
+    Estas diferenencias son soportadas por los interfaces de la plataforma e integraacion actual de participantes. Cambio principal es en el modelo de multillave que es obligatorio para el flujo regulado.
+</Note>
 
 ### Sobre debito
 
