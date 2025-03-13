@@ -37,8 +37,7 @@
               "es/guides/how-to-keys",
               "es/guides/how-to-update",
               "es/guides/how-to-send-mol",
-              "es/guides/how-to-a2a",
-              "es/guides/how-to-send-mol"
+              "es/guides/how-to-a2a"
             ]
           },
           {
@@ -46,11 +45,11 @@
             "icon": "code",
             "pages": [
               "es/about/about-flows",
+              "es/about/about-transfers",
               "es/about/about-signers",
               "es/about/about-accept",
               "es/about/about-settlement",
-              "es/about/about-timestamps",
-              "es/about/about-transfers"
+              "es/about/about-timestamps"
             ]
           }
         ]
