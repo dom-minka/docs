@@ -36,34 +36,58 @@ Para entender como funcionan los flujos actualmente en transfiya pueden revisar 
     Estas diferenencias son soportadas por los interfaces de la plataforma e integraacion actual de participantes. Cambio principal es en el modelo de multillave que es obligatorio para el flujo regulado.
 </Note>
 
-<Steps>
-    <Step title="Iniciar envio zona Bre-B">
-        El participante debe actualizar su experiencia de usuario para cumplir con el flujo regulatorio.
-         [Guia de UX Bre-B](/p2p-ux)
-    </Step>
-  <Step title="Resolucion de llaves destino">
-      El participante debe resolver destino con el directorio federado de Transfiya.
-  </Step>
-  <Step title="Iniciacion de transferncia">
-      El participante debe iniciar la transferencia usando modelo de transfer y flujo specifico para regulacion. [Como iniciar transferencia regulada](../guides/how-to-send-mol)
-  </Step>
-  <Step title="Validacion de cuenta destino">
-      El participante destino debe validar la cuenta destino usando el proceso de aceptacion.
-       [Sobre aceptacion](../about/about-accept)
-  </Step>
-  <Step title="Liquidacion (MOL)">
-      Transfiya realiza comunicacion con MOL sobre el estado de la transferencia y confirma liquidacion. La comunicacion se realiza a traves mensajes pacs.
-      [Sobre liquidacion](../about/about-settelment)
-  </Step>
-  <Step title="Notificaciones">
-      Transfiya realiza los pagos en tiempo real a las participantes.
-  </Step>
-</Steps>
+
+### 1. Iniciar envío en zona Bre-B
+
+El participante debe actualizar su experiencia de usuario para cumplir con los requisitos del flujo regulatorio.
+[Guía de UX Bre-B](/p2p-ux)
+
+### 2. Resolución de llaves de destino
+
+El participante debe resolver el destino mediante el directorio federado de Transfiya.
+[Cómo administrar llaves](../how-to/how-to-keys)
+
+### 3. Iniciar una transferencia
+
+El participante debe iniciar la transferencia utilizando el modelo de transferencia y el flujo específico para cumplir con la regulación. [Cómo iniciar una transferencia regulada](../guides/how-to-send-mol)
+
+<Note>
+   El modelo actual de transferencias de Transfiya es compatible con el flujo regulado y mantiene su interoperabilidad. El nuevo modelo de liquidación comienza con la fase de marcha blanca de MOL.
+</Note>
+
+### 4. Validación de cuenta destino
+
+El participante destino debe validar la cuenta de destino mediante el proceso de aceptación.
+
+[Sobre el proceso de aceptación](../about/about-accept)
+
+### 5. Liquidación (MOL)
+
+Transfiya gestiona la comunicación con MOL sobre el estado de la transferencia y confirma la liquidación. Esta comunicación se realiza a través de mensajes PACS internamente en la plataforma y no requiere esfuerzo adicional por parte del participante.
+
+[Sobre el proceso de liquidación](../about/about-settelment)
+
+### 6. Notificaciones  <Step title="Notificaciones">
+
+Transfiya mantiene el modelo actual de notificaciones.
 
 
-<Nota>
-    Modelo regulado no define orchestracion de debito. Sin embargo, en ultimas mesas de trabajo estan incluyendo el modelo pull or request que require orchestracion de debito de los participantes igual a modelo Transfiya.
-</Nota>
+## Sobre diferencias entre Transfiya y BreB
+
+Modelo de transfiya actual es completamente compatible con el modelo de BreB.
+Principal diferencia se encuetra en el resolucion de llaves y uso de directorio federado soportado por Transfiya.
+
+Los participantes no tienen que cambiar su integración con Transfiya para utilizar el modelo regulado.
+
+### Sobre debito
+
+Modelo regulado no define orchestracion de debito, pero es necesario para otros casos de uso como solicitudes de pago y modelo de cobranza.
+
+Flujo actual de transfiya es compatible con el modelo regulado.
+
+<Note>
+  En ultimas mesas de trabajo estan incluyendo el modelo pull or request que require orchestracion de debito de los participantes igual a modelo Transfiya.
+</Note>
 
 ### Tiempos de respusta regulados
 
