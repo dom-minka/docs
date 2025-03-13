@@ -1,79 +1,125 @@
 ---
 title: "Guia de experiencia de usuario enfocada en Bre-B"
 sidebarTitle: "Requirimentos UX"
-description: "Guia sobre como cumplir con los cambios en canal para Bre-B"
+description: "Guia sobre como cumplir con los cambios en la app de las entidades para Bre-B"
 ---
+
+## Intro
 
 Con respecto a la experiencia de usuario existen una directrices para las diferentes secciones que se deben incluir en la zona Bre-B dentro de las reglas de Ux mas claras se encuentran:
 
-- Los usuarios deberan tener acceso a la zona sello Bre-B (con su respectivo logo) en un primer nivel despues de pasar el flujo de autenticación de cada banco, se debe mostrar en la pantalla prncipal (Home) con el mismo nivel jerarquico de acciones como enviar dinero o transacciones.
-- En caso tal que existan otro punto de acceso a servicios de Bre-B como en secciones de enviar dinero o configuración, lectura/envio de QR la entidad podra utilizar la imagen gráfica y nombre de Bre-B
+* Los usuarios deberan tener acceso a la zona sello Bre-B (con su respectivo logo) en un primer nivel despues de pasar el flujo de autenticación de cada banco, se debe mostrar en la pantalla prncipal (Home) con el mismo nivel jerarquico de acciones como enviar dinero o transacciones.
+
+* En caso tal que existan otro punto de acceso a servicios de Bre-B como en secciones de enviar dinero o configuración, lectura/envio de QR la entidad podra utilizar la imagen gráfica y nombre de Bre-B
+
+### Secciones dentro de la Zona Bre-B
 
 Ya una vez dentro de la zona Bre-B las siguientes secciones y funcionalidades son requeridas, a continuacon encontraras la lista y posteriormente un apartado por cada seccion con mas detalles y ejemplos de experiencia de la app de un banco ficticio.
 
-1. Transferencias y pagos
-  - Con llave
-  - Con codigo QR
-    Leer
-    Generar
-2. Procesos de llaves
-  - Registro
-  - Modificación
-  - Cancelación
-  - Portabilidad
-  - Bloqueo
-  - Reactivación
-  - Consulta
-3. Histórico de transacciones
-  - Historico
-  - Solicitud de devolución
-  - Solicitud de reversión
-4. PQRs
-5. Otras funcionalidades
+Transferencias y pagos
+
+* Con llave
+
+* Con codigo QR
+  Leer
+  Generar
+
+Procesos de llaves
+
+* Registro
+
+* Modificación
+
+* Cancelación
+
+* Portabilidad
+
+* Bloqueo
+
+* Reactivación
+
+* Consulta
+
+Histórico de transacciones
+
+* Historial de movimientos&#x20;
+
+* Solicitud de devolución
+
+* Solicitud de reversió
+
+PQRs
+
+Otras funcionalidades
 
 ## Transferencias y pagos
 
-### Llave
-Para enviar dinero a una llave el usuario tiene diferentes posibiliadades, digitar la llave directamente en un campo o seleccionar de su lista de contactos para facilitar el acceso a llaves tipo celular o mail. El punto de entrada tambien puede variar de acuerdo a la experiencia de cada app, siendo impresindible que uno de estos puntos de entrada sea a través de la zona Bre-B > Transferencias.
+### Envio de dinero
 
-> Incertar mapa de flujo con lso diferentes caminos (Obligatorios y recomendados)
+Para enviar dinero a una llave el usuario tiene diferentes posibiliadades, digitar la llave directamente en un campo o seleccionar de su lista de contactos para facilitar el acceso a llaves tipo celular o mail. El punto de entrada también puede variar de acuerdo a la experiencia de cada app, siendo impresindíble que uno de estos puntos de entrada sea a través de la zona Bre-B > Transferencias.
 
-> Zona Bre-B > Transferencias > Con llave > Digitar llave (Obligatorio)
-Añadir gif
+![](/1.Transferencias.png)
 
-> Zona Bre-B > Transferencias > Con llave > Contactos (Recomendado)
-Añadir gif
+**Enviar a llave **`OBLIGATORIO`**
+![](/1.1Transferirdigitandollave.gif)
 
-> Transferencias > Usando Bre-B > Con llave > Digitar lave / Contactos (Recomendado)
+Enviar a contacto **`RECOMENDADO`**
+![](/1.2Transferiracontacto.gif)
 
-### Leer Codigo QR
+Iniciar desde el menu de transferencias o envio de dinero la app de la entidad **`RECOMENDADO`**
+![](/1.3Transferirdesdemenuenviardinero.gif)
+
+### Leer código QR
+
 Permitir al usuario leer un QR para realizar un pago
 
-> Incertar mapa de flujo con lso diferentes caminos (Obligatorios y recomendados)
+> ![](/2.LeerQR.png)
 
-> Zona Bre-B > Transferencias > QR > Leer (Obligatorio)
-Añadir gif
+Leer QR - Zona Bre-B **`OBLIGATORIO`**
+![](/2.1LeerQR-ZonaBre-B.gif)
 
-> Seccion QR > Leer QR (Recomendado)
+Leer QR - Sección QR APP **`RECOMENDADO`**
+![](/2.2LeerQR-Seccionenlaapp.gif)
 
-### Crear Codigo QR
-Para la creacion de código QR el usuario podra realizarlo a través de la zona Bre-B, el cual es obligatorio dentro de lo propuesto por la regulación, tambien cada entidad podra utilizar cualquier otro punto relacionado a la experiencia QR como punto de ingreso para sus usuarios
+### Crear Código QR
 
-> Incertar mapa de flujo con lso diferentes caminos (Obligatorios y recomendados)
-
-> Zona Bre-B > Transferencias > QR > Generar (Obligatorio)
-Añadir gif
-
-> Seccion QR > Crear QR (Recomendado)
+Para la creación de código QR el usuario podra realizarlo a través de la zona Bre-B, el cual es obligatorio dentro de lo propuesto por la regulación, tambien cada entidad podra utilizar cualquier otro punto relacionado a la experiencia QR como punto de ingreso para sus usuarios
+![](/3.2CrearQr-QrApp.gif)
 
 ## Procesos de llaves
+
 Dentro de los procesos relacionados a llaves la prpuesta es que en un sola sección llamada "administración de llaves" los usuarios puedan acceder a ajecutar las acciones listadas en la regulación. A continuación on ejemplo de como se podria ver esta pantalla
 
-> Incertar screenshoot
-
 ### Registro de llave
+
 Un usuario conecta una de sus llaves a sus cuentas, una llave podra estar connectada a una sola cuenta en todo el sistema, sin embargo una cuenta puede tener varias llaves asociadas. Las llaves que el usuario puede registrar estan basadas e la información de contacto que el banco tiene del usuario, es decir que si el usuario desea añadir un numero de telefono nuevo o mail tendra que primero realizar una actualización de los datos en su entidad.
 
-> Zona Bre-B > Administración de llaves > Asociar una llave
+![](/4.REgistrarunallave.gif)
 
 Para le onboarding de usuarios que por primera vez estan utilizando Bre-B para registrar llaves se recomienda una experiencia
+
+## Modificación de llave
+
+Un usuario puede cambiar las llaves asociadas en sus cuentas de la misma entidad únicamente.
+
+## Cancelación de llave
+
+Un usuario desconecta una llave de su cuenta permanentemente. Es necesario notificar al usuario que esta llave volverá a estar disponible para ser registrada 5 dias despues de la acción de cancelación
+
+![](/5.Cancelarllave.gif)
+
+## Portabilidad
+
+El objetivo de esta acción es trasladar sus llaves y asociarles a una cuenta de una entidad u otro medio de pago distinto desde donde se encuentra inicialmete asociada. Este flujo todavia no esta definido dentro de la regulación como se deberá comportar por lo cual no se especifica en esta guía.
+
+## Bloqueo de llave
+
+El usuario puede desactivar su llave y activarla dentro de un periodo de 30 días. Si el usuario no reactiva su llave en este periodo, la llave sera cancelada.
+
+![](/6.Bloquearllave.gif)
+
+## Activación de llave
+
+Esta accion solo se podra ejecutar sobre las llaves que el usuario bloqueo anteriormente.Esta accion solo se podra ejecutar sobre las llaves que el usuario bloqueo anteriormente.
+
+![](/7.Activarllavebloqueada.gif)
