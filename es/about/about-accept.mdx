@@ -25,7 +25,7 @@ sequenceDiagram
     participant Terceros as Terceros (Antifraude)
     participant Destino as Destino (Entidad)
 
-    Note over Origen, tya: Verificar destino
+    Note over Origen, tya: Verificar orgien
     Note over Origen, tya: Iniciar pago
     Note over tya, Origen: Compensación (Débito)
     Note over tya, Destino: Verificar destino (Aceptar)
@@ -39,14 +39,106 @@ sequenceDiagram
 
 Cuando una transferencia se encuentra en estado PENDIENTE, Minka intentará notificar a todas las entidades bancarias que posean al menos una cuenta registrada en el sistema.
 
-Si un banco ha desactivado la opción de notificación (mencionada anteriormente), dicho banco no recibirá la notificación. La llamada al endpoint /status se realizará de la siguiente manera:
+Si un banco ha desactivado la opción de notificación (mencionada anteriormente), dicho banco no recibirá la notificación.
+
+La llamada al endpoint /status comparte el objeto de Transferencia en base de criterios de aceptación definidos.
+
+<Tabs>
+    <Tab title="Request">
+        ```bash
+        curl -X POST /status
+         -H "x-api-key: <API_KEY>" \
+         -H "Authorization: Bearer <TOKEN>" \
+         -H "Content-Type: application/json" \
+         -d '
+        {
+          "source": "wXxwpxB32saqfmfMxAQD4SVWWhhn6akLC2",
+          "target": "wfvmRir8XxRtoEuUBDkv3BP4T7BQezwm1f",
+          "amount": "100.00",
+          "symbol": "$tin",
+          "labels": {
+            "hash": "PENDING",
+            "type": "SEND",
+            "domain": "tin",
+            "flowId": "Lf13jsK83omPv3bOt",
+            "status": "PENDING",
+            "tx_ref": "Lf13jsK83omPv3bOt",
+            "tx_mol": "20250114890915944TFY123456789012345", // nuevo campo
+            "initiated": "2025-01-14T20:40:57.322-05:00",
+            "created": "2025-01-14T20:40:57.322-05:00",
+            "updated": "2025-01-14T20:40:57.322-05:00",
+            "description": "DEV - SEND trx 01",
+            "sourceChannel": "APP",
+            "deviceFingerPrint": {
+              "city": "Bogotá",
+              "hash": "26fff5af6441f8e15a71e8d62c361714484b1b308c99e8eb68ca85e2a7e0dc58",
+              "model": "Huawei Mate 20 Pro",
+              "country": "Colombia",
+              "operator": "Bharti Airtel Limited",
+              "SIMCardId": "8991101200003204510",
+              "ipAddress": "2001:0db8:85a3:0000:0000:8a2e:0370:7334",
+              "mobileDevice": "990000862471854"
+            }
+          },
+          "snapshot": {
+            "source": {
+              "signer": {
+                "handle": "wXxwpxB32saqfmfMxAQD4SVWWhhn6akLC2",
+                "labels": {
+                  "name": "Jorge Alejandro Fernandez Garcia",
+                  "proprietary": "CC",
+                  "identification": "1010101010",
+                  "bankAccountType": "SVGS",
+                  "bankAccountNumber": "12345654321",
+           	      "bankId": "891234918",
+                  "targetSpbviCode": "TFY"
+                }
+              },
+            },
+            "target": {
+              "signer": {
+                   "handle": "wfvmRir8XxRtoEuUBDkv3BP4T7BQezwm1f",
+                "labels": {
+                  "name": "Jorge Alejandro Fernandez Garcia",
+                  "proprietary": "CC",
+         	        "identification": "1010101010",
+                  "bankAccountType": "SVGS",
+                  "bankAccountNumber": "12345654321",
+           	      "bankId": "891234918",
+                  "targetSpbviCode": "TFY",
+                }
+              },
+            }
+          },
+          "error": {
+            "code": 0,
+            "message": "Success"
+          },
+          "action_id": "35de4d3d-3aba-4fb3-b110-d004ce2aabb2",
+          "id": "35de4d3d-3aba-4fb3-b110-d004ce2aabb2"
+        }
+        ```
+    </Tab>
+    <Tab title="Response">
+        ```bash
+        {
+       	"error": {
+      		"code": 0,
+      		"message": "Success"
+            }
+        }
+        ```
+    </Tab>
+</Tabs>
+
+<Note>
+    La mayoría de los participantes actualmente utiliza un modelo que consulta periódicamente las transferencias pendientes. El uso del endpoint /status reduce significativamente la carga en la infraestructura tanto del banco como de la plataforma.
+</Note>
 
 ## Aceptación en flujo regulado
 
 El flujo regulado requiere un paso previo a la aceptación de la transferencia que incluye la validación de la cuenta destino y la aceptación de la transferencia por parte del destinatario.
 
-Aunque no existe una aceptación explícita por parte del usuario, las transferencias reguladas requieren una aprobación formal por parte de la entidad destinataria.
+Aunque no existe una aceptación explícita por parte del usuario, las transferencias reguladas requieren una aprobación formal por parte de la entidad destinataria
 
-Para cumplir con este parte de la transferencia, Minka enviará una notificación al entidad destinataria para que acepte la transferencia. Esta notificación se realizará a través de una llamada al endpoint /status.
-
-La entidad luego de confirmar la cuenta destino y la aceptación de la transferencia, sigue con el flujo actual de transferencia.
+La entidad luego de confirmar la cuenta destino acepta la transfernencia usando el flujo actual de aceptación de transferencias.
