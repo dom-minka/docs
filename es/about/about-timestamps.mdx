@@ -1,24 +1,23 @@
 ---
 title: 'Sobre Marcas de tiempo'
 description: 'Guia sobre los marcas de tiempo regulatorios'
-icon: 'code'
+icon: 'timeline'
 ---
 
 ## Modelo actual de monitoreo
 
-## Marcas de tiempo regulatorios
-Son el mecanismo definido por el Banco de la República para llevar el registro del tiempo transcurrido en cada una de las interacciones por los actores que intervienen durante el flujo de la transferencia.
+La plataforma transfiya es una plataforma nativa a nube y registra todos los interacciones con los participantes a nivel de interfaz acplicativo.
 
-Es responsabilidad del SPBVI la recolección de las marcas de tiempo y el reporte al Banco de la República. 
+Mayoria de marcas de tiempo ya se registran en la plataforma y comparten con los participantes sobre el modelo de monitoreo. Plataforma actualmente reponde en milisegundos y todo el tiempo de procesamiento es en segundos incluyendo participantes.
 
-Las marcas de tiempo que corresponden a las Entidades Participantes son:
+## Marcas de tiempo para parcipantes
 
----
-| Nombre de la marca de tiempo | Descripción | Responsable |
-|------------------------------|-------------|-------------|
-| T110 | Participante Originador recibe la confirmación de la instrucción de pago por parte del Cliente Ordenante | Participante Originador |
-| T120 | Participante Originador envía la instrucción de pago al SPBVI Originador luego de haber aplicado las actividades de autorización de la OP/TF Inmediata | Participante Originador |
-| T310 | Participante Receptor recibe instrucción de pago desde el SPBVI Receptor | Participante Receptor |
-| T320 | Participante Receptor envía la instrucción de pago al SPBVI Receptor | Participante Receptor |
-| T130 | Participante Originador recibe confirmación por parte del SPBVI Originador | Participante Originador |
-| T140 | Participante Originador envía el mensaje al Ordenante confirmando el débito de los recursos en su Medio de Pago | Participante Originador |
+Los participantes de la plataforma transfiya no tienen que registrar ni monitorear la plataforma. Sin embargo, la regulación pide que los participantes envíen las marcas de tiempo de inicio de la transacción por parte de usuario y notificacion de usuario.
+
+Para inicio de transferencia se va usar campo adicional en momento de creacion de la transferencia (POST /transfers)
+
+```Javascript
+  "labels.initiated": "2025-01-14T20:40:57.322-05:00"
+```
+
+Mas sobre [transferencias](../es/about/about-transfers)
