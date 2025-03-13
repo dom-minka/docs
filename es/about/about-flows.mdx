@@ -227,9 +227,7 @@ El participante debe validar la cuenta del destinatario antes de enviar la trans
           sb ->> ty: Continue transfer
         end
 
-        ty ->> ty: Wait for acceptace
 
-        tb ->> ty: Accept transfer
 
         ty ->> +monitor: Monitor+ init
         monitor -->> -ty: Monitor response
@@ -240,6 +238,11 @@ El participante debe validar la cuenta del destinatario antes de enviar la trans
         activate mol
         mol ->> mb: Credit target (pacs.008)
         activate mb
+
+               ty ->> ty: Wait for acceptace
+
+        tb ->> ty: Accept transfer
+
         mb ->> ty: Continue transfer<br />(MOL credit)
 
         alt action
