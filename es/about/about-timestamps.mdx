@@ -7,3 +7,18 @@ icon: 'code'
 ## Modelo actual de monitoreo
 
 ## Marcas de tiempo regulatorios
+Son el mecanismo definido por el Banco de la República para llevar el registro del tiempo transcurrido en cada una de las interacciones por los actores que intervienen durante el flujo de la transferencia.
+
+Es responsabilidad del SPBVI la recolección de las marcas de tiempo y el reporte al Banco de la República. 
+
+Las marcas de tiempo que corresponden a las Entidades Participantes son:
+
+---
+| Nombre de la marca de tiempo | Descripción | Responsable |
+|------------------------------|-------------|-------------|
+| T110 | Participante Originador recibe la confirmación de la instrucción de pago por parte del Cliente Ordenante | Participante Originador |
+| T120 | Participante Originador envía la instrucción de pago al SPBVI Originador luego de haber aplicado las actividades de autorización de la OP/TF Inmediata | Participante Originador |
+| T310 | Participante Receptor recibe instrucción de pago desde el SPBVI Receptor | Participante Receptor |
+| T320 | Participante Receptor envía la instrucción de pago al SPBVI Receptor | Participante Receptor |
+| T130 | Participante Originador recibe confirmación por parte del SPBVI Originador | Participante Originador |
+| T140 | Participante Originador envía el mensaje al Ordenante confirmando el débito de los recursos en su Medio de Pago | Participante Originador |
