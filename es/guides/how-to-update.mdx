@@ -51,52 +51,50 @@ sequenceDiagram
   <Tab title="Request">
       ```Diff
         curl -X PUT \
-    -H "x-api-key: <API_KEY>" \
-    -H "Authorization: Bearer <TOKEN>" \
-    -H "Content-Type: application/json" \
-    -d '{
-        "labels": { 
-	        "bankAccountType": "DBMO",
-	        "bankAccountNumber": "302058294920"
-   }
- }' "URL/v1/signer/wRFmYXS2sP9ho9VCZ3j4FuP1j55ABeFvsF"
+        -H "x-api-key: <API_KEY>" \
+        -H "Authorization: Bearer <TOKEN>" \
+        -H "Content-Type: application/json" \
+        -d '{
+            "labels": { 
+	         "bankAccountType": "DBMO",
+	         "bankAccountNumber": "302058294920"
+        }
+    }' "URL/v1/signer/wRFmYXS2sP9ho9VCZ3j4FuP1j55ABeFvsF"
       ```
   </Tab>
   <Tab title="Response">
       ```Diff
-{
-  "signer_id": "4c57ac39-16f0-489b-89d9-bddfcd352a36",
-  "handle": "wRFmYXS2sP9ho9VCZ3j4FuP1j55ABeFvsF",
-  "labels": {
-    "aliasType": "ALPHANUM",
-    "aliasValue": "@JORGE22",
-    "status": "INACTIVE",
-    "type": "PERSON",
-    "firstName": "Jorge",
-    "proprietary": "CC",
-    "identification": "1010101010",
-    "bankAccountType": "DBMO",
-    "bankAccountNumber": "302058294920",
-    "bankBicfi": "7095",
-    "bankName": "Banco Rojo",
-		"bankId": "891234918",
-    "routerReference": "$bancorojo",
-    "createdBy": "$minka",
-	  "targetSpbviCode": "TFY"
-    "created": "2024-10-11T11:59:24.241-05:00",
-    "updated": "2024-10-11T12:01:11.121-05:00",
-    "consented": "2024-10-11T11:59:24.241-05:00"
-  },
-  "keeper": [
     {
-      "scheme": "ecdsa-ed25519",
-      "public": "0463e75c8b975f069813ca8e6c36c0b6fd246eac708affb7ed2c6480fa201defe8725322d6380ec66e94f6dcb49f635c0ca51296e48da4a12b3ec66582a1297adf"
-    }
-  ],
-  "error": {
-    "code": 0,
-    "message": "Success"
-  }
+        "signer_id": "4c57ac39-16f0-489b-89d9-bddfcd352a36",
+        "handle": "wRFmYXS2sP9ho9VCZ3j4FuP1j55ABeFvsF",
+        "labels": {
+            "aliasType": "ALPHANUM",
+            "aliasValue": "@JORGE22",
+            "status": "INACTIVE",
+            "type": "PERSON",
+            "firstName": "Jorge",
+            "proprietary": "CC",
+            "identification": "1010101010",
+            "bankAccountType": "DBMO",
+            "bankAccountNumber": "302058294920",
+            "bankBicfi": "7095",
+            "bankName": "Banco Rojo",
+	        "bankId": "891234918",
+            "routerReference": "$bancorojo",
+            "createdBy": "$minka",
+	        "targetSpbviCode": "TFY"
+            "created": "2024-10-11T11:59:24.241-05:00",
+            "updated": "2024-10-11T12:01:11.121-05:00",
+            "consented": "2024-10-11T11:59:24.241-05:00"
+        },
+        "keeper": [{
+              "scheme": "ecdsa-ed25519",
+              "public": "0463e75c8b975f069813ca8e6c36c0b6fd246eac708affb7ed2c6480fa201defe8725322d6380ec66e94f6dcb49f635c0ca51296e48da4a12b3ec66582a1297adf"
+        }],
+          "error": {
+              "code": 0,
+              "message": "Success"
+        }
 }
       ```
   </Tab>
