@@ -33,7 +33,11 @@
           {
             "group": "Guias de uso",
             "icon": "book",
-            "pages": ["es/guides/how-to-keys", "es/guides/how-to-send-mol"]
+            "pages": [
+              "es/guides/how-to-keys",
+              "es/guides/how-to-send-mol",
+              "es/guides/how-to-a2a"
+            ]
           },
           {
             "group": "Sobre",
