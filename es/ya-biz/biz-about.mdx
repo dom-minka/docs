@@ -4,20 +4,28 @@ sidebarTitle: "Transfiya Empresas"
 description: "Dispersiones y recaudo en timpo real para empresas"
 ---
 
-En esta sección vamos a ver diferentes tipos de transacción que pueden realizar los diferentes participantes en el sistema financiero, por sí solo el nombre es solo descriptivo del origen y destino de cada movimiento. Si bien los bancos y los usuarios tienen una idea de ello, no para todo el público está claro el valor que pueden obtener al llevar este tipo de transacciones a tiempo real. A continuación, se puede encontrar para cada tipo de transacción escenarios explícitos donde se obtiene valor en función de las necesidades de los bancos y sus usuarios.
+En esta sección vamos a ver diferentes tipos de transacción que pueden realizar los diferentes participantes en el sistema financiero, por sí solo el nombre es solo descriptivo del origen y destino de cada movimiento. Si bien los bancos y los usuarios tienen una idea de ello, no para todo el público está claro el valor que pueden obtener al llevar este tipo de transacciones a tiempo real.
+
+Es pertinente aclarar que los esfuerzos realizados por los participantes para Bre-B, también benefician la futura implementación de casos para empresas como la capacidad de realizar dispersiones a los tipos de llaves reguladas y a cuentas.
 
 ## Empresa > Persona | B2P
 
 Permitir empresas iniciar transacciones con destino a personas en tiempo real moderniza y vuelve más eficiente flujos que durante mucho tiempo han tenido hacks operativos para semejar movimiento de dinero al instante, casos simples como un pago de nomina o proveedores, durante muchos años se han visto enmarcados por frases tipo “Te vamos a abrir una cuenta de nomina para que te llegue la plata el mismo día y tengamos menos esfuerzo operativo” o “Si tienes cuenta en nuestro mismo banco la plata te llega de una, si no se demora un poco”. Esto con la interoperabilidad de los pagos en tiempo real de ACH ya no representara un gran esfuerzo operativo para las empresas y generara una satisfacción transaccional para sus clientes y proveedores.
 
-Ademas de modernizar los flujos “de toda la vida” los pagos desde empresas a personas en tiempo real crean nuevas oportunidades para bancos y empresas para crear productos novedosos que satisfacen y asombran a sus clientes, generando mas valor o reduciendo sus costos operativos. Por ejemplo los desembolsos de créditos en tiempo real 24/7 para fintechs o entidades enfocadas en este servicio, empresas con venta digital que tienen que realizar devoluciones ahora las pueden hacer al instante una vez reciben el producto de vuelta y retiro de efectivo en puntos físicos o cajeros son algunas de las posibilidades que activan los pagos en tiempo real.
+Ademas de modernizar los flujos “de toda la vida”, los pagos desde empresas a personas en tiempo real crean nuevas oportunidades para bancos y empresas para crear productos novedosos que satisfacen y asombran a sus clientes, generando mas valor o reduciendo sus costos operativos. Por ejemplo los desembolsos de créditos en tiempo real 24/7 para fintechs o entidades enfocadas en este servicio, empresas con venta digital que tienen que realizar devoluciones ahora las pueden hacer al instante una vez reciben el producto de vuelta y retiro de efectivo en puntos físicos o cajeros son algunas de las posibilidades que activan los pagos en tiempo real.
 
-Aquí (Incluir link) encontrarás una lista de formas en las cuales se podrán realizar transacciones **empresas > personas** al igual que los casos de uso en los que aplica.
+[Aqui](../ya-biz/biz-b2p.mdx) encontrarás una lista de formas en las cuales se podrán realizar transacciones **empresas > personas** al igual que los casos de uso en los que aplica.
 
-## Persona > Empresa | B2P
+## Persona > Empresa | P2B
 
 Al igual que en el caso anterior, el flujo de dinero en tiempo real de personas a empresa moderniza muchas de las operaciones tradicionales de este tipo, sin embargo el potencial innovador es equiparable o incluso mayor a los casos empresa a persona. Los pagos en tiempo real son el principal foco, permitiendo a las empresas tener liquides inmediata con cada transacción por cada pago que reciben de sus clientes, una dinámica que durante mucho tiempo a sido exclusiva del efectivo o transacciones intra-bancarias. Ejemplos de casos de uso de pagos a empresas van desde las compras presenciales o en linea, como también recarga de cuentas virtuales (apuesta, videojuegos, puntos, etc), pagos de productos de créditos y servicios públicos.
 
 ACH también se apalanca en su funcionalidad de **request-to-pay** que permite generar solicitudes de pago donde el usuario-persona recibe una notificación de solicitud de pago, entra a la app de su banco y aprueba el pago, creando una experiencia de usuario rápida y transparente. Las entidades pueden habilitar a sus clientes empresas para generar solicitudes de pago individuales o de forma masiva a través de API o incluso su portal empresarial. Algunos de los ejemplos son solicitudes periódicas para pagos de suscripciones, solicitud de pago de servicios públicos o telcom, recarga de cuentas digitales (trading, millas, videojuegos, apuestas, etc)
 
-Aquí (Incluir link) encontrarás una lista de formas en las cuales se podrán realizar transacciones **personas > empresa** al igual que los casos de uso en los que aplica.
+[Aqui](../ya-biz/biz-p2b.mdx) encontrarás una lista de formas en las cuales se podrán realizar transacciones **personas > empresa** al igual que los casos de uso en los que aplica.
+
+### Envío cuenta a cuenta en tiempo real
+
+Actualmente, más de 12 millones de cuentas están registradas en Transfiya. Para fortalecer esta base, Transfiya está mejorando las transferencias cuenta a cuenta integrando su flujo de transacciones en tiempo real con los procesos tradicionales de A2A. Las instituciones financieras seguirán ofreciendo transacciones A2A a través de sus canales existentes. Si la cuenta del destinatario está vinculada a Transfiya, la transacción se liquidará en tiempo real; de lo contrario, seguirá el proceso tradicional de procesamiento por lotes.
+
+Para optimizar aún más esta experiencia, en mayo se lanzará una nueva función de prevalidación de cuentas. Esto permitirá a las instituciones financieras verificar el estado de una cuenta antes de ejecutar una transacción, asegurando que cualquier cuenta dentro del sistema financiero—independientemente de su actividad previa en Transfiya—pueda recibir fondos al instante. Esta mejora tiene como objetivo hacer que los pagos cuenta a cuenta en tiempo real sean el estándar en todas las instituciones participantes.
