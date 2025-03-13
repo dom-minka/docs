@@ -1,49 +1,11 @@
 ---
 title: 'Sobre Flujos'
-description: 'Guia sobre los flujos y orchestracion en transfiya'
+description: 'Guia sobre los flujos y orchestracion en Transfiya'
 icon: 'arrow-right'
 ---
 
-## Modelo de transferencia
 
-### Concepto "Transfer"
-
-Transfiya utiliza el concepto de "transfer" para iniciar pagos en el sistema.
-El *Transfer* es un inciacion de pago compuesta de transacciones que representan dos o más movimientos de dinero entre los participantes.
-
-Este modelo es agnóstico al caso de uso y soporta cualquier tipo de movimiento de fondos, dependiendo de las reglas configuradas del sistema sobre el flujo y las [llaves](../about/about-signers) de origen y destino.
-
-Para crear transferencias se usa el interfaz aplicativo de crear un transfer.
-
-Mas sobre flujos pueden conocer [aqui](../es/about/about-flows)
-
-<Note>
-El uso del modelo de transfer para iniciar pagos en el sistema permite emplear el mismo protocolo y REST API para cualquier caso de uso o flujo de dinero, incluyendo el nuevo flujo regulatorio.
-</Note>
-
-### Origen y destino de transferencia
-
-Plataforma de Transfiya permite envios entre diferentes llaves o credenciales de pago (signer) en el sistema desde su inicio representados por campos origen y destino.
-
-Tipo de transferencia, por ejemplo p2p, b2p, p2b, g2p  se define en base de los tipos de participates (signers) y reglas asignadas a cada uno de ellos.
-
-El principal uso de origen y destino es simplificar el proceso de envío y permitir cualquier tipo de movimiento de fondos sin necesidad de modificar la integración existente de los participantes.
-
-<ResponseField name="source" type="string">
-    Origen de la transferencia.
-</ResponseField>
-
-<ResponseField name="destination" type="string">
-    Destino de la transferencia.
-</ResponseField>
-
-[Sobre llaves y credenciales de pago (signers)](../about/about-signers)
-
-<Note>
-Esta flexibilidad facilita la implementación de diferentes casos de uso de negocio sin la necesidad de modificar la integración existente de los participantes.
-</Note>
-
-### Flujos
+## Flujos
 
 Cuando se inicia una transferencia en Tranfiya se activa un flujo de pago.
 
@@ -59,14 +21,258 @@ Flujos de envio se seleccionan en proceso de creacion de transferencia usando el
 
 Tipos de flujos disponibles actualmente en Transfiya:
 
-[Sobre Flujo de envio](../guides/how-to-send)
-
-[Sobre Flujo de solicitud](../guides/how-to-request)
-
-[Sobre Flujo de envio BreB](../guides/how-to-send-mol)
-
-[Sobre Flujo de validacion de cuenta](../guides/how-to-validate)
-
 <Note>
   El uso del modelo de transfer para iniciar pagos en el sistema permite emplear el mismo protocolo y REST API para cualquier caso de uso o flujo de dinero, incluyendo el nuevo flujo regulatorio.
 </Note>
+
+### Flujo de envio SEND
+
+El flujo de procesamiento actual para transferencias tipo `SEND` en Transfiya se visualiza de la siguiente manera:
+
+<Tabs>
+  <Tab title="SEND Resumen">
+      ```mermaid
+      sequenceDiagram
+	autonumber
+	participant sb as Participante origen
+	participant ty as TransfiYa
+        participant tb as Participante Destino
+        participant monitor as Antifraude
+
+        sb ->> +ty: Create transfer
+
+        ty ->> +sb: Call debit
+
+        ty ->> ty: Wait to accept
+
+        tb ->> ty: Accept (continue)
+
+        ty ->> monitor: AF init
+
+        ty ->> +tb: Call credit
+
+        ty ->> +sb: Call status
+
+        ty ->> +tb: Call status
+
+        ty ->> +monitor: AF complete
+        ```
+  </Tab>
+  <Tab title="SEND Detallado">
+      ```mermaid
+      sequenceDiagram
+	autonumber
+	participant sb as Participante Origen
+	participant ty as TransfiYa
+        participant tb as Participante Destino
+        participant monitor as Antifraude
+
+        sb ->> +ty: Create transfer
+        ty ->> ty: Validate business rules
+        ty -->> -sb: Transfer created
+
+        alt debit (async)
+        ty ->> +sb: Call debit
+        sb ->> ty: Create upload action
+        sb -->> -ty: Debit response
+        sb ->> sb: Debit source user
+        sb ->> ty: Set action tx_id
+        sb ->> ty: Sign debit IOU
+        ty ->> ty: Process debit IOU
+        ty -->> sb: Debit IOU response
+        sb ->> ty: Continue transfer
+        end
+
+        ty ->> ty: Wait to accept
+
+        tb ->> ty: Accept Transfer
+
+        ty ->> monitor: AF init
+        monitor -->> ty: AF response
+
+        alt action (sync)
+        ty ->> +sb: Call Action
+        sb ->> ty: Sign send IOU
+        sb -->> -ty: Action response
+        end
+
+        alt credit (async)
+        ty ->> +tb: Call credit
+        tb ->> ty: Create download action
+        tb -->> -ty: Credit response
+        tb ->> tb: Credit target user
+        tb ->> ty: Set action tx_id
+        tb ->> ty: Sign credit IOU
+        ty ->> ty: Process credit IOU
+        ty -->> tb: Credit IOU response
+        tb ->> ty: Continue transfer
+        end
+
+        ty ->> +sb: Call status
+        sb -->> -ty: Status response
+
+        ty ->> +tb: Call status
+        tb -->> -ty: Status response
+
+        ty ->> +monitor: Monitor+ complete
+        monitor -->> -ty: Monitor+ response
+      ```
+  </Tab>
+</Tabs>
+
+Los bancos realizan movimientos principales durante las llamadas de `debit` y `credit`, por eso estas llamadas son asíncronas.
+
+Los movimientos principales en ciertos sistemas bancarios pueden tomar un tiempo considerable. El movimiento de Acción no tiene efecto sobre los saldos en los sistemas bancarios, sirve solo como confirmación para enviar fondos al usuario destino.
+
+La transferencia puede ser aceptada automáticamente por Transfiya en caso de que el firmante de destino sea conocido. En caso contrario, se debe esperar a que el firmante de destino acepte manualmente la transferencia a través de una aplicación bancaria o que la entidad de destino confirma la aceptacion.
+
+Más información sobre la aceptación se puede encontrar en [Sobre aceptación](about-accept).
+
+<Note>
+Si un usuario tiene múltiples firmantes, les notificamos y esperamos a que acepten manualmente a través de una aplicación bancaria.
+</Note>
+
+Se llama a un sistema de detección de fraude después de que la transferencia es aceptada porque el destino final de la transferencia se resuelve en ese punto. Antes de este punto, el destino puede ser un alias que aún no está incorporado en el sistema.
+
+<Note>
+    Flujo tiene unos pasos sub optimos y es posible optimizarlos. Por ejemplo, actualizacion de action id, callbacks en debito es posible mejorar en su implementacion pasando a modelo v2 de plataforma o haciendo cambios de flujo.
+</Note>
+
+
+Status calls are currently used only as information, they should not contain any balance movements in the banking systems. They can be used to notify users, record statuses, etc.
+
+### Flujo regulado SENDMOL
+
+El flujo actual de Transfiya es totalmente compatible con el modelo regulatorio y no requiere modificaciones por parte de la entidad participante.
+
+La diferencia principal en el flujo regulatorio radica en el modelo de liquidación, donde la plataforma de Transfiya asume la responsabilidad de comunicarse directamente con el MOL (Modelo Operativo de Liquidación).
+
+<Note>
+  Gracias a la capacidad de Transfiya para orquestar redes externas, el participante solo necesita enviar una transferencia simple, incluso cuando el destinatario pertenece a una entidad fuera del ecosistema Transfiya.
+</Note>
+
+<Tabs>
+  <Tab title="SEND Resumen">
+      ```mermaid
+      sequenceDiagram
+      autonumber
+        participant sb as Participante origen
+    participant ty as TransfiYa
+        participant tb as Participante Destino
+        participant monitor as Antifraude
+        participant mol as Mol
+
+        sb ->> +ty: Create transfer
+
+        ty ->> +sb: Call debit
+
+        ty ->> monitor: AF init
+
+        ty ->> mol: Reserve funds
+
+        ty ->> ty: Wait acceptance
+
+        tb ->> ty: Accept (continue)
+
+        ty ->> mol: Confirm Settelment
+
+        ty ->> ty: Wait confirmation
+
+        mol ->> ty: Confirm Settlement
+
+        ty ->> +tb: Call Credit
+
+        ty ->> +sb: Call status
+
+        ty ->> +tb: Call status
+
+        ty ->> +monitor: AF complete
+        ```
+  </Tab>
+  <Tab title="SEND Detallado">
+      ```mermaid
+      ---
+      title: Intra Transfers (TransfiYa -> TransfiYa)
+      ---
+      sequenceDiagram
+	autonumber
+	participant su as Source User
+	participant sb as Source Bank
+	participant ty as TransfiYa
+        participant tb as Target Bank
+        participant monitor as Monitor+
+        participant mb as MOL Bridge
+        participant mol as MOL
+
+        su ->> +sb: Create transfer
+        sb ->> +ty: Create transfer
+        ty ->> ty: Validate business rules
+        ty -->> -sb: Transfer created
+        sb -->> -su: Transfer created
+
+        alt debit
+          ty ->> +sb: Call debit
+          sb ->> +ty: Create UPLOAD action
+          ty -->> -sb: Action response
+          sb -->> -ty: Debit response
+          sb ->> sb: Authorize debit
+          sb ->> +ty: Send IOU
+          ty -->> -sb: IOU response
+          sb ->> ty: Continue transfer
+        end
+
+        ty ->> ty: Wait for acceptace
+
+        tb ->> ty: Accept transfer
+
+        ty ->> +monitor: Monitor+ init
+        monitor -->> -ty: Monitor response
+
+        ty ->> +mb: Reserve funds
+        activate mb
+        mb ->> mol: Reserve funds (pacs.008)
+        activate mol
+        mol ->> mb: Credit target (pacs.008)
+        activate mb
+        mb ->> ty: Continue transfer<br />(MOL credit)
+
+        alt action
+          ty ->> +sb: Call Action
+          sb ->> +ty: Send IOU
+          ty -->> -sb: IOU response
+          sb -->> -ty: Action response
+        end
+
+        ty ->> mb: Confirm credit
+        mb -->> mol: Confirm credit (pacs.002)
+        deactivate mb
+        mol -->> mb: Confirmation (pacs.002)
+        deactivate mol
+        mb ->> ty: Continue transfer<br />(MOL reservation)
+        deactivate mb
+
+        ty ->> ty: Wait for settlement confirmation
+        mol ->> +mb: Settlement confirmation (pacs.002)
+        mb ->> -ty: Continue transfer<br />(MOL settled)
+
+        alt commit source
+        ty ->> +sb: Call status
+        sb -->> -ty: Status response
+        sb ->> sb: Finalize debit
+        sb ->> ty: Continue transfer
+        end
+
+        alt commit target
+        ty ->> +tb: Call status
+        tb -->> -ty: Status response
+        tb ->> tb: Credit target user
+        tb ->> +ty: Send IOU
+        ty -->> -tb: IOU response
+        tb ->> ty: Continue transfer
+        end
+
+        ty ->> +monitor: Monitor+ complete
+        monitor -->> -ty: Monitor+ response
+      ```
+  </Tab>
+</Tabs>
