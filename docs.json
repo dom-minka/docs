@@ -35,8 +35,8 @@
             "icon": "book",
             "pages": [
               "es/guides/how-to-keys",
+              "es/guides/how-to-resolve-keys",
               "es/guides/how-to-update",
-              "es/guides/how-to-validate",
               "es/guides/how-to-update",
               "es/guides/how-to-send-mol",
               "es/guides/how-to-a2a"
