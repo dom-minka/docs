@@ -1,7 +1,7 @@
 ---
 title: 'Sobre errores'
 description: 'Guia sobre manejo de errores en transfiya para SPI'
-icon: 'error'
+icon: 'triangle-exclamation'
 ---
 
 ## Modelo de errores
@@ -160,3 +160,14 @@ Este mapeo está basado en el siguiente documento:
     Versión 2.1.1
     2025-03-07
 </Info>
+
+| MOL error code | MOL response status | MOL operation | MOL error name | TransfiYa error code | TransfiYa error name | TransfiYa error message | Description |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| U000 | ACTC | Credit transfer | Success | 0 | - | Success |  |
+| U119 | RJCT | Credit transfer | SessionValidationFailed | 118 |ResourceValidationError | MOL validation error: MOL message | Validation error related related to message sent to MOL. |
+| U112 | RJCT | Credit transfer | MaxAmountCheckFailed | 123 | DomainRuleViolationError | MOL error: The amount exceeds the maximum amount allowed. | Transaction amount is above the maximum allowed amount. |
+| U125 | RJCT | Credit transfer | InboundBankClassifierNotFound | 107 | InvalidTargetError | MOL error: Target participant is not configured in the system. | The target participant is not configured in the system. |
+| U126 | RJCT | Credit transfer | OutboundBankIdCannotBeDetermined | 103 | InvalidSourceError | MOL error: Source participant is not configured in the system. | This error happens if the source participant is not configured in the system. |
+| U122 | RJCT | Credit transfer | InboundBankNotActive | 107 | InvalidTargetError | MOL error: Target participant is not active. | The target participant is configured in the system, but it is inactive. |
+| U173 | RJCT | Credit transfer | Validation error | 118 | ResourceValidationError |MOL validation error: MOL message | MOL validations are  not successful on the request. |
+| U908 | RJCT | Credit transfer | Rejection lock validation | 136 | ApiError | MOL error: Rejection lock validation MOL message | It is not clear in which case this error happens. |
