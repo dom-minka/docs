@@ -47,6 +47,7 @@
             "icon": "code",
             "pages": [
               "es/about/about-flows",
+              "es/about/about-errors",
               "es/about/about-transfers",
               "es/about/about-signers",
               "es/about/about-accept",

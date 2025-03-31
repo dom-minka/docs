@@ -4,37 +4,31 @@ description: 'Guia sobre los flujos y orquestación en transfiya'
 icon: 'arrow-right'
 ---
 
-
-import Tabs from '@theme/Tabs'
-import TabItem from '@theme/TabItem'
-
 ## Flujos
 
 “Al iniciar una transferencia en Transfiya, se activa un flujo de pago gestionado por una máquina de estados. Esta máquina de estados coordina la operación entre los participantes y sistemas externos, permitiendo controlar y orquestar el proceso a través de pasos específicos. Dichos pasos varían según la definición del flujo, el entorno y el tipo de participantes representados por el firmante (signer).”
 
 Los flujos de envío se seleccionan durante el proceso de creación de la transferencia, utilizando el campo de tipo de transferencia.
 
-```js
+```javascript
 Tipo de transferencia:
 labels.type: string[SEND, SENDMOL, REQUEST, ONBOARDING]
 ```
 
 Tipos de flujos disponibles actualmente en Transfiya:
 
-:::info
+<Note>
   El uso del modelo de transfer para iniciar pagos en el sistema permite emplear el mismo protocolo y REST API para cualquier caso de uso o flujo de dinero, incluyendo el nuevo flujo regulatorio.
-:::
+</Note>
 
 ### Flujo de envio SEND
 
-:::info
-    El modelo de flujo regulado no requiere modificaciones por parte de la entidad participante. Para su habilitación, es necesario que el sistema de liquidación del banco central esté disponible y operativo.
-:::
+El modelo de flujo regulado no requiere modificaciones por parte de la entidad participante. Para su habilitación, es necesario que el sistema de liquidación del banco central esté disponible y operativo.
 
 El flujo de procesamiento actual para transferencias tipo `SEND` en Transfiya se visualiza de la siguiente manera:
 
 <Tabs>
-  <TabItem title="SEND">
+  <Tab title="SEND">
       ```mermaid
       sequenceDiagram
 	    autonumber
@@ -53,8 +47,8 @@ El flujo de procesamiento actual para transferencias tipo `SEND` en Transfiya se
         ty ->> tb: Call status
         ty ->> monitor: AF complete
         ```
-  </TabItem>
-  <TabItem title="SEND Detallado">
+  </Tab>
+  <Tab title="SEND Detallado">
       ```mermaid
     sequenceDiagram
     autonumber
@@ -108,7 +102,7 @@ El flujo de procesamiento actual para transferencias tipo `SEND` en Transfiya se
     ty ->> monitor: Monitor+ complete
     monitor -->> ty: Monitor+ response
     ```
-  </TabItem>
+  </Tab>
 </Tabs>
 
 Los bancos realizan movimientos principales durante las llamadas de `debit` y `credit`, por eso estas llamadas son asíncronas.
@@ -119,15 +113,15 @@ La transferencia puede ser aceptada automáticamente por Transfiya en caso de qu
 
 Más información sobre la aceptación se puede encontrar en [Sobre aceptación](about-accept).
 
-:::info
+<Note>
 Si un usuario tiene múltiples firmantes, les notificamos y esperamos a que acepten manualmente a través de una aplicación bancaria.
-:::
+</Note>
 
 Se llama a un sistema de detección de fraude después de que la transferencia es aceptada porque el destino final de la transferencia se resuelve en ese punto. Antes de este punto, el destino puede ser un alias que aún no está incorporado en el sistema.
 
-:::info
+<Note>
 El flujo actual presenta pasos subóptimos que pueden optimizarse. Por ejemplo, la actualización del action ID y la gestión de callbacks en débitos pueden mejorarse implementando el modelo V2 de la plataforma o ajustando el flujo de trabajo.
-:::
+</Note>
 
 Las llamadas a `/status` se utilizan actualmente solo con fines informativos y no deben contener movimientos de saldo en los sistemas bancarios. Pueden usarse para notificar a los usuarios, registrar estados, etc.
 
@@ -139,16 +133,14 @@ La diferencia principal en el flujo regulatorio radica en el modelo de liquidaci
 
 El participante debe validar la cuenta del destinatario antes de enviar la transferencia; para eso vamos a usar el mismo flujo de aceptación de la transferencia.
 
-:::info
+<Note>
   Gracias a la capacidad de Transfiya para orquestar redes externas, el participante solo necesita enviar una transferencia simple, incluso cuando el destinatario pertenece a una entidad fuera del ecosistema Transfiya.
-:::
+</Note>
 
-:::warning
-  En la siguiente sección se describen los flujos y se detallan los endpoints o pasos afectados con su diferencias.
-:::
+En la siguiente sección se describen los flujos y se detallan los endpoints o pasos afectados con su diferencias.
 
 <Tabs>
-  <TabItem title="SENDMOL">
+  <Tab title="SENDMOL">
       ```mermaid
       sequenceDiagram
       autonumber
@@ -184,7 +176,7 @@ El participante debe validar la cuenta del destinatario antes de enviar la trans
 
         ty ->> monitor: Análisis de Fraude completo
         ```
-  </TabItem>
+  </Tab>
   <TabItem title="Crear transferencia (1)">
   ```mermaid
     sequenceDiagram
@@ -203,7 +195,7 @@ El participante debe validar la cuenta del destinatario antes de enviar la trans
     ty -->> sb: 201 Created
   ```
   <Tabs>
-    <TabItem label="Request" value="request">
+    <Tab title="POST /transfer">
         ```diff
         curl -X POST \
           -H "Content-Type: application/json" \
@@ -235,8 +227,8 @@ El participante debe validar la cuenta del destinatario antes de enviar la trans
             }
           }' "URL/v1/transfer"
           ```
-    </TabItem>
-    <TabItem label="Response" value="response">
+    </Tab>
+    <Tab title="Response">
         ```diff
         {
           "source": "wXxwpxB32saqfmfMxAQD4SVWWhhn6akLC2",
