@@ -4,16 +4,15 @@ description: 'Guia sobre manejo de errores en transfiya para SPI'
 icon: 'triangle-exclamation'
 ---
 
-## Modelo de errores
+## Resumen
 
-Transfiya implementa un sistema de manejo de errores basado en mensajes HTTP estándar para asegurar consistencia en sus comunicaciones.
+Transfiya usa un sistema de manejo de errores basado en estándar de errores HTTP.
 
-Los sistemas externos como DICE y MOL utilizan códigos de error específicos, sin embargo, Transfiya cuenta con un mecanismo que mapea automáticamente estos códigos a su estructura de errores genérica.
+Los sistemas externos como DICE y MOL utilizan códigos de error específicos, sin embargo, Transfiya cuenta con un mecanismo que mapea automáticamente estos códigos a su estructura de errores HTTP.
 
 Esta capacidad de estandarización simplifica considerablemente el proceso de integración para los participantes del sistema, reduciendo o incluso eliminando la necesidad de desarrollar lógicas de manejo de errores específicas.
 
-
-### Mensajes de error
+### Mensajes de error Transfiya
 
 Cuando ocurre un error en una transferencia o directorio, el sistema devuelve códigos de estado HTTP apropiados junto con un objeto de error que contiene información detallada.
 
@@ -87,6 +86,16 @@ TransfiYa ya valida todos los campos y esquemas, por lo que muchos de los errore
 
 Sin embargo, los mapeamos aquí para estar preparados en caso de encontrarnos con situaciones imprevistas donde estos errores pudieran ocurrir.
 
+<Info>
+Para asegurar compatilidad con todos los participantes, validaciones de llaves se van a informarar a travez de warnings para llaves que no tienen consentimento de usuario.
+</Info>
+
+Las advertencias siguen el estándar HTTP y se envían en los encabezados de error. Ejemplo de una advertencia:
+
+``` X-Minka-Warning: 118 *labels.type* is required. This will become an error after September 2025 ```
+
+Llaves que tienen consentimento de usuario se van a enviar a DICE
+
 
 La estrategia general de mapeo es la siguiente:
 
@@ -105,50 +114,48 @@ La estrategia general de mapeo es la siguiente:
     2025-03-07
 </Note>
 
-| DICE error code | DICE response status | DICE operations | DICE error message | TransfiYa error code | TransfiYa error name | TransfiYaerror message |
-| --- | --- | --- | --- | --- | --- | --- |
-| C401 | RJCT | NEWR, AMND | El NIT debe ser de 9 dígitos | 118 | ResourceValidationError | DICE error: The NIT must be 9 digits long. |
+<Accordion title="Mapeo Errores DICE">
+    | DICE error code | DICE response status | DICE operations | DICE error message | TransfiYa error code | TransfiYa error name | TransfiYa error message |
+    | --- | --- | --- | --- | --- | --- | --- |
+    | C401 | RJCT | NEWR, AMND | El NIT debe ser de 9 dígitos | 118 | ResourceValidationError | DICE error: The NIT must be 9 digits long. |
+    | C402 | RJCT | NEWR, AMND | El número de medio de pago excede 34 dígitos | 118 | ResourceValidationError | DICE error: The payment method number exceeds 34 digits  |
+    | C403 | RJCT | NEWR, AMND | El tipo de medio de pago debe ser uno de los registrados en el diccionario global | 118 | ResourceValidationError | DICE error: The payment method type must be one of those registered in the global dictionary. |
+    | C404 | RJCT | NEWR, AMND | La EASPBV Receptor debe ser una de las registradas en el diccionario global | 121 | ResourceNotFoundError | DICE error: The EASPBV Receiver must be one of those registered in the global dictionary. |
+    | C405 | RJCT | NEWR, AMND | El tipo de documento debe ser uno de los registrados en el diccionario global | 118 | ResourceValidationError | DICE error: The document type must be one of those registered in the global dictionary. |
+    | C406 | RJCT | NEWR, AMND | El tipo de persona debe ser uno de los registrados en el diccionario global | 118 | ResourceValidationError | DICE error: The person type must be one of those recorded in the global dictionary. |
+    | C407 | RJCT | NEWR, AMND | Para persona natural se debe diligenciar al menos el primer nombre y apellido. En Dsplnm y Nn debe ir una 'N' | 118 | ResourceValidationError | DICE error: For natural persons, at least the first and last name must be entered. The Dsplnm and Nn must be empty. |
+    | C408 | RJCT | NEWR, AMND | Para persona jurídica debe ser igual el nombre en el Dsplnm y Nn. Los campos de nombres y apellidos de persona natural deben estar vacíos. | 118 | ResourceValidationError | DICE error: For legal entities, the name in the Dsplnm and Nn must be the same. The first and last names fields for natural persons must be empty. |
+    | C409 | RJCT | NEWR, AMND | Se excede la longitud para nombre de persona jurídica o natural | 118 | ResourceValidationError | DICE error: The length for the name of a legal or natural person is exceeded. |
+    | C410 | RJCT | NEWR, AMND | La llave debe cumplir las reglas adicionales | 123 | DomainRuleViolationError | DICE error: The key must comply with additional rules. |
+    | C411 | RJCT | NEWR, DEAC | La llave ha sido cancelada y no cumple el número mínimo de días para registrarse nuevamente. | 123 | DomainRuleViolationError | DICE error: The key has been canceled and does not meet the minimum number of days to register again. |
+    | U000 | ACTC | NEWR, AMND | Operación exitosa | 0 | - | Success |
+    | U101 | RJCT | NEWR, AMND, DEAC, SUSP, SUSB, ACTV, ACTB | Tenant Id no encontrado. Debe ser DICETEST01 | 136 | ApiError | DICE error: Tenant ID not found. Must be DICETEST01. |
+    | U103 | RJCT | NEWR, AMND, DEAC | El código de la EASPBV no existe | 121 | ResourceNotFoundError | DICE error: The EASPBV code does not exist. |
+    | U119 | RJCT | NEWR, AMND | Error de sesión (errores de validación) | 136 | ApiError | DICE error: Session error. |
+    | U122 | RJCT | NEWR, AMND, DEAC, SUSP, SUSB, ACTV, ACTB | Se genera cuando el canal no está abierto211 | 136 | ApiError | DICE error: Channel not open. |
+    | U212 | RJCT | NEWR, AMND, DEAC, SUSP, SUSB, ACTV, ACTB | Mensaje enviado por un canal que no corresponde | 136 | ApiError | DICE error: Message sent by an inappropriate channel. |
+    | U250 | RJCT | NEWR, AMND | El tipo de llave debe ser uno de los registrados en el diccionario global | 118 | ResourceValidationError | DICE error: The key type must be one of those registered in the global dictionary. |
+    | U801 | RJCT | NEWR, AMND | No se puede determinar el participante | 118 | ResourceValidationError | DICE error: The participant cannot be determined. |
+    | U804 | RJCT | AMND, DEAC, SUSP, SUSB, ACTV, ACTB | La llave no existe o esta Inactiva. | 121 | ResourceNotFoundError | DICE error: The key does not exist or is inactive. |
+    | U805 | RJCT | AMND, SUSP, SUSB, ACTV, ACTB | La llave está suspendida por el cliente. | 123 | DomainRuleViolationError | DICE error: The key is suspended by the customer. |
+    | U806 | RJCT | NEWR, SUSP, SUSB, ACTV, ACTB | La llave ya está registrada con la misma entidad financiera, pero cuenta distinta. | 123 | DomainRuleViolationError | DICE error: The key is already registered with the same financial institution, but to a different account. |
+    | U807 | RJCT | NEWR | La llave ya está registrada con otra entidad financiera. | 123 | DomainRuleViolationError | DICE error: The key is already registered with another financial institution. |
+    | U808 | RJCT | NEWR | La llave ya se encuentra registrada con la misma cuenta. | 123 | DomainRuleViolationError | DICE error: The key is already registered with the same account. |
+    | U809 | RJCT | AMND, DEAC, SUSP, SUSB, ACTV, ACTB | No se tiene suficientes privilegios para hacer esta operación. | 100 | ForbiddenError | DICE error: You do not have sufficient privileges to perform this operation. |
+    | U811 | RJCT | AMND, DEAC, SUSP, SUSB, ACTV | La llave está suspendida por el participante. | 123 | DomainRuleViolationError | DICE error: The key is suspended by the participant. |
+</Accordion>
 
 
-
-| DICE error code | DICE response status | DICE operations | DICE error message | TransfiYa error code | TransfiYa error name | TransfiYa error message |
-| --- | --- | --- | --- | --- | --- | --- |
-| C401 | RJCT | NEWR, AMND | El NIT debe ser de 9 dígitos | 118 | ResourceValidationError | DICE error: The NIT must be 9 digits long. |
-| C402 | RJCT | NEWR, AMND | El número de medio de pago excede 34 dígitos | 118 | ResourceValidationError | DICE error: The payment method number exceeds 34 digits  |
-| C403 | RJCT | NEWR, AMND | El tipo de medio de pago debe ser uno de los registrados en el diccionario global | 118 | ResourceValidationError | DICE error: The payment method type must be one of those registered in the global dictionary. |
-| C404 | RJCT | NEWR, AMND | La EASPBV Receptor debe ser una de las registradas en el diccionario global | 121 | ResourceNotFoundError | DICE error: The EASPBV Receiver must be one of those registered in the global dictionary. |
-| C405 | RJCT | NEWR, AMND | El tipo de documento debe ser uno de los registrados en el diccionario global | 118 | ResourceValidationError | DICE error: The document type must be one of those registered in the global dictionary. |
-| C406 | RJCT | NEWR, AMND | El tipo de persona debe ser uno de los registrados en el diccionario global | 118 | ResourceValidationError | DICE error: The person type must be one of those recorded in the global dictionary. |
-| C407 | RJCT | NEWR, AMND | Para persona natural se debe diligenciar al menos el primer nombre y apellido. En Dsplnm y Nn debe ir una 'N' | 118 | ResourceValidationError | DICE error: For natural persons, at least the first and last name must be entered. The Dsplnm and Nn must be empty. |
-| C408 | RJCT | NEWR, AMND | Para persona jurídica debe ser igual el nombre en el Dsplnm y Nn. Los campos de nombres y apellidos de persona natural deben estar vacíos. | 118 | ResourceValidationError | DICE error: For legal entities, the name in the Dsplnm and Nn must be the same. The first and last names fields for natural persons must be empty. |
-| C409 | RJCT | NEWR, AMND | Se excede la longitud para nombre de persona jurídica o natural | 118 | ResourceValidationError | DICE error: The length for the name of a legal or natural person is exceeded. |
-| C410 | RJCT | NEWR, AMND | La llave debe cumplir las reglas adicionales | 123 | DomainRuleViolationError | DICE error: The key must comply with additional rules. |
-| C411 | RJCT | NEWR, DEAC | La llave ha sido cancelada y no cumple el número mínimo de días para registrarse nuevamente. | 123 | DomainRuleViolationError | DICE error: The key has been canceled and does not meet the minimum number of days to register again. |
-| U000 | ACTC | NEWR, AMND | Operación exitosa | 0 | - | Success |
-| U101 | RJCT | NEWR, AMND, DEAC, SUSP, SUSB, ACTV, ACTB | Tenant Id no encontrado. Debe ser DICETEST01 | 136 | ApiError | DICE error: Tenant ID not found. Must be DICETEST01. |
-| U103 | RJCT | NEWR, AMND, DEAC | El código de la EASPBV no existe | 121 | ResourceNotFoundError | DICE error: The EASPBV code does not exist. |
-| U119 | RJCT | NEWR, AMND | Error de sesión (errores de validación) | 136 | ApiError | DICE error: Session error. |
-| U122 | RJCT | NEWR, AMND, DEAC, SUSP, SUSB, ACTV, ACTB | Se genera cuando el canal no está abierto211 | 136 | ApiError | DICE error: Channel not open. |
-| U212 | RJCT | NEWR, AMND, DEAC, SUSP, SUSB, ACTV, ACTB | Mensaje enviado por un canal que no corresponde | 136 | ApiError | DICE error: Message sent by an inappropriate channel. |
-| U250 | RJCT | NEWR, AMND | El tipo de llave debe ser uno de los registrados en el diccionario global | 118 | ResourceValidationError | DICE error: The key type must be one of those registered in the global dictionary. |
-| U801 | RJCT | NEWR, AMND | No se puede determinar el participante | 118 | ResourceValidationError | DICE error: The participant cannot be determined. |
-| U804 | RJCT | AMND, DEAC, SUSP, SUSB, ACTV, ACTB | La llave no existe o esta Inactiva. | 121 | ResourceNotFoundError | DICE error: The key does not exist or is inactive. |
-| U805 | RJCT | AMND, SUSP, SUSB, ACTV, ACTB | La llave está suspendida por el cliente. | 123 | DomainRuleViolationError | DICE error: The key is suspended by the customer. |
-| U806 | RJCT | NEWR, SUSP, SUSB, ACTV, ACTB | La llave ya está registrada con la misma entidad financiera, pero cuenta distinta. | 123 | DomainRuleViolationError | DICE error: The key is already registered with the same financial institution, but to a different account. |
-| U807 | RJCT | NEWR | La llave ya está registrada con otra entidad financiera. | 123 | DomainRuleViolationError | DICE error: The key is already registered with another financial institution. |
-| U808 | RJCT | NEWR | La llave ya se encuentra registrada con la misma cuenta. | 123 | DomainRuleViolationError | DICE error: The key is already registered with the same account. |
-| U809 | RJCT | AMND, DEAC, SUSP, SUSB, ACTV, ACTB | No se tiene suficientes privilegios para hacer esta operación. | 100 | ForbiddenError | DICE error: You do not have sufficient privileges to perform this operation. |
-| U811 | RJCT | AMND, DEAC, SUSP, SUSB, ACTV | La llave está suspendida por el participante. | 123 | DomainRuleViolationError | DICE error: The key is suspended by the participant. |
-
-### Errores MOL
 
 ## MOL
 
-La documentación de MOL define muy pocos errores.
+La mayoría son errores de configuración, por lo que no deberían ser visibles para los participantes.
 
-La mayoría son errores de configuración, por lo que no deberían ser visibles para los participantes. El error más común que podría observarse es `U122 - InboundBankNotActive`, el cual ocurre cuando los participantes están fuera de servicio o han sido marcados como suspendidos por cualquier otra razón.
+El error más común que podría observarse es `U122 - InboundBankNotActive`, el cual ocurre cuando los participantes están fuera de servicio o han sido marcados como suspendidos por cualquier otra razón.
 
 Las validaciones de TransfiYa deberían prevenir la aparición de todos los demás errores, ya que validamos todos los campos antes de establecer contacto con MOL.
+
+### Errores MOL
 
 Este mapeo está basado en el siguiente documento:
 
@@ -161,13 +168,15 @@ Este mapeo está basado en el siguiente documento:
     2025-03-07
 </Info>
 
-| MOL error code | MOL response status | MOL operation | MOL error name | TransfiYa error code | TransfiYa error name | TransfiYa error message | Description |
-| --- | --- | --- | --- | --- | --- | --- | --- |
-| U000 | ACTC | Credit transfer | Success | 0 | - | Success |  |
-| U119 | RJCT | Credit transfer | SessionValidationFailed | 118 |ResourceValidationError | MOL validation error: MOL message | Validation error related related to message sent to MOL. |
-| U112 | RJCT | Credit transfer | MaxAmountCheckFailed | 123 | DomainRuleViolationError | MOL error: The amount exceeds the maximum amount allowed. | Transaction amount is above the maximum allowed amount. |
-| U125 | RJCT | Credit transfer | InboundBankClassifierNotFound | 107 | InvalidTargetError | MOL error: Target participant is not configured in the system. | The target participant is not configured in the system. |
-| U126 | RJCT | Credit transfer | OutboundBankIdCannotBeDetermined | 103 | InvalidSourceError | MOL error: Source participant is not configured in the system. | This error happens if the source participant is not configured in the system. |
-| U122 | RJCT | Credit transfer | InboundBankNotActive | 107 | InvalidTargetError | MOL error: Target participant is not active. | The target participant is configured in the system, but it is inactive. |
-| U173 | RJCT | Credit transfer | Validation error | 118 | ResourceValidationError |MOL validation error: MOL message | MOL validations are  not successful on the request. |
-| U908 | RJCT | Credit transfer | Rejection lock validation | 136 | ApiError | MOL error: Rejection lock validation MOL message | It is not clear in which case this error happens. |
+<Accordion title="Mapeo Errores MOL">
+    | MOL error code | MOL response status | MOL operation | MOL error name | TransfiYa error code | TransfiYa error name | TransfiYa error message | Description |
+    | --- | --- | --- | --- | --- | --- | --- | --- |
+    | U000 | ACTC | Credit transfer | Success | 0 | - | Success |  |
+    | U119 | RJCT | Credit transfer | SessionValidationFailed | 118 |ResourceValidationError | MOL validation error: MOL message | Validation error related related to message sent to MOL. |
+    | U112 | RJCT | Credit transfer | MaxAmountCheckFailed | 123 | DomainRuleViolationError | MOL error: The amount exceeds the maximum amount allowed. | Transaction amount is above the maximum allowed amount. |
+    | U125 | RJCT | Credit transfer | InboundBankClassifierNotFound | 107 | InvalidTargetError | MOL error: Target participant is not configured in the system. | The target participant is not configured in the system. |
+    | U126 | RJCT | Credit transfer | OutboundBankIdCannotBeDetermined | 103 | InvalidSourceError | MOL error: Source participant is not configured in the system. | This error happens if the source participant is not configured in the system. |
+    | U122 | RJCT | Credit transfer | InboundBankNotActive | 107 | InvalidTargetError | MOL error: Target participant is not active. | The target participant is configured in the system, but it is inactive. |
+    | U173 | RJCT | Credit transfer | Validation error | 118 | ResourceValidationError |MOL validation error: MOL message | MOL validations are  not successful on the request. |
+    | U908 | RJCT | Credit transfer | Rejection lock validation | 136 | ApiError | MOL error: Rejection lock validation MOL message | It is not clear in which case this error happens. |
+</Accordion>
