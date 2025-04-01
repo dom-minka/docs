@@ -14,13 +14,25 @@ Signers se pueden usar para transferencias reguladas y no reguladas.
 
 Una llave es relacionada a un credencial de pago o signer.
 
-```mermaid
----
-title: Modelo de Directorio de llaves
----
-flowchart LR
-  classDef alias stroke-dasharray: 5 5;
+<Tabs>
+    <Tab title="Modelo Bre-B">
+        ```mermaid
+        flowchart LR
+        classDef alias stroke-dasharray: 5 5;
 
-  A1[Llave 1<br>phone::$5712345]:::alias --> K1[Credencial de pago 1<br>chck:34243244343]
-  A2[Llave 2<br>email::pedro#8203;@perez.co]:::alias --> K2[Credencial de pago 1<br>svgs:42424234]
-```
+        A1[Llave 1<br>phone::$5712345]:::alias --> K1[Credencial de pago 1<br>chck:34243244343]
+        A2[Llave 2<br>email::pedro#8203;@perez.co]:::alias --> K2[Credencial de pago 1<br>svgs:42424234]
+        ```
+    </Tab>
+    <Tab title="Modelo Actual">
+    ```mermaid
+    flowchart LR
+
+      W1[Wallet 1<br />phone: $5712345] --> S1[Signer 1<br />account: 102020]
+      W1 --> S2[Signer 2<br />account: 75840]
+      W2[Wallet 2<br />phone: $5798745] --> S2
+      W2 --> S3[Signer 3<br />Account: 584886]
+      W3[Wallet 3<br />phone: $5755849] --> S4[Signer 4<br />account: 974847]
+    ```
+    </Tab>
+</Tabs>
