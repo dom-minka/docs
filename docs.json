@@ -8,35 +8,41 @@
     "dark": "#15803D"
   },
   "navigation": {
-    "tabs": [
+    "versions": [
       {
-        "tab": "Directorio Federado",
-        "groups": [
+        "version": "1.1.0",
+        "tabs": [
           {
-            "group": "Como empezar",
-            "icon": "mask",
-            "pages": [
-              "es/directory/intro/intro-directory",
-              "es/directory/intro/intro-ux"
-            ]
-          },
-          {
-            "group": "Guias de uso",
-            "icon": "book",
-            "pages": [
-              "es/directory/guides/how-to-create-keys",
-              "es/directory/guides/how-to-resolve-keys",
-              "es/directory/guides/how-to-update"
-            ]
-          },
-          {
-            "group": "Acerca de",
-            "icon": "code",
-            "pages": [
-              "es/directory/about/about-signers",
-              "es/directory/about/about-validations",
-              "es/directory/about/about-data-model",
-              "es/directory/about/about-errors"
+            "tab": "Directorio Federado",
+            "groups": [
+              {
+                "group": "Como empezar",
+                "icon": "mask",
+                "pages": [
+                  "es/v1.5.0/directory/intro/intro-directory",
+                  "es/v1.5.0/directory/intro/intro-ux"
+                ]
+              },
+              {
+                "group": "Guias de uso",
+                "icon": "book",
+                "pages": [
+                  "es/v1.5.0/directory/guides/how-to-create-keys",
+                  "es/v1.5.0/directory/guides/how-to-resolve-keys",
+                  "es/v1.5.0/directory/guides/how-to-update"
+                ]
+              },
+              {
+                "group": "Acerca de",
+                "icon": "code",
+                "pages": [
+                  "es/v1.5.0/directory/about/about-signers",
+                  "es/v1.5.0/directory/about/about-validations",
+                  "es/v1.5.0/directory/about/about-data-model",
+                  "es/v1.5.0/directory/about/about-errors",
+                  "es/v1.5.0/directory/about/about-timestamps"
+                ]
+              }
             ]
           }
         ]
