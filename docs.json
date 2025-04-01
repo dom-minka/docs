@@ -8,42 +8,76 @@
     "dark": "#002E83"
   },
   "navigation": {
-    "tabs": [
+    "versions": [
       {
-        "tab": "Guias",
-        "groups": [
+        "version": "1.66",
+        "tabs": [
           {
-            "group": "Para Personas (breb.ya)",
-            "icon": "briefcase",
-            "pages": [
-              "es/ya-p2p/p2p-about",
-              "es/ya-p2p/p2p-regulatory",
-              "es/ya-p2p/p2p-ux"
+            "tab": "Directorio Federado",
+            "groups": [
+              {
+                "group": "Como empezar",
+                "icon": "mask",
+                "pages": [
+                  "es/v1.66/directory/intro/intro-directory",
+                  "es/v1.66/directory/intro/intro-ux"
+                ]
+              },
+              {
+                "group": "Guias de uso",
+                "icon": "book",
+                "pages": [
+                  "es/v1.66/directory/guides/how-to-create-keys",
+                  "es/v1.66/directory/guides/how-to-resolve-keys",
+                  "es/v1.66/directory/guides/how-to-update-keys",
+                  "es/v1.66/directory/guides/how-to-sync-dice"
+                ]
+              },
+              {
+                "group": "Acerca de",
+                "icon": "code",
+                "pages": [
+                  "es/v1.66/directory/about/about-signers",
+                  "es/v1.66/directory/about/about-validations",
+                  "es/v1.66/directory/about/about-data-model",
+                  "es/v1.66/directory/about/about-errors",
+                  "es/v1.66/directory/about/about-timestamps",
+                  "es/v1.66/directory/about/about-key-status"
+                ]
+              }
             ]
           },
           {
-            "group": "Para Empresas (pse.ya)",
-            "icon": "briefcase",
-            "pages": [
-              "es/ya-biz/biz-about",
-              "es/ya-biz/biz-b2p",
-              "es/ya-biz/biz-p2b"
+            "tab": "Transfiya Bre-B",
+            "groups": [
+              {
+                "group": "Como empezar",
+                "icon": "mask",
+                "pages": ["es/v1.66/transfers-mol/intro/intro-mol"]
+              },
+              {
+                "group": "Guias de uso",
+                "icon": "book",
+                "pages": ["es/v1.66/transfers-mol/guides/how-to-send-mol"]
+              },
+              {
+                "group": "Acerca de",
+                "icon": "code",
+                "pages": [
+                  "es/v1.66/transfers-mol/about/about-accept",
+                  "es/v1.66/transfers-mol/about/about-settlement"
+                ]
+              }
             ]
           },
           {
-            "group": "Guias de uso",
-            "icon": "book",
-            "pages": ["es/guides/how-to-keys", "es/guides/how-to-send-mol"]
-          },
-          {
-            "group": "Sobre",
-            "icon": "code",
-            "pages": [
-              "es/about/about-flows",
-              "es/about/about-signers",
-              "es/about/about-accept",
-              "es/about/about-settlement",
-              "es/about/about-timestamps"
+            "tab": "Notas de la versión",
+            "groups": [
+              {
+                "group": "Despliegues",
+                "icon": "mask",
+                "pages": ["es/v1.66/release-notes/release-notes-stg"]
+              }
             ]
           }
         ]
@@ -73,9 +107,8 @@
   },
   "footer": {
     "socials": {
-      "x": "https://x.com/mintlify",
-      "github": "https://github.com/mintlify",
-      "linkedin": "https://linkedin.com/company/mintlify"
+      "github": "https://github.com/minka_",
+      "linkedin": "https://linkedin.com/company/minkainc"
     }
   }
 }

@@ -1,0 +1,45 @@
+---
+title: 'Los estados'
+description: 'Descripción sobre los estados de llaves en el DICE'
+icon: 'traffic-light'
+---
+
+## Introducción
+
+Bre-B ha implementado un modelo sofisticado para gestionar el estado de las llaves que se sincronizan con el directorio centralizado.
+
+Este modelo está diseñado para funcionar de manera transparente, sin requerir trabajo adicional por parte de los participantes, ya que es administrado íntegramente por el sistema Transfiya.
+
+<Warning>
+    Este modelo solo podrá ser probado e implementado cuando DICE esté completamente funcional.
+</Warning>
+
+## Máquina de estados
+
+El directorio centralizado gestionará el estado de las llaves mediante códigos de error específicos. La función de Transfiya en este proceso se limita a mapear estos errores al estándar vigente.
+
+| Estado | ACTV (cliente) | ACTV (participante) | ICTV | SUSP | SUSPB |
+| --- | --- | --- | --- | --- | --- |
+| ACTV | U805 | U805 | U000 | U000 | U000 |
+| ICTV | U804 | U804 | U804 | U804 | U804 |
+| SUSP | U000 | U805 | U000 | U805 | U000 |
+| SUSPB | U811 | U000 | U811 | U811 | U000 |
+
+Los errores visibles para los participantes se basarán en los errores estándar HTTP:
+
+| Estado | Activo cliente | Activo participante | Inactivo | Suspendido cliente | Suspendido participante |
+| --- | --- | --- | --- | --- | --- |
+| Activo | 123 | 123 | 0 | 0 | 0 |
+| Inactivo | 121 | 121 | 121 | 121 | 121 |
+| Suspendido por cliente | 0 | 123 | 0 | 123 | 0 |
+| Suspendido por participante | 123 | 0 | 123 | 123 | 0 |
+
+Nombres de estaddos registrados en transfiya mapeado a DICE:
+
+| Name | Transfiya | Regulation |
+| --- | --- | --- |
+| Active | ACTIVE | ACTV |
+| Blocked by client | SUSPENDED_BY_CLIENT | SUSP |
+| Blocked by participant | SUSPENDED_BY_PARTICIPANT | SUSB |
+| Inactive (cancelled) | INACTIVE | ICTV |
+| Activated by participant | ACTIVE_BY_PARTICIPANT | ACTV |

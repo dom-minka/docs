@@ -1,0 +1,58 @@
+---
+title: 'Resumen Ejecutivo'
+description: 'Resumen sobre el directorio federado Transfiya'
+icon: 'clipboard-question'
+---
+
+## Introducción
+
+Bre-B es la nueva marca establecida por el Banco de la República que identifica el Sistema de Pagos Inmediatos e Interoperables en Colombia.
+
+En los flujos regulatorios actuales, que incluyen pagos entre personas y pagos a comercios, se implementará la marca Bre-B en la [experiencia de usuario](intro-ux) de todos los participantes del sistema.
+
+La regulación SPI en Colombia establece que todos los sistemas de pago en tiempo real deben ser interoperables mediante la integración con dos nuevos servicios proporcionados por el Banco Central de Colombia.
+
+Uno de estos servicios es un directorio centralizado que permite mapear credenciales o llaves de pago entre las redes.
+
+Bre-B define cinco tipos de alias (llaves), los cuales deben resolverse antes de iniciar cualquier transferencia.
+
+## Obligaciones de los participantes
+
+La mayor parte del trabajo para cumplir con la regulación está implementado a nivel de plataforma. Para cumplir con el modelo regulatorio de llaves, los participantes deben atender las siguientes obligaciones:
+
+<Steps>
+    <Step title="Zona Bre-B" icon="tablet-screen-button">
+      Los participantes deben implementar la funcionalidad de Bre-B en su canal de usuario siguiendo las guías de [experiencia de usuario](intro-ux).
+    </Step>
+    <Step title="Consentimiento de usuario" icon="check-double">
+      Los participantes deben obtener el consentimiento explícito de los usuarios para [sincronizar con DICE](../guides/how-to-sync-dice) sus llaves al sistema DICE.
+    </Step>
+    <Step title="Resolución de llaves" icon="magnifying-glass">
+      Los participantes deben [resolver las llaves](../guides/how-to-resolve-keys) antes de iniciar cualquier transferencia en el sistema Bre-B.
+    </Step>
+</Steps>
+
+
+## Directorio Transfiya
+
+El objetivo de Transfiya es optimizar los esfuerzos de los bancos y generar más valor en todos sus servicios.
+
+Transfiya ya cuenta con un directorio federado construido de manera genérica que soporta más funcionalidades que las requeridas por la regulación.
+
+El directorio regulado está soportado por Transfiya. Para cumplir con la regulación, simplementeno se utilizará la funcionalidad de Transfiya que permite vincular múltiples cuentas a una sola llave.
+
+<Info>
+    Para consultar, modificar y eliminar llaves en Transfiya, puede utilizar la API de Transfiya [signers](../about/about-signers)
+</Info>
+
+Una vez que la regulación entre en vigor, los participantes deberán [resolver](../guides/how-to-resolve-keys) las llaves antes de iniciar cualquier transferencia. Todas las transferencias en Bre-B se procesarán como transferencias de cuenta a cuenta, o de "signer" a "signer".
+
+Los "signers" representan credenciales de pago vinculadas de manera unívoca con cuentas bancarias. El modelo de [datos](../about/about-data-model) asociado al signer incluye información detallada sobre los propietarios de las cuentas, como números de documento, tipo y número de cuenta, entre otros datos relevantes.
+
+La mayoría de los campos exigidos por la regulación ya se encuentran disponibles en la versión actual de integración para los participantes.
+
+Al sincronizarse con el directorio centralizado, Transfiya implementará validaciones estrictas definidas por la regulación usando el esquema de [validación](../about/about-validations).
+
+<Info>
+  Durante la fase de transición, Transfiya habilitará validaciones flexibles o alertas para facilitar la interoperarbilidad y  adaptación de los participantes.
+</Info>

@@ -1,0 +1,615 @@
+---
+title: 'Sobre Flujos'
+description: 'Guia sobre los flujos y orquestación en transfiya'
+icon: 'arrow-right'
+---
+
+## Flujos
+
+“Al iniciar una transferencia en Transfiya, se activa un flujo de pago gestionado por una máquina de estados. Esta máquina de estados coordina la operación entre los participantes y sistemas externos, permitiendo controlar y orquestar el proceso a través de pasos específicos. Dichos pasos varían según la definición del flujo, el entorno y el tipo de participantes representados por el firmante (signer).”
+
+Los flujos de envío se seleccionan durante el proceso de creación de la transferencia, utilizando el campo de tipo de transferencia.
+
+```javascript
+Tipo de transferencia:
+labels.type: string[SEND, SENDMOL, REQUEST, ONBOARDING]
+```
+
+Tipos de flujos disponibles actualmente en Transfiya:
+
+<Note>
+  El uso del modelo de transfer para iniciar pagos en el sistema permite emplear el mismo protocolo y REST API para cualquier caso de uso o flujo de dinero, incluyendo el nuevo flujo regulatorio.
+</Note>
+
+### Flujo de envio SEND
+
+El modelo de flujo regulado no requiere modificaciones por parte de la entidad participante. Para su habilitación, es necesario que el sistema de liquidación del banco central esté disponible y operativo.
+
+El flujo de procesamiento actual para transferencias tipo `SEND` en Transfiya se visualiza de la siguiente manera:
+
+<Tabs>
+  <Tab title="SEND">
+      ```mermaid
+      sequenceDiagram
+	    autonumber
+        participant sb as Participante origen
+        participant ty as TransfiYa
+        participant tb as Participante Destino
+        participant monitor as Antifraude
+
+        sb ->> ty: Create transfer
+        ty ->> sb: Call debit
+        ty ->> ty: Wait to accept
+        tb ->> ty: Accept (continue)
+        ty ->> monitor: AF init
+        ty ->> tb: Call credit
+        ty ->> sb: Call status
+        ty ->> tb: Call status
+        ty ->> monitor: AF complete
+        ```
+  </Tab>
+  <Tab title="SEND Detallado">
+      ```mermaid
+    sequenceDiagram
+    autonumber
+    participant sb as Participante Origen
+    participant ty as TransfiYa
+    participant tb as Participante Destino
+    participant monitor as Antifraude
+
+    sb ->> ty: Create transfer
+    ty ->> ty: Validate business rules
+    ty -->> sb: Transfer created
+    alt debit (async)
+      ty ->> sb: Call debit
+      sb ->> ty: Create upload action
+      sb -->> ty: Debit response
+      sb ->> sb: Debit source user
+      sb ->> ty: Set action tx_id
+      sb ->> ty: Sign debit IOU
+      ty ->> ty: Process debit IOU
+      ty -->> sb: Debit IOU response
+      sb ->> ty: Continue transfer
+    end
+
+    ty ->> ty: Wait to accept
+    tb ->> ty: Accept Transfer
+    ty ->> monitor: AF init
+    monitor -->> ty: AF response
+
+    alt action (sync)
+      ty ->> sb: Call Action
+      sb ->> ty: Sign send IOU
+      sb -->> ty: Action response
+    end
+
+    alt credit (async)
+      ty ->> tb: Call credit
+      tb ->> ty: Create download action
+      tb -->> ty: Credit response
+      tb ->> tb: Credit target user
+      tb ->> ty: Set action tx_id
+      tb ->> ty: Sign credit IOU
+      ty ->> ty: Process credit IOU
+      ty -->> tb: Credit IOU response
+      tb ->> ty: Continue transfer
+    end
+
+    ty ->> sb: Call status
+    sb -->> ty: Status response
+    ty ->> tb: Call status
+    tb -->> ty: Status response
+    ty ->> monitor: Monitor+ complete
+    monitor -->> ty: Monitor+ response
+    ```
+  </Tab>
+</Tabs>
+
+Los bancos realizan movimientos principales durante las llamadas de `debit` y `credit`, por eso estas llamadas son asíncronas.
+
+Los movimientos principales en ciertos sistemas bancarios pueden tomar un tiempo considerable. El movimiento de Acción no tiene efecto sobre los saldos en los sistemas bancarios, sirve solo como confirmación para enviar fondos al usuario destino.
+
+La transferencia puede ser aceptada automáticamente por Transfiya en caso de que el firmante de destino sea conocido. En caso contrario, se debe esperar a que el firmante de destino acepte manualmente la transferencia a través de una aplicación bancaria o que la entidad de destino confirma la aceptacion.
+
+Más información sobre la aceptación se puede encontrar en [Sobre aceptación](about-accept).
+
+<Note>
+Si un usuario tiene múltiples firmantes, les notificamos y esperamos a que acepten manualmente a través de una aplicación bancaria.
+</Note>
+
+Se llama a un sistema de detección de fraude después de que la transferencia es aceptada porque el destino final de la transferencia se resuelve en ese punto. Antes de este punto, el destino puede ser un alias que aún no está incorporado en el sistema.
+
+<Note>
+El flujo actual presenta pasos subóptimos que pueden optimizarse. Por ejemplo, la actualización del action ID y la gestión de callbacks en débitos pueden mejorarse implementando el modelo V2 de la plataforma o ajustando el flujo de trabajo.
+</Note>
+
+Las llamadas a `/status` se utilizan actualmente solo con fines informativos y no deben contener movimientos de saldo en los sistemas bancarios. Pueden usarse para notificar a los usuarios, registrar estados, etc.
+
+### Flujo regulado SENDMOL
+
+El flujo actual de Transfiya es totalmente compatible con el modelo regulatorio y no requiere modificaciones por parte de la entidad participante.
+
+La diferencia principal en el flujo regulatorio radica en el modelo de liquidación, donde la plataforma de Transfiya asume la responsabilidad de comunicarse directamente con el MOL (Modelo Operativo de Liquidación).
+
+El participante debe validar la cuenta del destinatario antes de enviar la transferencia; para eso vamos a usar el mismo flujo de aceptación de la transferencia.
+
+<Note>
+  Gracias a la capacidad de Transfiya para orquestar redes externas, el participante solo necesita enviar una transferencia simple, incluso cuando el destinatario pertenece a una entidad fuera del ecosistema Transfiya.
+</Note>
+
+En la siguiente sección se describen los flujos y se detallan los endpoints o pasos afectados con su diferencias.
+
+<Tabs>
+  <Tab title="SENDMOL">
+      ```mermaid
+      sequenceDiagram
+      autonumber
+        participant sb as Participante origen
+    participant ty as TransfiYa
+        participant tb as Participante Destino
+        participant monitor as Antifraude
+        participant mol as Mol
+
+        sb ->> ty: Crear transferencia
+
+        ty ->> sb: Llamada debito
+
+        ty ->> monitor: Inicializar Análisis de Fraude
+
+        ty ->> mol: Reservar fondos
+        ty ->> tb: Notificación de transferencia
+        ty ->> ty: Esperar aceptación
+
+        tb ->> ty: Aceptar (continuar)
+
+        ty ->> mol: Confirmar liquidación
+
+        ty ->> ty: Esperar confirmación
+
+        mol ->> ty: Confirmar liquidación
+
+        ty ->> tb: Llamada credito
+
+        ty ->> sb: Llamada /status
+
+        ty ->> tb: Llamada /status
+
+        ty ->> monitor: Análisis de Fraude completo
+        ```
+  </Tab>
+  <TabItem title="Crear transferencia (1)">
+  ```mermaid
+    sequenceDiagram
+    autonumber
+    participant su as Source User
+    participant sb as Source Bank
+    participant ty as TransfiYa
+    participant tb as Target Bank
+    participant monitor as Monitor+
+    participant mb as MOL Bridge
+    participant mol as MOL
+
+
+    sb ->> ty: POST v1/transfer
+    ty ->> ty: Validate business rules
+    ty -->> sb: 201 Created
+  ```
+  <Tabs>
+    <Tab title="POST /transfer">
+        ```diff
+        curl -X POST \
+          -H "Content-Type: application/json" \
+          -H "x-api-key: API_KEY" \
+          -H "Authorization: Bearer TOKEN" \
+          -d '{
+            "source": "wXxwpxB32saqfmfMxAQD4SVWWhhn6akLC2",
+        -   "target": "$573002414263",
+        +   "target": "wfvmRir8XxRtoEuUBDkv3BP4T7BQezwm1f",
+            "symbol": "$tin",
+            "amount": "100",
+            "labels": {
+              "description": "Envio prueba mol",
+              "domain": "tin",
+        +     "type": "SENDMOL",
+              "sourceChannel": "APP",
+              "tx_id": "12341324342",
+        +     "initiated": "2025-01-14T20:40:57.322-05:00",
+              "deviceFingerPrint": {
+                "hash": "26fff5af6441f8e15a71e8d62c361714484b1b308c99e8eb68ca85e2a7e0dc58",
+                "ipAddress": "2001:0db8:85a3:0000:0000:8a2e:0370:7334",
+                "country": "Colombia",
+                "city": "Bogotá",
+                "mobileDevice": "990000862471854",
+                "SIMCardId": "8991101200003204510",
+                "model": "Huawei Mate 20 Pro",
+                "operator": "Bharti Airtel Limited"
+              }
+            }
+          }' "URL/v1/transfer"
+          ```
+    </Tab>
+    <Tab title="Response">
+        ```diff
+        {
+          "source": "wXxwpxB32saqfmfMxAQD4SVWWhhn6akLC2",
+        - "target": "$573002414263",
+        + "target": "wfvmRir8XxRtoEuUBDkv3BP4T7BQezwm1f",
+          "amount": "100.00",
+          "symbol": "$tin",
+          "labels": {
+            "hash": "PENDING",
+            "type": "SEND",
+            "domain": "tin",
+            "flowId": "Lf13jsK83omPv3bOt",
+            "status": "PENDING",
+            "tx_id": "12341324342",
+            "tx_ref": "Lf13jsK83omPv3bOt",
+        +   "tx_mol": "20250114890915944TFY123456789012345", // nuevo campo
+        +   "initiated": "2025-01-14T20:40:57.322-05:00",
+            "created": "2025-01-14T20:40:57.322-05:00",
+            "updated": "2025-01-14T20:40:57.322-05:00",
+            "description": "DEV - SEND trx 01",
+            "sourceChannel": "APP",
+            "deviceFingerPrint": {
+              "city": "Bogotá",
+              "hash": "26fff5af6441f8e15a71e8d62c361714484b1b308c99e8eb68ca85e2a7e0dc58",
+              "model": "Huawei Mate 20 Pro",
+              "country": "Colombia",
+              "operator": "Bharti Airtel Limited",
+              "SIMCardId": "8991101200003204510",
+              "ipAddress": "2001:0db8:85a3:0000:0000:8a2e:0370:7334",
+              "mobileDevice": "990000862471854"
+            }
+          },
+          "snapshot": {
+            "source": {
+              "signer": {
+                "handle": "wXxwpxB32saqfmfMxAQD4SVWWhhn6akLC2",
+                "labels": {
+                  "name": "Jorge Alejandro Fernandez Garcia",
+                  "proprietary": "CC",
+                  "identification": "1010101010",
+        +         "bankAccountType": "SVGS",
+        +         "bankAccountNumber": "12345654321",
+        +         "bankId": "891234918",
+        +         "targetSpbviCode": "TFY",
+        -         "created": "2022-04-12T16:17:49.322-05:00",
+        -         "createdBy": "tcYV0MRoklTXUwSFFkkQ",
+        -         "description": "new descr",
+        -         "routerReference": "$bancorojo"
+                }
+              },
+        -     "wallet": {
+        -       "handle": "$575555544444",
+        -       "labels": {
+        -         "name": "Test user 9",
+        -         "type": "PERSON",
+        -         "created": "2022-04-12T16:17:33.322-05:00",
+        -         "updated": "2022-04-14T09:30:33.322-05:00",
+        -         "createdBy": "$bancorojo"
+        -       },
+        -       "signer": [
+        -         "wXxwpxB32saqfmfMxAQD4SVWWhhn6akLC2",
+        -         "weqYJCU6MN193yJ63XehjT3VWFAAguAHHV"
+        -       ],
+        -       "default": "wXxwpxB32saqfmfMxAQD4SVWWhhn6akLC2"
+        -     }
+        -   },
+        -   "symbol": {
+        -     "signer": {
+        -       "handle": "wfvmRir8XxRtoEuUBDkv3BP4T7BQezwm1f",
+        -       "labels": {
+        -         "type": "SYMBOL",
+        -         "created": "2022-03-17T22:08:07.322-05:00",
+        -         "createdBy": "$minka"
+        -       }
+        -     },
+        -     "wallet": {
+        -       "handle": "$tin",
+        -       "labels": {
+        -         "name": "tin",
+        -         "type": "SYMBOL",
+        -         "created": "2022-03-17T22:08:09.234-05:00",
+        -         "updated": "2022-04-13T12:36:46.234-05:00",
+        -         "createdBy": "$minka"
+        -       },
+        -       "signer": [
+        -         "wfvmRir8XxRtoEuUBDkv3BP4T7BQezwm1f"
+        -       ],
+        -       "default": "wfvmRir8XxRtoEuUBDkv3BP4T7BQezwm1f"
+        -     }
+            },
+            "target": {
+              "signer": {
+        +       "handle": "wfvmRir8XxRtoEuUBDkv3BP4T7BQezwm1f",
+                "labels": {
+                  "name": "Jorge Alejandro Fernandez Garcia",
+                  "proprietary": "CC",
+                  "identification": "1010101010",
+                  "bankAccountType": "SVGS",
+                  "bankAccountNumber": "12345654321",
+                  "bankId": "891234918",
+        +         "targetSpbviCode": "TFY",
+        -         "created": "2022-04-12T16:17:49-05:00",
+        -         "createdBy": "tcYV0MRoklTXUwSFFkkQ",
+        -         "description": "new descr",
+        -         "routerReference": "$bancorojo"
+                }
+              },
+        -     "wallet": {
+        -       "handle": "$573002414263",
+        -       "labels": {
+        -         "type": "PERSON",
+        -         "created": "2022-03-23T11:00:55.332-05:00",
+        -         "updated": "2022-03-23T11:00:55.334-05:00"
+        -       }
+        -     }
+            }
+          },
+          "error": {
+            "code": 0,
+            "message": "Success"
+          },
+          "action_id": "35de4d3d-3aba-4fb3-b110-d004ce2aabb2",
+          "id": "35de4d3d-3aba-4fb3-b110-d004ce2aabb2"
+        }
+        ```
+    </TabItem>
+  </Tabs>
+  </TabItem>
+  <TabItem title="5. Aceptacion de transferecia">
+  ```mermaid
+    sequenceDiagram
+    autonumber
+    participant su as Source User
+    participant sb as Source Bank
+    participant ty as TransfiYa
+    participant tb as Target Bank
+    participant monitor as Monitor+
+    participant mb as MOL Bridge
+    participant mol as MOL
+
+    ty ->> tb: POST /status
+    tb ->> tb: Validar cuenta destino y ejecutar reglas de negocio
+    ty ->> ty: Esperar aceptación
+    tb ->> ty: POST /v1/transfer/{tx_Ref}/accept
+  ```
+    <Tabs>
+    <TabItem label="Request /status" value="request-status">
+    ```bash
+        curl -X POST /status
+         -H "x-api-key: <API_KEY>" \
+         -H "Authorization: Bearer <TOKEN>" \
+         -H "Content-Type: application/json" \
+         -d '
+        {
+          "source": "wXxwpxB32saqfmfMxAQD4SVWWhhn6akLC2",
+          "target": "wfvmRir8XxRtoEuUBDkv3BP4T7BQezwm1f",
+          "amount": "100.00",
+          "symbol": "$tin",
+          "labels": {
+            "hash": "PENDING",
+            "type": "SEND",
+            "domain": "tin",
+            "flowId": "Lf13jsK83omPv3bOt",
+            "status": "PENDING",
+            "tx_ref": "Lf13jsK83omPv3bOt",
+            "tx_mol": "20250114890915944TFY123456789012345", // nuevo campo
+            "initiated": "2025-01-14T20:40:57.322-05:00",
+            "created": "2025-01-14T20:40:57.322-05:00",
+            "updated": "2025-01-14T20:40:57.322-05:00",
+            "description": "DEV - SEND trx 01",
+            "sourceChannel": "APP",
+            "deviceFingerPrint": {
+              "city": "Bogotá",
+              "hash": "26fff5af6441f8e15a71e8d62c361714484b1b308c99e8eb68ca85e2a7e0dc58",
+              "model": "Huawei Mate 20 Pro",
+              "country": "Colombia",
+              "operator": "Bharti Airtel Limited",
+              "SIMCardId": "8991101200003204510",
+              "ipAddress": "2001:0db8:85a3:0000:0000:8a2e:0370:7334",
+              "mobileDevice": "990000862471854"
+            }
+          },
+          "snapshot": {
+            "source": {
+              "signer": {
+                "handle": "wXxwpxB32saqfmfMxAQD4SVWWhhn6akLC2",
+                "labels": {
+                  "name": "Jorge Alejandro Fernandez Garcia",
+                  "proprietary": "CC",
+                  "identification": "1010101010",
+                  "bankAccountType": "SVGS",
+                  "bankAccountNumber": "12345654321",
+           	      "bankId": "891234918",
+                  "targetSpbviCode": "TFY"
+                }
+              },
+            },
+            "target": {
+              "signer": {
+                   "handle": "wfvmRir8XxRtoEuUBDkv3BP4T7BQezwm1f",
+                "labels": {
+                  "name": "Jorge Alejandro Fernandez Garcia",
+                  "proprietary": "CC",
+         	        "identification": "1010101010",
+                  "bankAccountType": "SVGS",
+                  "bankAccountNumber": "12345654321",
+           	      "bankId": "891234918",
+                  "targetSpbviCode": "TFY",
+                }
+              },
+            }
+          },
+          "error": {
+            "code": 0,
+            "message": "Success"
+          },
+          "action_id": "35de4d3d-3aba-4fb3-b110-d004ce2aabb2",
+          "id": "35de4d3d-3aba-4fb3-b110-d004ce2aabb2"
+        }
+        ```
+
+    </TabItem>
+    <TabItem label="Request /accept" value="request-accept">
+        ```bash
+        curl --location --request POST 'URL/v1/transfer/[tx_ref]/accept' \
+        --header 'Content-Type: application/json' \
+        --header 'x-api-key: API_KEY' \
+        --header 'Authorization: Bearer TOKEN' \
+        -d '{
+          "signer": {
+            "handle": "wfvmRir8XxRtoEuUBDkv3BP4T7BQezwm1f",
+          }
+        }'
+        ```
+    </TabItem>
+  </Tabs>
+
+
+  </TabItem>
+  <TabItem title="SENDMOL Detallado">
+      ```mermaid
+      ---
+      title: Intra Transfers (TransfiYa -> TransfiYa)
+      ---
+     sequenceDiagram
+	autonumber
+	participant su as Source User
+	participant sb as Source Bank
+	participant ty as TransfiYa
+        participant tb as Target Bank
+        participant monitor as Monitor+
+        participant mb as MOL Bridge
+        participant mol as MOL
+
+        su ->> sb: Create transfer
+        sb ->> ty: Create transfer
+        ty ->> ty: Validate business rules
+        ty -->> sb: Transfer created
+        sb -->> su: Transfer created
+
+        alt debit
+          ty ->> sb: Call debit
+          sb ->> ty: Create UPLOAD action
+          ty -->> sb: Action response
+          sb -->> ty: Debit response
+          sb ->> sb: Authorize debit
+          sb ->> ty: Send IOU
+          ty -->> sb: IOU response
+          sb ->> ty: Continue transfer
+        end
+
+        ty ->> monitor: Monitor+ init
+        monitor -->> ty: Monitor response
+
+        ty ->> mb: Reserve funds
+        activate mb
+        mb ->> mol: Reserve funds (pacs.008)
+        activate mol
+        mol ->> mb: Credit target (pacs.008)
+        activate mb
+        mb ->> ty: Continue transfer<br />(MOL credit)
+
+
+        ty ->> tb: POST /status
+        tb ->> tb: Validate target account (business rules)
+        ty ->> ty: Wait for acceptace
+
+        tb ->> ty: Accept transfer
+
+        alt action
+          ty ->> sb: Call Action
+          sb ->> ty: Send IOU
+          ty -->> sb: IOU response
+          sb -->> ty: Action response
+        end
+
+
+        ty ->> mb: Confirm credit
+        mb -->> mol: Confirm credit (pacs.002)
+        deactivate mb
+        mol -->> mb: Confirmation (pacs.002)
+        deactivate mol
+        mb ->> ty: Continue transfer<br />(MOL reservation)
+        deactivate mb
+
+        ty ->> ty: Wait for settlement confirmation
+        mol ->> mb: Settlement confirmation (pacs.002)
+        mb ->> ty: Continue transfer<br />(MOL settled)
+
+        alt credit (async)
+            ty ->> tb: Call credit
+            tb ->> ty: Create download action
+            tb -->> ty: Credit response
+            tb ->> tb: Credit target user
+            tb ->> ty: Set action tx_id
+            tb ->> ty: Sign credit IOU
+            ty ->> ty: Process credit IOU
+            ty -->> tb: Credit IOU response
+            tb ->> ty: Continue transfer
+        end
+
+        alt commit source
+        ty ->> sb: Call status
+        sb -->> ty: Status response
+        sb ->> sb: Finalize debit
+        sb ->> ty: Continue transfer
+        end
+
+        alt commit target
+        ty ->> tb: Call status
+        tb -->> ty: Status response
+        tb ->> tb: Credit target user
+        tb ->> ty: Send IOU
+        ty -->> tb: IOU response
+        tb ->> ty: Continue transfer
+        end
+
+        ty ->> monitor: Monitor+ complete
+        monitor -->> ty: Monitor+ response
+      ```
+  </TabItem>
+  <TabItem label="Flujo BanRep" value="banrep">
+      ```mermaid
+      sequenceDiagram
+          autonumber
+          participant orClient as Originating - Client
+          participant orBank as Originating - Bank
+          participant spbvi as SPBVI (Transfiya)
+          participant mol as Operational Mechanism for Settlement (MOL)
+          participant tgSpbvi as Target - SPBVI
+          participant tgBank as Target - Bank
+          participant tgClient as Target - Client
+
+          Note over orClient,tgClient: PREVIOUS PROCESSES:<br>1. Resource allocation by the Originating Bank in the MOL <br>2. Client fund reservation <br>3. Prior key resolution
+
+          orBank ->> spbvi: Authorize and send payment instruction (pacs.008)<br>Create transfer
+          spbvi ->> spbvi: Execute risk controls
+          spbvi ->> mol: Clearing and send payment instruction (pacs.008)
+
+
+          mol ->> mol: Operational validations <br> Reserve funds
+          mol ->> tgSpbvi: Route validated payment instruction (pacs.008)
+          tgSpbvi ->> tgBank: Send validated payment instruction (pacs.008)
+          tgBank ->> tgBank: Validate account status <br> Validate amounts
+          tgBank ->> tgSpbvi: Confirmation (pacs.002)
+          tgSpbvi ->> mol:  Confirmation (pacs.002)
+          mol ->> spbvi: Confirmation (pacs.002)
+
+          Note over orClient,tgClient: Acceptance
+	  mol ->> mol: Execute settlement
+         par settlement origin
+	   mol ->> spbvi: Settlement confirmation (pacs.002)
+           spbvi ->> orBank: Debit confirmation (pacs.002)
+           orBank ->> orBank: Debit funds
+           orBank ->> orClient: Debit [success message]
+         and settlement target
+           mol ->> tgSpbvi: Settlement confirmation (pacs.002)
+           tgSpbvi ->> tgBank: Credit confirmation (pacs.002)
+           tgBank ->> tgBank: Credit funds
+           tgBank ->> tgClient: Credit [success message]
+	 end
+         ```
+  </TabItem>
+</Tabs>
