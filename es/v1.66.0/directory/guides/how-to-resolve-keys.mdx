@@ -4,21 +4,28 @@ description: 'Cómo hacer la resolución de las llaves'
 icon: 'magnifying-glass'
 ---
 
-## Modelo Actual y cambios
+## Introducción
 
-El flujo de Transfiya permite a los usuarios transferir dinero a llaves sin necesidad de registro previo, facilitando significativamente el uso del sistema y el proceso de registro de usuarios.
+El flujo regulatorio exige la resolución de llaves como requisito previo al inicio de cualquier transferencia, constituyendo el cambio fundamental para los participantes de Transfiya.
 
-Transfiya también ofrece la posibilidad de enviar transferencias directamente a los signers, completando la transacción de manera inmediata sin requerir aceptación por parte del receptor. El último modelo está regulado por Bre-B y requiere la resolución de la llave antes de iniciar cualquier transferencia.
+Actualmente, el sistema Transfiya permite a los usuarios realizar transferencias monetarias a llaves sin necesidad de registro previo, lo que simplifica significativamente tanto la experiencia de usuario como el proceso de incorporación al sistema.
+
+Transfiya permite el envío de transferencias directamente a los signers, lo que permite completar transacciones de forma inmediata sin requerir la aceptación del destinatario.
+
+Este último modelo, regulado por la normativa Bre-B, establece como obligatoria la resolución de la llave antes de proceder con cualquier operación de transferencia.
+
+Cualquier nuevo participante puede adoptar el modelo regulado y, simultáneamente, continuar enviando y recibiendo transferencias con los participantes existentes, independientemente de si éstos han migrado al nuevo flujo regulado.
 
 ## Flujo regulado
 
 Los cambios de regulación requiren resolución de llaves antes de iniciar una transferencia.
 
+```mermaid
 sequenceDiagram
 	autonumber
-	participant b as Banco
+	participant b as Participante
 	participant ty as Transfiya
-		participant cd as Directorio<br />Centralizado
+		participant cd as DICE
 
 		b ->> +ty: Buscar llave (signer)
 		ty ->> ty: Verificar signer
@@ -28,20 +35,15 @@ sequenceDiagram
 				ty ->> ty: Mapear llave a signer
 		end
 		ty -->> -b: Devolver signer
+```
 
-<Warring>
-				Si no se encuentra al signer, significa que el usuario no está registrado en el sistema y la transferencia no puede procesarse bajo el modelo regulado.
-</Warring>
+Si no se encuentra la llave activa, significa que el usuario no está registrado en el sistema y la transferencia no puede procesarse bajo el modelo regulado.
 
-Cualquier nuevo participante puede adoptar el modelo regulado y, simultáneamente, continuar enviando y recibiendo transferencias con los participantes existentes, independientemente de si éstos han migrado al nuevo flujo regulado.
+Los participantes pueden migrar al nuevo flujo de forma independiente, sin necesidad de esperar otros participantes.
 
 <Info>
-	Las transferencias a billeteras seguirán funcionando hasta la implementación completa de la regulación, garantizando la compatibilidad con los participantes actuales del sistema.
+	Las transferencias a billeteras con aceptación seguirán funcionando hasta la implementación completa de la regulación, garantizando la compatibilidad con los participantes actuales del sistema.
 </Info>
-
-Este modelo nos permite probar el flujo regulado utilizando todo el volumen transaccional de Transfiya mucho antes de que la regulación entre en vigor.
-
-Los participantes pueden migrar al nuevo flujo de forma independiente, sin necesidad de esperar a los demás.
 
 ## Ejemplos del API
 

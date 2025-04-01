@@ -4,13 +4,19 @@ description: 'Cómo registrar llaves en Transfiya'
 icon: 'address-card'
 ---
 
-# Flujo de creación de llave
+## Introducción
 
-Las llaves a nivel de regulación se mapearán a los credenciales de pago [signers](../about/about-signers) de Transfiya en una relación uno a uno.
+Los participantes registran sus llaves en el directorio federado de Transfiya, y no tienen acceso a directorio centralizado.
+
+Las llaves que cumplen con los requisitos mínimos de regulación se mapearán a los credenciales de pago [signers](../about/about-signers) de Transfiya en una relación de un credencial de pago a una llave.
+
+[Validaciones](../about/about-validations) de llaves son basados en minimos campos requeridos para la creación de una llave por la regulación.
 
 <Info>
-    Las billeteras permitían asignar múltiples cuentas a una sola llave. Esta funcionalidad está disponible por motivos de compatibilidad, pero no se utilizará en las llaves Bre-B.
+    Las billeteras actualmente permiten asignar múltiples cuentas a una sola llave. Esta funcionalidad está disponible por motivos de compatibilidad, pero no se utilizará en las llaves Bre-B.
 </Info>
+
+## Flujo de creación de llave
 
 A continuación se presenta una descripción general del flujo de creación de llaves y una comparativa con el proceso actual de Transfiya.
 
@@ -53,7 +59,7 @@ A continuación se presenta una descripción general del flujo de creación de l
       ty -->> -b: Respuesta billetera
   end
   ```
-</Tab>
+  </Tab>
 </Tabs>
 
 ## Ejemplo de creación de llave
