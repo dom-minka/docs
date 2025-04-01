@@ -20,6 +20,7 @@
                 "icon": "mask",
                 "pages": [
                   "es/v1.66.0/directory/intro/intro-directory",
+                  "es/v1.66.0/directory/intro/intro-regulatory",
                   "es/v1.66.0/directory/intro/intro-ux"
                 ]
               },
