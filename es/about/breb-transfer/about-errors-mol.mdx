@@ -1,5 +1,5 @@
 ---
-title: 'Sobre errores'
+title: 'Sobre errores de DICE'
 description: 'Guia sobre manejo de errores en transfiya para SPI'
 icon: 'triangle-exclamation'
 ---
@@ -8,7 +8,7 @@ icon: 'triangle-exclamation'
 
 Transfiya usa un sistema de manejo de errores basado en estándar de errores HTTP.
 
-Los sistemas externos como DICE y MOL utilizan códigos de error específicos, sin embargo, Transfiya cuenta con un mecanismo que mapea automáticamente estos códigos a su estructura de errores HTTP.
+Los sistemas externos como DICE utilizan códigos de error específicos, sin embargo, Transfiya cuenta con un mecanismo que mapea automáticamente estos códigos a su estructura de errores HTTP.
 
 Esta capacidad de estandarización simplifica considerablemente el proceso de integración para los participantes del sistema, reduciendo o incluso eliminando la necesidad de desarrollar lógicas de manejo de errores específicas.
 
@@ -28,6 +28,7 @@ Todas las solicitudes exitosas a la nube de minka tienen un estado HTTP `200`.
 
 Si hubo un error al procesar la solicitud, el objeto de error está en la respuesta. El objeto de error contiene el código y la descripción de un error.
 
+
 ```json
 {
 	"error":
@@ -38,17 +39,20 @@ Si hubo un error al procesar la solicitud, el objeto de error está en la respue
 }
 ```
 
-En el caso de transferencias exitosas, un objeto de error con código `0` se añade a la respuesta original.
+Ejemplo:
 
 ```jsx
 {
-	"error":
-		{
-			"code": 0,
-			"message": "Success"
-		}
+    "error": {
+        "code": 123,
+        "message": "DICE error: Key already registered with same account number"
+    }
 }
 ```
+
+<Info>
+    En el caso de transferencias exitosas, un objeto de error con código `0` se añade a la respuesta original.
+</Info>
 
 **Code**
 
@@ -160,10 +164,8 @@ Las validaciones de TransfiYa deberían prevenir la aparición de todos los dem�
 Este mapeo está basado en el siguiente documento:
 
 <Info>
-    Referencia para el mapeo se uso el documento
+    Referencia para el mapeo se uso el
     Documento Mecanismo Operativo para la Liquidación – MOL
-    Documento de Especificaciones Técnicas para la Implantación de BRE-B
-    Dirección General de Tecnología
     Versión 2.1.1
     2025-03-07
 </Info>

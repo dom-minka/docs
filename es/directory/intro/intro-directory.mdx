@@ -1,0 +1,37 @@
+---
+title: 'Resumen Ejecutivo'
+description: 'Resumen sobre el directorio federado Transfiya'
+icon: 'clipboard-question'
+---
+
+## Contexto
+
+La regulación SPI en Colombia establece que todos los sistemas de pago en tiempo real deben volverse interoperables mediante la integración con dos nuevos servicios proporcionados por el Banco Central de Colombia.
+
+Uno de estos servicios es un directorio centralizado que permitiría mapear credenciales o llaves de pago entre las redes.
+
+Bre-B define cinco tipos de alias (llaves), los cuales deben ser resueltos antes de iniciar cualquier transferencia.
+
+Las obligaciones de los participantes con respecto a los componentes del directorio incluyen la modificación de su experiencia de usuario y la conexión a un directorio federado como Transfiya.
+
+## Transfiya directorio
+
+Transfiya ya cuenta con un directorio federado que está construido para ser genérico y soporta más funcionalidades que las requeridas por la regulación.
+
+El flujo regulado está soportado por Transfiya, ya que incluye las funcionalidades disponibles en la plataforma. Para ser compatibles con la regulación, la funcionalidad de Transfiya que permite vincular múltiples cuentas a una sola llave no se va usar.
+
+<Info>
+    Para consultar, modificar y eliminar llaves en Transfiya, puede utilizar la API de Transfiya "signer"
+</Info>
+
+Una vez que la regulación entre en vigor, los participantes deberán resolver las llaves antes de iniciar una transferencia. Todas las transferencias en Bre-B serán tratadas como transferencias de cuenta a cuenta, o de "signer" a "signer".
+
+Los "signers" representan credenciales de pago están vinculados uno a uno con cuentas bancarias. Los metadatos del firmante contienen información sobre los propietarios de las cuentas, números de documento, tipo y número de cuenta, entre otros.
+
+La mayoría de los campos requeridos por la regulación ya están disponibles en los firmantes.
+
+ Al momento de sincronizarse con el directorio centralizado, Transfiya implementará validaciones estrictas definidas por la regulación usando schema de validación.
+
+<Info>
+  Durante la fase de transición, Transfiya habilitará validaciones flexibles o alertas para facilitar la actualización de los participantes.
+</Info>

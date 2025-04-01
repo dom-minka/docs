@@ -1,6 +1,6 @@
 ---
-title: 'Como modificar llaves'
-description: 'Como hacer modificasción de las llaves'
+title: 'Como sincronziar llaves'
+description: 'Como sincronizar llaves con directorio centralizado'
 icon: 'code'
 ---
 
@@ -9,7 +9,7 @@ Para actualizar las llaves, basta con actualizar un signer y el directorio de al
 El flujo actual para actualizar el alias con el que está vinculada la cuenta implica eliminar un firmante de un wallet y agregarlo a otra diferente:
 
 ```mermaid
-sequenceDiagram 
+sequenceDiagram
 	autonumber
 	participant b as Bank
 	participant ty as TransfiYa
@@ -34,7 +34,7 @@ sequenceDiagram
 El nuevo modelo no utiliza wallets, por lo que este proceso se simplifica a solo actualizar un signer:
 
 ```mermaid
-sequenceDiagram 
+sequenceDiagram
 	autonumber
 	participant b as Bank
 	participant ty as TransfiYa
@@ -55,7 +55,7 @@ sequenceDiagram
         -H "Authorization: Bearer <TOKEN>" \
         -H "Content-Type: application/json" \
         -d '{
-            "labels": { 
+            "labels": {
 	         "bankAccountType": "DBMO",
 	         "bankAccountNumber": "302058294920"
         }

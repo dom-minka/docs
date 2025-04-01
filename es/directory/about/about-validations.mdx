@@ -1,27 +1,37 @@
 ---
-title: 'Sobre Signers (Llaves)'
-description: 'Guia sobre los flujos y orchestracion en transfiya'
-icon: 'key'
+title: 'Las validaciones'
+description: 'Descripción detallada sobre validaciones de campos de llaves en el sistema'
+icon: 'check-double'
 ---
 
-## Sobre las llaves y signers
+## Validaciones en Transfiya
 
-Las llaves a nivel de regulación se mapearán a los signers de Transfiya en una relación uno a uno.
+La plataforma Transfiya utiliza tipos de datos y esquemas dinámicos para garantizar la integridad y consistencia de los datos en toda la plataforma. Esto incluye reglas de validación para diversos campos dentro del sistema.
 
-Transfiya soporta multiples llaves usando el modelo de signers que representan credenciales de pago que incluye datos personales, el tipo de cuenta y el estado de la cuenta.
+Dado que no existe una estructura de datos fija en la plataforma, creamos esquemas que se aplican según el tipo de registro y objeto en la plataforma.
 
-Signers se pueden usar para transferencias reguladas y no reguladas. Una llave es equivalente a una credencial de pago o signer.
+En Transfiya actualmente admitimos diferentes tipos de llaves que incluyen personas y empresas. El campo "type" en los firmantes está asociado a un esquema de validación específico.
 
-```mermaid
----
-title: Modelo de Directorio de llaves
----
-flowchart LR
-  classDef alias stroke-dasharray: 5 5;
+**Tipos de Validaciones:**
 
-  A1[Llave 1<br />phone::$5712345]:::alias --> K1[Credencial de pago 1<br />chck: 34243244343]
-  A2[Llave 2<br />email::pedro@perez.co]:::alias --> K2[Credencial de pago 1<br />svgs: 42424234]
-```
+| Tipo signer | Schema aplicada | Descripción |
+|--- | --- | --- |
+| `PERSON`  | PERSON | Representa una persona física |
+| `BUSINESS`  | BUSINESS | Representa una empresa o persona jurídica. |
+
+<Info>
+    Dependiendo del tipo de firmante del registro, se aplica el esquema de validación correspondiente. Por ejemplo, un firmante tipo persona requiere un nombre válido, mientras que un firmante tipo empresa requiere un nombre comercial válido.
+</Info>
+
+### Alertas (Advertencias leves)
+
+Para garantizar la compatibilidad con el sistema actual, las validaciones de firmantes relacionadas con las llaves regulatorias se mostrarán como advertencias en la API REST, sin bloquear la operación.
+
+### Errores (Validaciones estrictas)
+
+Debido a la compatibilidad con otros casos de uso y participantes, las validaciones estrictas solo se aplican cuando una llave se envía al directorio centralizado. Esto permite mantener la flexibilidad del sistema mientras se asegura la integridad de los datos críticos.
+
+Puede encontrar más información sobre los errores aquí[about-errors]
 
 ## Modelo de data
 
@@ -36,8 +46,7 @@ Modelo de data completo para signers se puede ver aca:
 | Tipo de identificación | labels.proprietary | Requerido |  | Texto | Ver tabla `labels.proprietary` |  |
 | Descripción | labels.description | Opcional |  | Texto | Máximo 255 caracteres. |  |
 | Número de identificación | labels.identification | Requerido |  | Texto | Máximo 18 caracteres alfanuméricos, caracteres especiales no permitidos. |  |
-| Tipo de cliente | labels.type | Requerido |  | Texto | Uno de los valores:
-PERSON, BUSINESS, TROUPE | Solo PERSON y BUSINESS son usados para transferencias reguladas. |
+| Tipo de cliente | labels.type | Requerido |  | Texto | Uno de los valores: PERSON, BUSINESS, TROUPE | Solo PERSON y BUSINESS son usados para transferencias reguladas. |
 | Nombre de entidad legal del cliente | labels.name | Requerido con condición | labels.type = 'BUSINESS' | Texto | 1-140 caracteres |  |
 | Primer nombre del cliente | labels.firstName | Requerido con condición | labels.type = 'PERSON' | Texto | 1-40 caracteres |  |
 | Segundo nombre del cliente | labels.secondName | Opcional con condición | labels.type = 'PERSON' | Texto | 1-40 caracteres | Nuevo valor requerido por regulación. |
@@ -45,8 +54,7 @@ PERSON, BUSINESS, TROUPE | Solo PERSON y BUSINESS son usados para transferencias
 | Segundo apellido del cliente | labels.secondLastName | Opcional con condición | labels.type = 'PERSON' | Texto | 1-40 caracteres | Nuevo valor requerido por regulación. |
 | País de residencia | labels.countryOfResidence | Opcional |  | Texto | Código ISO de país de 2 caracteres. [https://www.iso.org/obp/ui](https://www.iso.org/obp/ui/#search) |  |
 | Identificación de entidad emisora | labels.createdBy | Generado por Transfiya |  | Texto | Referencia de participante Transfiya | Identificador de billetera del banco en Transfiya. |
-| Tipo de método de pago | labels.bankAccountType | Requerido |  | Texto | Uno de los valores:
-SVGS, CACC, DBMO, DORD, DBMI |  |
+| Tipo de método de pago | labels.bankAccountType | Requerido |  | Texto | Uno de los valores:SVGS, CACC, DBMO, DORD, DBMI |  |
 | Número de método de pago | labels.bankAccountNumber | Requerido |  | Texto | Máximo 34 dígitos |  |
 | Código nacional del banco | labels.bankBicfi | Opcional |  | Texto | 4 dígitos |  |
 | Nombre del banco | labels.bankName | Opcional |  | Texto | Máximo 64 caracteres |  |
@@ -72,7 +80,7 @@ Signer label (`labels.aliasType`):
 | Document number | NRIC | NRIC |
 | Merchent Id | MERCHANT | B |
 
-Elemplo y validaciones de alias label (`labels.aliasValue`):
+Ejemplo y validaciones de alias label (`labels.aliasValue`):
 
 | Tipo de alias | Ejemplo | Validación | Comentario |
 | --- | --- | --- | --- |
@@ -82,9 +90,7 @@ Elemplo y validaciones de alias label (`labels.aliasValue`):
 | Número de documento | `PR5002499` | Mínimo 3 y máximo 18 caracteres alfanuméricos, no se permiten caracteres especiales. | El número de identificación del documento debe ser único en el sistema, incluso si se repite en Colombia. |
 | ID de comerciante | `0012345678` | Comienza con `00` y tiene 10 dígitos en total. |  |
 
-<Warning>
-    Para habilitar compatibilidad con el sistema actual, validaciones de signers relacionados con los llaves regulatorios se van a mostrar en forma de warnings en REST API.
-</Warning>
+
 
 ### Status de signers (llaves regulatorias)
 
@@ -149,14 +155,5 @@ Los campos del keeper se definen a continuación y siguen en el modelo actual:
 
 | Nombre | Campo | Tipo | Requerido | Validación |
 | --- | --- | --- | --- | --- |
-| Tipo de llave | scheme | Texto | Requerido | Uno de:
-`ecdsa-ed25519`, `eddsa-ed25519` |
+| Tipo de llave | scheme | Texto | Requerido | Uno de:`ecdsa-ed25519`, `eddsa-ed25519` |
 | Llave pública | public | Texto | Requerido | 64-130 caracteres |
-
-## Sobre billeteras o wallets
-
-Billeteres permiten almacenar y gestionar múltiples llaves o signers de manera segura y conveniente.
-
-<Note>
-    La plataforma va mantener compatiblidad con entidades que cuentan con el modelo actual de billeteras, pero para casos regulados no se van a usar despues de salida en producción.
-</Note>
