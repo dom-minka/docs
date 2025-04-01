@@ -1,0 +1,61 @@
+---
+title: Sobre Cambios Regulatorios
+description: Descripción del los cambios regulatorios y mandatorios
+icon: 'scale-balanced'
+---
+
+## Cambios Mandatorios
+
+Esta sección describe los cambios necesarios para que los bancos sean completamente compatibles con el modelo SPI (Sistema de Pagos Inmediatos). Transfiya mantendrá compatibilidad con los flujos actuales, por lo que las entidades pueden implementar estas modificaciones de forma independiente y en fases. Los cambios enumerados como 1, 2, 3 y 4 son suficientes para comenzar a operar bajo el nuevo modelo regulado.
+
+<Warning>
+El cambio número 5 está relacionado con el cumplimiento de los tiempos máximos de procesamiento definidos por la normativa. Si los bancos no lo implementan, podrán iniciar operaciones con otros participantes, pero estarán expuestos a posibles penalidades por demoras en las transferencias.
+
+Omitir el cambio 6 podría generar complicaciones solo en caso de problemas técnicos con Transfiya o con MOL. Si bien la plataforma Transfiya ha demostrado una alta disponibilidad durante el último año, la estabilidad del sistema dependerá en gran medida del comportamiento de MOL una vez esté en funcionamiento. No implementar este cambio puede traducirse en un esfuerzo operativo adicional para resolver posibles incidentes.
+</Warning>
+
+A continuación, se detallan los cambios obligatorios para lograr la compatibilidad con SPI:
+
+### 1. Obtener los datos del beneficiario (firmante destino) antes de enviar la transferencia
+
+En el modelo SPI, las transferencias se realizan de cuenta a cuenta, lo que en términos de Transfiya significa de firmante a firmante. Antes de realizar una transferencia, los bancos deben consultar el directorio federado para identificar un firmante válido que ya esté registrado en el sistema. Para cumplir con la regulación, el destinatario de las transferencias tipo `SEND` debe ser obligatoriamente un firmante.
+
+### 2. Eliminar validaciones relacionadas con billeteras
+
+Algunos bancos validan que una billetera represente un número de teléfono al procesar transferencias. Este tipo de validaciones deben eliminarse, ya que ahora se deben admitir distintos tipos de alias. Además, las billeteras dejarán de usarse en este contexto. Al tratarse de transferencias de cuenta a cuenta, los bancos no deben realizar validaciones sobre el alias en sí, sino únicamente sobre los datos del cliente: nombre, identificación y datos bancarios.
+
+### 3. Generar un `tx_id` único conforme a la regulación
+
+Cada transferencia SPI debe contar con un identificador único (`tx_id`) generado siguiendo las reglas establecidas por la normativa. Este campo ya existe actualmente en las transferencias de Transfiya, pero no está sujeto a validaciones estrictas. A partir de la entrada en vigor del modelo SPI, este identificador será validado conforme a las reglas regulatorias.
+
+### 4. Registrar los tiempos de recepción y despacho de operaciones
+
+Los bancos deberán registrar el momento exacto en que reciben una operación desde Transfiya y el momento en que envían una respuesta. Esta información se incluirá en cada tipo de operación de la siguiente manera:
+
+- **Creación de transferencia**
+  - `received`: momento en que el usuario generó la solicitud.
+  - `dispatched`: momento en que se envió la solicitud a Transfiya.
+
+- **Continuación de transferencia**
+  - `received`: hora de la última interacción previa con Transfiya.
+  - `dispatched`: hora en que se envía la solicitud de continuación.
+
+- **Aceptación de transferencia**
+  - `received`: momento en que el usuario aceptó la operación.
+  - `dispatched`: momento en que se envió la solicitud de aceptación a Transfiya.
+
+<Info>
+Estos registros de tiempo son fundamentales para generar reportes de desempeño ante MOL y verificar el cumplimiento de los tiempos establecidos por la regulación.
+</Info>
+
+### 5. Cumplir con los límites de tiempo establecidos por la regulación
+
+La normativa define límites estrictos para el procesamiento de distintos segmentos de una transferencia. Los bancos deberán revisar sus integraciones para garantizar que pueden cumplir con estos tiempos dentro de los márgenes establecidos.
+
+### 6. Soportar el estado `PENDING` en el endpoint `/status`
+
+El modelo regulado exige que el banco receptor valide el estado de la cuenta y los detalles de la transferencia antes de que esta sea completada. Esta validación no acredita aún los fondos, sino que se trata de una verificación previa. Para soportar esto, Transfiya emplea el modelo de aceptación que ya existe en su arquitectura.
+
+<Info>
+Para automatizar este proceso, se utiliza el endpoint `/status`. Al recibir un estado `PENDING`, el banco debe validar que la cuenta destino exista, esté activa y que el usuario pueda recibir el pago entrante. Si todo es correcto, la transferencia debe ser aceptada.
+</Info>
