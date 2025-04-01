@@ -48,29 +48,6 @@
             ]
           },
           {
-            "tab": "Transfiya Bre-B",
-            "groups": [
-              {
-                "group": "Como empezar",
-                "icon": "mask",
-                "pages": ["es/v1.66/transfers-mol/intro/intro-mol"]
-              },
-              {
-                "group": "Guias de uso",
-                "icon": "book",
-                "pages": ["es/v1.66/transfers-mol/guides/how-to-send-mol"]
-              },
-              {
-                "group": "Acerca de",
-                "icon": "code",
-                "pages": [
-                  "es/v1.66/transfers-mol/about/about-accept",
-                  "es/v1.66/transfers-mol/about/about-settlement"
-                ]
-              }
-            ]
-          },
-          {
             "tab": "Notas de la versión",
             "groups": [
               {
