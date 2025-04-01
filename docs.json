@@ -29,7 +29,8 @@
                 "pages": [
                   "es/v1.66.0/directory/guides/how-to-create-keys",
                   "es/v1.66.0/directory/guides/how-to-resolve-keys",
-                  "es/v1.66.0/directory/guides/how-to-update-keys"
+                  "es/v1.66.0/directory/guides/how-to-update-keys",
+                  "es/v1.66.0/directory/guides/how-sync-dice"
                 ]
               },
               {
@@ -63,8 +64,7 @@
                 "icon": "code",
                 "pages": [
                   "es/v1.66.0/transfers-mol/about/about-accept",
-                  "es/v1.66.0/transfers-mol/about/about-settlement",
-                  "es/v1.66.0/transfers-mol/about-transfers"
+                  "es/v1.66.0/transfers-mol/about/about-settlement"
                 ]
               }
             ]
