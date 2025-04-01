@@ -41,7 +41,8 @@
                   "es/v1.66.0/directory/about/about-validations",
                   "es/v1.66.0/directory/about/about-data-model",
                   "es/v1.66.0/directory/about/about-errors",
-                  "es/v1.66.0/directory/about/about-timestamps"
+                  "es/v1.66.0/directory/about/about-timestamps",
+                  "es/v1.66.0/directory/about/about-key-status"
                 ]
               }
             ]
