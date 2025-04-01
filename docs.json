@@ -10,7 +10,7 @@
   "navigation": {
     "versions": [
       {
-        "version": "1.1.0",
+        "version": "1.66.0",
         "tabs": [
           {
             "tab": "Directorio Federado",
@@ -19,28 +19,52 @@
                 "group": "Como empezar",
                 "icon": "mask",
                 "pages": [
-                  "es/v1.5.0/directory/intro/intro-directory",
-                  "es/v1.5.0/directory/intro/intro-ux"
+                  "es/v1.66.0/directory/intro/intro-directory",
+                  "es/v1.66.0/directory/intro/intro-ux"
                 ]
               },
               {
                 "group": "Guias de uso",
                 "icon": "book",
                 "pages": [
-                  "es/v1.5.0/directory/guides/how-to-create-keys",
-                  "es/v1.5.0/directory/guides/how-to-resolve-keys",
-                  "es/v1.5.0/directory/guides/how-to-update-keys"
+                  "es/v1.66.0/directory/guides/how-to-create-keys",
+                  "es/v1.66.0/directory/guides/how-to-resolve-keys",
+                  "es/v1.66.0/directory/guides/how-to-update-keys"
                 ]
               },
               {
                 "group": "Acerca de",
                 "icon": "code",
                 "pages": [
-                  "es/v1.5.0/directory/about/about-signers",
-                  "es/v1.5.0/directory/about/about-validations",
-                  "es/v1.5.0/directory/about/about-data-model",
-                  "es/v1.5.0/directory/about/about-errors",
-                  "es/v1.5.0/directory/about/about-timestamps"
+                  "es/v1.66.0/directory/about/about-signers",
+                  "es/v1.66.0/directory/about/about-validations",
+                  "es/v1.66.0/directory/about/about-data-model",
+                  "es/v1.66.0/directory/about/about-errors",
+                  "es/v1.66.0/directory/about/about-timestamps"
+                ]
+              }
+            ]
+          },
+          {
+            "tab": "Transfiya Bre-B",
+            "groups": [
+              {
+                "group": "Como empezar",
+                "icon": "mask",
+                "pages": ["es/v1.66.0/transfers-mol/intro/intro-mol"]
+              },
+              {
+                "group": "Guias de uso",
+                "icon": "book",
+                "pages": ["es/v1.66.0/transfers-mol/guides/how-to-send-mol"]
+              },
+              {
+                "group": "Acerca de",
+                "icon": "code",
+                "pages": [
+                  "es/v1.66.0/transfers-mol/about/about-accept",
+                  "es/v1.66.0/transfers-mol/about/about-settlement",
+                  "es/v1.66.0/transfers-mol/about-transfers"
                 ]
               }
             ]
