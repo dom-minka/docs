@@ -1,0 +1,108 @@
+---
+title: Sobre Flujo Actual
+description: Descripción del flujo actual para transferencias tipo `SEND` en Transfiya, incluyendo detalles sobre llamadas, confirmaciones, y detección de fraude.
+icon: 'arrow-progress'
+---
+
+## Flujo actual de Transfiya
+
+El flujo actual de procesamiento de transferencias tipo `SEND` en Transfiya funciona de la siguiente manera:
+
+<Info>
+Transfiya **no implementa actualmente** un protocolo de confirmación en dos fases (*two-phase commit*), aunque este podría incorporarse utilizando la llamada de `status` como segunda fase del proceso.
+</Info>
+
+Las entidades financieras realizan los movimientos centrales durante las llamadas de `debit` (débito) y `credit` (crédito), motivo por el cual **estas llamadas son asincrónicas**. En algunos sistemas bancarios, los movimientos contables pueden tardar en completarse.
+
+La acción denominada `movement`, por su parte, **no tiene efecto sobre los saldos reales**; su único propósito es confirmar que los fondos pueden ser enviados al usuario destinatario.
+
+<Tip>
+Transfiya puede aceptar una transferencia automáticamente en casos donde existan firmantes por defecto, enlaces previos u otros mecanismos configurados.
+</Tip>
+
+Cuando el usuario tiene múltiples firmantes asociados, se le envía una **notificación para que confirme manualmente** la operación desde su aplicación bancaria.
+
+El sistema de detección de fraude (**Monitor+**) se activa **únicamente después de que la transferencia ha sido aceptada**, ya que es en ese momento cuando se conoce con certeza el destinatario final. Antes de esa etapa, el destinatario puede ser un alias no registrado.
+
+<Warning>
+Las llamadas de `status` **no deben generar movimientos de saldo** en los sistemas bancarios. Estas llamadas se utilizan con fines informativos, como notificar al usuario o registrar el estado de la transacción.
+</Warning>
+
+### Vista general del proceso
+
+A continuación, se presenta una vista general del procesamiento de transferencias desde una perspectiva de alto nivel.
+
+```mermaid
+sequenceDiagram
+  autonumber
+  participant sb as Banco origen
+  participant ty as Transfiya
+  participant tb as Banco destino
+  participant af as Antifraude
+
+  sb ->> ty: Crear transferencia
+  ty ->> sb: Llamar a débito
+  ty ->> ty: Esperar aceptación
+  ty ->> af: Iniciar antifraude
+  ty ->> sb: Llamar a acción
+  ty ->> tb: Llamar a crédito
+  ty ->> sb: Llamar a estado
+  ty ->> tb: Llamar a estado
+  ty ->> af: Finalizar antifraude
+```
+**Diagrama detallado del procesamiento de transferencias:**
+```mermaid
+sequenceDiagram
+  autonumber
+  participant sb as Banco Origen
+  participant ty as Transfiya
+  participant tb as Banco Destino
+  participant monitor as Monitor+
+
+  sb ->> +ty: Crear transferencia
+  ty ->> ty: Validar reglas de negocio
+  ty -->> -sb: Transferencia creada
+
+  alt débito (asincrónico)
+  ty ->> +sb: Llamar a débito
+  sb ->> ty: Crear acción de subida
+  sb -->> -ty: Respuesta de débito
+  sb ->> sb: Debitar usuario origen
+  sb ->> ty: Asignar tx_id a la acción
+  sb ->> ty: Firmar pagaré (IOU) de débito
+  ty ->> ty: Procesar IOU de débito
+  ty -->> sb: Respuesta del IOU de débito
+  sb ->> ty: Continuar transferencia
+  end
+
+  ty ->> ty: Esperar aceptación
+  ty ->> monitor: Iniciar Monitor+
+  monitor -->> ty: Respuesta de Monitor+
+
+  alt acción (sincrónica)
+  ty ->> +sb: Llamar a acción
+  sb ->> ty: Firmar pagaré (IOU) de envío
+  sb -->> -ty: Respuesta de acción
+  end
+
+  alt crédito (asincrónico)
+  ty ->> +tb: Llamar a crédito
+  tb ->> ty: Crear acción de descarga
+  tb -->> -ty: Respuesta de crédito
+  tb ->> tb: Acreditar usuario destino
+  tb ->> ty: Asignar tx_id a la acción
+  tb ->> ty: Firmar pagaré (IOU) de crédito
+  ty ->> ty: Procesar IOU de crédito
+  ty -->> tb: Respuesta del IOU de crédito
+  tb ->> ty: Continuar transferencia
+  end
+
+  ty ->> +sb: Llamar a estado
+  sb -->> -ty: Respuesta de estado
+
+  ty ->> +tb: Llamar a estado
+  tb -->> -ty: Respuesta de estado
+
+  ty ->> +monitor: Finalizar Monitor+
+  monitor -->> -ty: Respuesta de Monitor+
+```
