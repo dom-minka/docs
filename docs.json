@@ -48,6 +48,41 @@
             ]
           },
           {
+            "tab": "Transferencias Bre-B",
+            "groups": [
+              {
+                "group": "Como empezar",
+                "icon": "mask",
+                "pages": ["es/v1.66/transfers-mol/intro/intro-mol"]
+              },
+              {
+                "group": "Guias de uso",
+                "icon": "mask",
+                "pages": [
+                  "es/v1.66/transfers-mol/guides/how-to-send-mol",
+                  "es/v1.66/transfers-mol/guides/how-to-sign-transfer",
+                  "es/v1.66/transfers-mol/guides/how-to-accept-transfer",
+                  "es/v1.66/transfers-mol/guides/how-to-debit-sender",
+                  "es/v1.66/transfers-mol/guides/how-to-credit-receiver",
+                  "es/v1.66/transfers-mol/guides/how-to-notify"
+                ]
+              },
+              {
+                "group": "Acerca de",
+                "icon": "mask",
+                "pages": [
+                  "es/v1.66/transfers-mol/about/about-flows",
+                  "es/v1.66/transfers-mol/about/about-current-flow",
+                  "es/v1.66/transfers-mol/about/about-new-flow",
+                  "es/v1.66/transfers-mol/about/about-regulatory-changes",
+                  "es/v1.66/transfers-mol/about/about-settlement",
+                  "es/v1.66/transfers-mol/about/about-transfers",
+                  "es/v1.66/transfers-mol/about/about-transfiya"
+                ]
+              }
+            ]
+          },
+          {
             "tab": "Notas de la versión",
             "groups": [
               {

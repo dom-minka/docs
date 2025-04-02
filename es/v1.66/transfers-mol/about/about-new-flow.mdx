@@ -1,0 +1,319 @@
+---
+title: Sobre Flujo Regulatorio
+description: Descripción del flujo nuevo segun la regulacion que entra en vigor este 2025
+icon: 'building-columns'
+---
+
+## Contexto General
+
+A partir de 2025, entra en vigor una nueva regulación en Colombia que busca la interoperabilidad de todos los sistemas de pagos en tiempo real (RTP). Esta normativa exige la implementación de un Modelo Operativo de Liquidación (MOL) centralizado y un directorio único de alias. Transfiya, como el principal sistema P2P del país, debe adecuarse a estos lineamientos para poder continuar operando.
+
+## Estrategia de Adaptación
+
+Nuestro enfoque se basa en mantener compatibilidad con los bancos actualmente integrados a Transfiya, evitando la necesidad de migraciones complejas y costosas. Esto nos permite preservar nuestra base de usuarios y consolidar nuestra posición de liderazgo en el mercado.
+
+## Procesamiento de Transferencias y MOL
+
+Con la entrada en operación del MOL, todas las transferencias deberán ser enviadas a esta nueva infraestructura. Durante ese proceso, Transfiya suspenderá temporalmente su procesamiento interno hasta recibir la confirmación por parte de MOL.
+
+<Info>
+Gracias a que nuestro sistema ya está basado en procesamiento asincrónico por etapas (flow processor), esta integración se puede lograr simplemente agregando un nuevo paso dentro del flujo existente, de manera similar a como ya lo hacemos con otras integraciones como Monitor+.
+</Info>
+
+## Compatibilidad con el Modelo Regulatorio
+
+La regulación define que todas las transacciones sean de cuenta a cuenta. En Transfiya, las cuentas están representadas por firmantes (*signers*), por lo que nuestras transferencias ya son técnicamente equivalentes a lo exigido (de firmante a firmante). Este modelo ya se usa en flujos B2P actuales, lo que minimiza los cambios requeridos.
+
+<Tip>
+También revisaremos validaciones relacionadas con números de teléfono tanto en bancos como en Transfiya, y evaluaremos si se necesitan nuevos campos en las transferencias. Sin embargo, al almacenar la información relevante en el objeto `snapshot` y en los firmantes, se evitaría modificar la estructura de las transferencias.
+</Tip>
+
+## Tiempos y Reversión de Transferencias
+
+La regulación establece límites estrictos de tiempo para el procesamiento. Nuestra arquitectura permite registrar el tiempo de cada etapa del flujo, por lo que estamos en capacidad de cumplir con esta exigencia sin mayores ajustes estructurales.
+
+<Warning>
+El sistema actual ya incluye un mecanismo de reversión automática ante fallas. Actualmente opera en un plazo de varias horas, pero será optimizado para que actúe en segundos y se integre al flujo regular de procesamiento, asegurando cumplimiento con los estándares regulatorios.
+</Warning>
+
+## Mantenimiento de Funcionalidades Existentes
+
+Funcionalidades como las solicitudes de dinero (`REQUEST`) podrán mantenerse sin cambios, ya que no están reguladas. La aceptación de transferencias también continuará funcionando en los escenarios donde ya está deshabilitada por configuración (un solo firmante o firmante predeterminado).
+
+## Flujo de transferencias compatible con la regulación
+
+Esta sección presenta los flujos de procesamiento de transferencias que han sido actualizados para cumplir con los lineamientos de la regulación e integrar la funcionalidad del MOL (Modelo Operativo de Liquidación).
+
+<Tabs>
+    <Tab title="Flujo Transfiya -> Transfiya">
+    ```mermaid
+    sequenceDiagram
+  autonumber
+  participant su as Usuario Origen
+  participant sb as Banco Origen
+  participant ty as Transfiya
+  participant tb as Banco Destino
+  participant monitor as Monitor+
+  participant mb as Puente MOL
+  participant mol as MOL
+
+  su ->> +sb: Crear transferencia
+  sb ->> +ty: Crear transferencia
+  ty ->> ty: Validar reglas de negocio
+  ty -->> -sb: Transferencia creada
+  sb -->> -su: Transferencia creada
+
+  alt débito
+    ty ->> +sb: Llamar a débito
+    sb ->> +ty: Crear acción de subida (UPLOAD)
+    ty -->> -sb: Respuesta de acción
+    sb -->> -ty: Respuesta de débito
+    sb ->> sb: Debitar cuenta origen
+    sb ->> +ty: Actualizar acción con tx_id
+    ty -->> -sb: Acción actualizada
+    sb ->> +ty: Enviar pagaré (IOU)
+    ty -->> -sb: Respuesta de IOU
+    sb ->> ty: Continuar transferencia
+  end
+
+  ty ->> +monitor: Iniciar Monitor+
+  monitor -->> -ty: Respuesta de Monitor+
+
+  ty ->> +mb: Reservar fondos
+  activate mb
+  mb ->> mol: Reservar fondos (pacs.008)
+  activate mol
+  mol ->> mb: Acreditar destino (pacs.008)
+  activate mb
+  mb ->> ty: Continuar transferencia<br />(crédito MOL)
+
+  alt aceptación
+    ty ->> tb: Notificar estado PENDIENTE
+    tb -->> ty: Respuesta
+    tb ->> tb: Validar datos del destinatario
+    tb ->> ty: Aceptar transferencia
+  end
+
+  ty ->> mb: Confirmar crédito
+  mb -->> mol: Confirmar crédito (pacs.002)
+  deactivate mb
+  mol -->> mb: Confirmación (pacs.002)
+  deactivate mol
+  mb ->> ty: Continuar transferencia<br />(reserva MOL)
+  deactivate mb
+
+  ty ->> ty: Esperar confirmación de liquidación
+  mol ->> +mb: Confirmación de liquidación (pacs.002)
+  mb ->> -ty: Continuar transferencia<br />(MOL liquidado)
+
+  alt acción
+    ty ->> +sb: Llamar a Acción
+    sb ->> +ty: Enviar IOU
+    ty -->> -sb: Respuesta de IOU
+    sb -->> -ty: Respuesta de Acción
+  end
+
+  alt crédito
+    ty ->> +tb: Llamar a crédito
+    tb ->> +ty: Crear acción de descarga (DOWNLOAD)
+    ty -->> -tb: Respuesta de acción
+    tb -->> -ty: Respuesta de crédito
+    tb ->> tb: Acreditar usuario destino
+    tb ->> +ty: Actualizar acción con tx_id
+    ty -->> -tb: Acción actualizada
+    tb ->> +ty: Enviar IOU
+    ty -->> -tb: Respuesta de IOU
+    tb ->> ty: Continuar transferencia
+  end
+
+  alt estado completado
+    ty ->> +sb: Llamar a estado (COMPLETADO)
+    sb -->> -ty: Respuesta de estado
+    sb ->> sb: Notificar a usuario origen
+
+    ty ->> +tb: Llamar a estado (COMPLETADO)
+    tb -->> -ty: Respuesta de estado
+    tb ->> tb: Notificar a usuario destino
+  end
+
+  ty ->> +monitor: Finalizar Monitor+
+  monitor -->> -ty: Respuesta de Monitor+
+    ```
+    </Tab>
+    <Tab title="Flujo Transfiya -> BanRep">
+    ```mermaid
+    sequenceDiagram
+  autonumber
+  participant su as Usuario Origen
+  participant sb as Banco Origen
+  participant ty as Transfiya
+  participant mb as Puente MOL
+  participant mol as MOL
+  participant tb as Banco Destino
+  participant monitor as Monitor+
+
+  su ->> +sb: Crear transferencia
+  sb ->> +ty: Crear transferencia
+  ty ->> ty: Validar reglas de negocio
+  ty -->> -sb: Transferencia creada
+  sb -->> -su: Transferencia creada
+
+  alt débito
+    ty ->> +sb: Llamar a débito
+    sb ->> +ty: Crear acción de subida (UPLOAD)
+    ty -->> -sb: Respuesta de acción
+    sb -->> -ty: Respuesta de débito
+    sb ->> sb: Debitar cuenta origen
+    sb ->> +ty: Actualizar acción con tx_id
+    ty -->> -sb: Acción actualizada
+    sb ->> +ty: Enviar pagaré (IOU)
+    ty -->> -sb: Respuesta de IOU
+    sb ->> ty: Continuar transferencia
+  end
+
+  ty ->> +monitor: Iniciar Monitor+
+  monitor -->> -ty: Respuesta de Monitor+
+
+  ty ->> +mb: Reservar fondos
+  mb ->> +mol: Reservar fondos (pacs.008)
+  mol ->> +tb: Acreditar destino (pacs.008)
+  tb ->> tb: Validar cuenta destino
+  tb -->> -mol: Confirmar crédito (pacs.002)
+  mol -->> -mb: Confirmación (pacs.002)
+  mb ->> -ty: Continuar transferencia<br />(reserva MOL)
+
+  ty ->> ty: Esperar confirmación de liquidación
+  mol ->> +mb: Confirmación de liquidación (pacs.002)
+  mb ->> -ty: Continuar transferencia<br />(MOL liquidado)
+
+  alt acción
+    ty ->> +sb: Llamar a Acción
+    sb ->> +ty: Enviar IOU
+    ty -->> -sb: Respuesta de IOU
+    sb -->> -ty: Respuesta de Acción
+  end
+
+  alt crédito
+    ty ->> +tb: Llamar a crédito
+    tb ->> +ty: Crear acción de descarga (DOWNLOAD)
+    ty -->> -tb: Respuesta de acción
+    tb -->> -ty: Respuesta de crédito
+    tb ->> tb: Acreditar usuario destino
+    tb ->> +ty: Actualizar acción con tx_id
+    ty -->> -tb: Acción actualizada
+    tb ->> +ty: Enviar IOU
+    ty -->> -tb: Respuesta de IOU
+    tb ->> ty: Continuar transferencia
+  end
+
+  alt estado completado
+    ty ->> +sb: Llamar a estado (COMPLETADO)
+    sb -->> -ty: Respuesta de estado
+    sb ->> sb: Notificar a usuario origen
+
+    ty ->> +tb: Llamar a estado (COMPLETADO)
+    tb -->> -ty: Respuesta de estado
+    tb ->> tb: Notificar a usuario destino
+  end
+
+  ty ->> +monitor: Finalizar Monitor+
+  monitor -->> -ty: Respuesta de Monitor+
+    ```
+    </Tab>
+    <Tab title="Flujo BanRep -> Transfiya">
+    ```mermaid
+    sequenceDiagram
+  autonumber
+  participant su as Usuario Origen
+  participant sb as Banco Origen
+  participant ss as Sistema RTP<br />Origen
+  participant mol as MOL
+  participant mb as Puente MOL
+  participant ty as Transfiya
+  participant tb as Banco Destino
+  participant monitor as Monitor+
+
+  su ->> +sb: Crear transferencia
+  sb ->> sb: Verificar y reservar fondos
+  sb ->> +ss: Crear transferencia
+  ss ->> ss: Validar fraude
+  ss -->> -sb: Transferencia creada
+  sb -->> -su: Transferencia creada
+  ss ->> +mol: Reservar fondos (pacs.008)
+  mol ->> +mb: Acreditar destino (pacs.008)
+
+  mb ->> +ty: Crear transferencia
+  ty ->> ty: Validar reglas de negocio
+  ty -->> -mb: Transferencia creada
+
+  alt débito
+    ty ->> +mb: Llamar a débito
+    mb ->> +ty: Crear acción de subida (UPLOAD)
+    ty -->> -mb: Respuesta de acción
+    mb -->> -ty: Respuesta de débito
+    mb ->> mb: Autorizar débito
+    mb ->> +ty: Actualizar acción con tx_id
+    ty -->> -mb: Acción actualizada
+    mb ->> +ty: Enviar IOU
+    ty -->> -mb: Respuesta de IOU
+    mb ->> ty: Continuar transferencia
+  end
+
+  ty ->> +monitor: Iniciar Monitor+
+  monitor -->> -ty: Respuesta de Monitor+
+
+  alt aceptación
+    ty ->> mb: Notificar estado PENDIENTE
+    mb -->> ty: Respuesta
+    mb ->> mb: Validar datos del destinatario
+    mb ->> ty: Aceptar transferencia
+  end
+
+  ty ->> mb: Confirmar crédito
+  mb -->> -mol: Confirmar crédito (pacs.002)
+  mol -->> -ss: Confirmación (pacs.002)
+  ss ->> ss: Esperar confirmación de liquidación
+  mol ->> +ss: Confirmación de liquidación (pacs.002)
+  ss ->> -sb: Finalizar transferencia
+  activate sb
+  sb ->> sb: Debitar usuario origen
+  sb -->> ss: Confirmación final
+  deactivate sb
+
+  ty ->> ty: Esperar confirmación de liquidación
+  mol ->> +mb: Confirmación de liquidación (pacs.002)
+  mb ->> -ty: Continuar transferencia<br />(MOL liquidado)
+
+  alt acción
+    ty ->> +mb: Llamar a Acción
+    mb ->> +ty: Enviar IOU
+    ty -->> -mb: Respuesta de IOU
+    mb -->> -ty: Respuesta de Acción
+  end
+
+  alt crédito
+    ty ->> +tb: Llamar a crédito
+    tb ->> +ty: Crear acción de descarga (DOWNLOAD)
+    ty -->> -tb: Respuesta de acción
+    tb -->> -ty: Respuesta de crédito
+    tb ->> tb: Acreditar cuenta destino
+    tb ->> +ty: Enviar IOU
+    ty -->> -tb: Respuesta de IOU
+    tb ->> ty: Continuar transferencia
+  end
+
+  alt estado completado
+    ty ->> +mb: Llamar a estado (COMPLETADO)
+    mb -->> -ty: Respuesta de estado
+    mb ->> mb: Notificar a usuario origen
+
+    ty ->> +tb: Llamar a estado (COMPLETADO)
+    tb -->> -ty: Respuesta de estado
+    tb ->> tb: Notificar a usuario destino
+  end
+
+  ty ->> +monitor: Finalizar Monitor+
+  monitor -->> -ty: Respuesta de Monitor+
+    ```
+    </Tab>
+</Tabs>    
