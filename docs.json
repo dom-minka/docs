@@ -71,13 +71,11 @@
                 "group": "Acerca de",
                 "icon": "mask",
                 "pages": [
-                  "es/v1.66/transfers-mol/about/about-flows",
                   "es/v1.66/transfers-mol/about/about-current-flow",
                   "es/v1.66/transfers-mol/about/about-new-flow",
                   "es/v1.66/transfers-mol/about/about-regulatory-changes",
                   "es/v1.66/transfers-mol/about/about-settlement",
-                  "es/v1.66/transfers-mol/about/about-transfers",
-                  "es/v1.66/transfers-mol/about/about-transfiya"
+                  "es/v1.66/transfers-mol/about/about-transfers"
                 ]
               }
             ]
