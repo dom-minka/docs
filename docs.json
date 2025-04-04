@@ -105,19 +105,6 @@
             ]
           },
           {
-            "tab": "APIs",
-            "groups": [
-              {
-                "group": "APIs",
-                "openapi": {
-                  "source": "/public/spi-signers.yaml",
-                  "directory": "api-reference"
-                }
-
-              }
-            ]  
-          },
-          {
             "tab": "Notas de la versión",
             "groups": [
               {
