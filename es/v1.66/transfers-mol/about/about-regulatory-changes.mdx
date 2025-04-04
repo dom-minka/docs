@@ -8,11 +8,6 @@ icon: 'scale-balanced'
 
 Esta sección describe los cambios necesarios para que los bancos sean completamente compatibles con el modelo SPI (Sistema de Pagos Inmediatos). Transfiya mantendrá compatibilidad con los flujos actuales, por lo que las entidades pueden implementar estas modificaciones de forma independiente y en fases. Los cambios enumerados como 1, 2, 3 y 4 son suficientes para comenzar a operar bajo el nuevo modelo regulado.
 
-<Warning>
-El cambio número 5 está relacionado con el cumplimiento de los tiempos máximos de procesamiento definidos por la normativa. Si los bancos no lo implementan, podrán iniciar operaciones con otros participantes, pero estarán expuestos a posibles penalidades por demoras en las transferencias.
-
-Omitir el cambio 6 podría generar complicaciones solo en caso de problemas técnicos con Transfiya o con MOL. Si bien la plataforma Transfiya ha demostrado una alta disponibilidad durante el último año, la estabilidad del sistema dependerá en gran medida del comportamiento de MOL una vez esté en funcionamiento. No implementar este cambio puede traducirse en un esfuerzo operativo adicional para resolver posibles incidentes.
-</Warning>
 
 A continuación, se detallan los cambios obligatorios para lograr la compatibilidad con SPI:
 
