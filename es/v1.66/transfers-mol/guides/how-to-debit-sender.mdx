@@ -20,11 +20,11 @@ En Transfiya, una operación de débito se representa como una acción de tipo `
 
 ## Proceso de débito paso a paso
 
-A continuación, se describe detalladamente el flujo de procesamiento para una transferencia tipo `SEND`, enfocándonos en la etapa de **débito al usuario origen**. Este flujo se ejecuta en múltiples etapas, combinando interacciones entre TransfiYa y el banco originador, tanto en fases síncronas como asincrónicas.
+A continuación, se describe detalladamente el flujo de procesamiento para una transferencia tipo `SEND`, enfocándonos en la etapa de **débito al usuario origen**. Este flujo se ejecuta en múltiples etapas, combinando interacciones entre Transfiya y el banco originador, tanto en fases síncronas como asincrónicas.
 
 El objetivo principal de este proceso es asegurar que los fondos del usuario origen estén disponibles y sean reservados o debitados correctamente antes de avanzar con el resto de la operación. El flujo también contempla los mecanismos necesarios para revertir movimientos en caso de errores, así como el uso de pruebas criptográficas (IOU) y el cumplimiento de los tiempos regulatorios.
 
-Cada paso está alineado con los lineamientos del nuevo modelo SPI (Sistema de Pagos Inmediatos) y busca mantener la compatibilidad con la arquitectura existente de TransfiYa. A continuación se detallan las acciones involucradas, junto con ejemplos prácticos y consideraciones técnicas relevantes.
+Cada paso está alineado con los lineamientos del nuevo modelo SPI (Sistema de Pagos Inmediatos) y busca mantener la compatibilidad con la arquitectura existente de Transfiya. A continuación se detallan las acciones involucradas, junto con ejemplos prácticos y consideraciones técnicas relevantes.
 
 
 ```mermaid
@@ -47,8 +47,8 @@ sequenceDiagram
 ```
 
 <Steps>
-  <Step title="TransfiYa llama al banco origen para procesar la operación de débito">
-    TransfiYa inicia el proceso mediante una solicitud **POST** al endpoint de débito del banco origen, con la información completa de la transferencia.
+  <Step title="Transfiya llama al banco origen para procesar la operación de débito">
+    Transfiya inicia el proceso mediante una solicitud **POST** al endpoint de débito del banco origen, con la información completa de la transferencia.
     <Tabs>
         <Tab title="Request">
         ```json
@@ -136,8 +136,8 @@ sequenceDiagram
     </Tabs>
   </Step>
 
-  <Step title="El banco origen crea una acción tipo `UPLOAD` en TransfiYa">
-    Esto representa la reserva o débito de fondos. Se debe generar una acción usando el API de TransfiYa, referenciando la transferencia original.
+  <Step title="El banco origen crea una acción tipo `UPLOAD` en Transfiya">
+    Esto representa la reserva o débito de fondos. Se debe generar una acción usando el API de Transfiya, referenciando la transferencia original.
     <Tabs>
         <Tab title="Request">
         ```diff
@@ -274,7 +274,7 @@ sequenceDiagram
         }
         ```
        <Info>
-        En caso de errores no recuperables durante el procesamiento, se puede devolver un objeto `error` a TransfiYa.
+        En caso de errores no recuperables durante el procesamiento, se puede devolver un objeto `error` a Transfiya.
         </Info>
 
         <Info>
@@ -295,14 +295,30 @@ sequenceDiagram
 
   <Step title="El banco actualiza la acción `UPLOAD` con el `tx_id` de la transacción interna">
     <Info>
-    El identificador `tx_id` permite posteriores conciliaciones entre TransfiYa y el banco.
+    El identificador `tx_id` permite posteriores conciliaciones entre Transfiya y el banco.
     </Info>
-  </Step>
-
-  <Step title="TransfiYa responde con la acción actualizada">
-    La acción incluirá el nuevo campo `tx_id` como parte de los metadatos.
-    <Tabs>
-        <Tab title="Exitosa">
+    <Tabs >
+        <Tab title="Request">
+    ```json
+    curl -X PUT \
+    -H "Content-Type: application/json" \
+    -H "x-api-key: <API_KEY>" \
+    -H "Authorization: Bearer <TOKEN>" \
+    -d '{
+        "labels": {
+        "tx_id": "K3.392894.29480"
+        }
+    }' "<TRANSFIYA URL>/v1/action/<upload_action_id>"
+    ```
+    | Field name        | Field value                                                                                          |
+    | ----------------- | ---------------------------------------------------------------------------------------------------- |
+    | `<upload_action_id>` | The `<upload_action_id>` used in the URL is the ID of the `UPLOAD` action created in step 2. In our example, it is `5954ac04-b4db-4c6f-86f6-43df30f6bacb`. |
+    | `labels.tx_id`    | Unique identifier of the transaction executed by the bank to debit the funds from the source account. |
+    </Tab>
+    <Tab title="Respose">
+    <Info>
+     La acción incluirá el nuevo campo `tx_id` como parte de los metadatos.
+    </Info>
         ```json
         {
         "source": "wSjXPK5uocHQdY81THFG3VL8G5vN6mU7Ro",
@@ -375,7 +391,7 @@ sequenceDiagram
     <Tabs>
         <Tab title="Request">
          <Info>
-        TransfiYa valida la firma del objeto IOU recibido y lo almacena en el libro mayor, si todo es válido. Esta operación también marca la acción `UPLOAD` como `COMPLETED`.
+        Transfiya valida la firma del objeto IOU recibido y lo almacena en el libro mayor, si todo es válido. Esta operación también marca la acción `UPLOAD` como `COMPLETED`.
         </Info>
         ```json
         curl -X POST \
@@ -413,7 +429,7 @@ sequenceDiagram
         </Tab>
         <Tab title="Response">
         <Info>
-        TransfiYa devuelve una acción con estado `COMPLETED` al banco o una acción con estado `ERROR` en caso de errores.
+        Transfiya devuelve una acción con estado `COMPLETED` al banco o una acción con estado `ERROR` en caso de errores.
         </Info>
         ```json
         {
@@ -481,7 +497,7 @@ sequenceDiagram
         </Tab>
         <Tab title="Error">
          <Info>
-        TransfiYa devuelve una acción con estado `COMPLETED` al banco o una acción con estado `ERROR` en caso de errores.
+        Transfiya devuelve una acción con estado `COMPLETED` al banco o una acción con estado `ERROR` en caso de errores.
         </Info>
          ```json
          {
@@ -569,8 +585,8 @@ sequenceDiagram
         | Field name   | Descripción                                                                                      |
         |--------------|--------------------------------------------------------------------------------------------------|
         | `<tx_ref>`   | El campo `<tx_ref>` en la URL representa la referencia de la transferencia, que se encuentra en `labels.tx_ref` del `mainAction`. |
-        | `received`   | Marca de tiempo en formato ISO 8601. Representa el momento en que se recibió la última respuesta de TransfiYa (llamada `sendit`). |
-        | `dispatched` | Marca de tiempo en formato ISO 8601. Representa el momento en que se envió la llamada `continue` a TransfiYa. |
+        | `received`   | Marca de tiempo en formato ISO 8601. Representa el momento en que se recibió la última respuesta de Transfiya (llamada `sendit`). |
+        | `dispatched` | Marca de tiempo en formato ISO 8601. Representa el momento en que se envió la llamada `continue` a Transfiya. |
 
         </Tab>
         <Tab title="Error Request">
@@ -599,9 +615,9 @@ sequenceDiagram
         | Field name     | Descripción en español                                                                                       |
         |----------------|--------------------------------------------------------------------------------------------------------------|
         | `<tx_ref>`     | El campo `<tx_ref>` en la URL representa la referencia de la transferencia, que se encuentra en `labels.tx_ref` del `mainAction`. |
-        | `received`     | Timestamp en formato ISO 8601. Representa la hora en que se recibió la respuesta de la última llamada de TransfiYa (`sendit`). |
-        | `dispatched`   | Timestamp en formato ISO 8601. Representa la hora en que se envió la llamada `continue` a TransfiYa.         |
-        | `error.code`   | Un código de error válido soportado por TransfiYa que describe el error ocurrido.                            |
+        | `received`     | Timestamp en formato ISO 8601. Representa la hora en que se recibió la respuesta de la última llamada de Transfiya (`sendit`). |
+        | `dispatched`   | Timestamp en formato ISO 8601. Representa la hora en que se envió la llamada `continue` a Transfiya.         |
+        | `error.code`   | Un código de error válido soportado por Transfiya que describe el error ocurrido.                            |
         | `error.message`| Un mensaje con información adicional sobre el error.                                                         |
 
         </Tab>

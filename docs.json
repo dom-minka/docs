@@ -44,6 +44,14 @@
                   "es/v1.66/directory/about/about-timestamps",
                   "es/v1.66/directory/about/about-key-status"
                 ]
+              },
+              {
+                "group": "APIs",
+                "openapi": {
+                  "source": "/public/spi-signers.yaml",
+                  "directory": "directory"
+                }
+
               }
             ]
           },
@@ -60,9 +68,9 @@
                 "icon": "mask",
                 "pages": [
                   "es/v1.66/transfers-mol/guides/how-to-send-mol",
-                  "es/v1.66/transfers-mol/guides/how-to-sign-transfer",
-                  "es/v1.66/transfers-mol/guides/how-to-accept-transfer",
                   "es/v1.66/transfers-mol/guides/how-to-debit-sender",
+                  "es/v1.66/transfers-mol/guides/how-to-accept-transfer",
+                  "es/v1.66/transfers-mol/guides/how-to-sign-transfer",
                   "es/v1.66/transfers-mol/guides/how-to-credit-receiver",
                   "es/v1.66/transfers-mol/guides/how-to-notify"
                 ]
@@ -77,8 +85,37 @@
                   "es/v1.66/transfers-mol/about/about-settlement",
                   "es/v1.66/transfers-mol/about/about-transfers"
                 ]
+              },
+              {
+                "group": "APIs Banco",
+                "openapi": {
+                  "source": "/public/spi-banks.yaml",
+                  "directory": "transfers-mol"
+                }
+
+              },
+              {
+                "group": "APIs Transfiya",
+                "openapi": {
+                  "source": "/public/tinapi.yaml",
+                  "directory": "transfers-mol-2"
+                }
+
               }
             ]
+          },
+          {
+            "tab": "APIs",
+            "groups": [
+              {
+                "group": "APIs",
+                "openapi": {
+                  "source": "/public/spi-signers.yaml",
+                  "directory": "api-reference"
+                }
+
+              }
+            ]  
           },
           {
             "tab": "Notas de la versión",
@@ -90,6 +127,7 @@
               }
             ]
           }
+
         ]
       }
     ],

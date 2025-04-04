@@ -5,7 +5,7 @@ icon: 'file-check'
 ---
 
 ## Validación de aceptación por el banco destino
-Una vez realizado el débito, TransfiYa ejecuta controles antifraude sobre la transferencia y contacta al banco destino para solicitar la aceptación del pago. Este paso permite al banco receptor validar la información de la cuenta destino y confirmar que el pago puede ser recibido correctamente.
+Una vez realizado el débito, Transfiya ejecuta controles antifraude sobre la transferencia y contacta al banco destino para solicitar la aceptación del pago. Este paso permite al banco receptor validar la información de la cuenta destino y confirmar que el pago puede ser recibido correctamente.
 
 <Info>
 Durante esta etapa, el banco DEBE realizar las siguientes validaciones:
@@ -19,7 +19,7 @@ Que la moneda de la cuenta coincida con la moneda de la transferencia.
 Que el monto de la transferencia no supere los límites previamente definidos.
 
 </Info>
-La notificación de este paso se realiza mediante el endpoint status. Este endpoint es utilizado por TransfiYa para comunicar los cambios de estado de las transferencias a las entidades participantes.
+La notificación de este paso se realiza mediante el endpoint status. Este endpoint es utilizado por Transfiya para comunicar los cambios de estado de las transferencias a las entidades participantes.
 
 Los estados actualmente soportados por este endpoint son:
 
@@ -35,7 +35,7 @@ Las validaciones de aceptación DEBEN realizarse inmediatamente cuando la transf
 </Tip>
 ```mermaid
 flowchart TD
-    tya[TransfiYa] -->|&nbsp;POST /status&nbsp;| banco[Banco]
+    tya[Transfiya] -->|&nbsp;POST /status&nbsp;| banco[Banco]
     banco --> estado{Procesar notificación<br />de estado}
     estado -->|&nbsp;COMPLETADO&nbsp;| completado[Finalizar<br />transferencia]:::deshabilitado
     estado -->|&nbsp;PENDIENTE&nbsp;| pendiente[Validar<br />y aceptar]
@@ -43,7 +43,7 @@ flowchart TD
     classDef deshabilitado color:gray,stroke:gray,stroke-dasharray:5,5
 ```
 
-Para aceptar una transferencia, el banco debe reaccionar a la notificación enviada por TransfiYa con estado PENDING. Esta notificación indica que la transferencia está en espera de validación por parte del banco destino.
+Para aceptar una transferencia, el banco debe reaccionar a la notificación enviada por Transfiya con estado PENDING. Esta notificación indica que la transferencia está en espera de validación por parte del banco destino.
 
 <Info>
 En este capítulo nos enfocaremos exclusivamente en el manejo del estado PENDING a través del endpoint status.
@@ -54,7 +54,7 @@ Los demás estados (COMPLETED y REJECTED) serán abordados más adelante en el f
 ```mermaid
 sequenceDiagram
   autonumber
-  participant ty as TransfiYa
+  participant ty as Transfiya
   participant tb as Banco Destino
 
   ty ->> tb: Notificar estado PENDIENTE
@@ -66,8 +66,8 @@ sequenceDiagram
 
   alt la cuenta no está registrada
     tb ->> tb: Crear y almacenar<br />keeper
-    tb ->> +ty: Crear firmante
-    ty -->> -tb: Respuesta del firmante
+    tb ->> +ty: Crear signer
+    ty -->> -tb: Respuesta del signer
   end
 
   tb ->> ty: Aceptar transferencia
@@ -75,15 +75,15 @@ sequenceDiagram
 
 ## Aceptación de transferencia – Pasos detallados
 
-Una vez realizado el débito al usuario origen y ejecutados los controles antifraude, TransfiYa contacta al banco destino para solicitar la aceptación de la transferencia. Esta etapa es crítica para asegurar que el pago pueda ser recibido correctamente.
+Una vez realizado el débito al usuario origen y ejecutados los controles antifraude, Transfiya contacta al banco destino para solicitar la aceptación de la transferencia. Esta etapa es crítica para asegurar que el pago pueda ser recibido correctamente.
 
-Durante esta fase, el banco receptor debe validar la cuenta de destino, el monto, la moneda y el registro del usuario dentro del ecosistema TransfiYa. Esta validación se notifica mediante el endpoint status, el cual indica que la transferencia se encuentra en estado PENDING.
+Durante esta fase, el banco receptor debe validar la cuenta de destino, el monto, la moneda y el registro del usuario dentro del ecosistema Transfiya. Esta validación se notifica mediante el endpoint status, el cual indica que la transferencia se encuentra en estado PENDING.
 
 A continuación, se detallan los pasos que debe seguir el banco para aceptar correctamente una transferencia:
 
 <Steps>
 
-<Step title="TransfiYa llama al endpoint `status` del banco destino con estado `PENDING`">
+<Step title="Transfiya llama al endpoint `status` del banco destino con estado `PENDING`">
   Se realiza una solicitud `POST` al endpoint del banco con todos los datos relevantes de la transferencia. El campo `labels.status` estará en `PENDING`.
   <Tabs>
     <Tab title="Request">
@@ -220,8 +220,8 @@ A continuación, se detallan los pasos que debe seguir el banco para aceptar cor
     | Field name     | Descripción en español                                                                 |
     |----------------|-----------------------------------------------------------------------------------------|
     | `<tx_ref>`     | El campo `<tx_ref>` en la URL representa la referencia de la transferencia, que puede encontrarse en `labels.tx_ref` del `mainAction`. |
-    | `received`     | Marca de tiempo en formato ISO 8601. Representa el momento en que se recibió la llamada `status` desde TransfiYa. |
-    | `dispatched`   | Marca de tiempo en formato ISO 8601. Representa el momento en que se envió la llamada `reject` hacia TransfiYa. |
+    | `received`     | Marca de tiempo en formato ISO 8601. Representa el momento en que se recibió la llamada `status` desde Transfiya. |
+    | `dispatched`   | Marca de tiempo en formato ISO 8601. Representa el momento en que se envió la llamada `reject` hacia Transfiya. |
 
 
     </Tab>
@@ -256,8 +256,8 @@ A continuación, se detallan los pasos que debe seguir el banco para aceptar cor
     | Field name   | Descripción en español                                                                                       |
     |--------------|-------------------------------------------------------------------------------------------------------------|
     | `<tx_ref>`   | El campo `<tx_ref>` en la URL representa la referencia de la transferencia, que se encuentra en `labels.tx_ref` del `mainAction`. |
-    | `received`   | Timestamp en formato ISO 8601. Representa el momento en que se recibió la llamada `status` desde TransfiYa. |
-    | `dispatched` | Timestamp en formato ISO 8601. Representa el momento en que se envió la llamada `reject` a TransfiYa.       |
+    | `received`   | Timestamp en formato ISO 8601. Representa el momento en que se recibió la llamada `status` desde Transfiya. |
+    | `dispatched` | Timestamp en formato ISO 8601. Representa el momento en que se envió la llamada `reject` a Transfiya.       |
 
     </Tab>
     <Tab title="">
@@ -265,23 +265,23 @@ A continuación, se detallan los pasos que debe seguir el banco para aceptar cor
   </Tabs>  
 </Step>
 
-<Step title="Banco Destino verifica si la cuenta está registrada en TransfiYa (onboarded)">
-  Se valida que exista un `signer` en el sistema y que cuente con una clave pública (`keeper`) válida asociada.
+<Step title="Banco Destino verifica si la cuenta está registrada en Transfiya (onboarded)">
+  Se valida que exista un `signer` en el sistema y que cuente con una clave pública (`keeper`) válida asociada. Esta validacion la realiza el banco internamente, no debe ir a transfiya para realizarla.
 </Step>
 
 <Step title="Genera una clave privada (`keeper`) si la cuenta no está registrada">
-  Cada cuenta debe tener una clave criptográfica única. Esta se usa para firmar operaciones bajo el modelo de TransfiYa.
+  Cada cuenta debe tener una clave criptográfica única. Esta se usa para firmar operaciones bajo el modelo de Transfiya.
   <Info>
-La seguridad de TransfiYa se basa en criptografía de clave pública/privada. Esta clave se utiliza para autorizar cualquier pago asociado a la cuenta, por lo que **cada cuenta debe tener una clave única asociada**. Se recomienda utilizar los SDKs de TransfiYa para generar estas claves de manera segura.
+La seguridad de Transfiya se basa en criptografía de clave pública/privada. Esta clave se utiliza para autorizar cualquier pago asociado a la cuenta, por lo que **cada cuenta debe tener una clave única asociada**. Se recomienda utilizar los SDKs de Transfiya para generar estas claves de manera segura.
 </Info>
 </Step>
 
-<Step title="Banco Destino Registra el `signer` en TransfiYa">
-  El firmante puede tener alias o no, dependiendo del consentimiento del usuario. El banco debe usar la clave pública correspondiente al `keeper` generado.
+<Step title="Banco Destino Registra el `signer` en Transfiya">
+  El banco destino registra una cuenta en Transfiya creando un  signer vinculado a una clave pública, la cual está asociada a la clave privada generada previamente. Este signer contiene también metadatos adicionales sobre la cuenta y su titular, los cuales son necesarios para el correcto procesamiento de las transacciones dentro del sistema.
   <Tabs>
     <Tab title="Request Account Signer">
     <Info>
-    No se requiere consentimiento del usuario para crear firmantes de cuenta que no estén vinculados a alias. Este tipo de firmantes son útiles para incorporar automáticamente cuentas de usuario sin necesidad de solicitar confirmación.
+    No se requiere consentimiento del usuario para crear signers de cuenta que no estén vinculados a alias. Este tipo de signers son útiles para incorporar automáticamente cuentas de usuario sin necesidad de solicitar confirmación.
     </Info>
     ```json
     curl -X POST \
@@ -338,7 +338,7 @@ La seguridad de TransfiYa se basa en criptografía de clave pública/privada. Es
     </Tab>
     <Tab title="Request Alias Signer">
     <Info>
-    Se requiere consentimiento del usuario para crear firmantes con alias.
+    Se requiere consentimiento del usuario para crear signers con alias.
     </Info>
      ```json
      curl -X POST \
@@ -372,8 +372,8 @@ La seguridad de TransfiYa se basa en criptografía de clave pública/privada. Es
      ```
     | Field name | Valor del campo |
     | --- | --- |
-    | `received` | Timestamp en formato ISO 8601. Representa el momento en que se recibió la llamada `status` desde TransfiYa. |
-    | `dispatched` | Timestamp en formato ISO 8601. Representa el momento en que se envió la solicitud de creación del signer a TransfiYa. |
+    | `received` | Timestamp en formato ISO 8601. Representa el momento en que se recibió la llamada `status` desde Transfiya. |
+    | `dispatched` | Timestamp en formato ISO 8601. Representa el momento en que se envió la solicitud de creación del signer a Transfiya. |
 
     </Tab>
      <Tab title="Response Alias Signer">

@@ -65,36 +65,36 @@ Los cambios en el modelo son mostrados en el ejemplo de diferencias en codigo.
 
 <Tabs>
   <Tab title="Request">
-      ```diff
-      curl -X POST \
-        -H "Content-Type: application/json" \
-        -H "x-api-key: API_KEY" \
-        -H "Authorization: Bearer TOKEN" \
-        -d '{
-          "source": "wXxwpxB32saqfmfMxAQD4SVWWhhn6akLC2",
-      -   "target": "$573002414263",
-      +   "target": "wfvmRir8XxRtoEuUBDkv3BP4T7BQezwm1f",
-          "symbol": "$tin",
-          "amount": "100",
-          "labels": {
-            "description": "Envio prueba mol",
-            "domain": "tin",
-      +     "type": "SENDMOL",
-            "sourceChannel": "APP",
-      +     "tx_id": "20250114890915944TFY123456789012345",
-      +     "initiated": "2025-01-14T20:40:57.322-05:00",
-            "deviceFingerPrint": {
-              "hash": "26fff5af6441f8e15a71e8d62c361714484b1b308c99e8eb68ca85e2a7e0dc58",
-              "ipAddress": "2001:0db8:85a3:0000:0000:8a2e:0370:7334",
-              "country": "Colombia",
-              "city": "Bogotá",
-              "mobileDevice": "990000862471854",
-              "SIMCardId": "8991101200003204510",
-              "model": "Huawei Mate 20 Pro",
-              "operator": "Bharti Airtel Limited"
-            }
-          }
-        }' "URL/v1/transfer"
+      ```json
+     curl -X POST \
+  -H "Content-Type: application/json" \
+  -H "x-api-key: <API_KEY>" \
+  -H "Authorization: Bearer <TOKEN>" \
+  -d '{
+    "source": "wXxwpxB32saqfmfMxAQD4SVWWhhn6akLC2",
+    "target": "wRFmYXS2sP9ho9VCZ3j4FuP1j55ABeFvsF",
+    "symbol": "$tin",
+    "amount": "100",
+    "labels": {
+      "description": "Payment for lunch",
+      "domain": "tin",
+      "type": "SENDMOL",
+      "sourceChannel": "APP",
+      "tx_id": "20250114890915944TFY123456789012345",
+      "received": "2025-01-14T20:40:57.322-05:00",
+      "dispatched": "2025-01-14T20:40:58.322-05:00",
+      "deviceFingerPrint": {
+        "hash": "26fff5af6441f8e15a71e8d62c361714484b1b308c99e8eb68ca85e2a7e0dc58",
+        "ipAddress": "2001:0db8:85a3:0000:0000:8a2e:0370:7334",
+        "country": "Colombia",
+        "city": "Bogotá",
+        "mobileDevice": "990000862471854",
+        "SIMCardId": "8991101200003204510",
+        "model": "Huawei Mate 20 Pro",
+        "operator": "Bharti Airtel Limited"
+      }
+    }
+  }' "<TRANSFIYA URL>/v1/transfer"
         ```
   </Tab>
   <Tab title="Response">
@@ -107,7 +107,7 @@ Los cambios en el modelo son mostrados en el ejemplo de diferencias en codigo.
         "symbol": "$tin",
         "labels": {
           "hash": "PENDING",
-          "type": "SEND",
+          "type": "SENDMOL",
           "domain": "tin",
           "flowId": "Lf13jsK83omPv3bOt",
           "status": "PENDING",

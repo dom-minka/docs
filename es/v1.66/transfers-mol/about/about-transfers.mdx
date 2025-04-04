@@ -4,6 +4,43 @@ description: 'Guia sobre los transferencias en transfiya'
 icon: 'money-bill-transfer'
 ---
 
+El flujo completo para procesar una transferencia en Transfiya bajo el modelo regulado involucra varios pasos distribuidos entre el banco origen, Transfiya, MOL y el banco destino. A continuación se describen las etapas principales desde una perspectiva de alto nivel:
+
+<Steps>
+
+<Step title="Creación de la transferencia">
+El usuario inicia una transferencia desde su aplicación bancaria. El banco origen comunica la solicitud a TransfiYa, quien valida reglas de negocio internas y devuelve una respuesta para confirmar la creación.
+</Step>
+
+<Step title="Débito del usuario origen">
+TransfiYa solicita al banco origen ejecutar la operación de débito. El banco crea una acción de tipo `UPLOAD`, debita los fondos y responde con un IOU firmado que TransfiYa valida.
+</Step>
+
+<Step title="Aceptación de la transferencia">
+Si se requiere aceptación, TransfiYa notifica al banco destino con estado `PENDING`. Este valida la cuenta, registra el firmante si es necesario y acepta la operación para continuar.
+</Step>
+
+<Step title="Firma y autorización de la acción principal">
+TransfiYa llama al banco origen para firmar la acción principal (`mainAction`). El banco genera y firma un IOU con los detalles de la operación, el cual TransfiYa valida y marca como `COMPLETED`.
+</Step>
+
+<Step title="Crédito al usuario destino">
+TransfiYa llama al banco destino para acreditar los fondos. Este crea una acción `DOWNLOAD`, acredita la cuenta y envía un IOU firmado que TransfiYa valida.
+</Step>
+
+<Step title="Notificación de estado final">
+TransfiYa envía una notificación de estado `COMPLETED` (o `REJECTED` si hubo un error) a ambos bancos para cerrar el proceso. Cada banco puede notificar al usuario y realizar tareas internas de limpieza si lo requiere.
+</Step>
+
+</Steps>
+
+
+
+<Info>
+Este flujo está diseñado para asegurar consistencia y trazabilidad completa en cada paso, incluyendo criptografía para garantizar integridad y autenticación en las operaciones.
+</Info>
+
+
 ## Modelo de transferencia
 
 ### Concepto "Transfer"

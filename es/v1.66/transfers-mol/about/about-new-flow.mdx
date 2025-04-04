@@ -45,7 +45,7 @@ Funcionalidades como las solicitudes de dinero (`REQUEST`) podrán mantenerse si
 Esta sección presenta los flujos de procesamiento de transferencias que han sido actualizados para cumplir con los lineamientos de la regulación e integrar la funcionalidad del MOL (Modelo Operativo de Liquidación).
 
 <Tabs>
-    <Tab title="Flujo Transfiya -> Transfiya">
+    <Tab title="Flujo Transfiya -> Transfiya (Intra)">
     ```mermaid
     sequenceDiagram
   autonumber
@@ -140,7 +140,7 @@ Esta sección presenta los flujos de procesamiento de transferencias que han sid
   monitor -->> -ty: Respuesta de Monitor+
     ```
     </Tab>
-    <Tab title="Flujo Transfiya -> BanRep">
+    <Tab title="Flujo Transfiya -> BanRep (Inter)">
     ```mermaid
     sequenceDiagram
   autonumber
@@ -193,17 +193,17 @@ Esta sección presenta los flujos de procesamiento de transferencias que han sid
     sb -->> -ty: Respuesta de Acción
   end
 
-  alt crédito
-    ty ->> +tb: Llamar a crédito
-    tb ->> +ty: Crear acción de descarga (DOWNLOAD)
-    ty -->> -tb: Respuesta de acción
-    tb -->> -ty: Respuesta de crédito
-    tb ->> tb: Acreditar usuario destino
-    tb ->> +ty: Actualizar acción con tx_id
-    ty -->> -tb: Acción actualizada
-    tb ->> +ty: Enviar IOU
-    ty -->> -tb: Respuesta de IOU
-    tb ->> ty: Continuar transferencia
+  alt crédito vía PUENTE MOL
+    ty ->> +mb: Llamar a crédito
+    mb ->> +ty: Crear acción de descarga (DOWNLOAD)
+    ty -->> -mb: Respuesta de acción
+    mb -->> -ty: Respuesta de crédito
+    mb ->> mb: Acreditar usuario destino
+    mb ->> +ty: Actualizar acción con tx_id
+    ty -->> -mb: Acción actualizada
+    mb ->> +ty: Enviar IOU
+    ty -->> -mb: Respuesta de IOU
+    mb ->> ty: Continuar transferencia
   end
 
   alt estado completado
@@ -211,16 +211,15 @@ Esta sección presenta los flujos de procesamiento de transferencias que han sid
     sb -->> -ty: Respuesta de estado
     sb ->> sb: Notificar a usuario origen
 
-    ty ->> +tb: Llamar a estado (COMPLETADO)
-    tb -->> -ty: Respuesta de estado
-    tb ->> tb: Notificar a usuario destino
+    ty ->> +mb: Llamar a estado (COMPLETADO)
+    mb -->> -ty: Respuesta de estado
   end
 
   ty ->> +monitor: Finalizar Monitor+
   monitor -->> -ty: Respuesta de Monitor+
     ```
     </Tab>
-    <Tab title="Flujo BanRep -> Transfiya">
+    <Tab title="Flujo BanRep -> Transfiya (Inter)">
     ```mermaid
     sequenceDiagram
   autonumber
@@ -263,10 +262,10 @@ Esta sección presenta los flujos de procesamiento de transferencias que han sid
   monitor -->> -ty: Respuesta de Monitor+
 
   alt aceptación
-    ty ->> mb: Notificar estado PENDIENTE
-    mb -->> ty: Respuesta
-    mb ->> mb: Validar datos del destinatario
-    mb ->> ty: Aceptar transferencia
+    ty ->> tb: Notificar estado PENDIENTE
+    tb -->> ty: Respuesta
+    tb ->> tb: Validar datos del destinatario
+    tb ->> ty: Aceptar transferencia
   end
 
   ty ->> mb: Confirmar crédito

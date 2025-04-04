@@ -22,7 +22,7 @@ Esta notificación es enviada tanto al banco **origen** como al banco **destino*
 
 ```mermaid
 flowchart TD
-    tya[TransfiYa] -->| POST /status | bank[Banco]
+    tya[Transfiya] -->| POST /status | bank[Banco]
     bank --> status{Procesar<br />notificación de estado}
     status -->| COMPLETADO | completed[Finalizar<br />transferencia]
     status -->| PENDIENTE | pending[Validar<br />y aceptar]:::disabled
@@ -37,7 +37,7 @@ La implementación recomendada en este caso es notificar al usuario únicamente 
 ```mermaid
 sequenceDiagram
 	autonumber
-	participant ty as TransfiYa
+	participant ty as Transfiya
 	participant tb as Banco
 
 	ty ->> tb: Llamada al endpoint /status
@@ -49,7 +49,7 @@ sequenceDiagram
 
 ### Notificación final del estado de la transferencia
 
-Una vez que el procesamiento de la transferencia ha concluido, **TransfiYa notifica tanto al banco origen como al banco destino** mediante una llamada al endpoint `status`. Esta llamada incluye toda la información relevante de la transferencia y su estado final, el cual puede ser:
+Una vez que el procesamiento de la transferencia ha concluido, **Transfiya notifica tanto al banco origen como al banco destino** mediante una llamada al endpoint `status`. Esta llamada incluye toda la información relevante de la transferencia y su estado final, el cual puede ser:
 
 - `COMPLETED`: si la operación fue exitosa.
 - `REJECTED`: si la operación fue revertida correctamente tras un fallo en el proceso.
@@ -58,8 +58,8 @@ A partir de esta notificación, el banco debe confirmar su recepción, y de form
 
 <Steps>
 
-<Step title="TransfiYa llama al endpoint `status` con la transferencia finalizada">
-TransfiYa realiza una solicitud `POST` al endpoint `status` del banco origen y del banco destino con una transferencia marcada como `COMPLETED` o `REJECTED`, según sea el caso.
+<Step title="Transfiya llama al endpoint `status` con la transferencia finalizada">
+Transfiya realiza una solicitud `POST` al endpoint `status` del banco origen y del banco destino con una transferencia marcada como `COMPLETED` o `REJECTED`, según sea el caso.
 <Tabs>
     <Tab title="Request Completed">
     ```json

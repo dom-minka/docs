@@ -1,0 +1,1007 @@
+---
+openapi: 3.0.0
+
+info:
+  title: SPI documentation
+  version: 2.0.0
+  description: API documentation for TransfiYa SPI flow
+
+tags:
+  - name: Signer
+    description: Operations related to Signers (keys)
+
+paths:
+  /v1/signer:
+    post:
+      summary: Create a new signer
+      tags:
+        - Signer
+      description: Endpoint to create a signer with necessary details.
+      operationId: createSigner
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateSignerRequest'
+            examples:
+              example1:
+                summary: PERSON minimum fields
+                value:
+                  keeper:
+                    - public: '7ef44ee7ff1f4527ef44ee7ff1f4527ef44ee7ff1f4527ef44ee7ff1f4527ef4'
+                      scheme: 'ecdsa-ed25519'
+                  labels:
+                    type: 'PERSON'
+                    aliasType: 'ALPHANUM'
+                    aliasValue: '@jorge'
+                    proprietary: 'CC'
+                    identification: '1010101010'
+                    firstName: 'Jorge'
+                    lastName: 'Diaz'
+                    bankAccountType: 'SVGS'
+                    bankAccountNumber: '4123456789'
+                    routerReference: '$bancorojo'
+                    consented: '2025-03-13T20:38:07-05:00'
+                    received: '2025-03-13T20:38:07.123-05:00'
+                    dispatched: '2025-03-13T20:38:10.123-05:00'
+              example2:
+                summary: PERSON all fields
+                value:
+                  handle: 'wfQeFLxQCFF5zrAjHnVX7tJnigmN98mDLM'
+                  keeper:
+                    - public: '7ef44ee7ff1f4527ef44ee7ff1f4527ef44ee7ff1f4527ef44ee7ff1f4527ef4'
+                      scheme: 'ecdsa-ed25519'
+                  labels:
+                    type: 'PERSON'
+                    aliasType: 'ALPHANUM'
+                    aliasValue: '@jorge'
+                    proprietary: 'CC'
+                    description: 'signer for spi'
+                    identification: '1010101010'
+                    firstName: 'Jorge'
+                    secondName: 'Ivan'
+                    lastName: 'Diaz'
+                    secondLastName: 'Gomez'
+                    countryOfResidence: 'CO'
+                    bankAccountType: 'SVGS'
+                    bankAccountNumber: '4123456789'
+                    bankBicfi: '1234'
+                    bankName: 'Banco Rojo'
+                    bankId: '900123456'
+                    routerReference: '$bancorojo'
+                    targetSpbviCode: 'TFY'
+                    consented: '2025-03-13T20:38:07-05:00'
+                    received: '2025-03-13T20:38:07.123-05:00'
+                    dispatched: '2025-03-13T20:38:10.123-05:00'
+              example3:
+                summary: BUSINESS minimum fields
+                value:
+                  keeper:
+                    - public: '7ef44ee7ff1f4527ef44ee7ff1f4527ef44ee7ff1f4527ef44ee7ff1f4527ef4'
+                      scheme: 'ecdsa-ed25519'
+                  labels:
+                    type: 'BUSINESS'
+                    aliasType: 'ALPHANUM'
+                    aliasValue: '@cognito'
+                    proprietary: 'NIT'
+                    identification: '900123456'
+                    name: 'Cognito inc'
+                    bankAccountType: 'SVGS'
+                    bankAccountNumber: '4123456789'
+                    routerReference: '$bancorojo'
+                    consented: '2025-03-13T20:38:07-05:00'
+                    received: '2025-03-13T20:38:07.123-05:00'
+                    dispatched: '2025-03-13T20:38:10.123-05:00'
+              example4:
+                summary: BUSINESS all fields
+                value:
+                  handle: 'wfQeFLxQCFF5zrAjHnVX7tJnigmN98mDLM'
+                  keeper:
+                    - public: '7ef44ee7ff1f4527ef44ee7ff1f4527ef44ee7ff1f4527ef44ee7ff1f4527ef4'
+                      scheme: 'ecdsa-ed25519'
+                  labels:
+                    type: 'BUSINESS'
+                    aliasType: 'ALPHANUM'
+                    aliasValue: '@cognito'
+                    proprietary: 'NIT'
+                    description: 'signer for spi'
+                    identification: '900123456'
+                    name: 'Cognito inc'
+                    countryOfResidence: 'CO'
+                    bankAccountType: 'SVGS'
+                    bankAccountNumber: '4123456789'
+                    bankBicfi: '1234'
+                    bankName: 'Banco Rojo'
+                    bankId: '900123456'
+                    routerReference: '$bancorojo'
+                    targetSpbviCode: 'TFY'
+                    consented: '2025-03-13T20:38:07-05:00'
+                    received: '2025-03-13T20:38:07.123-05:00'
+                    dispatched: '2025-03-13T20:38:10.123-05:00'
+
+      responses:
+        '200':
+          description: Signer created successfully
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/SignerResponse'
+                  - type: object
+                    properties:
+                      error:
+                        type: object
+                        properties:
+                          code:
+                            type: integer
+                            example: 0
+                          message:
+                            type: string
+                            example: 'Success'
+              examples:
+                example1:
+                  summary: 'Response for PERSON with minimum fields'
+                  value:
+                    signer_id: '0195b009-a139-7ff2-adac-15e3c3ecfc88'
+                    id: '0195b009-a139-7ff2-adac-15e3c3ecfc88'
+                    handle: 'wYe6h63CNqoLxJet5jP1WWLhGi8D11ZGij'
+                    keeper:
+                      - public: '7ef44ee7ff1f4527ef44ee7ff1f4527ef44ee7ff1f4527ef44ee7ff1f4527ef4'
+                        scheme: 'ecdsa-ed25519'
+                        secret: '046d541aec939b4748943e49cc1117a70966a6fc87345e6052a54f1e69ea48d5'
+                    labels:
+                      type: 'PERSON'
+                      status: 'ACTIVE'
+                      created: '2025-03-19T15:12:55.993-05:00'
+                      updated: '2025-03-19T15:12:55.993-05:00'
+                      createdBy: 'mSJkneiASd'
+                      aliasType: 'ALPHANUM'
+                      aliasValue: '@jorge'
+                      proprietary: 'CC'
+                      identification: '1010101010'
+                      firstName: 'Jorge'
+                      lastName: 'Diaz'
+                      bankId: '900123456'
+                      bankAccountType: 'SVGS'
+                      bankAccountNumber: '4123456789'
+                      routerReference: '$bancorojo'
+                      targetSpbviCode: 'TFY'
+                      consented: '2025-03-13T20:38:07-05:00'
+                      received: '2025-03-13T20:38:07.123-05:00'
+                      dispatched: '2025-03-13T20:38:10.123-05:00'
+                    error:
+                      code: 0
+                      message: 'Success'
+                example2:
+                  summary: 'Response for PERSON with all fields'
+                  value:
+                    signer_id: '0195b009-a139-7ff2-adac-15e3c3ecfc88'
+                    id: '0195b009-a139-7ff2-adac-15e3c3ecfc88'
+                    handle: 'wfQeFLxQCFF5zrAjHnVX7tJnigmN98mDLM'
+                    keeper:
+                      - public: '7ef44ee7ff1f4527ef44ee7ff1f4527ef44ee7ff1f4527ef44ee7ff1f4527ef4'
+                        scheme: 'ecdsa-ed25519'
+                        secret: '046d541aec939b4748943e49cc1117a70966a6fc87345e6052a54f1e69ea48d5'
+                    labels:
+                      type: 'PERSON'
+                      status: 'ACTIVE'
+                      created: '2025-03-19T15:12:55.993-05:00'
+                      updated: '2025-03-19T15:12:55.993-05:00'
+                      createdBy: 'mSJkneiASd'
+                      aliasType: 'ALPHANUM'
+                      aliasValue: '@jorge'
+                      proprietary: 'CC'
+                      description: 'signer for spi'
+                      identification: '1010101010'
+                      firstName: 'Jorge'
+                      secondName: 'Ivan'
+                      lastName: 'Diaz'
+                      secondLastName: 'Gomez'
+                      countryOfResidence: 'CO'
+                      bankBicfi: '1234'
+                      bankName: 'Banco Rojo'
+                      bankId: '900123456'
+                      bankAccountType: 'SVGS'
+                      bankAccountNumber: '4123456789'
+                      routerReference: '$bancorojo'
+                      targetSpbviCode: 'TFY'
+                      consented: '2025-03-13T20:38:07-05:00'
+                      received: '2025-03-13T20:38:07.123-05:00'
+                      dispatched: '2025-03-13T20:38:10.123-05:00'
+                    error:
+                      code: 0
+                      message: 'Success'
+                example3:
+                  summary: 'Response for BUSINESS with minimum fields'
+                  value:
+                    signer_id: '0195b009-a139-7ff2-adac-15e3c3ecfc88'
+                    id: '0195b009-a139-7ff2-adac-15e3c3ecfc88'
+                    handle: 'wYe6h63CNqoLxJet5jP1WWLhGi8D11ZGij'
+                    keeper:
+                      - public: '7ef44ee7ff1f4527ef44ee7ff1f4527ef44ee7ff1f4527ef44ee7ff1f4527ef4'
+                        scheme: 'ecdsa-ed25519'
+                        secret: '046d541aec939b4748943e49cc1117a70966a6fc87345e6052a54f1e69ea48d5'
+                    labels:
+                      type: 'BUSINESS'
+                      status: 'ACTIVE'
+                      created: '2025-03-19T15:12:55.993-05:00'
+                      updated: '2025-03-19T15:12:55.993-05:00'
+                      createdBy: 'mSJkneiASd'
+                      aliasType: 'ALPHANUM'
+                      aliasValue: '@cognito'
+                      proprietary: 'NIT'
+                      identification: '900123456'
+                      name: 'Cognito inc'
+                      bankId: '900123456'
+                      bankAccountType: 'SVGS'
+                      bankAccountNumber: '4123456789'
+                      routerReference: '$bancorojo'
+                      targetSpbviCode: 'TFY'
+                      consented: '2025-03-13T20:38:07-05:00'
+                      received: '2025-03-13T20:38:07.123-05:00'
+                      dispatched: '2025-03-13T20:38:10.123-05:00'
+                    error:
+                      code: 0
+                      message: 'Success'
+                example4:
+                  summary: 'Response for BUSINESS with all fields'
+                  value:
+                    signer_id: '0195b009-a139-7ff2-adac-15e3c3ecfc88'
+                    id: '0195b009-a139-7ff2-adac-15e3c3ecfc88'
+                    handle: 'wYe6h63CNqoLxJet5jP1WWLhGi8D11ZGij'
+                    keeper:
+                      - public: '7ef44ee7ff1f4527ef44ee7ff1f4527ef44ee7ff1f4527ef44ee7ff1f4527ef4'
+                        scheme: 'ecdsa-ed25519'
+                        secret: '046d541aec939b4748943e49cc1117a70966a6fc87345e6052a54f1e69ea48d5'
+                    labels:
+                      type: 'BUSINESS'
+                      status: 'ACTIVE'
+                      created: '2025-03-19T15:12:55.993-05:00'
+                      updated: '2025-03-19T15:12:55.993-05:00'
+                      createdBy: 'mSJkneiASd'
+                      aliasType: 'ALPHANUM'
+                      aliasValue: '@cognito'
+                      proprietary: 'NIT'
+                      description: 'signer for spi'
+                      identification: '900123456'
+                      name: 'Cognito inc'
+                      countryOfResidence: 'CO'
+                      bankBicfi: '1234'
+                      bankName: 'Banco Rojo'
+                      bankId: '900123456'
+                      bankAccountType: 'SVGS'
+                      bankAccountNumber: '4123456789'
+                      routerReference: '$bancorojo'
+                      targetSpbviCode: 'TFY'
+                      consented: '2025-03-13T20:38:07-05:00'
+                      received: '2025-03-13T20:38:07.123-05:00'
+                      dispatched: '2025-03-13T20:38:10.123-05:00'
+                    error:
+                      code: 0
+                      message: 'Success'
+
+        '400':
+          description: Invalid request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Internal server error
+
+    get:
+      summary: Retrieve signers
+      description: Get signers with support for filtering.
+      tags:
+        - Signer
+      operationId: getSigners
+      parameters:
+        - in: query
+          name: pagenum
+          schema:
+            type: integer
+          required: false
+        - in: query
+          name: pagesize
+          schema:
+            type: integer
+          required: false
+        - in: query
+          name: handle
+          schema:
+            type: string
+          required: false
+        - in: query
+          name: 'labels.aliasType'
+          schema:
+            type: string
+            enum: ['ALPHANUM', 'NRIC', 'PHONE', 'EMAIL', 'MERCHANT']
+          required: false
+        - in: query
+          name: 'labels.aliasValue'
+          schema:
+            type: string
+          required: false
+          examples:
+            example1:
+              summary: Get a signer by aliasValue
+              value: '@jorge'
+
+      responses:
+        '200':
+          description: Signer details retrieved successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  entities:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/SignerResponse'
+                  pagination:
+                    type: object
+                    properties:
+                      pageNum:
+                        type: number
+                      pageSize:
+                        type: number
+                  error:
+                    type: object
+                    properties:
+                      code:
+                        type: number
+                      message:
+                        type: string
+              examples:
+                example1:
+                  summary: 'Response for query by aliasValue'
+                  value:
+                    entities:
+                      - signer_id: '01958221-232c-7884-9c17-d76170087d06'
+                        id: '01958221-232c-7884-9c17-d76170087d06'
+                        handle: 'wgC4AdDJGDPoGrdD2e4MsS28W3SAR3Uo9h'
+                        keeper:
+                          - public: '0406abe8a361c5d9cc6f8d2ae387ff2451622978c2a41f68ed0523652c06ac33c03b0841ec3c55bc33be831b2bc5a1aaf46b615554cdf809300b2d509f8258d4da'
+                            scheme: 'ecdsa-ed25519'
+                            secret: '0563062c13538fc6fb28bd73a2ef70278c2bdc5037a5a828b69899f9b29eb5f0'
+                        labels:
+                          type: 'PERSON'
+                          status: 'ACTIVE'
+                          created: '2025-03-18T15:12:55.993-05:00'
+                          updated: '2025-03-18T15:12:55.993-05:00'
+                          createdBy: 'mSJkneiASd'
+                          aliasType: 'ALPHANUM'
+                          aliasValue: '@jorge'
+                          proprietary: 'CC'
+                          identification: '1010101010'
+                          firstName: 'Jorge'
+                          lastName: 'Diaz'
+                          bankId: '900123456'
+                          bankAccountType: 'SVGS'
+                          bankAccountNumber: '4123456789'
+                          routerReference: '$bancorojo'
+                          targetSpbviCode: 'TFY'
+                          consented: '2025-03-18T20:38:07-05:00'
+                          received: '2025-03-13T20:38:07.123-05:00'
+                          dispatched: '2025-03-13T20:38:10.123-05:00'
+                      - signer_id: '0195b009-a139-7ff2-adac-15e3c3ecfc88'
+                        id: '0195b009-a139-7ff2-adac-15e3c3ecfc88'
+                        handle: 'wYe6h63CNqoLxJet5jP1WWLhGi8D11ZGij'
+                        keeper:
+                          - public: '7ef44ee7ff1f4527ef44ee7ff1f4527ef44ee7ff1f4527ef44ee7ff1f4527ef4'
+                            scheme: 'ecdsa-ed25519'
+                            secret: '046d541aec939b4748943e49cc1117a70966a6fc87345e6052a54f1e69ea48d5'
+                        labels:
+                          type: 'PERSON'
+                          status: 'INACTIVE'
+                          created: '2025-03-19T15:12:55.993-05:00'
+                          updated: '2025-03-19T15:12:55.993-05:00'
+                          createdBy: 'mSJkneiASd'
+                          aliasType: 'ALPHANUM'
+                          aliasValue: '@jorge'
+                          proprietary: 'CC'
+                          identification: '1010101010'
+                          firstName: 'Jorge'
+                          lastName: 'Diaz'
+                          bankId: '900123456'
+                          bankAccountType: 'SVGS'
+                          bankAccountNumber: '4123456789'
+                          routerReference: '$bancorojo'
+                          targetSpbviCode: 'TFY'
+                          consented: '2025-03-19T20:38:07-05:00'
+                          received: '2025-03-13T20:38:07.123-05:00'
+                          dispatched: '2025-03-13T20:38:10.123-05:00'
+                    pagination:
+                      pageNum: 0
+                      pageSize: 50
+                    error:
+                      code: 0
+                      message: Success
+        '400':
+          description: Invalid request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Internal server error
+
+  /v1/signer/{signerAddress}:
+    get:
+      summary: Get a signer with signer handle.
+      tags:
+        - Signer
+      description: Endpoint to get a signer.
+      operationId: getSigner
+      parameters:
+        - in: path
+          name: signerAddress
+          schema:
+            type: string
+          required: true
+          example: wYe6h63CNqoLxJet5jP1WWLhGi8D11ZGij
+
+      responses:
+        '200':
+          description: Signer fetched successfully
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/SignerResponse'
+                  - type: object
+                    properties:
+                      error:
+                        type: object
+                        properties:
+                          code:
+                            type: integer
+                            example: 0
+                          message:
+                            type: string
+                            example: 'Success'
+              examples:
+                example1:
+                  summary: 'Response'
+                  value:
+                    signer_id: '0195b009-a139-7ff2-adac-15e3c3ecfc88'
+                    id: '0195b009-a139-7ff2-adac-15e3c3ecfc88'
+                    handle: 'wYe6h63CNqoLxJet5jP1WWLhGi8D11ZGij'
+                    keeper:
+                      - public: '7ef44ee7ff1f4527ef44ee7ff1f4527ef44ee7ff1f4527ef44ee7ff1f4527ef4'
+                        scheme: 'ecdsa-ed25519'
+                        secret: '046d541aec939b4748943e49cc1117a70966a6fc87345e6052a54f1e69ea48d5'
+                    labels:
+                      type: 'PERSON'
+                      status: 'INACTIVE'
+                      created: '2025-03-19T15:12:55.993-05:00'
+                      updated: '2025-03-20T15:12:55.993-05:00'
+                      createdBy: 'mSJkneiASd'
+                      aliasType: 'ALPHANUM'
+                      aliasValue: '@jorge'
+                      proprietary: 'CC'
+                      identification: '1010101010'
+                      firstName: 'Jorge'
+                      lastName: 'Diaz'
+                      bankId: '900123456'
+                      bankAccountType: 'SVGS'
+                      bankAccountNumber: '4123456789'
+                      routerReference: '$bancorojo'
+                      targetSpbviCode: 'TFY'
+                      consented: '2025-03-13T20:38:07-05:00'
+                      received: '2025-03-13T20:38:07.123-05:00'
+                      dispatched: '2025-03-13T20:38:10.123-05:00'
+                    error:
+                      code: 0
+                      message: Success
+
+        '400':
+          description: Invalid request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Internal server error
+
+    put:
+      summary: Update a signer
+      tags:
+        - Signer
+      description: Endpoint to update a signer.
+      operationId: updateSigner
+      parameters:
+        - in: path
+          name: signerAddress
+          schema:
+            type: string
+          required: true
+          example: wYe6h63CNqoLxJet5jP1WWLhGi8D11ZGij
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateSignerRequest'
+            examples:
+              example1:
+                summary: Change status of a signer
+                value:
+                  labels:
+                    status: 'INACTIVE'
+
+      responses:
+        '200':
+          description: Signer updated successfully
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/SignerResponse'
+                  - type: object
+                    properties:
+                      error:
+                        type: object
+                        properties:
+                          code:
+                            type: integer
+                            example: 0
+                          message:
+                            type: string
+                            example: 'Success'
+              examples:
+                example1:
+                  summary: 'Response'
+                  value:
+                    signer_id: '0195b009-a139-7ff2-adac-15e3c3ecfc88'
+                    id: '0195b009-a139-7ff2-adac-15e3c3ecfc88'
+                    handle: 'wYe6h63CNqoLxJet5jP1WWLhGi8D11ZGij'
+                    keeper:
+                      - public: '7ef44ee7ff1f4527ef44ee7ff1f4527ef44ee7ff1f4527ef44ee7ff1f4527ef4'
+                        scheme: 'ecdsa-ed25519'
+                        secret: '046d541aec939b4748943e49cc1117a70966a6fc87345e6052a54f1e69ea48d5'
+                    labels:
+                      type: 'PERSON'
+                      status: 'INACTIVE'
+                      created: '2025-03-19T15:12:55.993-05:00'
+                      updated: '2025-03-20T15:12:55.993-05:00'
+                      createdBy: 'mSJkneiASd'
+                      aliasType: 'ALPHANUM'
+                      aliasValue: '@jorge'
+                      proprietary: 'CC'
+                      identification: '1010101010'
+                      firstName: 'Jorge'
+                      lastName: 'Diaz'
+                      bankId: '900123456'
+                      bankAccountType: 'SVGS'
+                      bankAccountNumber: '4123456789'
+                      routerReference: '$bancorojo'
+                      targetSpbviCode: 'TFY'
+                      consented: '2025-03-13T20:38:07-05:00'
+                      received: '2025-03-13T20:38:07.123-05:00'
+                      dispatched: '2025-03-13T20:38:10.123-05:00'
+
+        '400':
+          description: Invalid request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Internal server error
+
+components:
+  schemas:
+    CreateSignerRequest:
+      type: object
+      properties:
+        handle:
+          type: string
+          example: 'wfQeFLxQCFF5zrAjHnVX7tJnigmN98mDLM'
+          pattern: '^w[1-9A-HJ-NP-Za-km-z]+$'
+          minLength: 28
+          maxLength: 35
+          nullable: true
+        keeper:
+          type: array
+          items:
+            type: object
+            properties:
+              public:
+                type: string
+                pattern: '^[0-9a-f]+$'
+                minLength: 64
+                maxLength: 130
+              scheme:
+                type: string
+                enum: ['ecdsa-ed25519', 'eddsa-ed25519']
+        labels:
+          type: object
+          properties:
+            type:
+              type: string
+              enum: ['PERSON', 'BUSINESS']
+              description: 'Type of a signer'
+            aliasType:
+              type: string
+              description: 'Alias type of the signer'
+              enum: ['ALPHANUM', 'EMAIL', 'MERCHANT', 'PHONE', 'NRIC']
+              nullable: false
+            aliasValue:
+              type: string
+              description: |
+                Value of the alias. The format of the alias depends on the aliasType:
+                - "ALPHANUM": Starts with @. Max 20 and min 5 alphanumeric characters after the @.
+                - "EMAIL": Max 92 characters, must contain only one @. Max 30 characters before the @ and 61 after.
+                - "MERCHANT": Starts with 00 and contains 10 characrters in total.
+                - "PHONE": Starts with 3 and contains 9 numbers after.
+                - "NRIC": Max 18 and min 3 alphanumeric characters.
+              maxLength: 92
+              minLength: 3
+              nullable: false
+              example: '@jorge'
+            proprietary:
+              type: string
+              description: |
+                'Proprietary label of the signer'
+                - "CC": Cédula de Ciudadanía 
+                - "CE": Cédula de Extranjería
+                - "PA": Pasaporte
+                - "TI": Tarjeta de Identidad
+                - "NUIP": Número Único de Identificación Personal
+                - "NIT": Número de Identificación Tributaria
+              enum: ['CC', 'CE', 'PA', 'TI', 'NUIP', 'NIT']
+              nullable: false
+            description:
+              type: string
+              description: 'Description of the signer'
+              maxLength: 255
+              nullable: true
+              example: 'signer for spi'
+            identification:
+              type: string
+              description: 'Identification of the signer. Alphanumeric characters.'
+              maxLength: 18
+              nullable: false
+              example: '1010101010'
+            name:
+              type: string
+              description: 'Legal entity name. Only for BUSINESS type.'
+              maxLength: 140
+              nullable: true
+              example: 'Cognito inc'
+            firstName:
+              type: string
+              description: 'First name of the signer. Only for PERSON type.'
+              maxLength: 140
+              nullable: true
+              example: 'Jorge'
+            secondName:
+              type: string
+              description: 'Optional second name of the signer. Only for PERSON type.'
+              maxLength: 140
+              nullable: true
+              example: 'Ivan'
+            lastName:
+              type: string
+              description: 'Last name of the signer. Only for PERSON type.'
+              maxLength: 140
+              nullable: true
+              example: 'Diaz'
+            secondLastName:
+              type: string
+              description: 'Optional second last name of the signer. Only for PERSON type.'
+              maxLength: 140
+              nullable: true
+              example: 'Gomez'
+            countryOfResidence:
+              type: string
+              description: 'ISO code of the country of residence of the signer.'
+              maxLength: 2
+              nullable: true
+              example: 'CO'
+            bankAccountType:
+              type: string
+              description: |
+                Type of bank account.
+                - "SVGS": Savings
+                - "CACC": Checking
+                - "DBMO": Low-amount deposits
+                - "DORD": Ordinary deposits
+                - "DBMI": Inclusive low-amount deposits
+              enum: ['SVGS', 'CACC', 'DBMO', 'DORD', 'DBMI']
+              nullable: false
+            bankAccountNumber:
+              type: string
+              description: 'Bank account number of the signer. Only digits'
+              maxLength: 34
+              nullable: false
+              example: '4123456789'
+            bankBicfi:
+              type: string
+              description: 'Bank BICFI code of the bank. Only digits'
+              maxLength: 4
+              nullable: true
+              example: '1234'
+            bankName:
+              type: string
+              description: 'Name of the bank'
+              maxLength: 64
+              nullable: true
+              example: 'Banco Rojo'
+            bankId:
+              type: string
+              description: 'Bank NIT'
+              maxLength: 9
+              nullable: true
+              example: '900123456'
+            routerReference:
+              type: string
+              description: 'Bank wallet identifier.'
+              maxLength: 34
+              example: '$bancorojo'
+              nullable: false
+            targetSpbviCode:
+              type: string
+              description: |
+                'TFY by default'
+                - "TFY": TransfiYa
+                - "ENT": Entre cuentas
+                - "CRB": Credibanco
+                - "VIS": Visionamos
+              enum:
+                - TFY
+                - ENT
+                - CRB
+                - VIS
+            consented:
+              type: string
+              description: 'Date of consent in ISO 8601'
+              nullable: false
+              example: '2025-03-13T20:38:07-05:00'
+            received:
+              type: string
+              description: 'Date of reception in ISO 8601 with milliseconds precision'
+              nullable: false
+              example: '2025-03-13T20:38:07.123-05:00'
+            dispatched:
+              type: string
+              description: 'Date of dispatch in ISO 8601 with milliseconds precision'
+              nullable: false
+              example: '2025-03-13T20:38:10.123-05:00'
+
+    UpdateSignerRequest:
+      type: object
+      properties:
+        labels:
+          type: object
+          properties:
+            type:
+              type: string
+              enum: ['PERSON', 'BUSINESS']
+              description: 'Type of a signer'
+            aliasType:
+              type: string
+              description: 'Alias type of the signer'
+              enum: ['ALPHANUM', 'EMAIL', 'MERCHANT', 'PHONE', 'NRIC']
+            aliasValue:
+              type: string
+              description: |
+                Value of the alias. The format of the alias depends on the aliasType:
+                - "ALPHANUM": Starts with @. Max 20 and min 5 alphanumeric characters after the @.
+                - "EMAIL": Max 92 characters, must contain only one @. Max 30 characters before the @ and 61 after.
+                - "MERCHANT": Starts with 00 and contains 10 characrters in total.
+                - "PHONE": Starts with 3 and contains 9 numbers after.
+                - "NRIC": Max 18 and min 3 alphanumeric characters.
+              maxLength: 92
+              minLength: 3
+            proprietary:
+              type: string
+              description: |
+                'Proprietary label of the signer'
+                - "CC": Cédula de Ciudadanía 
+                - "CE": Cédula de Extranjería
+                - "PA": Pasaporte
+                - "TI": Tarjeta de Identidad
+                - "NUIP": Número Único de Identificación Personal
+                - "NIT": Número de Identificación Tributaria
+              enum: ['CC', 'CE', 'PA', 'TI', 'NUIP', 'NIT']
+            description:
+              type: string
+              description: 'Description of the signer'
+              maxLength: 255
+            identification:
+              type: string
+              description: 'Identification of the signer. Alphanumeric characters.'
+              maxLength: 18
+            name:
+              type: string
+              description: 'Legal entity name. Only for BUSINESS type.'
+              maxLength: 140
+            firstName:
+              type: string
+              description: 'First name of the signer. Only for PERSON type.'
+              maxLength: 140
+            secondName:
+              type: string
+              description: 'Optional second name of the signer. Only for PERSON type.'
+              maxLength: 140
+            lastName:
+              type: string
+              description: 'Last name of the signer. Only for PERSON type.'
+              maxLength: 140
+            secondLastName:
+              type: string
+              description: 'Optional second last name of the signer. Only for PERSON type.'
+              maxLength: 140
+            countryOfResidence:
+              type: string
+              description: 'ISO code of the country of residence of the signer.'
+              maxLength: 2
+            bankAccountType:
+              type: string
+              description: |
+                Type of bank account.
+                - "SVGS": Savings
+                - "CACC": Checking
+                - "DBMO": Low-amount deposits
+                - "DORD": Ordinary deposits
+                - "DBMI": Inclusive low-amount deposits
+              enum: ['SVGS', 'CACC', 'DBMO', 'DORD', 'DBMI']
+            bankAccountNumber:
+              type: string
+              description: 'Bank account number of the signer. Only digits'
+              maxLength: 34
+            bankBicfi:
+              type: string
+              description: 'Bank BICFI code of the bank. Only digits'
+              maxLength: 4
+            bankName:
+              type: string
+              description: 'Name of the bank'
+              maxLength: 64
+            bankId:
+              type: string
+              description: 'Bank NIT'
+              maxLength: 9
+            routerReference:
+              type: string
+              description: 'Bank wallet identifier.'
+              maxLength: 34
+            targetSpbviCode:
+              type: string
+              description: |
+                'TFY by default'
+                - "TFY": TransfiYa
+                - "ENT": Entre cuentas
+                - "CRB": Credibanco
+                - "VIS": Visionamos
+              enum:
+                - TFY
+                - ENT
+                - CRB
+                - VIS
+
+    SignerResponse:
+      type: object
+      properties:
+        id:
+          type: string
+        signer_id:
+          type: string
+        handle:
+          type: string
+        keeper:
+          type: array
+          items:
+            type: object
+            properties:
+              private:
+                type: string
+              public:
+                type: string
+              scheme:
+                type: string
+        labels:
+          type: object
+          properties:
+            type:
+              type: string
+            aliasType:
+              type: string
+            aliasValue:
+              type: string
+            status:
+              type: string
+            proprietary:
+              type: string
+            description:
+              type: string
+            identification:
+              type: string
+            name:
+              type: string
+            firstName:
+              type: string
+            secondName:
+              type: string
+            lastName:
+              type: string
+            secondLastName:
+              type: string
+            countryOfResidence:
+              type: string
+            bankAccountType:
+              type: string
+            bankAccountNumber:
+              type: string
+            bankBicfi:
+              type: string
+            bankName:
+              type: string
+            bankId:
+              type: string
+            createdBy:
+              type: string
+            routerReference:
+              type: string
+            targetSpbviCode:
+              type: string
+            consented:
+              type: string
+            received:
+              type: string
+            dispatched:
+              type: string
+            created:
+              type: string
+            updated:
+              type: string
+
+    ErrorResponse:
+      properties:
+        error:
+          $ref: '#/components/schemas/GenericError'
+
+    GenericError:
+      type: object
+      properties:
+        code:
+          type: integer
+        message:
+          type: string
+    ErrorForbidden:
+      type: object
+      properties:
+        code:
+          type: integer
+        message:
+          type: string
+        details:
+          type: object

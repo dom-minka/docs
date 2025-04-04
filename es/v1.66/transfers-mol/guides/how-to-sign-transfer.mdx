@@ -5,10 +5,10 @@ icon: 'file-signature'
 ---
 
 Autorización de movimiento de fondos (action)
-Una vez se han completado con éxito todas las validaciones relacionadas con el procesamiento de la transferencia y la información del destinatario ha sido completamente resuelta, TransfiYa realiza una llamada al endpoint action del banco originador.
+Una vez se han completado con éxito todas las validaciones relacionadas con el procesamiento de la transferencia y la información del destinatario ha sido completamente resuelta, Transfiya realiza una llamada al endpoint action del banco originador.
 
 <Info> El propósito de esta operación es autorizar el movimiento de los fondos hacia la custodia del banco destinatario. </Info>
-Esta operación no requiere que el banco originador realice movimientos contables en su sistema interno. Su único objetivo es autorizar el movimiento de saldos dentro del sistema de TransfiYa, desde el usuario originador (cuya clave es gestionada por el banco de origen) hacia el usuario destinatario (cuya clave es gestionada por el banco de destino).
+Esta operación no requiere que el banco originador realice movimientos contables en su sistema interno. Su único objetivo es autorizar el movimiento de saldos dentro del sistema de Transfiya, desde el usuario originador (cuya clave es gestionada por el banco de origen) hacia el usuario destinatario (cuya clave es gestionada por el banco de destino).
 
 <Info> Al momento de invocar el endpoint `action`, todos los datos tanto del usuario de origen como del destinatario ya están completamente resueltos. Antes de este punto, en algunos casos de uso, la información del destinatario podría no estar completamente disponible si aún no había sido registrado en el sistema. </Info>
 
@@ -16,7 +16,7 @@ Esta operación no requiere que el banco originador realice movimientos contable
 sequenceDiagram
 	autonumber
 	participant sb as Banco Originador
-	participant ty as TransfiYa
+	participant ty as Transfiya
 
 ty ->> +sb: Llamar al endpoint de acción
 sb ->> +ty: Enviar IOU
@@ -26,14 +26,14 @@ sb -->> -ty: Respuesta de la acción
 ```
 
 ## Firma de la acción principal (Sign main action)
-Una vez TransfiYa ha resuelto completamente la información de origen y destino, se procede a autorizar el movimiento de fondos dentro del sistema. Esta operación consiste en la firma de la acción principal por parte del banco originador. La firma se realiza a través de un objeto IOU (prueba criptográfica), que garantiza que el banco autoriza la transacción y que esta no fue modificada.
+Una vez Transfiya ha resuelto completamente la información de origen y destino, se procede a autorizar el movimiento de fondos dentro del sistema. Esta operación consiste en la firma de la acción principal por parte del banco originador. La firma se realiza a través de un objeto IOU (prueba criptográfica), que garantiza que el banco autoriza la transacción y que esta no fue modificada.
 
 Este proceso tiene como finalidad asegurar la integridad y validez de la operación antes de que se ejecute el movimiento final hacia el banco destinatario.
 
 <Steps>
 
-<Step title="TransfiYa llama al endpoint `/action` del banco originador">
-TransfiYa realiza una solicitud al endpoint `/action` del banco originador, incluyendo todos los datos relevantes de la acción principal. Esta llamada tiene como objetivo solicitar autorización para mover fondos entre usuarios.
+<Step title="Transfiya llama al endpoint `/action` del banco originador">
+Transfiya realiza una solicitud al endpoint `/action` del banco originador, incluyendo todos los datos relevantes de la acción principal. Esta llamada tiene como objetivo solicitar autorización para mover fondos entre usuarios.
 <Tabs>
     <Tab title="Request">
     ```json
@@ -119,8 +119,8 @@ TransfiYa realiza una solicitud al endpoint `/action` del banco originador, incl
   </Tabs>
 </Step>
 
-<Step title="El banco origen genera un objeto IOU, lo firma y lo envía a TransfiYa">
-El banco crea un objeto IOU con los datos de la acción principal, lo firma con la clave privada asociada al firmante origen y lo envía a TransfiYa para su validación.
+<Step title="El banco origen genera un objeto IOU, lo firma y lo envía a Transfiya">
+El banco crea un objeto IOU con los datos de la acción principal, lo firma con la clave privada asociada al firmante origen y lo envía a Transfiya para su validación.
 <Tabs>
     <Tab title="Request">
     <Info>
@@ -128,14 +128,14 @@ El banco crea un objeto IOU con los datos de la acción principal, lo firma con 
     </Info>
 
     <Info>
-    El objeto IOU se utiliza para autorizar un movimiento de saldo entre los firmantes de usuario origen y destino en TransfiYa. Este objeto DEBE reflejar fielmente la acción principal que representa. Por ello, la mayoría de los datos del IOU se copian desde `mainAction`.
+    El objeto IOU se utiliza para autorizar un movimiento de saldo entre los firmantes de usuario origen y destino en Transfiya. Este objeto DEBE reflejar fielmente la acción principal que representa. Por ello, la mayoría de los datos del IOU se copian desde `mainAction`.
     </Info>
 
     <Info>
-    TransfiYa utiliza firmas criptográficas como prueba de que los participantes autorizaron movimientos de saldo. Los datos se hashean primero y luego se firman usando claves privadas, las cuales nunca deben compartirse con TransfiYa. Los algoritmos de firma y hash están documentados, y los SDKs de TransfiYa ofrecen soporte para simplificar estas integraciones.
+    Transfiya utiliza firmas criptográficas como prueba de que los participantes autorizaron movimientos de saldo. Los datos se hashean primero y luego se firman usando claves privadas, las cuales nunca deben compartirse con TransfiYa. Los algoritmos de firma y hash están documentados, y los SDKs de TransfiYa ofrecen soporte para simplificar estas integraciones.
     </Info>
     <Info>
-    TransfiYa validates the signature of the received IOU object and stores it in the ledger, if everything is valid. This operation also marks the main action as COMPLETED.
+    Transfiya validates the signature of the received IOU object and stores it in the ledger, if everything is valid. This operation also marks the main action as COMPLETED.
     </Info>
 
     ```json
@@ -178,7 +178,7 @@ El banco crea un objeto IOU con los datos de la acción principal, lo firma con 
     | `data.symbol`      | `mainAction.snapshot.symbol.signer.handle`                                                                                                       |
     | `data.amount`      | `mainAction.amount`                                                                                                                              |
     | `data.domain`      | `mainAction.labels.domain`                                                                                                                       |
-    | `data.expiry`      | `currentTime + 1 minuto` en formato ISO 8601. Indica el momento a partir del cual TransfiYa puede expirar la operación pendiente.               |
+    | `data.expiry`      | `currentTime + 1 minuto` en formato ISO 8601. Indica el momento a partir del cual Transfiya puede expirar la operación pendiente.               |
     | `hash`             | Un hash del objeto `data`, que puede ser generado utilizando los SDKs. El campo `hash.value` es el hash en sí; los demás campos son metadatos de hashing. |
     | `meta.signatures`  | Firma del hash generada con la clave privada del firmante (IOU source). Estas firmas pueden ser generadas con los SDKs. `schema`: algoritmo usado. `signer`: handle del firmante. `public`: clave pública. `string`: valor de la firma. |
 
@@ -359,7 +359,7 @@ Para finalizar el proceso, el banco responde confirmando el `action_id` recibido
     </Tab>
     <Tab title="Error Response">
     <Info>
-    En caso de errores no recuperables durante el procesamiento, se puede devolver un objeto `error` a TransfiYa como parte de la respuesta.
+    En caso de errores no recuperables durante el procesamiento, se puede devolver un objeto `error` a Transfiya como parte de la respuesta.
 
     Los códigos de error devueltos por los bancos deben estar en el rango `3xx`.
     </Info>
@@ -375,7 +375,7 @@ Para finalizar el proceso, el banco responde confirmando el `action_id` recibido
     ```
     | Field name      | Descripción                                                                 |
     |----------------|------------------------------------------------------------------------------|
-    | `error.code`   | Un código de error válido soportado por TransfiYa que indica el error ocurrido. |
+    | `error.code`   | Un código de error válido soportado por Transfiya que indica el error ocurrido. |
     | `error.message`| Un mensaje con información adicional sobre el error.                        |
 
     </Tab>

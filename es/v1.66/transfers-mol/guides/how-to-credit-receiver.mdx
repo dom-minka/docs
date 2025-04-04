@@ -6,7 +6,7 @@ icon: 'money-bill-transfer'
 
 ## Acreditar al usuario destino
 
-Acreditar al usuario destino es el último paso en el procesamiento de la transferencia. Para realizar esta operación, <strong>TransfiYa</strong> llama al endpoint `credit` del banco destino y envía la acción principal (`main action`) en estado `COMPLETED` como payload.
+Acreditar al usuario destino es el último paso en el procesamiento de la transferencia. Para realizar esta operación, <strong>Transfiya</strong> llama al endpoint `credit` del banco destino y envía la acción principal (`main action`) en estado `COMPLETED` como payload.
 
 El endpoint `credit` funciona de manera muy similar al endpoint `debit`, pero contempla un escenario adicional que debe ser manejado correctamente:
 
@@ -16,10 +16,9 @@ El crédito se utiliza tanto para acreditar al usuario destino —que es el caso
 
 ```mermaid
 flowchart TD
-    tya[TransfiYa] -->| POST /credit | bank[Banco]
+    tya[Transfiya] -->| POST /credit | bank[Banco]
     bank --> status{Estado de la<br />acción principal}
     status -->| COMPLETED | completed["Acreditar al destino<br />(caso exitoso)"]
-    status -->| REJECTED | rejected["Acreditar al origen<br />(caso de reversa)"]
 ```
 <Info>
 La implementación de la operación es la misma; la única diferencia está en determinar si se debe acreditar al <strong>origen</strong> o al <strong>destino</strong> de la acción principal. Esta decisión se toma en función del estado de la acción principal:
@@ -32,7 +31,7 @@ La implementación de la operación es la misma; la única diferencia está en d
 ```mermaid
 sequenceDiagram
 	autonumber
-	participant ty as TransfiYa
+	participant ty as Transfiya
   participant tb as Banco Destino
 
   ty ->> +tb: Llamar a crédito
@@ -51,7 +50,7 @@ sequenceDiagram
 ```
 
 ## Crédito al usuario destino
-Una vez que la transferencia ha sido aprobada y confirmada por el banco originador, TransfiYa procede a acreditar los fondos en la cuenta del usuario receptor. Este proceso se realiza mediante una llamada al endpoint credit del banco destino, la cual activa una nueva acción de tipo DOWNLOAD en el sistema.
+Una vez que la transferencia ha sido aprobada y confirmada por el banco originador, Transfiya procede a acreditar los fondos en la cuenta del usuario receptor. Este proceso se realiza mediante una llamada al endpoint credit del banco destino, la cual activa una nueva acción de tipo DOWNLOAD en el sistema.
 
 El flujo de acreditación contempla tanto casos exitosos como escenarios de reversa. En ambos casos, el procedimiento técnico es el mismo: el banco receptor valida la información de la cuenta, acredita los fondos y firma un objeto IOU que sirve como prueba criptográfica de la operación.
 
@@ -59,7 +58,7 @@ A continuación, se describe el paso a paso de este proceso:
 
 <Steps>
 
-<Step title="TransfiYa llama al banco destino para procesar la operación de abono.">
+<Step title="Transfiya llama al banco destino para procesar la operación de abono.">
 Se invoca el endpoint `credit` con todos los datos necesarios para iniciar el abono de fondos.
 <Tabs>
     <Tab title="Request Exitoso">
@@ -141,100 +140,19 @@ Se invoca el endpoint `credit` con todos los datos necesarios para iniciar el ab
         }
     ```
     </Tab>
-    
-
-    <Tab title="Request Reverse">
-    ```json
-    POST https://ban.co/transfiya/credit
-    {
-        "source": "wXxwpxB32saqfmfMxAQD4SVWWhhn6akLC2",
-        "target": "wRFmYXS2sP9ho9VCZ3j4FuP1j55ABeFvsF",
-        "amount": "100.00",
-        "symbol": "$tin",
-        "labels": {
-            "hash": "PENDING",
-            "type": "SENDMOL",
-            "domain": "tin",
-            "flowId": "Lf13jsK83omPv3bOt",
-            "status": "ERROR",
-            "tx_ref": "Lf13jsK83omPv3bOt",
-            "tx_id": "20250114890915944TFY123456789012345",
-            "created": "2025-01-14T20:40:57.322-05:00",
-            "updated": "2025-01-14T20:41:00.841-05:00",
-            "description": "Payment for lunch",
-            "sourceChannel": "APP",
-            "deviceFingerPrint": {
-            "city": "Bogotá",
-            "hash": "26fff5af6441f8e15a71e8d62c361714484b1b308c99e8eb68ca85e2a7e0dc58",
-            "model": "Huawei Mate 20 Pro",
-            "country": "Colombia",
-            "operator": "Bharti Airtel Limited",
-            "SIMCardId": "8991101200003204510",
-            "ipAddress": "2001:0db8:85a3:0000:0000:8a2e:0370:7334",
-            "mobileDevice": "990000862471854"
-            }
-        },
-        "snapshot": {
-            "source": {
-            "signer": {
-                "handle": "wXxwpxB32saqfmfMxAQD4SVWWhhn6akLC2",
-                "labels": {
-                "name": "Maria Fernanda Gomez",
-                "proprietary": "CC",
-                    "identification": "2020202020",
-                "bankAccountType": "SVGS",
-                "bankAccountNumber": "95445654254",
-                "bankId": "895554821",
-                "targetSpbviCode": "TFY"
-                }
-            },
-            },
-            "symbol": {
-            "signer": {
-                "handle": "wMxKCAzsQBiUURDU3xD3xuSbVo1S9jmf3d",
-                "labels": {
-                "created": "2018-10-19T20:23:22.041Z",
-                "createdBy": "ZhrQA3vcm17h2RRO4LrJ"
-                }
-            }
-            },
-            "target": {
-            "signer": {
-                "handle": "wRFmYXS2sP9ho9VCZ3j4FuP1j55ABeFvsF",
-                "labels": {
-                "name": "Jorge Alejandro Fernandez Garcia",
-                "proprietary": "CC",
-                    "identification": "1010101010",
-                "bankAccountType": "SVGS",
-                "bankAccountNumber": "12345654321",
-                "bankId": "891234918",
-                "targetSpbviCode": "TFY"
-                }
-            },
-            }
-        },
-        "error": {
-            "code": 127,
-            "message": "Action cannot be signed."
-        },
-        "action_id": "35de4d3d-3aba-4fb3-b110-d004ce2aabb2",
-        "id": "35de4d3d-3aba-4fb3-b110-d004ce2aabb2"
-        }
-    ```
-    </Tab>
   </Tabs>
 </Step>
 
-<Step title="El banco destino crea una acción de tipo `DOWNLOAD` en TransfiYa.">
+<Step title="El banco destino crea una acción de tipo `DOWNLOAD` en Transfiya.">
 Esta acción representa la operación de crédito y se registra con estado inicial `PENDING`.
 <Tabs>
     <Tab title="Request Exitoso">
     <Info>
-    `mainAction` en los valores hace referencia a los datos de la acción principal que se recibe desde TransfiYa. En otras palabras, representa el cuerpo de una llamada `POST https://ban.co/transfiya/credit`.
+    `mainAction` en los valores hace referencia a los datos de la acción principal que se recibe desde Transfiya. En otras palabras, representa el cuerpo de una llamada `POST https://ban.co/transfiya/credit`.
     </Info>
 
     <Info>
-    `bankSigner` representa el firmante de liquidación que es registrado por el banco durante su incorporación con TransfiYa. Este firmante mantiene el balance total disponible para el banco dentro del sistema.
+    `bankSigner` representa el firmante de liquidación que es registrado por el banco durante su incorporación con Transfiya. Este firmante mantiene el balance total disponible para el banco dentro del sistema.
     </Info>
 
     ```json
@@ -263,8 +181,8 @@ Esta acción representa la operación de crédito y se registra con estado inici
     | `amount`          | `mainAction.amount` — Monto de la transferencia.                             |
     | `labels.type`     | `DOWNLOAD` — Siempre debe ser `DOWNLOAD` en operaciones de crédito.          |
     | `labels.tx_ref`   | `mainAction.labels.tx_ref` — Referencia única de la transferencia.           |
-    | `labels.received` | Timestamp en formato ISO 8601 — Momento en que TransfiYa recibió la solicitud de abono. |
-    | `labels.dispatched` | Timestamp en formato ISO 8601 — Momento en que se envió la solicitud de creación de la acción a TransfiYa. |
+    | `labels.received` | Timestamp en formato ISO 8601 — Momento en que Transfiya recibió la solicitud de abono. |
+    | `labels.dispatched` | Timestamp en formato ISO 8601 — Momento en que se envió la solicitud de creación de la acción a Transfiya. |
         
     </Tab>
     <Tab title="Response Exitoso">
@@ -338,121 +256,6 @@ Esta acción representa la operación de crédito y se registra con estado inici
         }
     ```
     </Tab>
-    <Tab title="Request Reverse">
-    <Info>
-    `mainAction` se utiliza para hacer referencia a los datos de la acción principal recibida desde TransfiYa. En otras palabras, representa el cuerpo de una llamada  
-    **`POST` https://ban.co/transfiya/credit**
-    </Info>
-
-    <Info>
-    `bankSigner` representa el firmante de liquidación que es registrado por el banco durante el proceso de incorporación con TransfiYa. Este firmante mantiene el saldo total disponible para el banco dentro del sistema.
-    </Info>
-
-    <Info>
-    Una acción `DOWNLOAD` en un flujo de reversa es exactamente lo opuesto a la acción `UPLOAD` de la fase de débito. Los fondos se devuelven desde el firmante usuario de origen hacia el firmante de liquidación del banco de origen.
-    </Info>
-
-    ```json
-    curl -X POST \
-        -H "Content-Type: application/json" \
-        -H "x-api-key: <API_KEY>" \
-        -H "Authorization: Bearer <TOKEN>" \
-        -d '{
-            "source": "wXxwpxB32saqfmfMxAQD4SVWWhhn6akLC2",
-            "target": "wSjXPK5uocHQdY81THFG3VL8G5vN6mU7Ro",
-            "symbol": "$tin",
-            "amount": "100.00",
-            "labels": {
-            "type": "DOWNLOAD",
-            "tx_ref": "Lf13jsK83omPv3bOt",
-            "received": "2025-01-14T20:42:17.322-05:00",
-            "dispatched": "2025-01-14T20:42:17.831-05:00"
-            }
-        }' "<TRANSFIYA URL>/v1/action"
-    ```
-    | Field name         | Descripción                                                                                       |
-    |--------------------|---------------------------------------------------------------------------------------------------|
-    | `source`           | `mainAction.snapshot.source.signer.handle`<br />Origen de la transferencia (usuario del banco).   |
-    | `target`           | `bankSigner.handle`<br />Firmante de liquidación del banco de origen.                            |
-    | `symbol`           | `mainAction.symbol`<br />Moneda de la transferencia.                                              |
-    | `amount`           | `mainAction.amount`<br />Monto de la transferencia.                                               |
-    | `labels.type`      | `DOWNLOAD`<br />Siempre debe ser `DOWNLOAD` para créditos.                                        |
-    | `labels.tx_ref`    | `mainAction.labels.tx_ref`<br />Referencia de la transferencia.                                   |
-    | `labels.received`  | Timestamp en formato ISO 8601<br />Momento en que se recibió esta llamada de crédito desde TransfiYa. |
-    | `labels.dispatched`| Timestamp en formato ISO 8601<br />Momento en que se envió esta solicitud de creación de acción a TransfiYa. |
-
-    </Tab>
-     <Tab title="Response Reverse">
-    <Info>
-    Pueden agregarse campos adicionales a estas respuestas como parte de nuevas funcionalidades. Las implementaciones bancarias DEBEN ser resilientes ante la adición de nuevos campos.
-    </Info>
-
-    ```json
-    {
-        "source": "wXxwpxB32saqfmfMxAQD4SVWWhhn6akLC2",
-        "target": "wSjXPK5uocHQdY81THFG3VL8G5vN6mU7Ro",
-        "amount": "100.00",
-        "symbol": "$tin",
-        "labels": {
-            "hash": "PENDING",
-            "type": "DOWNLOAD",
-            "domain": "tin",
-            "status": "PENDING",
-            "tx_ref": "Lf13jsK83omPv3bOt",
-            "received": "2025-01-14T20:42:17.322-05:00",
-            "dispatched": "2025-01-14T20:42:17.831-05:00"
-            "delivered": "2025-01-14T20:42:18.002-05:00",
-            "created": "2025-01-14T20:42:18.305-05:00",
-            "updated": "2025-01-14T20:42:18.305-05:00"
-        },
-        "snapshot": {
-            "source": {
-            "signer": {
-                "handle": "wXxwpxB32saqfmfMxAQD4SVWWhhn6akLC2",
-                "labels": {
-                "name": "Maria Fernanda Gomez",
-                "proprietary": "CC",
-                    "identification": "2020202020",
-                "bankAccountType": "SVGS",
-                "bankAccountNumber": "95445654254",
-                "bankId": "895554821",
-                "targetSpbviCode": "TFY"
-                }
-            }
-            },
-            "symbol": {
-            "signer": {
-                "handle": "wMxKCAzsQBiUURDU3xD3xuSbVo1S9jmf3d",
-                "labels": {
-                "created": "2018-10-19T20:23:22.041Z",
-                "createdBy": "ZhrQA3vcm17h2RRO4LrJ"
-                }
-            }
-            },
-            "target": {
-            "signer": {
-                "handle": "wSjXPK5uocHQdY81THFG3VL8G5vN6mU7Ro",
-                "labels": {
-                "type": "TROUPE",
-                "created": "2022-06-10T10:46:35-05:00",
-                "bankName": "Banco Rojo",
-                "bankId": "895554821",
-                "bankBicfi": "9574",
-                "createdBy": "A16iU3t38Tygr70uO1qf",
-                "routerReference": "$bancorojo",
-                "bankAccountNumber": "160101"
-                }
-            }
-            }
-        },
-        "error": {
-            "code": 0,
-            "message": "Success"
-        },
-        "action_id": "2aa49d5d-3dcc-4841-bb3e-baeb9fef4278"
-        }
-    ```
-    </Tab>
     <Tab title="Error Response">
     <Info>
     La respuesta de error se devuelve cuando una solicitud no es válida, cuando quien llama no tiene los permisos suficientes o cuando el sistema se encuentra en mantenimiento.
@@ -485,40 +288,7 @@ Esta respuesta cierra la parte síncrona de la operación; el resto se ejecuta d
     }
     ```
     </Tab>
-    <Tab title="Error Response">
-    <Info>
-    En caso de errores irrecuperables durante el procesamiento, se puede retornar un objeto `error` a TransfiYa.
-
-    El campo `action_id` es opcional en caso de errores, pero debe incluirse si el error ocurrió después de que la acción fue creada exitosamente.
-
-    Los códigos de error retornados por los bancos deben estar en el rango `3xx`.
-    </Info>
-
-    ```json
-    {
-        "action_id": "2aa49d5d-3dcc-4841-bb3e-baeb9fef4278", // If available
-        "error": {
-            "code": 300,
-            "message": "Transfer timeout"
-        }
-    }
-    ```
-    | Field name      | Descripción del valor del campo                                                                 |
-    |------------------|------------------------------------------------------------------------------------------------|
-    | `error.code`     | Código de error válido soportado por TransfiYa que representa el error ocurrido.              |
-    | `error.message`  | Mensaje con información adicional acerca del error ocurrido.                                   |
-
-    </Tab>
   </Tabs>
-</Step>
-
-<Step title="El banco determina a quién abonar según el estado de la acción principal.">
-- Si `COMPLETED` → se abona al `target`.  
-- Si `REJECTED` → se abona al `source`.
-</Step>
-
-<Step title="El banco valida la información de la cuenta de abono y acredita el monto.">
-La cuenta debe existir, estar activa y tener condiciones válidas para recibir el abono.
 </Step>
 
 <Step title="El banco actualiza la acción con un `tx_id`.">
@@ -615,13 +385,13 @@ El IOU incluye los datos del abono y debe ser firmado criptográficamente.
 <Tabs>
     <Tab title="Request">
     <Info>
-    TransfiYa valida la firma del objeto IOU recibido y lo almacena en el libro mayor si todo es válido. Esta operación también marca la acción `DOWNLOAD` como `COMPLETED`.
+    Transfiya valida la firma del objeto IOU recibido y lo almacena en el libro mayor si todo es válido. Esta operación también marca la acción `DOWNLOAD` como `COMPLETED`.
     </Info>
 
     <Info>
     El IOU se utiliza como prueba de que una operación ha sido realizada en el core bancario. Debe coincidir exactamente con la acción que representa. Por este motivo, la mayoría de los datos del IOU se copian desde el objeto `downloadAction`.
 
-    TransfiYa utiliza firmas criptográficas como prueba de que los participantes autorizaron los movimientos de saldo. Los datos se hashean primero y luego se firman utilizando claves privadas que **nunca deben compartirse** con TransfiYa. Los algoritmos de firma y hash están documentados, y los SDKs de TransfiYa permiten realizar estas operaciones de forma sencilla para facilitar la integración.
+    Transfiya utiliza firmas criptográficas como prueba de que los participantes autorizaron los movimientos de saldo. Los datos se hashean primero y luego se firman utilizando claves privadas que **nunca deben compartirse** con TransfiYa. Los algoritmos de firma y hash están documentados, y los SDKs de TransfiYa permiten realizar estas operaciones de forma sencilla para facilitar la integración.
     </Info>
 
     ```json
@@ -664,7 +434,7 @@ El IOU incluye los datos del abono y debe ser firmado criptográficamente.
     | `data.symbol`      | `downloadAction.snapshot.symbol.signer.handle` – Identificador del símbolo o moneda.                                                 |
     | `data.amount`      | `downloadAction.amount` – Monto a acreditar.                                                                                         |
     | `data.domain`      | `downloadAction.labels.domain` – Dominio asociado a la transacción.                                                                 |
-    | `data.expiry`      | `currentTime + 1 minuto` en formato ISO 8601 – Momento a partir del cual TransfiYa puede expirar una operación pendiente.            |
+    | `data.expiry`      | `currentTime + 1 minuto` en formato ISO 8601 – Momento a partir del cual Transfiya puede expirar una operación pendiente.            |
     | `hash`             | Hash del objeto `data`, generado por los SDKs. `hash.value` es el valor calculado, y los demás campos indican los pasos de hash.     |
     | `meta.signatures`  | Firma del `hash` generada con la clave privada del firmante fuente. Incluye: `schema` (algoritmo), `signer`, `public` (clave pública) y `string` (firma). |
 
@@ -822,8 +592,8 @@ Esta llamada indica que el flujo puede continuar. Debe incluir los campos `recei
     | Field name      | Valor del campo                                                                                  |
     |-----------------|--------------------------------------------------------------------------------------------------|
     | `<tx_ref>`      | El campo `<tx_ref>` en la URL representa la referencia de la transferencia, ubicada en `labels.tx_ref` del `mainAction`. |
-    | `received`      | Timestamp en formato ISO 8601. Representa el momento en que se recibió la última respuesta de TransfiYa (llamada `sendit`). |
-    | `dispatched`    | Timestamp en formato ISO 8601. Representa el momento en que se envió la llamada `continue` a TransfiYa. |
+    | `received`      | Timestamp en formato ISO 8601. Representa el momento en que se recibió la última respuesta de Transfiya (llamada `sendit`). |
+    | `dispatched`    | Timestamp en formato ISO 8601. Representa el momento en que se envió la llamada `continue` a Transfiya. |
 
     </Tab>
     <Tab title="Response">
@@ -852,9 +622,9 @@ Esta llamada indica que el flujo puede continuar. Debe incluir los campos `recei
     | Field name       | Descripción                                                                                      |
     |------------------|--------------------------------------------------------------------------------------------------|
     | `<tx_ref>`       | El campo `<tx_ref>` en la URL representa la referencia de la transferencia. Se encuentra en `labels.tx_ref` del `mainAction`. |
-    | `received`       | Marca de tiempo en formato ISO 8601. Representa el momento en que se recibió la respuesta de la última llamada de TransfiYa (`sendit`). |
-    | `dispatched`     | Marca de tiempo en formato ISO 8601. Representa el momento en que se envió la llamada `continue` a TransfiYa. |
-    | `error.code`     | Código de error válido, soportado por TransfiYa, correspondiente a un error ocurrido.             |
+    | `received`       | Marca de tiempo en formato ISO 8601. Representa el momento en que se recibió la respuesta de la última llamada de Transfiya (`sendit`). |
+    | `dispatched`     | Marca de tiempo en formato ISO 8601. Representa el momento en que se envió la llamada `continue` a Transfiya. |
+    | `error.code`     | Código de error válido, soportado por Transfiya, correspondiente a un error ocurrido.             |
     | `error.message`  | Mensaje con información adicional sobre el error ocurrido.                                       |
 
     </Tab>

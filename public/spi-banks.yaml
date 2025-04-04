@@ -1,0 +1,600 @@
+openapi: 3.0.0
+info:
+  version: 1.0.1
+  title: 'ACH TIN Bank Interface'
+tags:
+  - name: Credit
+    description: 'Executes download on TIN Cloud side and credit on banking core'
+  - name: Debit
+    description: 'Executes upload on TIN Cloud side and debit on banking core'
+  - name: Transfer
+    description: 'Signs the operation'
+  - name: Status
+    description: 'Notifies on status of operation'
+
+paths:
+  /v1/credit:
+    post:
+      summary: Performs download operation.
+      description: Executes download on TIN Cloud side and credit on banking core side.
+      operationId: downloadOperation
+      security:
+        - ApiKeyAuth: []
+        - oAuth2ClientCredentials: []
+        - XNonce: []
+
+      tags:
+        - Credit
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TransferUnsigned'
+        required: true
+      responses:
+        '200':
+          description: If the credit was processed locally and action was signed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ActionSigned'
+        '202':
+          description: Credit is processing and bank will use async method to continue transfer
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ActionUnsigned'
+        '400':
+          description: If there was error in processing credit or creating download
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+  /v1/debit:
+    post:
+      summary: Performs upload operation.
+      description: Executes upload on TIN Cloud side and debit on banking core side.
+      operationId: uploadOperation
+      security:
+        - ApiKeyAuth: []
+        - oAuth2ClientCredentials: []
+        - XNonce: []
+      tags:
+        - Debit
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TransferUnsigned'
+        required: true
+      responses:
+        '200':
+          description: If the debit was processed locally and action was signed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ActionSigned'
+        '202':
+          description: Debit is processing and bank will use async method to continue transfer
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ActionUnsigned'
+        '400':
+          description: If there was error in processing debit or creating upload
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+  /v1/status:
+    post:
+      summary: Notifies on status of operation.
+      description: Notification channel. It receives action object as a confirmation of transfer acceptance or reject action.
+      operationId: checkStatus
+      security:
+        - ApiKeyAuth: []
+        - oAuth2ClientCredentials: []
+        - XNonce: []
+      tags:
+        - Status
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TransferSigned'
+        required: true
+      responses:
+        '200':
+          description: Notification received succesfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NoError'
+        '400':
+          description: Error in receiving notification.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+  /v1/transfer:
+    post:
+      summary: Signs the operation.
+      description:
+        TIN Cloud will call this endpoint when bank needs to sign the pending
+        action. Depending on the key handling strategy it can use keys stored in the
+        TIN Cloud or keys stored on local Key management system.
+      operationId: signAction
+      security:
+        - ApiKeyAuth: []
+        - oAuth2ClientCredentials: []
+        - XNonce: []
+      tags:
+        - Transfer
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TransferUnsigned'
+        required: true
+      responses:
+        '200':
+          description: Action signed successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TransferSigned'
+        '400':
+          description: Error signing the action
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+  /oauth/token:
+    post:
+      summary: This is the endpoint to get a temporal token to set in the oauth2 header
+      description: ''
+      operationId: getToken
+      tags:
+        - Token
+      security:
+        - BasicAuth: []
+        - XNonce: []
+      responses:
+        '200':
+          description: Token fetched
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/tokenResponse'
+      requestBody:
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/tokenRequest'
+        required: true
+
+servers:
+  - url: 'https://bank.domain.com/v1'
+components:
+  securitySchemes:
+    BasicAuth:
+      type: http
+      scheme: basic
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: API_KEY
+    oAuth2ClientCredentials:
+      type: oauth2
+      description: Simple credentials
+      flows:
+        clientCredentials:
+          tokenUrl: https://achtin-stg.minka.io/oauth/token
+          scopes: {} # tin ach does not use scopes
+  schemas:
+    ActionSigned:
+      type: object
+      properties:
+        source:
+          type: string
+        target:
+          type: string
+        symbol:
+          type: string
+        amount:
+          type: string
+        labels:
+          type: object
+          properties:
+            tx_ref:
+              type: string
+            tx_id:
+              type: string
+            type:
+              type: string
+            description:
+              type: string
+            sourceCreated:
+              type: string
+            hash:
+              type: string
+        error:
+          type: object
+          $ref: '#/components/schemas/NoError'
+        action_id:
+          type: string
+    ActionUnsigned:
+      type: object
+      properties:
+        source:
+          type: string
+        target:
+          type: string
+        symbol:
+          type: string
+        amount:
+          type: string
+        labels:
+          type: object
+          properties:
+            tx_ref:
+              type: string
+            tx_id:
+              type: string
+            type:
+              type: string
+            description:
+              type: string
+            sourceCreated:
+              type: string
+        error:
+          type: object
+          $ref: '#/components/schemas/NoError'
+        action_id:
+          type: string
+    TransferSigned:
+      type: object
+      properties:
+        source:
+          type: string
+        target:
+          type: string
+        symbol:
+          type: string
+        amount:
+          type: string
+        snapshot:
+          type: object
+          properties:
+            source:
+              type: object
+              properties:
+                wallet:
+                  type: object
+                  properties:
+                    handle:
+                      type: string
+                    labels:
+                      type: object
+                      properties:
+                        type:
+                          type: string
+                        channelSms:
+                          type: string
+                signer:
+                  type: object
+                  properties:
+                    handle:
+                      type: string
+                    labels:
+                      type: object
+                      properties:
+                        personType:
+                          type: string
+                        firstName:
+                          type: string
+                        lastName:
+                          type: string
+                        email:
+                          type: string
+                        mobile:
+                          type: string
+                        identification:
+                          type: string
+                        proprietary:
+                          type: string
+                        countryOfResidence:
+                          type: string
+                        bankAccountNumber:
+                          type: string
+                        bankAccountType:
+                          type: string
+                        bankBicfi:
+                          type: string
+                        bankName:
+                          type: string
+            target:
+              type: object
+              properties:
+                wallet:
+                  type: object
+                  properties:
+                    handle:
+                      type: string
+                    labels:
+                      type: object
+                      properties:
+                        type:
+                          type: string
+                        channelSms:
+                          type: string
+                signer:
+                  type: object
+                  properties:
+                    handle:
+                      type: string
+                    labels:
+                      type: object
+                      properties:
+                        personType:
+                          type: string
+                        firstName:
+                          type: string
+                        lastName:
+                          type: string
+                        email:
+                          type: string
+                        mobile:
+                          type: string
+                        identification:
+                          type: string
+                        proprietary:
+                          type: string
+                        countryOfResidence:
+                          type: string
+                        bankAccountNumber:
+                          type: string
+                        bankAccountType:
+                          type: string
+                        bankBicfi:
+                          type: string
+                        bankName:
+                          type: string
+            symbol:
+              type: object
+              properties:
+                wallet:
+                  type: object
+                  properties:
+                    handle:
+                      type: string
+                    labels:
+                      type: object
+                      properties:
+                        type:
+                          type: string
+                signer:
+                  type: object
+                  properties:
+                    handle:
+                      type: string
+        labels:
+          type: object
+          properties:
+            tx_ref:
+              type: string
+            tx_id:
+              type: string
+            type:
+              type: string
+            description:
+              type: string
+            transactionPurpose:
+              type: string
+            sourceCreated:
+              type: string
+            targetUpdated:
+              type: string
+            created:
+              type: string
+            numberOfTransactions:
+              type: string
+            hash:
+              type: string
+        error:
+          type: object
+          $ref: '#/components/schemas/NoError'
+        action_id:
+          type: string
+    TransferUnsigned:
+      type: object
+      properties:
+        source:
+          type: string
+        target:
+          type: string
+        symbol:
+          type: string
+        amount:
+          type: string
+        snapshot:
+          type: object
+          properties:
+            source:
+              type: object
+              properties:
+                wallet:
+                  type: object
+                  properties:
+                    handle:
+                      type: string
+                    labels:
+                      type: object
+                      properties:
+                        type:
+                          type: string
+                        channelSms:
+                          type: string
+                signer:
+                  type: object
+                  properties:
+                    handle:
+                      type: string
+                    labels:
+                      type: object
+                      properties:
+                        personType:
+                          type: string
+                        firstName:
+                          type: string
+                        lastName:
+                          type: string
+                        email:
+                          type: string
+                        mobile:
+                          type: string
+                        identification:
+                          type: string
+                        proprietary:
+                          type: string
+                        countryOfResidence:
+                          type: string
+                        bankAccountNumber:
+                          type: string
+                        bankAccountType:
+                          type: string
+                        bankBicfi:
+                          type: string
+                        bankName:
+                          type: string
+            target:
+              type: object
+              properties:
+                wallet:
+                  type: object
+                  properties:
+                    handle:
+                      type: string
+                    labels:
+                      type: object
+                      properties:
+                        type:
+                          type: string
+                        channelSms:
+                          type: string
+                signer:
+                  type: object
+                  properties:
+                    handle:
+                      type: string
+                    labels:
+                      type: object
+                      properties:
+                        personType:
+                          type: string
+                        firstName:
+                          type: string
+                        lastName:
+                          type: string
+                        email:
+                          type: string
+                        mobile:
+                          type: string
+                        identification:
+                          type: string
+                        proprietary:
+                          type: string
+                        countryOfResidence:
+                          type: string
+                        bankAccountNumber:
+                          type: string
+                        bankAccountType:
+                          type: string
+                        bankBicfi:
+                          type: string
+                        bankName:
+                          type: string
+            symbol:
+              type: object
+              properties:
+                wallet:
+                  type: object
+                  properties:
+                    handle:
+                      type: string
+                    labels:
+                      type: object
+                      properties:
+                        type:
+                          type: string
+                signer:
+                  type: object
+                  properties:
+                    handle:
+                      type: string
+        labels:
+          type: object
+          properties:
+            tx_ref:
+              type: string
+            tx_id:
+              type: string
+            type:
+              type: string
+            description:
+              type: string
+            transactionPurpose:
+              type: string
+            sourceCreated:
+              type: string
+            targetUpdated:
+              type: string
+            created:
+              type: string
+            numberOfTransactions:
+              type: string
+        error:
+          type: object
+          $ref: '#/components/schemas/NoError'
+        action_id:
+          type: string
+    ErrorResponse:
+      type: object
+      properties:
+        error:
+          type: object
+          $ref: '#/components/schemas/ErrorGeneric'
+    ErrorGeneric:
+      type: object
+      properties:
+        code:
+          type: integer
+        message:
+          type: string
+    NoError:
+      type: object
+      properties:
+        code:
+          type: integer
+        message:
+          type: string
+
+    tokenRequest:
+      type: object
+      properties:
+        grant_type:
+          type: string
+        client_id:
+          type: string
+        client_secret:
+          type: string
+
+    tokenResponse:
+      type: object
+      properties:
+        access_token:
+          type: string
+        expires_in:
+          type: integer
+        token_type:
+          type: string
