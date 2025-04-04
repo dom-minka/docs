@@ -3,9 +3,9 @@
   "theme": "mint",
   "name": "Transfiya Guide",
   "colors": {
-    "primary": "#16A34A",
-    "light": "#07C983",
-    "dark": "#15803D"
+    "primary": "#4183FF",
+    "light": "#0052EA",
+    "dark": "#002E83"
   },
   "navigation": {
     "versions": [
@@ -48,7 +48,7 @@
             ]
           },
           {
-            "tab": "Transfiya Bre-B",
+            "tab": "Transferencias Bre-B",
             "groups": [
               {
                 "group": "Como empezar",
@@ -57,25 +57,24 @@
               },
               {
                 "group": "Guias de uso",
-                "icon": "book",
+                "icon": "mask",
                 "pages": [
                   "es/v1.66/transfers-mol/guides/how-to-send-mol",
-                  "es/v1.66/transfers-mol/guides/how-to-debit-sender",
-                  "es/v1.66/transfers-mol/guides/how-to-accept-transfer",
                   "es/v1.66/transfers-mol/guides/how-to-sign-transfer",
+                  "es/v1.66/transfers-mol/guides/how-to-accept-transfer",
+                  "es/v1.66/transfers-mol/guides/how-to-debit-sender",
                   "es/v1.66/transfers-mol/guides/how-to-credit-receiver",
                   "es/v1.66/transfers-mol/guides/how-to-notify"
                 ]
               },
               {
                 "group": "Acerca de",
-                "icon": "code",
+                "icon": "mask",
                 "pages": [
-                  "es/v1.66/transfers-mol/about/about-accept",
-                  "es/v1.66/transfers-mol/about/about-settlement",
                   "es/v1.66/transfers-mol/about/about-current-flow",
                   "es/v1.66/transfers-mol/about/about-new-flow",
                   "es/v1.66/transfers-mol/about/about-regulatory-changes",
+                  "es/v1.66/transfers-mol/about/about-settlement",
                   "es/v1.66/transfers-mol/about/about-transfers"
                 ]
               }
