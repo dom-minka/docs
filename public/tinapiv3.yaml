@@ -1,0 +1,3867 @@
+---
+openapi: 3.0.0
+
+info:
+  version: 2.4.2
+  title: 'TINAPI'
+
+tags:
+  - name: Action
+    description: 'Endpoint related to actions (transactions) in TIN platform'
+  - name: Transfer
+    description: 'Endpoint related to transfers in TIN platform'
+  - name: Token
+    description: 'Endpoint related to token in TIN platform'
+
+security:
+  - apiKeyAuth: []
+  - apiTokenAuth: []
+
+paths:
+  /v1/transfer:
+    post:
+      summary: Crear una transferencia
+      description: ''
+      operationId: createTinTransfer
+      tags:
+        - Transfer
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateTransferRequest'
+        required: true
+      responses:
+        '200':
+          description: P2P TIN transfer created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreateTransferResponse'
+        '400':
+          description: Transfer error message
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '100':
+          description: You don't have permissions to access this method
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '102':
+          description: Invalid labels
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+    get:
+      summary: Get all transfers with support for filtering
+      operationId: getTransfers
+      parameters:
+        - in: query
+          name: transferId
+          schema:
+            type: string
+        - in: query
+          name: source
+          schema:
+            type: string
+        - in: query
+          name: target
+          schema:
+            type: string
+        - in: query
+          name: sourceBankBicfi
+          schema:
+            type: string
+        - in: query
+          name: targetBankBicfi
+          schema:
+            type: string
+        - in: query
+          name: type
+          schema:
+            type: string
+            enum:
+              - REQUEST
+              - SEND
+        - in: query
+          name: status
+          schema:
+            type: string
+            enum:
+              - PENDING
+              - COMPLETED
+              - REJECTED
+              - ERROR
+              - ACCEPTED
+              - CREATED
+              - INITIATED
+        - in: query
+          name: pagesize
+          description: items to fetch by page (e.g. 5)
+          schema:
+            type: string
+        - in: query
+          name: pagenum
+          description: page to fetch
+          schema:
+            type: string
+        - in: query
+          name: sortBy
+          description: field by which you want to order (e.g. created)
+          schema:
+            type: string
+        - in: query
+          name: sort
+          schema:
+            type: string
+            enum:
+              - asc
+              - desc
+        - in: query
+          name: additionalProperties
+          description: others ways to query, query a labels property, query using OR with keys and values, etc
+          schema:
+            type: object
+            example:
+              labels.domain: DOMAIN
+              labels.tx_ref: FIRST_TX_REF,SECOND_TX_REF
+              source,sourceWallet: WALLET
+      tags:
+        - Transfer
+      responses:
+        '200':
+          description: Successful get of a transfer
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Transfers'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '100':
+          description: You don't have permissions to access this method
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '104':
+          description: Invalid handle
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /v1/transfer/:
+    get:
+      summary: Get transfer statistics
+      description: ''
+      operationId: getTransferStatistics
+      tags:
+        - Transfer
+      parameters:
+        - in: query
+          name: query
+          schema:
+            type: object
+          required: true
+      responses:
+        '200':
+          description: Successful get of transfer analytics
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TransferStatistics'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /v1/transfer/{transfer_id}:
+    put:
+      summary: Actualizar una transferencia
+      description: ''
+      operationId: updateTransfer
+      tags:
+        - Transfer
+      parameters:
+        - in: path
+          name: transfer_id
+          schema:
+            type: string
+          required: true
+        - in: query
+          name: sideEffectsEnabled
+          schema:
+            type: boolean
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateTransferRequest'
+        required: true
+      responses:
+        '200':
+          description: P2P TIN transfer updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetTransferResponse'
+        '400':
+          description: Transfer error message
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '100':
+          description: You don't have permissions to access this method
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '102':
+          description: Invalid labels
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /v1/transfer/{action_id}/accept:
+    post:
+      summary: Accept a P2P transfer
+      description: ''
+      operationId: acceptP2Ptranfer
+      tags:
+        - Transfer
+      parameters:
+        - in: path
+          name: action_id
+          schema:
+            type: string
+          required: true
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AcceptTransferRequest'
+      responses:
+        '200':
+          description: Successful Acceptance of a transfer
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreateTransferResponse'
+        '400':
+          description: Transfer error message
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '100':
+          description: You don't have permissions to access this method
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '102':
+          description: Invalid labels
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /v1/transfer/{action_id}/reject:
+    post:
+      summary: Rechazar una transferencia
+      description: ''
+      operationId: rejectP2Ptranfer
+      tags:
+        - Transfer
+      parameters:
+        - in: path
+          name: action_id
+          schema:
+            type: string
+          required: true
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RejectTransferRequest'
+      responses:
+        '200':
+          description: Successful Rejection of a transfer
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreateTransferResponse'
+        '400':
+          description: Transfer error message
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '100':
+          description: You don't have permissions to access this method
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '102':
+          description: Invalid labels
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /v1/transfer/{action_id}/continue:
+    post:
+      summary: Continue async a P2P transfer
+      description: ''
+      operationId: continueP2Ptransfer
+      tags:
+        - Transfer
+      parameters:
+        - in: path
+          name: action_id
+          schema:
+            type: string
+          required: true
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ActionSigned'
+      responses:
+        '200':
+          description: Successful Acceptance of a transfer
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetActionResponse'
+        '400':
+          description: Transfer error message
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '100':
+          description: You don't have permissions to access this method
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '102':
+          description: Invalid labels
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /v1/transfer/{transferId}/initiate:
+    post:
+      summary: Inicializar una transferencia
+      description: ''
+      operationId: initiateP2PTransfer
+      tags:
+        - Transfer
+      parameters:
+        - in: path
+          name: transferId
+          schema:
+            type: string
+          required: true
+      responses:
+        '200':
+          description: Transfer initiated successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetTransferResponse'
+        '400':
+          description: Transfer error message
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /v1/transfer/analytics:
+    get:
+      summary: Get transfer analytics
+      description: ''
+      operationId: getTransferAnalytics
+      tags:
+        - Transfer
+      parameters:
+        - in: query
+          name: query
+          schema:
+            type: object
+          required: true
+      responses:
+        '200':
+          description: Successful get of transfer analytics
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AnalyticsData'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /v1/link:
+    post:
+      summary: Create a link
+      description: ''
+      operationId: createLink
+      tags:
+        - Link
+      responses:
+        '200':
+          description: Successful creation of a Link
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LinkItem'
+        '400':
+          description: Link error message
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateLinkRequest'
+        required: true
+    get:
+      summary: Get links
+      description: ''
+      operationId: getLinks
+      tags:
+        - Link
+      parameters:
+        - in: query
+          name: source
+          schema:
+            type: string
+        - in: query
+          name: target
+          schema:
+            type: string
+        - in: query
+          name: type
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful get links
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetLinksResponse'
+        '400':
+          description: Link error message
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '100':
+          description: You don't have permissions to access this method
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '104':
+          description: Invalid handle
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /v1/link/{link_id}:
+    put:
+      summary: Update a link
+      description: ''
+      operationId: updateLink
+      tags:
+        - Link
+      parameters:
+        - in: path
+          name: link_id
+          schema:
+            type: string
+          required: true
+      responses:
+        '200':
+          description: Successful update of a link
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LinkItem'
+        '400':
+          description: Link error message
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '100':
+          description: You don't have permissions to access this method
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '104':
+          description: Invalid handle
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateLinkRequest'
+        required: true
+
+    delete:
+      summary: Delete a link
+      description: ''
+      operationId: deleteLink
+      tags:
+        - Link
+      parameters:
+        - in: path
+          name: link_id
+          schema:
+            type: string
+          required: true
+      responses:
+        '200':
+          description: Successful deletion of a link
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LinkItem'
+        '400':
+          description: Link error message
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '100':
+          description: You don't have permissions to access this method
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '102':
+          description: Invalid labels
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /v1/action:
+    post:
+      summary: Create an action
+      description: ''
+      operationId: createAction
+      tags:
+        - Action
+      responses:
+        '200':
+          description: Successful creation of an action
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreateActionResponse'
+        '400':
+          description: Action error message
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '100':
+          description: You don't have permissions to access this method
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '102':
+          description: Invalid labels
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '106':
+          description: Invalid source
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '107':
+          description: Invalid destination
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '108':
+          description: Invalid symbol
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '109':
+          description: Invalid amount
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '110':
+          description: Unsupported action type
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '111':
+          description: Rejection reason not defined
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '112':
+          description: Not enough balance
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '113':
+          description: Keys are not available
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateActionRequest'
+        required: true
+    get:
+      summary: Get all actions with support for filtering
+      tags:
+        - Action
+      parameters:
+        - in: query
+          name: source
+          schema:
+            type: string
+        - in: query
+          name: target
+          schema:
+            type: string
+        - in: query
+          name: sourceBankBicfi
+          schema:
+            type: string
+        - in: query
+          name: targetBankBicfi
+          schema:
+            type: string
+        - in: query
+          name: type
+          schema:
+            type: string
+            enum:
+              - REQUEST
+              - SEND
+        - in: query
+          name: status
+          schema:
+            type: string
+            enum:
+              - PENDING
+              - COMPLETED
+              - REJECTED
+              - ERROR
+        - in: query
+          name: pagesize
+          description: items to fetch by page (e.g. 5)
+          schema:
+            type: string
+        - in: query
+          name: pagenum
+          description: page to fetch
+          schema:
+            type: string
+        - in: query
+          name: sortBy
+          description: field by which you want to order (e.g. created)
+          schema:
+            type: string
+        - in: query
+          name: sort
+          schema:
+            type: string
+            enum:
+              - asc
+              - desc
+        - in: query
+          name: simulatedCount
+          description: if true, don't count total results for query
+          schema:
+            type: boolean
+        - in: query
+          name: additionalProperties
+          description: others ways to query, query a labels property, query using OR with keys and values, etc
+          schema:
+            type: object
+            example:
+              labels.domain: DOMAIN
+              labels.tx_ref: FIRST_TX_REF,SECOND_TX_REF
+              source,sourceWallet: WALLET
+      responses:
+        '200':
+          description: Successful get of an action
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetActionsResponse'
+
+        '400':
+          description: Action error message
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '100':
+          description: You don't have permissions to access this method
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '115':
+          description: Invalid action hash
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /v1/action/analytics:
+    get:
+      summary: Get action analytics
+      description: ''
+      operationId: getActionAnalytics
+      tags:
+        - Action
+      parameters:
+        - in: query
+          name: query
+          schema:
+            type: object
+          required: true
+      responses:
+        '200':
+          description: Successful get of action analytics
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AnalyticsData'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /v1/action/{action_id}:
+    get:
+      summary: Get an action by action_id
+      description: ''
+      operationId: getActionByActionId
+      tags:
+        - Action
+      parameters:
+        - in: path
+          name: action_id
+          schema:
+            type: string
+          required: true
+      responses:
+        '200':
+          description: Successfully get an action
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetActionResponse'
+        '400':
+          description: Action error message
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '100':
+          description: You don't have permissions to access this method
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '102':
+          description: Invalid labels
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+    put:
+      summary: Update an action
+      description: ''
+      operationId: updateAction
+      tags:
+        - Action
+      parameters:
+        - in: path
+          name: action_id
+          schema:
+            type: string
+          required: true
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetActionResponse'
+        '400':
+          description: Domain error message
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '100':
+          description: You don't have permissions to access this method
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '102':
+          description: Invalid labels
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '115':
+          description: Invalid action hash
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '116':
+          description: Field is not allowed to be changed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateActionRequest'
+        required: true
+
+  /v1/action/{action_id}/signed:
+    post:
+      summary: Sign action
+      description: ''
+      operationId: signAction
+      tags:
+        - Action
+      parameters:
+        - in: path
+          name: action_id
+          schema:
+            type: string
+          required: true
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreateTransferResponse'
+        '400':
+          description: Domain error message
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '100':
+          description: You don't have permissions to access this method
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '102':
+          description: Invalid labels
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ActionSignedLabels'
+
+  /v1/action/{action_id}/sendit:
+    post:
+      summary: Send action
+      description: ''
+      operationId: sendAction
+      tags:
+        - Action
+      parameters:
+        - in: path
+          name: action_id
+          schema:
+            type: string
+          required: true
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreateActionResponse'
+        '400':
+          description: Domain error message
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '100':
+          description: You don't have permissions to access this method
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '102':
+          description: Invalid labels
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/IouSigned'
+        required: true
+
+  /v1/domain:
+    post:
+      summary: Generate a domain
+      description: ''
+      operationId: createDomain
+      tags:
+        - Domain
+      responses:
+        '200':
+          description: Domain generated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DomainResponse'
+        '400':
+          description: Domain error message
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '100':
+          description: You don't have permissions to access this method
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '102':
+          description: Invalid labels
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DomainRequest'
+        required: true
+
+  /v1/domain/{domain}:
+    put:
+      summary: Edit a domain
+      description: ''
+      operationId: updateDomain
+      tags:
+        - Domain
+      parameters:
+        - in: path
+          name: domain
+          schema:
+            type: string
+          required: true
+      responses:
+        '200':
+          description: Domain updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DomainResponse'
+        '400':
+          description: Domain error message
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '100':
+          description: You don't have permissions to access this method
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '102':
+          description: Invalid labels
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DomainUpdateRequest'
+        required: true
+
+    get:
+      summary: Retrieve a domain
+      description: ''
+      operationId: readDomain
+      tags:
+        - Domain
+      parameters:
+        - in: path
+          name: domain
+          schema:
+            type: string
+          required: true
+      responses:
+        '200':
+          description: Domain retrieved
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DomainRequest'
+        '400':
+          description: Domain error message
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /v1/signer:
+    post:
+      summary: Create a signer
+      description: ''
+      operationId: createSigner
+      tags:
+        - Signer
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SignerResponse'
+        '100':
+          description: You don't have permissions to access this method.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SignerCreationRequest'
+        required: true
+    get:
+      summary: Retrieve signers
+      description: ''
+      operationId: getSigners
+      tags:
+        - Signer
+      parameters:
+        - in: query
+          name: pagenum
+          schema:
+            type: integer
+          required: false
+        - in: query
+          name: pagesize
+          schema:
+            type: integer
+          required: false
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SignerListResponse'
+        '100':
+          description: You don't have permissions to access this method.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '104':
+          description: Invalid handle.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /v1/signer/lookup:
+    post:
+      summary: Look up a signer
+      description: ''
+      operationId: lookupSigner
+      tags:
+        - Signer
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SignerLookupResponse'
+        '118':
+          description: Validation error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '100':
+          description: You don't have permissions to access this method.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SignerLookupRequest'
+        required: true
+
+  /v1/signer/{signerAddress}:
+    get:
+      summary: Retrieve a signer by address
+      description: ''
+      operationId: getSignerByAddress
+      tags:
+        - Signer
+      parameters:
+        - in: path
+          name: signerAddress
+          schema:
+            type: string
+          required: true
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SignerResponse'
+        '100':
+          description: You don't have permissions to access this method
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '102':
+          description: Invalid labels
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+    put:
+      summary: Edit a signer
+      description: ''
+      operationId: updateSigner
+      tags:
+        - Signer
+      parameters:
+        - in: path
+          name: signerAddress
+          schema:
+            type: string
+          required: true
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SignerUpdateRequest'
+      responses:
+        '200':
+          description: Signer updated.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GenericResponse'
+        '100':
+          description: You don't have permissions to access this method.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '102':
+          description: Invalid labels.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /v1/signer/{userAddress}/router/{actionId}/action:
+    post:
+      summary: Call action in user's Bank
+      description: ''
+      operationId: callAction
+      tags:
+        - Signer
+      parameters:
+        - in: path
+          name: userAddress
+          schema:
+            type: string
+          required: true
+        - in: path
+          name: actionId
+          schema:
+            type: string
+          required: true
+        - in: header
+          name: x-nonce
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreateActionResponse'
+        '100':
+          description: You don't have permissions to access this method
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '102':
+          description: Invalid labels
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /v1/signer/{userAddress}/router/{actionId}/upload:
+    post:
+      summary: Call debit in user's bank
+      description: ''
+      operationId: callUpload
+      tags:
+        - Signer
+      parameters:
+        - in: path
+          name: userAddress
+          schema:
+            type: string
+          required: true
+        - in: path
+          name: actionId
+          schema:
+            type: string
+          required: true
+        - in: header
+          name: x-nonce
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreateActionResponse'
+        '100':
+          description: You don't have permissions to access this method
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '102':
+          description: Invalid labels
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /v1/signer/{userAddress}/router/{actionId}/download:
+    post:
+      summary: Call credit in user's bank
+      description: ''
+      operationId: callDownload
+      tags:
+        - Signer
+      parameters:
+        - in: path
+          name: userAddress
+          schema:
+            type: string
+          required: true
+        - in: path
+          name: actionId
+          schema:
+            type: string
+          required: true
+        - in: header
+          name: x-nonce
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreateActionResponse'
+        '100':
+          description: You don't have permissions to access this method
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '102':
+          description: Invalid labels
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /v1/signer/{userAddress}/router/{actionId}/status:
+    post:
+      summary: Notify status
+      description: ''
+      operationId: callStatus
+      tags:
+        - Signer
+      parameters:
+        - in: path
+          name: userAddress
+          schema:
+            type: string
+          required: true
+        - in: path
+          name: actionId
+          schema:
+            type: string
+          required: true
+        - in: header
+          name: x-nonce
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '100':
+          description: You don't have permissions to access this method
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '102':
+          description: Invalid labels
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /v1/signer/{userAddress}/router/{actionId}/notify:
+    post:
+      summary: Notify pending transfer to status
+      description: ''
+      operationId: callStatusNotify
+      tags:
+        - Signer
+      parameters:
+        - in: path
+          name: userAddress
+          schema:
+            type: string
+          required: true
+        - in: path
+          name: actionId
+          schema:
+            type: string
+          required: true
+        - in: header
+          name: x-nonce
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '100':
+          description: You don't have permissions to access this method
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '102':
+          description: Invalid labels
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /v1/wallet:
+    post:
+      summary: Create a wallet
+      description: ''
+      operationId: createWallet
+      tags:
+        - Wallet
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WalletResponse'
+        '100':
+          description: You don't have permissions to access this method
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '102':
+          description: Invalid labels
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '104':
+          description: Invalid handle
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/WalletRequest'
+        required: true
+    get:
+      summary: Get a wallet by signer
+      description: ''
+      operationId: getWalletBySigner
+      tags:
+        - Wallet
+      parameters:
+        - in: query
+          name: signer
+          schema:
+            type: string
+          required: true
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetWalletsResponse'
+        '100':
+          description: You don't have permissions to access this method
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '104':
+          description: Invalid handle
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /v1/wallet/{handle}:
+    get:
+      summary: Get a wallet
+      description: ''
+      operationId: getWalletByHandle
+      tags:
+        - Wallet
+      parameters:
+        - in: path
+          name: handle
+          schema:
+            type: string
+          required: true
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetWalletResponse'
+        '100':
+          description: You don't have permissions to access this method
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '102':
+          description: Invalid labels
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+    put:
+      summary: Edit a wallet
+      description: ''
+      operationId: updateWallet
+      tags:
+        - Wallet
+      parameters:
+        - in: path
+          name: handle
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WalletUpdateResponse'
+        '100':
+          description: You don't have permissions to access this method
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '102':
+          description: Invalid labels
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/WalletUpdateRequest'
+        required: true
+
+  /v1/wallet/{handle}/signers:
+    get:
+      summary: Get signers directory for a  wallet
+      description: ''
+      operationId: getWalletSigners
+      tags:
+        - Wallet
+      parameters:
+        - in: path
+          name: handle
+          schema:
+            type: string
+          required: true
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetWalletSignersResponse'
+        '100':
+          description: You don't have permissions to access this method
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '121':
+          description: Wallet not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /v1/wallet/{handle}/balance:
+    get:
+      summary: Get default account  balance of a wallet
+      description: ''
+      operationId: getBalance
+      tags:
+        - Wallet
+      parameters:
+        - in: path
+          name: handle
+          schema:
+            type: string
+          required: true
+        - in: query
+          name: unit
+          schema:
+            type: string
+          required: true
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BalanceResponse'
+        '100':
+          description: You don't have permissions to access this method
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '102':
+          description: Invalid labels
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /v1/wallet/{handle}/channel/sms:
+    post:
+      summary: Send SMS
+      description: ''
+      operationId: sendSms
+      tags:
+        - Wallet
+      parameters:
+        - in: path
+          name: handle
+          schema:
+            type: string
+          required: true
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '100':
+          description: You don't have permissions to access this method
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '102':
+          description: Invalid labels
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SmsRequest'
+        required: true
+
+  /v1/wallet/{handle}/signer/{signerToRemove}:
+    delete:
+      summary: Remove signer
+      description: Remove a signer from a specific wallet
+      operationId: removeSignerFromWallet
+      tags:
+        - Wallet
+      parameters:
+        - in: path
+          name: handle
+          schema:
+            type: string
+          required: true
+        - in: path
+          name: signerToRemove
+          schema:
+            type: string
+          required: true
+      responses:
+        '200':
+          description: Ok
+        '121':
+          description: Wallet or Signer not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '118':
+          description: Invalid format of Wallet or Signer
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /v1/conciliation:
+    get:
+      summary: Generates a conciliation txt file
+      description: ''
+      operationId: getConciliation
+      tags:
+        - Conciliation
+      parameters:
+        - in: query
+          name: customQuery
+          schema:
+            type: string
+          required: true
+      responses:
+        '200':
+          description: Conciliation file generated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Conciliation'
+        '400':
+          description: Forbidden ac
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '100':
+          description: You don't have permissions to access this method
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '102':
+          description: Invalid labels
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /oauth:
+    post:
+      summary: Create credentials
+      description: 'Endpoint used for creating of credentials'
+      operationId: createCredentials
+      tags:
+        - Credentials
+      security:
+        - apiKeyAuth: []
+        - apiTokenAuth:
+            [
+              create_user_credentials,
+              create_domain_credentials,
+              create_organization_credentials,
+              create_all_credentials,
+              manage_user_credentials,
+              manage_domain_credentials,
+              manage_organization_credentials,
+              manage_all_credentials,
+            ]
+      responses:
+        '200':
+          description: Credentials created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreateCredentialsResponse'
+        '400':
+          description: Credentials error message
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '403':
+          description: User doesn't have permissions to create credentials
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorForbidden'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateCredentialsRequest'
+        required: true
+
+  /oauth/credentials/{handle}:
+    put:
+      summary: Update credentials
+      description: 'Endpoint used for updating of credentials'
+      operationId: updateCredentials
+      tags:
+        - Credentials
+      parameters:
+        - in: path
+          name: handle
+          schema:
+            type: string
+          required: true
+      security:
+        - apiKeyAuth: []
+        - apiTokenAuth:
+            [
+              update_user_credentials,
+              update_domain_credentials,
+              update_organization_credentials,
+              update_all_credentials,
+              manage_user_credentials,
+              manage_domain_credentials,
+              manage_organization_credentials,
+              manage_all_credentials,
+            ]
+      responses:
+        '200':
+          description: Credentials updated successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UpdateCredentialsResponse'
+        '400':
+          description: Credentials error message
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '403':
+          description: User doesn't have permissions to update credentials
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorForbidden'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateCredentialsRequest'
+        required: true
+
+  /oauth/client/{handle}:
+    get:
+      summary: Get credentials
+      description: 'Endpoint used to get credentials'
+      operationId: getCredentials
+      tags:
+        - Credentials
+      parameters:
+        - in: path
+          name: handle
+          schema:
+            type: string
+          required: true
+      security:
+        - apiKeyAuth: []
+        - apiTokenAuth:
+            [
+              read_user_credentials,
+              read_domain_credentials,
+              read_organization_credentials,
+              read_all_credentials,
+              manage_user_credentials,
+              manage_domain_credentials,
+              manage_organization_credentials,
+              manage_all_credentials,
+            ]
+      responses:
+        '200':
+          description: Get credentials successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetCredentialsResponse'
+        '400':
+          description: Credentials error message
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '403':
+          description: User doesn't have permissions to get credentials
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorForbidden'
+
+  /oauth/key/{handle}:
+    get:
+      summary: Get api key
+      description: 'Endpoint used to get api key'
+      operationId: getApiKey
+      tags:
+        - Credentials
+      parameters:
+        - in: path
+          name: handle
+          schema:
+            type: string
+          required: true
+      security:
+        - apiTokenAuth:
+            [
+              read_user_credentials,
+              read_domain_credentials,
+              read_organization_credentials,
+              read_all_credentials,
+              manage_user_credentials,
+              manage_domain_credentials,
+              manage_organization_credentials,
+              manage_all_credentials,
+            ]
+      responses:
+        '200':
+          description: Get api key successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetApiKeyResponse'
+        '400':
+          description: Credentials error message
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '403':
+          description: User doesn't have permissions to get api key
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorForbidden'
+
+  /oauth/{handle}:
+    put:
+      summary: Regenerate secrets
+      description: 'Endpoint used to regenerate secrets'
+      operationId: regenerateSecrets
+      tags:
+        - Credentials
+      parameters:
+        - in: path
+          name: handle
+          schema:
+            type: string
+          required: true
+      security:
+        - apiKeyAuth: []
+        - apiTokenAuth:
+            [
+              update_user_credentials,
+              update_domain_credentials,
+              update_organization_credentials,
+              update_all_credentials,
+              manage_user_credentials,
+              manage_domain_credentials,
+              manage_organization_credentials,
+              manage_all_credentials,
+            ]
+      responses:
+        '200':
+          description: Regenerated secrets successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RegenerateSecretsResponse'
+        '400':
+          description: Credentials error message
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '403':
+          description: User doesn't have permissions to regenerate credentials
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorForbidden'
+
+  /oauth/rollback/{handle}:
+    put:
+      summary: Rollback secrets
+      description: 'Endpoint used to rollback secrets'
+      operationId: rollbackSecrets
+      tags:
+        - Credentials
+      parameters:
+        - in: path
+          name: handle
+          schema:
+            type: string
+          required: true
+      security:
+        - apiKeyAuth: []
+        - apiTokenAuth:
+            [
+              update_user_credentials,
+              update_domain_credentials,
+              update_organization_credentials,
+              update_all_credentials,
+              manage_user_credentials,
+              manage_domain_credentials,
+              manage_organization_credentials,
+              manage_all_credentials,
+            ]
+      responses:
+        '200':
+          description: Rollbacked secrets
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RollbackSecretsResponse'
+        '400':
+          description: Credentials error message
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '403':
+          description: User doesn't have permissions to rollback secrets
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorForbidden'
+
+  /oauth/token:
+    post:
+      summary: Create token
+      description: 'Endpoint used for creating of token'
+      operationId: createToken
+      tags:
+        - Token
+      security:
+        - {}
+        - basicAuth: []
+      responses:
+        '200':
+          description: Token created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreateTokenResponse'
+        '400':
+          description: Token error message
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateTokenRequest'
+        required: false
+
+  /oauth/authorize:
+    get:
+      summary: Authorize token
+      description: 'Endpoint used to authorize token'
+      operationId: authorizeToken
+      tags:
+        - Token
+      security:
+        - apiKeyAuth: []
+        - apiTokenAuth: []
+      responses:
+        '200':
+          description: Token authorized successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AuthorizeTokenResponse'
+        '400':
+          description: Token error message
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+components:
+  securitySchemes:
+    apiKeyAuth:
+      type: apiKey
+      in: header
+      name: x-api-key
+
+    apiTokenAuth:
+      type: oauth2
+      flows:
+        clientCredentials:
+          tokenUrl: '/oauth/token'
+          scopes:
+            create_user_credentials: Grants access to create credentials for user
+            create_domain_credentials: Grants access to create credentials for domain
+            create_organization_credentials: Grants access to create credentials for bank
+            create_all_credentials: Grants access to create credentials for all
+
+            read_user_credentials: Grants access to read user credentials
+            read_domain_credentials: Grants access to read domain credentials
+            read_organization_credentials: Grants access to read bank credentials
+            read_all_credentials: Grants access to read all credentials
+
+            update_user_credentials: Grants access to update user credentials
+            update_domain_credentials: Grants access to update domain credentials
+            update_organization_credentials: Grants access to update bank credentials
+            update_all_credentials: Grants access to update all credentials
+
+            manage_user_credentials: Grants access to manage user credentials
+            manage_domain_credentials: Grants access to manage domain credentials
+            manage_organization_credentials: Grants access to manage bank credentials
+            manage_all_credentials: Grants access to manage all credentials
+
+    basicAuth:
+      type: http
+      scheme: basic
+
+  schemas:
+    CreateCredentialsRequest:
+      type: object
+      properties:
+        handle:
+          type: string
+        _auth:
+          $ref: '#/components/schemas/AuthMetadata'
+        scopes:
+          type: array
+          items:
+            type: string
+        roles:
+          type: array
+          items:
+            type: string
+
+    CreateCredentialsResponse:
+      $ref: '#/components/schemas/Credentials'
+
+    GetCredentialsResponse:
+      $ref: '#/components/schemas/Credentials'
+
+    GetApiKeyResponse:
+      type: object
+      properties:
+        handle:
+          type: string
+        api_key:
+          type: string
+        created:
+          type: string
+        updated:
+          type: string
+
+    UpdateCredentialsRequest:
+      type: object
+      properties:
+        handle:
+          type: string
+        _auth:
+          $ref: '#/components/schemas/AuthMetadata'
+        scopes:
+          type: array
+          items:
+            type: string
+        roles:
+          type: array
+          items:
+            type: string
+
+    RegenerateSecretsResponse:
+      $ref: '#/components/schemas/Credentials'
+
+    RollbackSecretsResponse:
+      $ref: '#/components/schemas/Credentials'
+
+    UpdateCredentialsResponse:
+      $ref: '#/components/schemas/Credentials'
+
+    CreateTokenRequest:
+      type: object
+      properties:
+        client_id:
+          type: string
+        client_secret:
+          type: string
+
+    CreateTokenResponse:
+      type: object
+      properties:
+        access_token:
+          type: string
+        expires_in:
+          type: string
+        token_type:
+          type: string
+
+    AuthorizeTokenResponse:
+      type: object
+      properties:
+        code:
+          type: integer
+        message:
+          type: string
+
+    DomainRequest:
+      type: object
+      properties:
+        handle:
+          type: string
+        router:
+          type: string
+        labels:
+          type: object
+
+    DomainUpdateRequest:
+      type: object
+      properties:
+        router:
+          type: string
+        labels:
+          type: object
+
+    SignerRequest:
+      type: object
+      properties:
+        labels:
+          $ref: '#/components/schemas/SignerLabels'
+
+    SignerCreationRequest:
+      type: object
+      properties:
+        labels:
+          $ref: '#/components/schemas/SignerCreationLabels'
+
+    SignerUpdateRequest:
+      type: object
+      properties:
+        labels:
+          $ref: '#/components/schemas/SignerUpdateLabels'
+
+    SignerCreationLabels:
+      type: object
+      properties:
+        type:
+          type: string
+        description:
+          type: string
+        firstName:
+          type: string
+        secondName:
+          type: string
+        lastName:
+          type: string
+        secondLastName:
+          type: string
+        email:
+          type: string
+        mobile:
+          type: string
+        identification:
+          type: string
+        proprietary:
+          type: string
+          description: |
+            - "CC": Cédula de Ciudadanía
+            - "CE": Cédula de Extranjería
+            - "PA": Pasaporte
+            - "TI": Tarjeta de Identidad
+            - "NUIP": Número Único de Identificación Personal
+            - "NIT": Número de Identificación Tributaria
+            - "OTR": Otro
+            - "PPT": Permiso por Protección Temporal
+            - "PEP": Persona Especial de Permanencia
+          enum:
+            - CC
+            - CE
+            - PA
+            - TI
+            - NUIP
+            - NIT
+            - OTR
+            - PPT
+            - PEP
+        countryOfResidence:
+          type: string
+        sourceChannel:
+          type: string
+        bankAccountNumber:
+          type: string
+        bankAccountType:
+          type: string
+          description: |
+            - "SVGS": Savings
+            - "TRAS": Cash trading account
+            - "CACC": Checking
+            - "OTHR": Other
+            - "DBMO": Low-amount deposits
+            - "DORD": Ordinary deposits
+            - "DBMI": Inclusive low-amount deposits
+          enum:
+            - SVGS
+            - TRAS
+            - CACC
+            - OTHR
+            - DBMO
+            - DORD
+            - DBMI
+        bankBicfi:
+          type: string
+        bankName:
+          type: string
+        routerReference:
+          type: string
+        symbols:
+          type: array
+          items:
+            type: string
+        createdBy:
+          type: string
+        assignedTo:
+          type: array
+          items:
+            type: string
+        autoReject:
+          type: boolean
+        targetSpbviCode:
+          type: string
+          description: |
+            - "TFY": Transfiya
+            - "ENT": Entre cuentas
+            - "CRB": Credibanco
+            - "VIS": Visionamos
+          enum:
+            - TFY
+            - ENT
+            - CRB
+            - VIS
+        consented:
+          type: string
+        bankId:
+          type: string
+        aliasValue:
+          type: string
+        aliasType:
+          type: string
+          enum:
+            - ALPHANUM
+            - EMAIL
+            - PHONE
+            - NRIC
+            - MERCHANT
+
+    SignerUpdateLabels:
+      type: object
+      properties:
+        type:
+          type: string
+        description:
+          type: string
+        firstName:
+          type: string
+        secondName:
+          type: string
+        lastName:
+          type: string
+        secondLastName:
+          type: string
+        email:
+          type: string
+        mobile:
+          type: string
+        identification:
+          type: string
+        proprietary:
+          type: string
+          description: |
+            - "CC": Cédula de Ciudadanía
+            - "CE": Cédula de Extranjería
+            - "PA": Pasaporte
+            - "TI": Tarjeta de Identidad
+            - "NUIP": Número Único de Identificación Personal
+            - "NIT": Número de Identificación Tributaria
+            - "OTR": Otro
+            - "PPT": Permiso por Protección Temporal
+            - "PEP": Persona Especial de Permanencia
+          enum:
+            - CC
+            - CE
+            - PA
+            - TI
+            - NUIP
+            - NIT
+            - OTR
+            - PPT
+            - PEP
+        countryOfResidence:
+          type: string
+        sourceChannel:
+          type: string
+        bankAccountNumber:
+          type: string
+        bankAccountType:
+          type: string
+          description: |
+            - "SVGS": Savings
+            - "TRAS": Cash trading account
+            - "CACC": Checking
+            - "OTHR": Other
+            - "DBMO": Low-amount deposits
+            - "DORD": Ordinary deposits
+            - "DBMI": Inclusive low-amount deposits
+          enum:
+            - SVGS
+            - TRAS
+            - CACC
+            - OTHR
+            - DBMO
+            - DORD
+            - DBMI
+        bankBicfi:
+          type: string
+        bankName:
+          type: string
+        routerReference:
+          type: string
+        symbols:
+          type: array
+          items:
+            type: string
+        createdBy:
+          type: string
+        assignedTo:
+          type: array
+          items:
+            type: string
+        autoReject:
+          type: boolean
+        targetSpbviCode:
+          type: string
+          description: |
+            - "TFY": Transfiya
+            - "ENT": Entre cuentas
+            - "CRB": Credibanco
+            - "VIS": Visionamos
+          enum:
+            - TFY
+            - ENT
+            - CRB
+            - VIS
+        consented:
+          type: string
+        bankId:
+          type: string
+        aliasValue:
+          type: string
+        aliasType:
+          type: string
+          enum:
+            - ALPHANUM
+            - EMAIL
+            - PHONE
+            - NRIC
+            - MERCHANT
+        status:
+          type: string
+          enum:
+            - ACTIVE
+            - SUSPENDED_BY_CLIENT
+            - SUSPENDED_BY_PARTICIPANT
+            - INACTIVE
+
+    SignerLabels:
+      type: object
+      properties:
+        type:
+          type: string
+        description:
+          type: string
+        firstName:
+          type: string
+        secondName:
+          type: string
+        lastName:
+          type: string
+        secondLastName:
+          type: string
+        email:
+          type: string
+        mobile:
+          type: string
+        identification:
+          type: string
+        proprietary:
+          type: string
+        countryOfResidence:
+          type: string
+        sourceChannel:
+          type: string
+        bankAccountNumber:
+          type: string
+        bankAccountType:
+          type: string
+        bankBicfi:
+          type: string
+        bankName:
+          type: string
+        routerReference:
+          type: string
+        symbols:
+          type: array
+          items:
+            type: string
+        createdBy:
+          type: string
+        assignedTo:
+          type: array
+          items:
+            type: string
+        autoReject:
+          type: boolean
+        targetSpbviCode:
+          type: string
+        consented:
+          type: string
+        bankId:
+          type: string
+        aliasValue:
+          type: string
+        aliasType:
+          type: string
+        status:
+          type: string
+
+    SignerLookupRequest:
+      type: object
+      required: [labels]
+      properties:
+        labels:
+          $ref: '#/components/schemas/SignerLookupLabels'
+
+    SignerLookupLabels:
+      type: object
+      required:
+        [identification, proprietary, bankAccountNumber, routerReference]
+      properties:
+        identification:
+          type: string
+        proprietary:
+          type: string
+        bankAccountNumber:
+          type: string
+        routerReference:
+          type: string
+
+    PublicKeys:
+      type: object
+      properties:
+        public:
+          type: string
+        secret:
+          type: string
+        scheme:
+          type: string
+
+    WalletRequest:
+      type: object
+      properties:
+        handle:
+          type: string
+        default:
+          type: string
+        symbolDefaults:
+          type: object
+        labels:
+          type: object
+          properties:
+            type:
+              type: string
+            channelSms:
+              type: string
+            routerUpload:
+              type: string
+            routerDownload:
+              type: string
+            routerAction:
+              type: string
+            routerStatus:
+              type: string
+            routerStatusNotifyPending:
+              type: boolean
+            routerAuthMethod:
+              type: string
+            routerAuthParams:
+              type: object
+            routerFormat:
+              type: string
+            portfolio:
+              type: string
+            domains:
+              type: string
+            entityType:
+              type: string
+            url:
+              type: string
+            limitAlert:
+              type: string
+            bankBicfi:
+              type: string
+            bankName:
+              type: string
+            sebraAccount:
+              type: string
+            ownedBy:
+              type: string
+
+    GetWalletResponse:
+      type: object
+      properties:
+        signer:
+          type: array
+          items:
+            type: string
+        default:
+          type: string
+        symbolDefaults:
+          type: object
+        wallet_id:
+          type: string
+        labels:
+          type: object
+          properties:
+            type:
+              type: string
+            channelSms:
+              type: string
+            routerUpload:
+              type: string
+            routerDownload:
+              type: string
+            routerAction:
+              type: string
+            routerStatus:
+              type: string
+            routerStatusNotifyPending:
+              type: boolean
+            routerAuthMethod:
+              type: string
+            routerAuthParams:
+              type: object
+            routerFormat:
+              type: string
+            limitAlert:
+              type: string
+            portfolio:
+              type: string
+            domains:
+              type: string
+            entityType:
+              type: string
+            url:
+              type: string
+            bankBicfi:
+              type: string
+            bankName:
+              type: string
+            sebraAccount:
+              type: string
+            createdBy:
+              type: string
+            ownedBy:
+              type: string
+          additionalProperties: true
+        handle:
+          type: string
+        id:
+          type: string
+        error:
+          $ref: '#/components/schemas/GenericError'
+
+    GetWalletsResponse:
+      type: object
+      properties:
+        entities:
+          type: array
+          items:
+            $ref: '#/components/schemas/GetWalletResponse'
+        pagination:
+          $ref: '#/components/schemas/Pagination'
+        error:
+          $ref: '#/components/schemas/GenericError'
+
+    WalletResponse:
+      type: object
+      properties:
+        signer:
+          type: array
+          items:
+            type: string
+        default:
+          type: string
+        symbolDefaults:
+          type: object
+        wallet_id:
+          type: string
+        labels:
+          type: object
+          properties:
+            type:
+              type: string
+            channelSms:
+              type: string
+            routerUpload:
+              type: string
+            routerDownload:
+              type: string
+            routerAction:
+              type: string
+            routerStatus:
+              type: string
+            routerStatusNotifyPending:
+              type: boolean
+            routerAuthMethod:
+              type: string
+            routerAuthParams:
+              type: object
+            routerFormat:
+              type: string
+            portfolio:
+              type: string
+            domains:
+              type: string
+            entityType:
+              type: string
+            url:
+              type: string
+            limitAlert:
+              type: string
+            bankBicfi:
+              type: string
+            bankName:
+              type: string
+            sebraAccount:
+              type: string
+            createdBy:
+              type: string
+            ownedBy:
+              type: string
+        handle:
+          type: string
+        error:
+          $ref: '#/components/schemas/GenericError'
+
+    WalletUpdateRequest:
+      type: object
+      properties:
+        default:
+          type: string
+        symbolDefaults:
+          type: object
+        signer:
+          type: array
+          items:
+            type: string
+
+    WalletUpdateResponse:
+      type: object
+      properties:
+        id:
+          type: string
+        labels:
+          type: object
+          properties:
+            type:
+              type: string
+            channelSms:
+              type: string
+            routerUpload:
+              type: string
+            routerDownload:
+              type: string
+            routerAction:
+              type: string
+            routerStatus:
+              type: string
+            routerStatusNotifyPending:
+              type: boolean
+            routerAuthMethod:
+              type: string
+            routerAuthParams:
+              type: object
+            routerFormat:
+              type: string
+            portfolio:
+              type: string
+            domains:
+              type: string
+            entityType:
+              type: string
+            url:
+              type: string
+            limitAlert:
+              type: string
+            bankBicfi:
+              type: string
+            bankName:
+              type: string
+            sebraAccount:
+              type: string
+            createdBy:
+              type: string
+            ownedBy:
+              type: string
+        handle:
+          type: string
+        wallet_id:
+          type: string
+        signer:
+          type: array
+          items:
+            type: string
+        default:
+          type: string
+        symbolDefaults:
+          type: object
+        error:
+          $ref: '#/components/schemas/GenericError'
+
+    SignerResponse:
+      type: object
+      properties:
+        handle:
+          type: string
+        signer_id:
+          type: string
+        keeper:
+          type: array
+          items:
+            $ref: '#/components/schemas/PublicKeys'
+        labels:
+          $ref: '#/components/schemas/SignerLabels'
+
+    SignerListResponse:
+      type: array
+      items:
+        $ref: '#/components/schemas/SignerResponse'
+
+    SignerLookupResponse:
+      type: object
+      properties:
+        entities:
+          type: array
+          items:
+            type: object
+            properties:
+              handle:
+                type: string
+              wallets:
+                type: array
+                items:
+                  type: string
+        pagination:
+          $ref: '#/components/schemas/Pagination'
+        error:
+          $ref: '#/components/schemas/GenericError'
+
+    GetWalletSignersResponse:
+      type: object
+      properties:
+        entities:
+          type: array
+          items:
+            type: object
+            properties:
+              handle:
+                type: string
+              bankName:
+                type: string
+              bankAccountNumber:
+                type: string
+              bankBicfi:
+                type: string
+        error:
+          $ref: '#/components/schemas/GenericError'
+
+    DomainResponse:
+      type: object
+      properties:
+        domain_id:
+          type: string
+
+    IouSigned:
+      type: object
+      properties:
+        hash:
+          type: object
+          properties:
+            types:
+              type: string
+            steps:
+              type: string
+            value:
+              type: string
+        data:
+          type: object
+          properties:
+            amount:
+              type: string
+            domain:
+              type: string
+            expiry:
+              type: string
+            random:
+              type: string
+            source:
+              type: string
+            symbol:
+              type: string
+            target:
+              type: string
+        meta:
+          type: object
+          properties:
+            signatures:
+              type: array
+              items:
+                $ref: '#/components/schemas/Signatures'
+
+    Signatures:
+      type: object
+      properties:
+        scheme:
+          type: string
+        signer:
+          type: string
+        public:
+          type: string
+        string:
+          type: string
+
+    BalanceResponse:
+      type: object
+      properties:
+        amount:
+          type: string
+        error:
+          $ref: '#/components/schemas/GenericError'
+
+    CreateActionRequest:
+      type: object
+      properties:
+        source:
+          type: string
+        target:
+          type: string
+        symbol:
+          type: string
+        amount:
+          type: string
+        labels:
+          type: object
+          properties:
+            tx_id:
+              type: string
+            tx_ref:
+              type: string
+            domain:
+              type: string
+            sourceChannel:
+              type: string
+            created:
+              type: string
+            sourceCreated:
+              type: string
+            targetUpdated:
+              type: string
+            description:
+              type: string
+            type:
+              type: string
+            rejectSource:
+              type: string
+            rejectDescription:
+              type: string
+            transactionPurpose:
+              type: string
+            numberOfTransactions:
+              type: string
+            deviceFingerPrint:
+              $ref: '#/components/schemas/DeviceFingerPrint'
+
+    CreateActionResponse:
+      type: object
+      properties:
+        action_id:
+          type: string
+        source:
+          type: string
+        target:
+          type: string
+        symbol:
+          type: string
+        amount:
+          type: string
+        labels:
+          type: object
+          properties:
+            tx_id:
+              type: string
+            tx_ref:
+              type: string
+            status:
+              type: string
+            domain:
+              type: string
+            sourceChannel:
+              type: string
+            created:
+              type: string
+            updated:
+              type: string
+            sourceCreated:
+              type: string
+            targetUpdated:
+              type: string
+            description:
+              type: string
+            type:
+              type: string
+            rejectSource:
+              type: string
+            rejectDescription:
+              type: string
+            transactionPurpose:
+              type: string
+            numberOfTransactions:
+              type: string
+            hash:
+              type: string
+            config:
+              type: object
+            reason:
+              type: object
+            test:
+              type: array
+              items:
+                type: object
+            deviceFingerPrint:
+              $ref: '#/components/schemas/DeviceFingerPrint'
+            service:
+              type: string
+            otp:
+              type: string
+            tpagaAuthorization:
+              type: object
+            girosPayment:
+              type: object
+            girosTransactionInfo:
+              type: object
+            agent:
+              type: object
+            customer:
+              type: object
+            contextTransaction:
+              type: object
+        snapshot:
+          $ref: '#/components/schemas/Snapshot'
+        error:
+          $ref: '#/components/schemas/GenericError'
+
+    ErrorForbidden:
+      type: object
+      properties:
+        code:
+          type: integer
+        message:
+          type: string
+        details:
+          type: object
+
+    ErrorResponse:
+      properties:
+        error:
+          $ref: '#/components/schemas/GenericError'
+
+    GenericError:
+      type: object
+      properties:
+        code:
+          type: integer
+        message:
+          type: string
+        details:
+          type: object
+
+    SmsRequest:
+      type: object
+      properties:
+        message:
+          type: string
+
+    UpdateActionRequest:
+      type: object
+      properties:
+        labels:
+          type: object
+          properties:
+            status:
+              type: string
+            hash:
+              type: string
+        snapshot:
+          $ref: '#/components/schemas/Snapshot'
+        error:
+          $ref: '#/components/schemas/GenericError'
+
+    CreateLinkRequest:
+      type: object
+      properties:
+        source:
+          type: string
+        target:
+          type: string
+        type:
+          type: string
+          enum:
+            - TRUST
+            - BLOCK
+
+    UpdateLinkRequest:
+      type: object
+      properties:
+        type:
+          type: string
+          enum:
+            - TRUST
+            - BLOCK
+
+    GetLinksResponse:
+      type: object
+      properties:
+        entities:
+          type: array
+          items:
+            $ref: '#/components/schemas/LinkItem'
+        pagination:
+          $ref: '#/components/schemas/Pagination'
+        error:
+          $ref: '#/components/schemas/GenericError'
+
+    LinkItem:
+      type: object
+      properties:
+        id:
+          type: string
+        source:
+          type: string
+        target:
+          type: string
+        created:
+          type: string
+        link_id:
+          type: string
+        'type':
+          type: string
+
+    GetActionsResponse:
+      type: object
+      properties:
+        entities:
+          type: array
+          items:
+            $ref: '#/components/schemas/GetActionResponse'
+
+    GetActionResponse:
+      properties:
+        action_id:
+          type: string
+        source:
+          type: string
+        symbol:
+          type: string
+        target:
+          type: string
+        amount:
+          type: string
+        snapshot:
+          $ref: '#/components/schemas/Snapshot'
+        labels:
+          type: object
+          properties:
+            tx_id:
+              type: string
+            tx_ref:
+              type: string
+            status:
+              type: string
+            domain:
+              type: string
+            sourceChannel:
+              type: string
+            created:
+              type: string
+            updated:
+              type: string
+            sourceCreated:
+              type: string
+            targetUpdated:
+              type: string
+            description:
+              type: string
+            type:
+              type: string
+            rejectSource:
+              type: string
+            rejectDescription:
+              type: string
+            transactionPurpose:
+              type: string
+            numberOfTransactions:
+              type: string
+            hash:
+              type: string
+            iouHash:
+              type: string
+            reason:
+              type: object
+            reverseInitiated:
+              type: boolean
+            config:
+              type: object
+            test:
+              type: array
+              items:
+                type: object
+            deviceFingerPrint:
+              $ref: '#/components/schemas/DeviceFingerPrint'
+            service:
+              type: string
+            otp:
+              type: string
+            tpagaAuthorization:
+              type: object
+            girosPayment:
+              type: object
+            girosTransactionInfo:
+              type: object
+            agent:
+              type: object
+            customer:
+              type: object
+            contextTransaction:
+              type: object
+        error:
+          $ref: '#/components/schemas/GenericError'
+
+    ActionSignedLabels:
+      properties:
+        labels:
+          type: object
+          properties:
+            tx_id:
+              type: string
+            tx_ref:
+              type: string
+            status:
+              type: string
+            created:
+              type: string
+            sourceCreated:
+              type: string
+            targetUpdated:
+              type: string
+            description:
+              type: string
+            type:
+              type: string
+            rejectSource:
+              type: string
+            rejectDescription:
+              type: string
+            transactionPurpose:
+              type: string
+            numberOfTransactions:
+              type: string
+            reason:
+              type: object
+            deviceFingerPrint:
+              $ref: '#/components/schemas/DeviceFingerPrint'
+
+    ActionSigned:
+      properties:
+        action_id:
+          type: string
+        source:
+          type: string
+        symbol:
+          type: string
+        target:
+          type: string
+        amount:
+          type: string
+        snapshot:
+          $ref: '#/components/schemas/Snapshot'
+        labels:
+          type: object
+          properties:
+            tx_id:
+              type: string
+            tx_ref:
+              type: string
+            status:
+              type: string
+            created:
+              type: string
+            sourceCreated:
+              type: string
+            targetUpdated:
+              type: string
+            description:
+              type: string
+            rejectSource:
+              type: string
+            rejectDescription:
+              type: string
+            transactionPurpose:
+              type: string
+            numberOfTransactions:
+              type: string
+            reason:
+              type: object
+            hash:
+              type: string
+
+    GetTransfersResponse:
+      type: object
+      properties:
+        entities:
+          type: array
+          items:
+            $ref: '#/components/schemas/GetActionResponse'
+
+    GenericResponse:
+      type: object
+      additionalProperties: true
+
+    CreateTransferRequest:
+      type: object
+      properties:
+        source:
+          type: string
+        target:
+          type: string
+        symbol:
+          type: string
+        amount:
+          type: string
+        labels:
+          type: object
+          properties:
+            type:
+              type: string
+            tx_id:
+              type: string
+            tx_ref:
+              type: string
+            status:
+              type: string
+            domain:
+              type: string
+            created:
+              type: string
+            sourceCreated:
+              type: string
+            targetUpdated:
+              type: string
+            description:
+              type: string
+            rejectSource:
+              type: string
+            rejectDescription:
+              type: string
+            transactionPurpose:
+              type: string
+            numberOfTransactions:
+              type: string
+            deviceFingerPrint:
+              $ref: '#/components/schemas/DeviceFingerPrint'
+            config:
+              type: object
+
+    CreateTransferRequestV2:
+      type: object
+      properties:
+        source:
+          type: string
+        target:
+          type: string
+        symbol:
+          type: string
+        amount:
+          type: string
+        labels:
+          type: object
+
+    UpdateTransferRequestV2:
+      type: object
+      properties:
+        amount:
+          type: string
+        labels:
+          type: object
+        snapshot:
+          $ref: '#/components/schemas/Snapshot'
+        error:
+          $ref: '#/components/schemas/GenericError'
+
+    CreateTransferResponse:
+      type: object
+      properties:
+        action_id:
+          type: string
+        source:
+          type: string
+        target:
+          type: string
+        symbol:
+          type: string
+        amount:
+          type: string
+        snapshot:
+          $ref: '#/components/schemas/Snapshot'
+        labels:
+          type: object
+          properties:
+            tx_ref:
+              type: string
+            created:
+              type: string
+            type:
+              type: string
+            hash:
+              type: string
+            status:
+              type: string
+        error:
+          $ref: '#/components/schemas/GenericError'
+        _auth:
+          $ref: '#/components/schemas/AuthMetadata'
+
+    AcceptTransferRequest:
+      type: object
+      properties:
+        signer:
+          $ref: '#/components/schemas/SignerObject'
+        wallet:
+          $ref: '#/components/schemas/WalletObject'
+
+    AcceptTransferRequestV2:
+      type: object
+      properties:
+        signerHandle:
+          type: string
+
+    RejectTransferRequest:
+      type: object
+      properties:
+        signer:
+          $ref: '#/components/schemas/SignerObject'
+        wallet:
+          $ref: '#/components/schemas/WalletObject'
+
+    RejectTransferRequestV2:
+      type: object
+      properties:
+        reject:
+          type: object
+
+    SignerObject:
+      type: object
+      properties:
+        handle:
+          type: string
+
+    WalletObject:
+      type: object
+      properties:
+        handle:
+          type: string
+        signer:
+          type: array
+          items:
+            type: string
+        default:
+          type: string
+        symbolDefaults:
+          type: object
+        labels:
+          type: object
+          properties:
+            type:
+              type: string
+            channelSms:
+              type: string
+
+    SnapshotWalletObject:
+      type: object
+      properties:
+        labels:
+          type: object
+        handle:
+          type: string
+        signer:
+          type: array
+          items:
+            type: string
+        default:
+          type: string
+        symbolDefaults:
+          type: object
+
+    SnapshotSignerObject:
+      type: object
+      properties:
+        handle:
+          type: string
+        labels:
+          type: object
+
+    SnapshotNetworkObject:
+      type: object
+      properties:
+        handle:
+          type: string
+        labels:
+          type: object
+        default:
+          type: string
+
+    Snapshot:
+      type: object
+      properties:
+        target:
+          type: object
+          properties:
+            wallet:
+              $ref: '#/components/schemas/SnapshotWalletObject'
+            signer:
+              $ref: '#/components/schemas/SnapshotSignerObject'
+            network:
+              $ref: '#/components/schemas/SnapshotNetworkObject'
+        source:
+          type: object
+          properties:
+            wallet:
+              $ref: '#/components/schemas/SnapshotWalletObject'
+            signer:
+              $ref: '#/components/schemas/SnapshotSignerObject'
+            network:
+              $ref: '#/components/schemas/SnapshotNetworkObject'
+        symbol:
+          type: object
+          properties:
+            wallet:
+              $ref: '#/components/schemas/SnapshotWalletObject'
+            signer:
+              $ref: '#/components/schemas/SnapshotSignerObject'
+            network:
+              $ref: '#/components/schemas/SnapshotNetworkObject'
+
+    DeviceFingerPrint:
+      type: object
+      properties:
+        hash:
+          type: string
+        ipAddress:
+          type: string
+        geolocation:
+          type: string
+        country:
+          type: string
+        city:
+          type: string
+        mobileDevice:
+          type: string
+        SIMCardId:
+          type: string
+        model:
+          type: string
+        operator:
+          type: string
+
+    Conciliation:
+      type: object
+      properties:
+        fileName:
+          type: string
+        text:
+          type: string
+
+    AuthMetadata:
+      type: object
+      properties:
+        owner:
+          type: string
+        realm:
+          type: string
+        organization:
+          type: string
+        domain:
+          type: string
+
+    Credentials:
+      type: object
+      properties:
+        handle:
+          type: string
+        client_id:
+          type: string
+        client_secret:
+          type: string
+        api_key:
+          type: string
+        _auth:
+          $ref: '#/components/schemas/AuthMetadata'
+        scopes:
+          type: array
+          items:
+            type: string
+        roles:
+          type: array
+          items:
+            type: string
+        created:
+          type: string
+        updated:
+          type: string
+
+    Transfers:
+      type: object
+      properties:
+        entities:
+          type: array
+          items:
+            $ref: '#/components/schemas/GetTransferResponse'
+        pagination:
+          $ref: '#/components/schemas/Pagination'
+        error:
+          $ref: '#/components/schemas/GenericError'
+
+    GetTransferResponse:
+      type: object
+      properties:
+        transferId:
+          type: string
+        txId:
+          type: string
+        txRef:
+          type: string
+        source:
+          type: string
+        sourceWallet:
+          type: string
+        sourceSigner:
+          type: string
+        sourceSignerBalance:
+          type: string
+        sourceBank:
+          type: string
+        sourceBankBicfi:
+          type: string
+        target:
+          type: string
+        targetWallet:
+          type: string
+        targetSigner:
+          type: string
+        targetSignerBalance:
+          type: string
+        targetBank:
+          type: string
+        targetBankBicfi:
+          type: string
+        amount:
+          type: string
+        symbol:
+          type: string
+        type:
+          type: string
+        status:
+          type: string
+        description:
+          type: string
+        created:
+          type: string
+        updated:
+          type: string
+        domain:
+          type: string
+        owner:
+          type: string
+        error:
+          $ref: '#/components/schemas/GenericError'
+        labels:
+          type: object
+          properties:
+            hash:
+              type: string
+            type:
+              type: string
+            tx_id:
+              type: string
+            domain:
+              type: string
+            status:
+              type: string
+            tx_ref:
+              type: string
+            created:
+              type: string
+            updated:
+              type: string
+            description:
+              type: string
+            sourceChannel:
+              type: string
+            sourceCreated:
+              type: string
+            transactionPurpose:
+              type: string
+            numberOfTransactions:
+              type: string
+            deviceFingerPrint:
+              $ref: '#/components/schemas/DeviceFingerPrint'
+            service:
+              type: string
+            createdBy:
+              type: string
+            otp:
+              type: string
+            tpagaAuthorization:
+              type: object
+            girosPayment:
+              type: object
+            girosTransactionInfo:
+              type: object
+            agent:
+              type: object
+            customer:
+              type: object
+            contextTransaction:
+              type: object
+            createdTransferFlowId:
+              type: string
+            acceptedTransferFlowId:
+              type: string
+            rejectedTransferFlowId:
+              type: string
+            expiresAt:
+              type: string
+            invoiceId:
+              type: string
+            invoiceDetail:
+              type: string
+            contractId:
+              type: string
+            acceptSms:
+              type: string
+        snapshot:
+          $ref: '#/components/schemas/Snapshot'
+        _auth:
+          $ref: '#/components/schemas/AuthMetadata'
+
+    TransferResponseV2:
+      type: object
+      properties:
+        transferId:
+          type: string
+        source:
+          type: string
+        target:
+          type: string
+        amount:
+          type: string
+        symbol:
+          type: string
+        labels:
+          type: object
+        snapshot:
+          $ref: '#/components/schemas/Snapshot'
+        _auth:
+          $ref: '#/components/schemas/AuthMetadata'
+        error:
+          $ref: '#/components/schemas/GenericError'
+
+    AnalyticsData:
+      type: array
+      items:
+        type: object
+
+    TransferStatistics:
+      type: object
+      properties:
+        entities:
+          type: array
+          items:
+            type: object
+            properties:
+              totalAmountOfTxs:
+                type: integer
+              numberOfTxs:
+                type: integer
+        error:
+          $ref: '#/components/schemas/GenericError'
+        pagination:
+          $ref: '#/components/schemas/Pagination'
+
+    Pagination:
+      type: object
+      properties:
+        pageNum:
+          type: string
+        pageSize:
+          type: string
+        totalResults:
+          type: string
+        filter:
+          type: string

@@ -7,7 +7,7 @@ tags:
     description: 'Executes download on TIN Cloud side and credit on banking core'
   - name: Debit
     description: 'Executes upload on TIN Cloud side and debit on banking core'
-  - name: Transfer
+  - name: Action
     description: 'Signs the operation'
   - name: Status
     description: 'Notifies on status of operation'
@@ -15,7 +15,7 @@ tags:
 paths:
   /v1/credit:
     post:
-      summary: Performs download operation.
+      summary: Acreditar al destino.
       description: Executes download on TIN Cloud side and credit on banking core side.
       operationId: downloadOperation
       security:
@@ -52,7 +52,7 @@ paths:
                 $ref: '#/components/schemas/ErrorResponse'
   /v1/debit:
     post:
-      summary: Performs upload operation.
+      summary: Debitar al origen.
       description: Executes upload on TIN Cloud side and debit on banking core side.
       operationId: uploadOperation
       security:
@@ -88,7 +88,7 @@ paths:
                 $ref: '#/components/schemas/ErrorResponse'
   /v1/status:
     post:
-      summary: Notifies on status of operation.
+      summary: Notificacion de la transferencia.
       description: Notification channel. It receives action object as a confirmation of transfer acceptance or reject action.
       operationId: checkStatus
       security:
@@ -116,9 +116,9 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
-  /v1/transfer:
+  /v1/action:
     post:
-      summary: Signs the operation.
+      summary: Actualiza la transferencia.
       description:
         TIN Cloud will call this endpoint when bank needs to sign the pending
         action. Depending on the key handling strategy it can use keys stored in the
@@ -129,7 +129,7 @@ paths:
         - oAuth2ClientCredentials: []
         - XNonce: []
       tags:
-        - Transfer
+        - Action
       requestBody:
         content:
           application/json:

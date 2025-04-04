@@ -89,7 +89,7 @@
               {
                 "group": "APIs Banco",
                 "openapi": {
-                  "source": "/public/spi-banks.yaml",
+                  "source": "/public/spi-banksv3.yaml",
                   "directory": "transfers-mol"
                 }
 
@@ -97,7 +97,7 @@
               {
                 "group": "APIs Transfiya",
                 "openapi": {
-                  "source": "/public/tinapi.yaml",
+                  "source": "/public/tinapiv8.yaml",
                   "directory": "transfers-mol-2"
                 }
 
