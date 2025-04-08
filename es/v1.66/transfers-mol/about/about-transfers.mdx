@@ -59,11 +59,11 @@ El uso del modelo de transfer para iniciar pagos en el sistema permite emplear e
 
 ### Origen y destino de transferencia
 
-Plataforma de Transfiya permite envios entre diferentes llaves o credenciales de pago (signer) en el sistema desde su inicio representados por campos origen y destino.
+La plataforma de Transfiya permite, desde sus inicios, realizar envíos de fondos entre diferentes credenciales de pago registradas en el sistema, conocidas como signers. Estas se representan a través de los campos source (origen) y target (destino).
 
-Tipo de transferencia, por ejemplo p2p, b2p, p2b, g2p  se define en base de los tipos de participates (signers) y reglas asignadas a cada uno de ellos.
+El tipo de transferencia —por ejemplo, P2P, B2P, P2B o G2P— se determina en función del tipo de participantes involucrados (es decir, el tipo de signer) y de las reglas asociadas a cada uno.
 
-El principal uso de origen y destino es simplificar el proceso de envío y permitir cualquier tipo de movimiento de fondos sin necesidad de modificar la integración existente de los participantes.
+El modelo basado en source y target tiene como objetivo simplificar la integración para los participantes, permitiendo cualquier tipo de movimiento de fondos entre entidades sin necesidad de realizar modificaciones adicionales en sus integraciones actuales.
 
 <ResponseField name="source" type="string">
     Origen de la transferencia.

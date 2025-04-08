@@ -19,7 +19,7 @@ Los participantes únicamente deben asegurar para envio de transferencias:
 
 - **Utilizar API de transferencias**: Mantener la misma integración para iniciar transferencias
 - **Especificar tipo de transferencia**: Durante la marcha blanca, identificar las transferencias que se comunican con MOL usando "label.type":"SENDMOL"
-- **Incluir marcas de tiempo**: Agregar marca de tiempo externa a la plataforma: "initiated" para notificar tiempo de inicio de transferncia
+- **Incluir marcas de tiempo**: Agregar marca de tiempo externa a la plataforma: "dispateched" para notificar tiempo de inicio de transferncia
 
 ### Origen y destino de transferencia
 
@@ -234,6 +234,22 @@ Los cambios en el modelo son mostrados en el ejemplo de diferencias en codigo.
    ```
   </Tab>
 </Tabs>
+
+## Aceptación en el flujo regulado
+
+En el modelo regulado, la aceptación de una transferencia no depende de una acción explícita por parte del usuario final, como podría suceder en flujos tradicionales. Sin embargo, sí requiere de una validación formal por parte de la entidad financiera que actúa como banco receptor.
+
+Este paso de aceptación es obligatorio antes de continuar con el procesamiento y consiste en que la entidad receptora verifique que la cuenta destino:
+
+- Existe y está activa.
+- Está habilitada para recibir pagos.
+- Cumple con los requisitos establecidos por la regulación, como los límites de monto o tipo de moneda.
+
+Una vez realizada esta validación, el banco destinatario confirma la aceptación utilizando el mecanismo estándar ya existente en TransfiYa para flujos asincrónicos. Esta aceptación por parte de la entidad equivale a una aprobación regulatoria que habilita a continuar con la operación de crédito y la posterior liquidación a través del MOL.
+
+<Info icon="shield-check">
+  Este modelo permite cumplir con la normativa vigente sin necesidad de cambiar los componentes fundamentales de la arquitectura de TransfiYa, facilitando así la adaptación de los bancos al nuevo flujo SPI.
+</Info>
 
 ## Modelo de liquidación
 

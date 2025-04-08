@@ -4,14 +4,6 @@ description: Descripción del flujo nuevo segun la regulacion que entra en vigor
 icon: 'building-columns'
 ---
 
-## Contexto General
-
-A partir de 2025, entra en vigor una nueva regulación en Colombia que busca la interoperabilidad de todos los sistemas de pagos en tiempo real (RTP). Esta normativa exige la implementación de un Modelo Operativo de Liquidación (MOL) centralizado y un directorio único de alias. Transfiya, como el principal sistema P2P del país, debe adecuarse a estos lineamientos para poder continuar operando.
-
-## Estrategia de Adaptación
-
-Nuestro enfoque se basa en mantener compatibilidad con los bancos actualmente integrados a Transfiya, evitando la necesidad de migraciones complejas y costosas. Esto nos permite preservar nuestra base de usuarios y consolidar nuestra posición de liderazgo en el mercado.
-
 ## Procesamiento de Transferencias y MOL
 
 Con la entrada en operación del MOL, todas las transferencias deberán ser enviadas a esta nueva infraestructura. Durante ese proceso, Transfiya suspenderá temporalmente su procesamiento interno hasta recibir la confirmación por parte de MOL.
@@ -24,9 +16,9 @@ Gracias a que nuestro sistema ya está basado en procesamiento asincrónico por 
 
 La regulación define que todas las transacciones sean de cuenta a cuenta. En Transfiya, las cuentas están representadas por firmantes (*signers*), por lo que nuestras transferencias ya son técnicamente equivalentes a lo exigido (de firmante a firmante). Este modelo ya se usa en flujos B2P actuales, lo que minimiza los cambios requeridos.
 
-<Tip>
-También revisaremos validaciones relacionadas con números de teléfono tanto en bancos como en Transfiya, y evaluaremos si se necesitan nuevos campos en las transferencias. Sin embargo, al almacenar la información relevante en el objeto `snapshot` y en los firmantes, se evitaría modificar la estructura de las transferencias.
-</Tip>
+<Warning>
+Los bancos deben quitar las validaciones existentes con número de teléfono
+</Warning>
 
 ## Tiempos y Reversión de Transferencias
 
