@@ -1,0 +1,30 @@
+---
+title: 'SDK'
+description: 'Historial de despliegues del SDK oficial'
+icon: 'circle-check'
+---
+
+
+## Notas de versión - 07/04/2025
+
+Se han añadido nuevas etiquetas de tiempo (timestamp) reguladas por MOL a las entidades `signer` y `transfer`. Ambas etiquetas utilizan el formato de fecha y hora ISO 8601.
+
+- `received`: representa el momento en que el banco recibió la solicitud del usuario.
+- `dispatched`: representa el momento en que el banco realizó la llamada a TransfiYa.
+
+Estas etiquetas permiten cumplir con los requisitos regulatorios de trazabilidad y control de tiempos para operaciones en tiempo real.
+
+<Info>
+Estas mejoras permiten a los participantes reportar y auditar el flujo de operaciones con mayor precisión y alineación con el modelo SPI.
+</Info>
+
+### Descargas disponibles
+
+- 📦 SDK para **Java JDK1.7** (v0.1.28.2)  
+  [Descargar](https://storage.googleapis.com/tin-sdks/2025-04-01/java_jdk1.7_0.1.28.2_a592328e4e15d0b102a17bf6b705b00b.zip)
+
+- 📦 SDK para **Java JDK1.8** (v0.1.28.2)  
+  [Descargar](https://storage.googleapis.com/tin-sdks/2025-04-01/java_jdk1.8_0.1.28.2_c8d86c9c053ba9dcac3137e1c2d3453c.zip)
+
+- 📦 SDK para **C#** (v1.1.2)  
+  [Descargar](https://storage.googleapis.com/tin-sdks/2025-04-01/csharp_1.1.2_8b604778c2ee25798746ef371ed6fd84.zip)

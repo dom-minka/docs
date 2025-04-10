@@ -22,7 +22,7 @@ El modelo de datos detallado con las diferencias se puede encontrar a continuaci
 | Nombre de entidad legal del cliente | labels.name | Requerido con condición | labels.type = 'BUSINESS' | Texto | 1-140 caracteres |  |
 | Primer nombre del cliente | labels.firstName | Requerido con condición | labels.type = 'PERSON' | Texto | 1-40 caracteres |  |
 | Segundo nombre del cliente | labels.secondName | Opcional con condición | labels.type = 'PERSON' | Texto | 1-40 caracteres | Nuevo valor requerido por regulación. |
-| Primer apellido del cliente | labels.lastName | Opcional con condición | labels.type = 'PERSON' | Texto | 1-40 caracteres | Cambiado a opcional para coincidir con la regulación. |
+| Primer apellido del cliente | labels.lastName | Opcional con condición | labels.type = 'PERSON' | Texto | 1-40 caracteres | Cambiado a obligatorio para coincidir con la regulación. |
 | Segundo apellido del cliente | labels.secondLastName | Opcional con condición | labels.type = 'PERSON' | Texto | 1-40 caracteres | Nuevo valor requerido por regulación. |
 | País de residencia | labels.countryOfResidence | Opcional |  | Texto | Código ISO de país de 2 caracteres. [https://www.iso.org/obp/ui](https://www.iso.org/obp/ui/#search) |  |
 | Identificación de entidad emisora | labels.createdBy | Generado por Transfiya |  | Texto | Referencia de participante Transfiya | Identificador de billetera del banco en Transfiya. |
@@ -57,7 +57,7 @@ Ejemplo y validaciones de alias label (`labels.aliasValue`):
 | Tipo de alias | Ejemplo | Validación | Comentario |
 | --- | --- | --- | --- |
 | Número de teléfono | `3012344567` | Debe comenzar con `3` y tener 9 dígitos después de este prefijo. |  |
-| Alfanumérico | `@JORGE35` | Comienza con el símbolo `@`. Máximo 20 caracteres alfanuméricos y mínimo 5 caracteres alfanuméricos después del símbolo `@`. | El símbolo `@` está reservado para IDs alfanuméricos, nombres de usuario, etc. |
+| Alfanumérico | `@JORGE35` | Comienza con el símbolo `@`. Máximo 20 caracteres alfanuméricos y mínimo 5 caracteres alfanuméricos (No puede incluir espacios, tildes ni el caracter ñ) después del símbolo `@`. | El símbolo `@` está reservado para IDs alfanuméricos, nombres de usuario, etc. |
 | Correo electrónico | `TEST@COMPANY.IO` | Máximo 92 caracteres. Debe tener un único carácter `@`. Máximo 30 caracteres antes del `@` y 61 después. |  |
 | Número de documento | `PR5002499` | Mínimo 3 y máximo 18 caracteres alfanuméricos, no se permiten caracteres especiales. | El número de identificación del documento debe ser único en el sistema, incluso si se repite en Colombia. |
 | ID de comerciante | `0012345678` | Comienza con `00` y tiene 10 dígitos en total. |  |
@@ -117,6 +117,7 @@ SPBVI codes (`labels.targetSpbviCode`):
 | Entre cuentas | ENT |
 | Credibanco | CRB |
 | Visionamos | VIS |
+| Servibanca | SRV |
 
 ### Keeper (firmas digitales)
 

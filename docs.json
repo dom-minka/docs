@@ -52,6 +52,14 @@
                   "directory": "directory"
                 }
 
+              },
+              {
+                "group": "Archivos de Soporte",
+                "icon": "code",
+                "pages": [
+                  "es/v1.66/directory/support/support-files"
+                ]
+
               }
             ]
           },
@@ -101,6 +109,14 @@
                   "directory": "transfers-mol-2"
                 }
 
+              },
+              {
+                "group": "Archivos de Soporte",
+                "icon": "code",
+                "pages": [
+                  "es/v1.66/transfers-mol/support/support-files"
+                ]
+
               }
             ]
           },
@@ -111,7 +127,14 @@
                 "group": "Despliegues",
                 "icon": "mask",
                 "pages": ["es/v1.66/release-notes/release-notes-stg"]
-              }
+              },
+              {
+                "group": "SDK",
+                "icon": "mask",
+                "pages": ["es/v1.66/release-notes/sdk-releases"]
+              }  
+
+
             ]
           }
 
