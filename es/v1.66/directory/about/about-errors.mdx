@@ -26,7 +26,6 @@ La estructura de errores está distribuida estratégicamente según el tipo de p
 
 - `1xx` - Errores de sistema TransfiYa
 - `3xx` - Errores de participantes
-- `7xx` - Errores de flujo
 
 El sistema Transfiya implementa un protocolo de respuesta estandarizado. Todas las solicitudes procesadas exitosamente hacia la plataforma de Minka retornan invariablemente un código de estado HTTP `200`.
 
@@ -84,6 +83,9 @@ Las advertencias del sistema se adhieren rigurosamente al estándar HTTP y se tr
 A continuación se muestra un ejemplo representativo de una advertencia:
 
 ``` X-Minka-Warning: 118 *labels.type* is required. This will become an error after September 2025 ```
+<Warning>
+A partir de la entrada en operación del DICE en producción todos los participantes deben cumplir con el esquema regulatorio, de lo contratio tranfiya no procesara la petición.
+</Warning>
 
 ### Mapeo de Errores DICE
 

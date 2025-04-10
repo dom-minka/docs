@@ -51,6 +51,8 @@ Los demás estados (COMPLETED y REJECTED) serán abordados más adelante en el f
 
 </Info>
 
+## Aceptación de transferencia – Pasos detallados
+
 ```mermaid
 sequenceDiagram
   autonumber
@@ -72,8 +74,9 @@ sequenceDiagram
 
   tb ->> ty: Aceptar transferencia
 ```
-
-## Aceptación de transferencia – Pasos detallados
+<Info>
+A continuación detallamos los pasos del diagrama de secuencia con el detalle tecnico.
+</Info>
 
 Una vez realizado el débito al usuario origen y ejecutados los controles antifraude, Transfiya contacta al banco destino para solicitar la aceptación de la transferencia. Esta etapa es crítica para asegurar que el pago pueda ser recibido correctamente.
 
