@@ -65,54 +65,55 @@ Los signers pueden consultarse a través del endpoint v1/signer, aplicando los f
 <Tabs>
 		<Tab title="Request">
 			```js
-			curl -X PUT \
-			  -H "x-api-key: <API_KEY>" \
-			  -H "Authorization: Bearer <TOKEN>" \
-			  -H "Content-Type: application/json" \
-			  "<base URL>/v1/signer/?labels.aliasValue=@jorge22"
+			curl --location '{{url}}/v1/signer/lookup.dice' \
+        --header 'Content-Type: application/json' \
+        --header 'Authorization: Bearer <token>' \
+        --data-raw '{
+            "aliasValue": "@testing",
+            "received": "2025-04-10T15:49:15.015-05:00",
+            "dispatched": "2025-04-10T15:49:15.015-05:00"
+        }'
 			```
 		</Tab>
 		<Tab title="Response">
       ```json
-      {
-        "entities": [
-          {
-            "signer_id": "4c57ac39-16f0-489b-89d9-bddfcd352a36",
-            "handle": "wRFmYXS2sP9ho9VCZ3j4FuP1j55ABeFvsF",
-            "labels": {
-              "aliasType": "ALPHANUM",
-              "aliasValue": "@JORGE22",
-              "status": "ACTIVE",
-              "type": "PERSON",
-              "firstName": "Jorge",
-              "lastName": "Rodriguez",
-              "proprietary": "CC",
-              "identification": "1010101010",
-              "bankAccountType": "SVGS",
-              "bankAccountNumber": "12345654321",
-              "bankBicfi": "7095",
-              "bankName": "Banco Rojo",
-              "bankId": "891234918",
-              "routerReference": "$bancorojo",
-              "createdBy": "$minka",
-              "targetSpbviCode": "TFY",
-              "created": "2024-10-11T11:59:24.241-05:00",
-              "updated": "2024-10-11T12:01:11.121-05:00",
-              "consented": "2024-10-11T11:59:24.241-05:00"
-            },
-            "keeper": [
-              {
-                "scheme": "ecdsa-ed25519",
-                "public": "0463e75c8b975f069813ca8e6c36c0b6fd246eac708affb7ed2c6480fa201defe8725322d6380ec66e94f6dcb49f635c0ca51296e48da4a12b3ec66582a1297adf"
-              }
-            ],
-            "error": {
-              "code": 0,
-              "message": "Success"
-            }
-          }
-        ]
+     {
+      "signer_id": "0195b009-a139-7ff2-adac-15e3c3ecfc88",
+      "id": "0195b009-a139-7ff2-adac-15e3c3ecfc88",
+      "handle": "wYe6h63CNqoLxJet5jP1WWLhGi8D11ZGij",
+      "keeper": [
+        {
+          "public": "7ef44ee7ff1f4527ef44ee7ff1f4527ef44ee7ff1f4527ef44ee7ff1f4527ef4",
+          "scheme": "ecdsa-ed25519",
+          "secret": "046d541aec939b4748943e49cc1117a70966a6fc87345e6052a54f1e69ea48d5"
+        }
+      ],
+      "labels": {
+        "type": "PERSON",
+        "status": "INACTIVE",
+        "created": "2025-03-19T15:12:55.993-05:00",
+        "updated": "2025-03-20T15:12:55.993-05:00",
+        "createdBy": "mSJkneiASd",
+        "aliasType": "ALPHANUM",
+        "aliasValue": "@jorge",
+        "proprietary": "CC",
+        "identification": "1010101010",
+        "firstName": "Jorge",
+        "lastName": "Diaz",
+        "bankId": "900123456",
+        "bankAccountType": "SVGS",
+        "bankAccountNumber": "4123456789",
+        "routerReference": "$bancorojo",
+        "targetSpbviCode": "TFY",
+        "consented": "2025-03-13T20:38:07-05:00",
+        "received": "2025-03-13T20:38:07.123-05:00",
+        "dispatched": "2025-03-13T20:38:10.123-05:00"
+      },
+      "error": {
+        "code": 0,
+        "message": "Success"
       }
+    }
       ```
 		</Tab>
 </Tabs>
