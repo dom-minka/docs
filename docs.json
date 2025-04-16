@@ -48,7 +48,7 @@
               {
                 "group": "APIs",
                 "openapi": {
-                  "source": "/public/spi-signersv2.yaml",
+                  "source": "/public/spi-v3.yaml",
                   "directory": "directory"
                 }
 
