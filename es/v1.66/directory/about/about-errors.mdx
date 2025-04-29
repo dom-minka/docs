@@ -116,7 +116,7 @@ A partir de la entrada en operación del DICE en producción todos los participa
     | U806 | RJCT | NEWR, SUSP, SUSB, ACTV, ACTB | La llave ya está registrada con la misma entidad financiera, pero cuenta distinta. | 123 | DomainRuleViolationError | DICE error: The key is already registered with the same financial institution, but to a different account. |
     | U807 | RJCT | NEWR | La llave ya está registrada con otra entidad financiera. | 123 | DomainRuleViolationError | DICE error: The key is already registered with another financial institution. |
     | U808 | RJCT | NEWR | La llave ya se encuentra registrada con la misma cuenta. | 123 | DomainRuleViolationError | DICE error: The key is already registered with the same account. |
-    | U809 | RJCT | AMND, DEAC, SUSP, SUSB, ACTV, ACTB | No se tiene suficientes privilegios para hacer esta operación. | 100 | ForbiddenError | DICE error: You do not have sufficient privileges to perform this operation. |
+    | U809 | RJCT | AMND, DEAC, SUSP, SUSB, ACTV, ACTB | Signer no encontrado. | 121 | ResourceNotFoundError | DICE error: Signer not found. |
     | U811 | RJCT | AMND, DEAC, SUSP, SUSB, ACTV | La llave está suspendida por el participante. | 123 | DomainRuleViolationError | DICE error: The key is suspended by the participant. |
 </Accordion>
 
