@@ -1,0 +1,402 @@
+---
+title: 'Cómo modificar llaves'
+description: 'Guia del proceso de modificación de las llaves'
+icon: 'pen'
+---
+
+## Introducción
+
+Para actualizar las llaves usamos el modelo de actualización de objeto [signer] (../about/about-signers).
+
+Transfiya funciona como un directorio federado que puede almacenar copias de llaves que no se sincronizan automáticamente con DICE.
+
+Información sobre cómo sincronizar con [DICE](how-to-sync-dice).
+
+## Flujos de actualización
+
+El nuevo modelo regulado simplifica el proceso de actualización, porque no utiliza wallets.
+
+En el flujo actual para actualizar una llave con el que está vinculada la cuenta implica eliminar un singer y crear nuevo vínculo.
+
+<Tabs>
+    <Tab title="Nuevo flujo">
+        ```mermaid
+        sequenceDiagram
+       	autonumber
+       	participant b as Participante
+       	participant ty as Transfiya
+        participant cd as DICE
+
+        b ->> +ty: Acutalizar signer
+        ty ->> +cd: Validar con DICE
+        cd -->> -ty: Respuesta DICE
+        ty ->> ty: Actualizar signer
+        ty -->> -b: Respuesta signer
+        ```
+    </Tab>
+    <Tab title="Flujo anterior">
+      ```mermaid
+      sequenceDiagram
+     	autonumber
+     	participant b as Bank
+     	participant ty as Transfiya
+
+        b ->> +ty: Buscar wallet
+        ty -->> -b: Respuesta wallet
+        b ->> +ty: Actualizar wallet (eliminar signer)
+        ty -->> -b: Respuesta wallet
+        b ->> +ty: Mapeo wallet signer
+        ty -->> -b: Respuesta signer
+        alt wallet existe
+          b ->> +ty: Actualizar wallet con signer
+          ty ->> ty: Actualziar wallet
+          ty -->> -b: Respuesta
+        else wallet doesn't exist
+          b ->> +ty: Crear nuevo wallet con signer
+          ty ->> ty: Crear wallet
+          ty -->> -b: Respuesta
+        end
+        ```
+    </Tab>
+</Tabs>
+
+<Info>
+    El modelo actual de billeteras permanecerá activo para garantizar compatibilidad con los sistemas existentes.
+</Info>
+
+## Ejemplos de API
+
+### Cambio de información de la cuenta
+
+Para modificar la información de la cuenta de una llave se realiza actualizando las etiquetas de un signer.
+
+```java HTTP
+PUT /v1/signer/{handle}
+```
+
+---
+| Parameter | Type | Description |
+| --------- | ---- | ----------- |
+| handle | string | 26-35 characters Alphanumeric characters allowed base58 structure |
+| labels | object | Metadata describing the address. Use them to describe the details of the signer. |
+---
+
+<Tabs>
+  <Tab title="Request">
+    ```bash
+    curl -X PUT \
+      -H "x-api-key: <API_KEY>" \
+      -H "Authorization: Bearer <TOKEN>" \
+      -H "Content-Type: application/json" \
+      -d '{
+        "labels": {
+          "bankAccountType": "DBMO",
+          "bankAccountNumber": "302058294920"
+        }
+      }' "URL/v1/signer/wRFmYXS2sP9ho9VCZ3j4FuP1j55ABeFvsF"
+    ```
+  </Tab>
+  <Tab title="Response">
+    ```javascript
+    {
+      "signer_id": "4c57ac39-16f0-489b-89d9-bddfcd352a36",
+      "handle": "wRFmYXS2sP9ho9VCZ3j4FuP1j55ABeFvsF",
+      "labels": {
+        "aliasType": "ALPHANUM",
+        "aliasValue": "@JORGE22",
+        "status": "INACTIVE",
+        "type": "PERSON",
+        "firstName": "Jorge",
+        "proprietary": "CC",
+        "identification": "1010101010",
+        "bankAccountType": "DBMO",
+        "bankAccountNumber": "302058294920",
+        "bankBicfi": "7095",
+        "bankName": "Banco Rojo",
+        "bankId": "891234918",
+        "routerReference": "$bancorojo",
+        "createdBy": "$minka",
+        "targetSpbviCode": "TFY"
+        "created": "2024-10-11T11:59:24.241-05:00",
+        "updated": "2024-10-11T12:01:11.121-05:00",
+        "consented": "2024-10-11T11:59:24.241-05:00",
+        "received": "2024-10-11T11:59:22.241-05:00",
+        "dispatched": "2024-10-11T11:59:22.517-05:00"
+      },
+      "keeper": [
+        {
+          "scheme": "ecdsa-ed25519",
+          "public": "0463e75c8b975f069813ca8e6c36c0b6fd246eac708affb7ed2c6480fa201defe8725322d6380ec66e94f6dcb49f635c0ca51296e48da4a12b3ec66582a1297adf"
+        }
+      ],
+      "error": {
+        "code": 0,
+        "message": "Success"
+      }
+    }
+    ```
+  </Tab>
+</Tabs>
+
+### Códigos de Error
+
+---
+| Error Code | Description |
+| --------- | ----------- |
+| 99 | Unexpected server error |
+| 100 | You don't have permissions to access this method |
+| 102 | Invalid labels |
+| 118 | Resource schema validation error |
+| 121 | Signer not found in database |
+---
+
+### Cambio de llave de un signer
+
+La modificación de los alias de signer es una de las operaciones de llave contempladas en el marco regulatorio del SPI. Esta operación debemos entenderla internamente como una cancelación del valor de la llave actual y la creación de una nueva.
+
+```java HTTP
+PUT /v1/signer/{handle}
+```
+
+---
+| Parameter | Type | Description |
+| --------- | ---- | ----------- |
+| handle | string | 26-35 characters Alphanumeric characters allowed base58 structure |
+| labels | object | Metadata describing the address. Use them to describe the details of the signer. |
+---
+
+<Tabs>
+  <Tab title="Request">
+    ```jsx
+    curl -X PUT \
+      -H "x-api-key: <API_KEY>" \
+      -H "Authorization: Bearer <TOKEN>" \
+      -H "Content-Type: application/json" \
+      -d '{
+        "labels": {
+          "status": "INACTIVE"
+        }
+      }' "URL/v1/signer/wRFmYXS2sP9ho9VCZ3j4FuP1j55ABeFvsF"
+    ```
+  </Tab>
+  <Tab title="Response">
+    ```jsx
+    {
+      "signer_id": "4c57ac39-16f0-489b-89d9-bddfcd352a36",
+      "handle": "wRFmYXS2sP9ho9VCZ3j4FuP1j55ABeFvsF",
+      "labels": {
+        "aliasType": "EMAIL",
+        "aliasValue": "jorge@company.io",
+        "status": "INACTIVE",
+        "type": "PERSON",
+        "firstName": "Jorge",
+        "proprietary": "CC",
+        "identification": "1010101010",
+        "bankAccountType": "SVGS",
+        "bankAccountNumber": "12345654321",
+        "bankBicfi": "7095",
+        "bankName": "Banco Rojo",
+        "routerReference": "$bancorojo",
+        "createdBy": "$minka",
+        "targetSpbviCode": "TFY"
+        "created": "2024-10-11T11:59:24.241-05:00",
+        "updated": "2024-10-11T12:01:11.121-05:00",
+        "consented": "2024-10-11T11:59:24.241-05:00",
+        "received": "2024-10-11T11:59:22.241-05:00",
+        "dispatched": "2024-10-11T11:59:22.517-05:00"
+      },
+      "keeper": [
+        {
+          "scheme": "ecdsa-ed25519",
+          "public": "0463e75c8b975f069813ca8e6c36c0b6fd246eac708affb7ed2c6480fa201defe8725322d6380ec66e94f6dcb49f635c0ca51296e48da4a12b3ec66582a1297adf"
+        }
+      ],
+      "error": {
+        "code": 0,
+        "message": "Success"
+      }
+    }
+    ```
+  </Tab>
+</Tabs>
+
+## Crear Nuevo Alias
+
+Crear un nuevo signer con un alias diferente y asociar los mismos datos de usuario:
+
+**POST /v1/signer/**
+
+<Tabs>
+  <Tab title="Request">
+    ```jsx
+    curl -X POST \
+      -H "x-api-key: <API_KEY>" \
+      -H "Authorization: Bearer <TOKEN>" \
+      -H "Content-Type: application/json" \
+      -d '{
+        "labels": {
+          "aliasType": "EMAIL",
+          "aliasValue": "jorge2@company.io",
+          "type": "PERSON",
+          "firstName": "Jorge",
+          "secondName": "Alejandro",
+          "lastName": "Fernandez",
+          "secondLastName": "Garcia",
+          "proprietary": "CC",
+          "identification": "1010101010",
+          "bankAccountType": "SVGS",
+          "bankAccountNumber": "12345654321",
+          "countryOfResidence": "CO",
+          "bankBicfi": "7095",
+          "bankName": "Banco Rojo",
+          "routerReference": "$bancorojo",
+          "targetSpbviCode": "TFY",
+          "consented": "2024-10-11T11:59:23.241-05:00"
+        },
+        "keeper": [
+          {
+            "scheme": "ecdsa-ed25519",
+            "public": "0463e75c8b975f069813ca8e6c36c0b6fd246eac708affb7ed2c6480fa201defe8725322d6380ec66e94f6dcb49f635c0ca51296e48da4a12b3ec66582a1297adf"
+          }
+        ]
+      }  "URL/v1/signer"
+    ```
+  </Tab>
+  <Tab title="Response">
+    ```jsx
+    {
+      "signer_id": "4c57ac39-16f0-489b-89d9-bddfcd352a36",
+      "handle": "wRFmYXS2sP9ho9VCZ3j4FuP1j55ABeFvsF",
+      "labels": {
+        "aliasType: "EMAIL",
+        "aliasValue": "jorge2@company.io",
+        "status": "ACTIVE",
+        "type": "PERSON",
+        "firstName": "Jorge",
+        "secondName": "Alejandro",
+        "lastName": "Fernandez",
+        "secondLastName": "Garcia",
+        "proprietary": "CC",
+        "identification": "1010101010",
+        "bankAccountType": "SVGS",
+        "bankAccountNumber": "12345654321",
+        "countryOfResidence": "CO",
+        "bankBicfi": "7095",
+        "bankName": "Banco Rojo",
+        "routerReference": "$bancorojo",
+        "createdBy": "$minka",
+        "targetSpbviCode": "TFY"
+        "created": "2024-10-11T11:59:24.241-05:00",
+        "updated": "2024-10-11T11:59:24.241-05:00",
+        "consented": "2024-10-11T11:59:23.241-05:00",
+        "received": "2024-10-11T11:59:22.241-05:00",
+        "dispatched": "2024-10-11T11:59:22.517-05:00"
+      },
+      "keeper": [
+        {
+          "scheme": "ecdsa-ed25519",
+          "public": "0463e75c8b975f069813ca8e6c36c0b6fd246eac708affb7ed2c6480fa201defe8725322d6380ec66e94f6dcb49f635c0ca51296e48da4a12b3ec66582a1297adf"
+        }
+      ],
+      "error": {
+        "code": 0,
+        "message": "Success"
+      }
+    }
+    ```
+  </Tab>
+</Tabs>
+
+---
+| Error Code | Description |
+| --------- | ----------- |
+| 99 | Unexpected server error |
+| 100 | You don't have permissions to access this method |
+| 102 | Invalid labels |
+| 118 | Resource schema validation error |
+| 121 | Signer not found in database |
+---
+
+### Cambio de información personal de un signer
+
+Para modificar la información personal de un signer, se realiza por medio de la actualización de las etiquetas del signer.
+
+```java HTTP
+PUT /v1/signer/{handle}
+```
+---
+| Parameter | Type | Description |
+| --------- | ---- | ----------- |
+| handle | string | 26-35 characters Alphanumeric characters allowed base58 structure |
+| labels | object | Metadata describing the address. Use them to describe the details of the signer. |
+---
+
+<Tabs>
+  <Tab title="Request">
+    ```javascript
+    curl -X PUT \
+      -H "x-api-key: <API_KEY>" \
+      -H "Authorization: Bearer <TOKEN>" \
+      -H "Content-Type: application/json" \
+      -d '{
+        "labels": {
+	        "lastName": "Garcia",
+	        "identification": "54812184282"
+        }
+      }' "URL/v1/signer/wRFmYXS2sP9ho9VCZ3j4FuP1j55ABeFvsF"
+      ```
+  </Tab>
+  <Tab title="Response">
+    ```javascript {10,12}
+    {
+      "signer_id": "4c57ac39-16f0-489b-89d9-bddfcd352a36",
+      "handle": "wRFmYXS2sP9ho9VCZ3j4FuP1j55ABeFvsF",
+      "labels": {
+        "aliasType": "EMAIL",
+        "aliasValue": "JORGE@COMPANY.IO",
+        "status": "INACTIVE",
+        "type": "PERSON",
+        "firstName": "Jorge",
+        "lastName": "Garcia",
+        "proprietary": "CC",
+        "identification": "54812184282",
+        "bankAccountType": "DBMO",
+        "bankAccountNumber": "302058294920",
+        "bankBicfi": "7095",
+        "bankName": "Banco Rojo",
+        "bankId": "891234918",
+        "routerReference": "$bancorojo",
+        "createdBy": "$minka",
+        "targetSpbviCode": "TFY"
+        "created": "2024-10-11T11:59:24.241-05:00",
+        "updated": "2024-10-11T12:01:11.121-05:00",
+        "consented": "2024-10-11T11:59:24.241-05:00",
+        "received": "2024-10-11T11:59:22.241-05:00",
+        "dispatched": "2024-10-11T11:59:22.517-05:00"
+      },
+      "keeper": [
+        {
+          "scheme": "ecdsa-ed25519",
+          "public": "0463e75c8b975f069813ca8e6c36c0b6fd246eac708affb7ed2c6480fa201defe8725322d6380ec66e94f6dcb49f635c0ca51296e48da4a12b3ec66582a1297adf"
+        }
+      ],
+      "error": {
+        "code": 0,
+        "message": "Success"
+      }
+    }
+    ```
+  </Tab>
+</Tabs>
+
+### Códigos de Error
+
+---
+| Error Code | Description |
+| --------- | ----------- |
+| 99 | Unexpected server error |
+| 100 | You don't have permissions to access this method |
+| 102 | Invalid labels |
+| 118 | Resource schema validation error |
+| 121 | Signer not found in database |
+---

@@ -1,0 +1,241 @@
+---
+title: 'Cómo registrar llaves'
+description: 'Cómo registrar llaves en Transfiya'
+icon: 'address-card'
+---
+
+## Introducción
+
+Los participantes registran sus llaves en el directorio federado de Transfiya, el cual sincroniza inmediatamente con el directorio centralizado.
+
+Las llaves que cumplen con los requisitos mínimos de regulación se mapearán a los credenciales de pago [signers](../about/about-signers) de Transfiya en una relación de un credencial de pago a una llave.
+
+[Validaciones](../about/about-validations) de llaves son basados en minimos campos requeridos para la creación de una llave por la regulación.
+
+<Info>
+    Las billeteras actualmente permiten asignar múltiples cuentas a una sola llave. Esta funcionalidad está disponible por motivos de compatibilidad, pero no se utilizará en las llaves Bre-B.
+</Info>
+
+## Flujo de creación de llave
+
+A continuación se presenta una descripción general del flujo de creación de llaves y una comparativa con el proceso actual de Transfiya.
+
+<Tabs>
+<Tab title="Flujo Bre-B">
+    ```mermaid
+    sequenceDiagram
+    	autonumber
+    	participant b as Participante
+    	participant ty as Transfiya
+    	participant cd as DICE
+
+    b ->> b: Generar keeper (pubKey, privKey)
+    b ->> +ty: Generar signer (register pubKey)
+    ty ->> +cd: Registar llave
+    cd -->> -ty: Respuesta DICE
+    ty ->> ty: Crear signer
+    ty -->> -b: Respuesta signer
+    ```
+  </Tab>
+  <Tab title="Flujo actual">
+  ```mermaid
+  sequenceDiagram
+  	autonumber
+  	participant b as Participante
+  	participant ty as Transfiya
+
+  b ->> b: Generar keeper (pubKey, privKey)
+  b ->> +ty: Crear signer (register pubKey)
+  ty -->> -b: Respusta participante
+  b ->> +ty: Buscar billetera ($57...)
+  ty -->> -b: Respuesta
+  alt billetera existe
+      b ->> +ty: Actualizar biletera con signer
+      ty ->> ty: Actualizar billetera
+      ty -->> -b: Respuesta
+  else no existe billetera
+      b ->> +ty: Crear nueva billetera
+      ty ->> ty: Crear billetera
+      ty -->> -b: Respuesta billetera
+  end
+  ```
+  </Tab>
+</Tabs>
+
+## Ejemplo de creación de llave
+
+Para la creación de llaves, se utilizará la interfaz de aplicación destinada a la creación de signers.
+
+La plataforma Transfiya utiliza tipos de datos y [esquemas dinámicos](../about/about-validations) para garantizar la integridad y consistencia de los datos en toda la plataforma. Esto incluye reglas de validación para diversos campos dentro del sistema.
+
+**Tipos de Validaciones:**
+
+| Tipo signer | Schema aplicada | Descripción |
+|--- | --- | --- |
+| `PERSON`  | PERSON | Representa una persona física |
+| `BUSINESS`  | BUSINESS | Representa una empresa o persona jurídica. |
+
+Más sobre [modelo de data](../about/about-data-model)
+
+<Info>
+Para cubrir el caso de incorporación (onboarding), TransfiYa añade nuevas etiquetas al payload del firmante. Estas etiquetas representan las marcas de tiempo que los participantes necesitan recopilar:
+
+- **received** → el momento en que un participante recibió una solicitud del usuario para incorporarse, cuando el usuario hace clic en la aplicación  
+- **dispatched** → el momento en que un participante envió una solicitud de incorporación a Transfiya, cuando se llama a la API de creación de firmante
+</Info>
+
+
+### Ejemplo llave persona
+
+A continuación se presenta un ejemplo de creación de una llave tipo 'PERSON' y un análisis comparativo con la implementación actual en Transfiya:
+
+
+<Tabs>
+  <Tab title="Request">
+      ```Diff
+      curl -X POST \
+       -H "x-api-key: <API_KEY>" \
+       -H "Authorization: Bearer <TOKEN>" \
+       -H "Content-Type: application/json" \
+       -d '{
+         "labels": {
+      +    "aliasType": "ALPHANUM",
+      +    "aliasValue": "@jorge22",
+           "type": "PERSON",
+           "firstName": "Jorge",
+           "secondName": "Manuel",
+           "lastName": "Diaz",
+           "secondLastName": "Padilla",
+           "proprietary": "CC",
+           "identification": "1010101010",
+           "bankAccountType": "SVGS",
+           "bankAccountNumber": "12345654321",
+           "routerReference": "$bancorojo",
+           "targetSpbviCode": "TFY",
+           "consented": "2024-10-11T11:59:24.241-05:00",
+      +    "bankId": "891234918",
+      +    "received": "2024-10-11T11:59:22.241-05:00",
+      +    "dispatched": "2024-10-11T11:59:22.517-05:00"
+         },
+         "keeper": [{
+           "scheme": "ecdsa-ed25519",
+           "public": "0463e75c8b975f069813ca8e6c36c0b6fd246eac708affb7ed2c6480fa201defe8725322d6380ec66e94f6dcb49f635c0ca51296e48da4a12b3ec66582a1297adf"
+         }]
+       }' "<base URL>/v1/signer"
+      ```
+  </Tab>
+  <Tab title="Response">
+      ```json
+      {
+        "signer_id": "4c57ac39-16f0-489b-89d9-bddfcd352a36",
+        "handle": "wRFmYXS2sP9ho9VCZ3j4FuP1j55ABeFvsF",
+        "labels": {
+          "aliasType": "ALPHANUM",
+          "aliasValue": "@JORGE22",
+          "status": "ACTIVE",
+          "type": "PERSON",
+          "firstName": "Jorge",
+          "secondName": "Manuel",
+          "lastName": "Diaz",
+          "secondLastName": "Padilla",
+          "proprietary": "CC",
+          "identification": "1010101010",
+          "bankAccountType": "SVGS",
+          "bankAccountNumber": "12345654321",
+          "bankId": "891234918",
+          "routerReference": "$bancorojo",
+          "createdBy": "$minka",
+          "targetSpbviCode": "TFY"
+          "created": "2024-10-11T11:59:24.241-05:00"
+          "consented": "2024-10-11T11:59:24.241-05:00",
+          "received": "2024-10-11T11:59:22.241-05:00",
+          "dispatched": "2024-10-11T11:59:22.517-05:00"
+        },
+        "keeper": [
+          {
+            "scheme": "ecdsa-ed25519",
+            "public": "0463e75c8b975f069813ca8e6c36c0b6fd246eac708affb7ed2c6480fa201defe8725322d6380ec66e94f6dcb49f635c0ca51296e48da4a12b3ec66582a1297adf"
+          }
+        ],
+        "error": {
+          "code": 0,
+          "message": "Success"
+        }
+      }
+      ```
+  </Tab>
+</Tabs>
+
+### Ejemplo de creación llave de negocio
+
+A continuación se presenta un ejemplo de creación de una llave tipo 'BUSINESS' y un análisis comparativo con la implementación actual en Transfiya:
+
+<Tabs>
+  <Tab title="Request">
+      ```diff
+      curl -X POST \
+       -H "x-api-key: <API_KEY>" \
+       -H "Authorization: Bearer <TOKEN>" \
+       -H "Content-Type: application/json" \
+       -d '{
+         "labels": {
+      +    "aliasType": "ALPHANUM",
+      +    "aliasValue": "@cognito",
+           "type": "BUSINESS",
+           "name": "Cognito Inc",
+           "proprietary": "NIT",
+           "identification": "900123456",
+           "bankAccountType": "SVGS",
+           "bankAccountNumber": "12345654321",
+           "routerReference": "$bancorojo",
+           "targetSpbviCode": "TFY",
+      +    "bankId": "891234918",
+      +    "consented": "2025-03-15T00:44:09-05:00",
+      +    "received": "2024-10-11T11:59:22.241-05:00",
+      +    "dispatched": "2024-10-11T11:59:22.517-05:00"
+         },
+         "keeper": [{
+           "scheme": "ecdsa-ed25519",
+           "public": "0463e75c8b975f069813ca8e6c36c0b6fd246eac708affb7ed2c6480fa201defe8725322d6380ec66e94f6dcb49f635c0ca51296e48da4a12b3ec66582a1297adf"
+         }]
+       }' "<base URL>/v1/signer"
+      ```
+  </Tab>
+  <Tab title="Response">
+      ```json
+      {
+        "signer_id": "4c57ac39-16f0-489b-89d9-bddfcd352a36",
+        "handle": "wRFmYXS2sP9ho9VCZ3j4FuP1j55ABeFvsF",
+        "labels": {
+          "aliasType": "ALPHANUM",
+          "aliasValue": "@cognito",
+          "status": "ACTIVE",
+          "type": "BUSINESS",
+          "firstName": "Cognito Inc",
+          "proprietary": "NIT",
+          "identification": "900123456",
+          "bankAccountType": "SVGS",
+          "bankAccountNumber": "12345654321",
+          "bankId": "891234918",
+          "routerReference": "$bancorojo",
+          "createdBy": "$minka",
+          "targetSpbviCode": "TFY"
+          "created": "2024-10-11T11:59:24.241-05:00"
+          "consented": "2025-03-15T00:44:09-05:00",
+          "received": "2024-10-11T11:59:22.241-05:00",
+          "dispatched": "2024-10-11T11:59:22.517-05:00"
+        },
+        "keeper": [
+          {
+            "scheme": "ecdsa-ed25519",
+            "public": "0463e75c8b975f069813ca8e6c36c0b6fd246eac708affb7ed2c6480fa201defe8725322d6380ec66e94f6dcb49f635c0ca51296e48da4a12b3ec66582a1297adf"
+          }
+        ],
+        "error": {
+          "code": 0,
+          "message": "Success"
+        }
+      }
+      ```
+  </Tab>
+</Tabs>

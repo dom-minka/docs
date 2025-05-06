@@ -1,0 +1,107 @@
+---
+title: 'Cómo cancelar llaves'
+description: 'Guia del proceso de cancelación de las llaves'
+icon: 'trash'
+---
+
+## Introducción
+
+En Transfiya, las llaves o credenciales de pago (signers) no se eliminan físicamente del sistema. En su lugar, se utiliza un enfoque de desactivación lógica para mantener la trazabilidad e integridad histórica de las operaciones.
+
+Para cancelar una llave, se debe actualizar el valor del campo status en el objeto del signer y asignarle el valor INACTIVE. Esto marca la llave como inactiva, evitando que pueda ser utilizada para nuevas operaciones, sin eliminar su existencia dentro del sistema.
+
+Este enfoque garantiza que la plataforma mantenga un historial completo de las llaves utilizadas, cumpliendo con los lineamientos regulatorios y de auditoría.
+
+<Info>
+Este proceso no solo marca la llave como inactiva en Transfiya, sino que también la desactiva automáticamente en el DICE. De esta manera, se asegura que el estado de la llave quede sincronizada en todo el ecosistema.
+</Info>
+
+
+## Ejemplos de API
+
+### Cancelacion de una llave
+
+Para cancelar una llave se realiza actualizando el estado de un signer a INACTIVE.
+
+```java HTTP
+PUT /v1/signer/{handle}
+```
+
+---
+| Parameter | Type | Description |
+| --------- | ---- | ----------- |
+| handle | string | 26-35 characters Alphanumeric characters allowed base58 structure |
+| labels | object | Metadata describing the status to cancel the key |
+---
+
+<Tabs>
+  <Tab title="Request">
+    ```bash
+    ccurl -X PUT \
+        -H "x-api-key: <API_KEY>" \
+        -H "Authorization: Bearer <TOKEN>" \
+        -H "Content-Type: application/json" \
+        -d '{
+        "labels": { 
+            "status": "INACTIVE"
+        }
+        }' "URL/v1/signer/wRFmYXS2sP9ho9VCZ3j4FuP1j55ABeFvsF"
+        ```
+    </Tab>
+    <Tab title="Response">
+        ```javascript
+        {
+            "signer_id": "4c57ac39-16f0-489b-89d9-bddfcd352a36",
+            "handle": "wRFmYXS2sP9ho9VCZ3j4FuP1j55ABeFvsF",
+            "labels": {
+                "aliasType": "ALPHANUM",
+                "aliasValue": "@JORGE22",
+                "status": "INACTIVE",
+                "type": "PERSON",
+                "firstName": "Jorge",
+                "proprietary": "CC",
+                "identification": "1010101010",
+                "bankAccountType": "SVGS",
+                "bankAccountNumber": "12345654321",
+                "bankBicfi": "7095",
+                "bankName": "Banco Rojo",
+                    "bankId": "891234918",
+                "routerReference": "$bancorojo",
+                "createdBy": "$minka",
+                "targetSpbviCode": "TFY"
+                "created": "2024-10-11T11:59:24.241-05:00",
+                "updated": "2024-10-11T12:01:11.121-05:00",
+                "consented": "2024-10-11T11:59:21.551-05:00",
+                "received": "2024-10-11T11:59:22.241-05:00",
+                "dispatched": "2024-10-11T11:59:22.517-05:00",
+                "delivered": "2024-10-11T11:59:24.104-05:00"
+            },
+            "keeper": [
+                {
+                "scheme": "ecdsa-ed25519",
+                "public": "0463e75c8b975f069813ca8e6c36c0b6fd246eac708affb7ed2c6480fa201defe8725322d6380ec66e94f6dcb49f635c0ca51296e48da4a12b3ec66582a1297adf"
+                }
+            ],
+            "error": {
+                "code": 0,
+                "message": "Success"
+            }
+        }
+    ```
+  </Tab>
+</Tabs>
+
+### Códigos de Error
+
+---
+| Error Code | Description                                         | HTTP Status |
+|------------|-----------------------------------------------------|-------------|
+| 99         | Unexpected server error                             | 400         |
+| 100        | You don't have permissions to access this method    | 403         |
+| 102        | Invalid labels                                      | 400         |
+| 118        | Resource schema validation error                    | 400         |
+| 121        | Signer not found in database                        | 400         |
+
+---
+
+
