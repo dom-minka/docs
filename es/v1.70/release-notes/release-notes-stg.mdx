@@ -1,0 +1,13 @@
+---
+title: 'Notas de despliegue'
+description: 'Historial de despliegues en ambiente de pruebas'
+icon: 'circle-check'
+---
+
+
+<Update label="2024-05-15" description="v1.70.0-OPS3339DICE">
+  - Nuevo código de error DICE: `C412`, documentado en la sección de errores.  
+  - Modificación en el endpoint de cancelación de signers: se introduce una nueva etiqueta booleana `allowImmediateReuse` en el firmante. Este campo se mapea con el valor `AllowSecIdUpdate` en DICE (Y/N) para permitir la reutilización inmediata de la clave, ignorando la regla de espera de 5 días tras cancelación.  
+  - Publicación de nueva versión del SDK con soporte para estos cambios.
+</Update>
+

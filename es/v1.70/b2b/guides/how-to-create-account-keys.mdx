@@ -1,0 +1,90 @@
+---
+title: 'Como crear una llave de tipo cuenta'
+description: 'Cómo registrar llaves en Transfiya'
+icon: 'address-card'
+---
+
+
+Para la creación de llaves, se utilizará la interfaz de aplicación destinada a la creación de signers.
+
+La plataforma Transfiya utiliza tipos de datos y [esquemas dinámicos](../about/about-validations) para garantizar la integridad y consistencia de los datos en toda la plataforma. Esto incluye reglas de validación para diversos campos dentro del sistema.
+
+**Tipos de Validaciones:**
+
+| Tipo signer | Schema aplicada | Descripción |
+|--- | --- | --- |
+| `BUSINESS`  | BUSINESS | Representa una empresa o persona jurídica. |
+
+
+
+
+
+### Ejemplo llave persona
+
+A continuación se presenta un ejemplo de creación de una llave tipo 'BUSINESS' donde el tipo de Alias es "ACCOUNT":
+
+
+<Tabs>
+  <Tab title="Request">
+      ```Diff
+      curl -X POST \
+ -H "x-api-key: <API_KEY>" \
+ -H "Authorization: Bearer <TOKEN>" \
+ -H "Content-Type: application/json" \
+ -d '{
+   "labels": {
+     "aliasType": "ACCOUNT",
+     "aliasValue": "svgs:1234@bbva.co",
+     "type": "BUSINESS",
+     "name": "Jorge SAS",
+     "proprietary": "NIT",
+	 "identification": "1010101010",
+     "bankAccountType": "SVGS",
+	 "bankAccountNumber": "10010010001",
+	 "routerReference": "$bbbva"
+   },
+   "keeper": [{
+     "scheme": "ecdsa-ed25519",
+     "public": "0463e75c8b975f069813ca8e6c36c0b6fd246eac708affb7ed2c6480fa201defe8725322d6380ec66e94f6dcb49f635c0ca51296e48da4a12b3ec66582a1297adf"
+   }]
+ }' "<base URL>/v1/signer"
+      ```
+  </Tab>
+  <Tab title="Response">
+      ```json
+      {
+        "signer_id": "4c57ac39-16f0-489b-89d9-bddfcd352a36",
+        "handle": "wRFmYXS2sP9ho9VCZ3j4FuP1j55ABeFvsF",
+        "labels": {
+          "aliasType": "ACCOUNT",
+          "aliasValue": "svgs:1234@bbva.co",
+          "status": "ACTIVE",
+          "type": "BUSINESS",
+          "name": "Jorge SAS",
+          "proprietary": "NIT",
+	      "identification": "1010101010",
+          "bankAccountType": "SVGS",
+	      "bankAccountNumber": "10010010001",
+	      "routerReference": "$bbbva"
+          "createdBy": "$minka",
+          "targetSpbviCode": "TFY"
+          "created": "2024-10-11T11:59:24.241-05:00"
+          "consented": "2024-10-11T11:59:24.241-05:00",
+          "received": "2024-10-11T11:59:22.241-05:00",
+          "dispatched": "2024-10-11T11:59:22.517-05:00"
+        },
+        "keeper": [
+          {
+            "scheme": "ecdsa-ed25519",
+            "public": "0463e75c8b975f069813ca8e6c36c0b6fd246eac708affb7ed2c6480fa201defe8725322d6380ec66e94f6dcb49f635c0ca51296e48da4a12b3ec66582a1297adf"
+          }
+        ],
+        "error": {
+          "code": 0,
+          "message": "Success"
+        }
+      }
+      ```
+  </Tab>
+</Tabs>
+

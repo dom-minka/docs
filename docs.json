@@ -10,6 +10,138 @@
   "navigation": {
     "versions": [
       {
+        "version": "1.70",
+        "tabs": [
+          {
+            "tab": "Directorio Federado",
+            "groups": [
+              {
+                "group": "Como empezar",
+                "icon": "mask",
+                "pages": [
+                  "es/v1.70/directory/intro/intro-directory",
+                  "es/v1.70/directory/intro/intro-ux"
+                ]
+              },
+              {
+                "group": "Guias de uso",
+                "icon": "book",
+                "pages": [
+                  "es/v1.70/directory/guides/how-to-create-keys",
+                  "es/v1.70/directory/guides/how-to-resolve-keys",
+                  "es/v1.70/directory/guides/how-to-update-keys",
+                  "es/v1.70/directory/guides/how-to-cancel-keys",
+                  "es/v1.70/directory/guides/how-to-sync-dice"
+                ]
+              },
+              {
+                "group": "Acerca de",
+                "icon": "code",
+                "pages": [
+                  "es/v1.70/directory/about/about-signers",
+                  "es/v1.70/directory/about/about-validations",
+                  "es/v1.70/directory/about/about-data-model",
+                  "es/v1.70/directory/about/about-errors",
+                  "es/v1.70/directory/about/about-timestamps",
+                  "es/v1.70/directory/about/about-key-status"
+                ]
+              },
+              {
+                "group": "APIs",
+                "openapi": {
+                  "source": "/public/spi-v3.yaml",
+                  "directory": "directory"
+                }
+
+              },
+              {
+                "group": "Archivos de Soporte",
+                "icon": "code",
+                "pages": [
+                  "es/v1.70/directory/support/support-files"
+                ]
+
+              }
+            ]
+          },
+          {
+            "tab": "Transferencias Bre-B",
+            "groups": [
+              {
+                "group": "Como empezar",
+                "icon": "mask",
+                "pages": ["es/v1.70/transfers-mol/intro/intro-mol"]
+              },
+              {
+                "group": "Guias de uso",
+                "icon": "mask",
+                "pages": [
+                  "es/v1.70/transfers-mol/guides/how-to-send-mol",
+                  "es/v1.70/transfers-mol/guides/how-to-debit-sender",
+                  "es/v1.70/transfers-mol/guides/how-to-accept-transfer",
+                  "es/v1.70/transfers-mol/guides/how-to-sign-transfer",
+                  "es/v1.70/transfers-mol/guides/how-to-credit-receiver",
+                  "es/v1.70/transfers-mol/guides/how-to-notify"
+                ]
+              },
+              {
+                "group": "Acerca de",
+                "icon": "mask",
+                "pages": [
+                  "es/v1.70/transfers-mol/about/about-current-flow",
+                  "es/v1.70/transfers-mol/about/about-new-flow",
+                  "es/v1.70/transfers-mol/about/about-regulatory-changes",
+                  "es/v1.70/transfers-mol/about/about-settlement",
+                  "es/v1.70/transfers-mol/about/about-transfers"
+                ]
+              },
+              {
+                "group": "APIs Banco",
+                "openapi": {
+                  "source": "/public/spi-banksv3.yaml",
+                  "directory": "transfers-mol"
+                }
+
+              },
+              {
+                "group": "APIs Transfiya",
+                "openapi": {
+                  "source": "/public/tinapiv8.yaml",
+                  "directory": "transfers-mol-2"
+                }
+
+              },
+              {
+                "group": "Archivos de Soporte",
+                "icon": "code",
+                "pages": [
+                  "es/v1.70/transfers-mol/support/support-files"
+                ]
+
+              }
+            ]
+          },
+          {
+            "tab": "Notas de la versión",
+            "groups": [
+              {
+                "group": "Despliegues",
+                "icon": "mask",
+                "pages": ["es/v1.70/release-notes/release-notes-stg"]
+              },
+              {
+                "group": "SDK",
+                "icon": "mask",
+                "pages": ["es/v1.70/release-notes/sdk-releases"]
+              }  
+
+
+            ]
+          }
+
+        ]
+      },
+      {
         "version": "1.69",
         "tabs": [
           {
