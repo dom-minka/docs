@@ -1,0 +1,37 @@
+---
+title: 'Cómo sincronizar llaves'
+description: 'Cómo sincronizar llaves con el directorio centralizado'
+icon: 'rotate'
+---
+
+## Introducción
+
+El modelo Bre-B requiere que los participantes seleccionen un directorio federado que sincronizará sus llaves con el directorio centralizado.
+
+El directorio federado cumple la función de administrar copias locales de las llaves y sincronizarlas con el directorio centralizado, los participantes no tienen que interactuar con el directorio centalizado.
+
+## Modelo de singers
+
+Transfiya utiliza el objeto [signer](../about/about-signers) para almacenar y gestionar las llaves en el directorio federado.
+
+Las validaciones para las llaves se aplican en el modelo de alertas antes de la salida a marcha blanca y antes de la sincronización con el directorio centralizado.
+
+Para más información, consulte [validaciones](../about/about-validations).
+
+## Sincronización
+
+Únicamente las llaves que cuentan con el consentimiento del usuario deben sincronizarse con el directorio centralizado.
+
+Para notificar a Transfiya que se desea sincronizar una llave con el directorio centralizado, es necesario agregar una etiqueta (label) de consentimiento durante la creación o modificación de la llave.
+
+El campo "consented" representa el evento que autoriza la sincronización de la llave con el directorio centralizado. El campo representa el tiempo en cual usuario dio su consentimiento de usar una llave centralizada.
+
+```javascript
+"labels: {
+  "consented": "2024-10-11T11:59:21.551-05:00"
+}
+```
+
+<Info>
+    Solo las llaves que cuentan con el consentimiento de los usuarios se sincronizan con el directorio centralizado.
+</Info>

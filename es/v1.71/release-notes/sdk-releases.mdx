@@ -1,0 +1,86 @@
+---
+title: 'SDK'
+description: 'Historial de despliegues del SDK oficial'
+icon: 'circle-check'
+---
+
+## Notas de versión - 26/05/2025
+
+- Nuevos endpoints para enviar las dos últimas marcas de tiempo durante la creación y resolución de llaves en la integración con DICE.
+  - Nuevo endpoint para enviar las dos últimas marcas de tiempo al realizar una transferencia regulada de llaves en la conexión con DICE.
+  - Documentación del caso de uso Empresa (cuenta a cuenta).
+  - Publicación de la documentación base inicial de Transfiya.
+
+### Descargas disponibles
+
+- 📦 SDK para **Java JDK1.7** (v0.1.28.6)  
+  [Descargar](https://storage.googleapis.com/tin-sdks/2025-05-27/2025-05-27_java_jdk1.7_0.1.28.6_08ccb49d270b03789881f44e189a6fd9.zip)
+
+- 📦 SDK para **Java JDK1.8** (v0.1.28.6)  
+  [Descargar](https://storage.googleapis.com/tin-sdks/2025-05-27/2025-05-27_java_jdk1.8_0.1.28.6_b07cb5df8b95ee38b2ca06171f46829a.zip)
+
+- 📦 SDK para **C#** (v1.1.6)  
+  [Descargar](https://storage.googleapis.com/tin-sdks/2025-05-27/2025-05-27_csharp_1.1.6_2e46d22198335e2c53bafe91d9f7117d.zip)
+
+- 📦 SDK para **Node.js** (v0.4.6)  
+  [Descargar](https://storage.googleapis.com/tin-sdks/2025-05-27/2025-05-27_nodejs_0.4.6_a6bea4852a7d1b2c94c8b415981dcd76.zip)  
+
+## Notas de versión - 15/05/2025
+
+Modificación en el endpoint de cancelación de signers: se introduce una nueva etiqueta booleana `allowImmediateReuse` en el firmante. Este campo se mapea con el valor `AllowSecIdUpdate` en DICE (Y/N) para permitir la reutilización inmediata de la clave, ignorando la regla de espera de 5 días tras cancelación.  
+
+### Descargas disponibles
+
+- 📦 SDK para **Java JDK1.7** (v0.1.28.5)  
+  [Descargar](https://storage.googleapis.com/tin-sdks/2025-05-15/2025-05-15_java_jdk1.7_0.1.28.5_e992957f4463f36390bfae525ee5afdd.zip)
+
+- 📦 SDK para **Java JDK1.8** (v0.1.28.5)  
+  [Descargar](https://storage.googleapis.com/tin-sdks/2025-05-15/2025-05-15_java_jdk1.8_0.1.28.5_fdf068e79bb29ba8b9178f1457b49ab5.zip)
+
+- 📦 SDK para **C#** (v1.1.5)  
+  [Descargar](https://storage.googleapis.com/tin-sdks/2025-05-15/2025-05-15_csharp_1.1.5_e9dc987814739e05d1d48a43c3ca1aad.zip)
+
+- 📦 SDK para **Node.js** (v0.4.5)  
+  [Descargar](https://storage.googleapis.com/tin-sdks/2025-05-15/2025-05-15_nodejs_0.4.5_9e0aecbd387cfed2eaa83a1622a1e111.zip)  
+
+## Notas de versión - 14/04/2025
+
+Se agregó soporte para el endpoint lookup.dice que permite consultar signers registrados en el sistema DICE. Esta funcionalidad facilita la resolución de claves públicas asociadas a un signer específico y mejora la interoperabilidad entre instituciones.
+
+### Descargas disponibles
+
+- 📦 SDK para **Java JDK1.7** (v0.1.28.3)  
+  [Descargar](https://storage.googleapis.com/tin-sdks/2025-04-14/java_jdk1.7_0.1.28.3_e085563ac99fd93ddc5915adef1bd895.zip)
+
+- 📦 SDK para **Java JDK1.8** (v0.1.28.3)  
+  [Descargar](https://storage.googleapis.com/tin-sdks/2025-04-14/java_jdk1.8_0.1.28.3_a39fadc04a700f13a206aad21e86399a.zip)
+
+- 📦 SDK para **C#** (v1.1.3)  
+  [Descargar](https://storage.googleapis.com/tin-sdks/2025-04-14/csharp_1.1.3_34ee48f1c502d8a2fc96b647f423e722.zip)
+
+- 📦 SDK para **Node.js** (v0.4.3)  
+  [Descargar](https://storage.googleapis.com/tin-sdks/2025-04-14/nodejs_0.4.3_72871d27fa40c716f22a697df2861823.zip)  
+
+## Notas de versión - 07/04/2025
+
+Se han añadido nuevas etiquetas de tiempo (timestamp) reguladas por MOL a las entidades `signer` y `transfer`. Ambas etiquetas utilizan el formato de fecha y hora ISO 8601.
+
+- `received`: representa el momento en que el banco recibió la solicitud del usuario.
+- `dispatched`: representa el momento en que el banco realizó la llamada a TransfiYa.
+
+Estas etiquetas permiten cumplir con los requisitos regulatorios de trazabilidad y control de tiempos para operaciones en tiempo real.
+
+<Info>
+Estas mejoras permiten a los participantes reportar y auditar el flujo de operaciones con mayor precisión y alineación con el modelo SPI.
+</Info>
+
+### Descargas disponibles
+
+- 📦 SDK para **Java JDK1.7** (v0.1.28.2)  
+  [Descargar](https://storage.googleapis.com/tin-sdks/2025-04-01/java_jdk1.7_0.1.28.2_a592328e4e15d0b102a17bf6b705b00b.zip)
+
+- 📦 SDK para **Java JDK1.8** (v0.1.28.2)  
+  [Descargar](https://storage.googleapis.com/tin-sdks/2025-04-01/java_jdk1.8_0.1.28.2_c8d86c9c053ba9dcac3137e1c2d3453c.zip)
+
+- 📦 SDK para **C#** (v1.1.2)  
+  [Descargar](https://storage.googleapis.com/tin-sdks/2025-04-01/csharp_1.1.2_8b604778c2ee25798746ef371ed6fd84.zip)

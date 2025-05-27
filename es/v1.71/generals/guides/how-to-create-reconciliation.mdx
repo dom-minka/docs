@@ -1,0 +1,61 @@
+---
+title: 'Cómo crear la conciliación'
+description: 'Guia para generar la conciliación'
+icon: 'pen'
+---
+
+
+Para apoyar los procesos operativos internos, los bancos deben integrar un método para consultar archivos de conciliación. Estos archivos son archivos de texto en formato estándar ACH y contienen un listado de transferencias para un período de tiempo determinado.
+
+El banco puede programar la consulta de estos archivos según su estrategia interna de operación.
+
+## Endpoint
+
+Para recuperar un archivo de conciliación, el banco debe consumir el siguiente endpoint: GET /v1/conciliation?bankId=[$BANKBICFI]&startDate=[STARTDATE]&endDate=[ENDDATE]&field=[created | updated]
+
+
+### Parámetros
+
+- `bankId`: Código BankBicfi del banco.
+- `startDate`: Fecha de inicio de los registros de transferencia que se desean recuperar.
+- `endDate`: Fecha final de los registros de transferencia.
+- `field`: Campo a usar como filtro: `created` o `updated` (valor por defecto: `created`).
+
+<Warning>
+La fecha más antigua que se puede utilizar para generar el archivo de conciliación es de **hasta 1 año atrás**.
+</Warning>
+
+Este proceso utiliza tecnología de streaming para recuperar los registros y producir el archivo. El tamaño del archivo dependerá de:
+
+- Cantidad de registros.
+- Lapso de tiempo definido.
+- Velocidad de descarga disponible.
+- Tiempo de espera interno máximo de la plataforma: **5 minutos**.
+
+## Ejemplo real
+
+Al generar el archivo desde el dashboard para un período de **1 año** con una conexión de **150 Mbps**, se obtuvo un archivo de más de **40,000 registros**, de aproximadamente **13 MB**, en menos de **1 minuto**.
+
+<Info>
+Con la mejora continua de la plataforma, se espera que estos tiempos se reduzcan aún más en el futuro.
+</Info>
+
+## Ejemplo de consulta
+
+Consulta para generar archivo de conciliación del Banco Rojo (Bank BICFI: `1234`) para el período del **18/02/2019 al 19/02/2019**:
+
+GET /v1/conciliation?bankId=1234&startDate=2019-02-18&endDate=2019-02-19&field=created
+
+## Vista previa del archivo de conciliación
+
+<img src="/images/reconciliation-1.png" alt="Descripción del diagrama" width="600px" />
+
+### Módulo de conciliación en el Dashboard
+
+Opcionalmente, puedes descargar el archivo de conciliación manualmente utilizando el Dashboard.
+
+<img src="/images/reconciliation-2.png" alt="Descripción del diagrama" width="600px" />
+
+
+
+

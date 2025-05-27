@@ -1,0 +1,57 @@
+---
+title: 'Cómo hacer autenticación'
+description: 'Guia del proceso de autorización'
+icon: 'key'
+---
+
+
+TIN utiliza **API KEY** y el protocolo **OAuth 2.0** para facilitar la autorización.  
+OAuth es un marco de autorización que permite a una aplicación cliente obtener acceso a recursos protegidos (como transferencias, enlaces, etc.).  
+El acceso a la API de TIN puede otorgarse a una aplicación en nombre de un usuario o en nombre de la propia aplicación.
+
+Esta sección cubre la autenticación **de aplicación**, que está diseñada para aplicaciones de servidor a servidor que consumen la API de TIN.
+
+### Acceso a la nube de ACH TIN
+
+Antes de poder comenzar a realizar solicitudes OAuth, necesitas obtener tus **credenciales de cliente**.  
+Estas credenciales están disponibles en la sección **Integración** del Dashboard de TIN.
+
+<Info>
+Primero, ACH debe crear una billetera (wallet) y un usuario administrador para la entidad/organización.  
+Este usuario será el responsable de realizar los accesos iniciales al Dashboard de TIN.
+</Info>
+
+<img src="/images/ach-autorizacion-1.png" alt="Descripción del diagrama" width="600px" />
+
+### Credenciales y autenticación
+
+La credencial de cliente es la **API_KEY**.
+
+Las credenciales OAuth 2.0 son **client_id** y **client_secret**, las cuales deben utilizarse para obtener un **access_token** desde el endpoint de autenticación.
+
+<Warning>
+⚠️ Tus credenciales deben almacenarse de forma segura.
+</Warning>
+
+### Llamadas a la API de TIN
+
+Para realizar llamadas a los endpoints de la API de TIN es necesario incluir la `API_KEY` y el `access_token` en el encabezado (**header**) de cada solicitud.
+
+<Info>
+El token es válido por una hora. Una vez vencido, debes solicitar uno nuevo.
+</Info>
+
+### Encabezados (Headers)
+
+| Nombre          | Valor               |
+|-----------------|---------------------|
+| Authorization   | Bearer *access_token* |
+| x-api-key       | *API_KEY*             |
+
+### Códigos de error
+
+| Código | Mensaje    | Descripción                                 |
+|--------|------------|---------------------------------------------|
+| 403    | Forbidden  | El token ha expirado o las credenciales son inválidas |
+
+
