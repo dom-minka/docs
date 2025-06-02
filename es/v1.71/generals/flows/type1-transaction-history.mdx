@@ -1,0 +1,148 @@
+---
+title: 'Tipo 1 Listar transacciones'
+description: 'Listar transacciones pendientes e historicas'
+icon: 'file-lines'
+---
+
+### Listar transferencias pendientes de tipo TYPE1
+
+Obtiene una lista de transferencias pendientes en las que el teléfono del usuario es el receptor.
+
+**GET** `/v1/transfer?labels.type="SEND"&target="$userPhone"&labels.status="PENDING"&sortBy="created"&sort="desc"`
+
+<img src="/images/type1-list-images-one.png" alt="Descripción del diagrama" />
+
+<Tabs>
+<Tab title="C# Example Code">
+```json
+ApiResponse<GetTransfersResponse> response = transferApi.GetTransfersWithCustomQuery("target=$57XXXXXXXXXX" + "&labels.type=SEND" + "&labels.status=PENDING");
+```
+</Tab>
+<Tab title="Nodejs Example Code">
+```json
+var API_KEY = "5b481fc2ae177010e197026b39c58cdb000f4c3897e841714e82c84c"; // String |
+
+var Tinapi = require('tinapi_');
+var defaultClient = Tinapi.ApiClient.instance;
+// Configure API key authorization: ApiKeyAuth
+var ApiKeyAuth = defaultClient.authentications['ApiKeyAuth'];
+ApiKeyAuth.apiKey = API_KEY;
+
+const transferApi = new tinapi.TransferApi()
+  const customQuery =
+    "labels.type=SEND&labels.status=PENDING&target=$573002414263"
+  transferApi.getTransfers(customQuery)
+    .then(transfers => {
+      console.log(transfers)
+    }).catch(console.log)
+```
+</Tab>
+<Tab title="Java Example Code">
+```json
+Transfers transfers = sdkApiClient.getTransfersWithCustomQuery("?labels.type=SEND&labels.status=PENDING");
+System.out.println(transfers);
+```
+</Tab>
+</Tabs>
+
+### Obtener historial de transferencias recibidas
+
+**GET** `/v1/transfer?type="SEND"&target="$userPhone"`
+
+Consulta el historial de transferencias en las que el teléfono del usuario es el receptor.
+
+<Tabs>
+<Tab title="Nodejs Example Code">
+```json
+var API_KEY = "5b481fc2ae177010e197026b39c58cdb000f4c3897e841714e82c84c"; // String |
+var Tinapi = require('tinapi_');
+var defaultClient = Tinapi.ApiClient.instance;
+// Configure API key authorization: ApiKeyAuth
+var ApiKeyAuth = defaultClient.authentications['ApiKeyAuth'];
+ApiKeyAuth.apiKey = API_KEY;
+
+var apiInstance = new Tinapi.ActionApi();
+var type = "SEND"; // String |
+var opts = {
+    'target': "$userPhone" // String |
+};
+apiInstance.getTransfer(type, opts).then(function(data) {
+
+    console.log('API called successfully. Returned data: ' + data);
+    console.log(data);
+
+}, function(error) {
+    console.error(error);
+});
+```
+</Tab>
+<Tab title="C# Example Code">
+```json
+string type = "SEND";
+string target = "$userPhone";
+string source = null;
+string API_KEY = "5b481fc2ae177010e197026b39c58cdb000f4c3897e841714e82c84c";
+instance.Configuration.AddApiKey("API_KEY", API_KEY);
+var response = instance.GetTransfersWithCustomQuery(type, source, target);
+Console.WriteLine(response.Entities.Count);
+Console.WriteLine(response.Entities[0]);
+```
+</Tab>
+<Tab title="Java Example Code">
+```json
+Transfers transfers = sdkApiClient.getTransfersWithCustomQuery("?targetWallet=$userPhone&labels.type=SEND&labels.status=PENDING");
+System.out.println(transfers);
+```
+</Tab>
+</Tabs>
+
+### Obtener historial de transferencias enviadas
+
+**GET** `/v1/action?filter=type="SEND"&source="$userPhone"`
+
+Consulta el historial de acciones tipo SEND en las que el teléfono del usuario es el remitente.
+
+<Tabs>
+<Tab title="Node Example Code">
+```json
+var API_KEY = "5b481fc2ae177010e197026b39c58cdb000f4c3897e841714e82c84c"; // String |
+var Tinapi = require('tin_api');
+var defaultClient = Tinapi.ApiClient.instance;
+// Configure API key authorization: ApiKeyAuth
+var ApiKeyAuth = defaultClient.authentications['ApiKeyAuth'];
+ApiKeyAuth.apiKey = API_KEY;
+
+var apiInstance = new Tinapi.ActionApi();
+var type = "SEND"; // String |
+var opts = {
+    'source': "$userPhone" // String |
+};
+apiInstance.getTransfer(type, opts).then(function(data) {
+
+    console.log('API called successfully. Returned data: ' + data);
+    console.log(data);
+
+}, function(error) {
+    console.error(error);
+});
+```
+</Tab>
+<Tab title="C# Example Code">
+```json
+string type = "SEND";
+string source = "$userPhone";
+string target = null;
+string API_KEY = "5b481fc2ae177010e197026b39c58cdb000f4c3897e841714e82c84c";
+instance.Configuration.AddApiKey("API_KEY", API_KEY);
+var response = instance.GetTransfersWithCustomQuery(type, source, target);
+Console.WriteLine(response.Entities.Count);
+Console.WriteLine(response.Entities[0]);
+```
+</Tab>
+<Tab title="Java Example Code">
+```json
+Transfers transfers = sdkApiClient.getTransfersWithCustomQuery("?sourceWallet=$573004431529&labels.type=SEND&labels.status=PENDING");
+System.out.println(transfers);
+```
+</Tab>
+</Tabs>

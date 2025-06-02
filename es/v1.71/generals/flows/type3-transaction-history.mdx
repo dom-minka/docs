@@ -1,0 +1,163 @@
+---
+title: 'Tipo 3 Listar transacciones'
+description: 'Listar transacciones pendientes e historicas'
+icon: 'file-lines'
+---
+
+### Listar transferencias pendientes de tipo TYPE3
+
+Obtiene una lista de transferencias pendientes en las que el teléfono del usuario es el receptor.
+
+**GET** `/v1/transfer?labels.type="REQUEST"&source="$userPhone"&labels.status="PENDING"&sortBy=created&sort=desc`
+
+<img src="/images/type3-list-images-one.png" alt="Descripción del diagrama" />
+
+<Tabs>
+
+<Tab title="C# Example Code">
+```json
+ApiResponse<GetTransfersResponse> response = transferApi.GetTransfersWithCustomQuery("source=$userPhone" + "&labels.type=REQUEST" + "&labels.status=PENDING" + "&sortBy=created" + "&sort=desc");
+```
+</Tab>
+<Tab title="Nodejs Example Code">
+```json
+var xApiKey = '5b481fc2ae177010e197026ba5b51227c44243cd9a18e41be536566e' // String |
+
+var Tinapi = require('tinapi_')
+var defaultClient = Tinapi.ApiClient.instance
+// Configure API key authorization: ApiKeyAuth
+var ApiKeyAuth = defaultClient.authentications['ApiKeyAuth']
+ApiKeyAuth.apiKey = xApiKey
+
+const transferApi = new tinapi.TransferApi()
+const customQuery =
+  'labels.type=REQUEST&source=$userPhone&labels.status=PENDING&sortBy=created&sort=desc'
+transferApi
+  .getTransfers(customQuery)
+  .then((transfers) => {
+    console.log(transfers)
+  })
+  .catch(console.log)
+```
+</Tab>
+<Tab title="Java Example Code">
+```json
+Transfers transfers = sdkApiClient.getTransfersWithCustomQuery("?labels.type=REQUEST&source=$userPhone&labels.status=PENDING&sortBy=created&sort=desc");
+System.out.println(transfers);
+```
+</Tab>
+</Tabs>
+
+### Obtener historial de transferencias recibidas
+
+**GET** `/v1/transfer?labels.type="REQUEST"&targetWallet="$userPhone"&labels.status="COMPLETED"&sortBy=created&sort=desc`
+
+
+
+<Tabs>
+<Tab title="Nodejs Example Code">
+```json
+var xApiKey = '5b481fc2ae177010e197026ba5b51227c44243cd9a18e41be536566e' // String |
+var Tinapi = require('tinapi_')
+var defaultClient = Tinapi.ApiClient.instance
+// Configure API key authorization: ApiKeyAuth
+var ApiKeyAuth = defaultClient.authentications['ApiKeyAuth']
+ApiKeyAuth.apiKey = xApiKey
+
+var apiInstance = new Tinapi.ActionApi()
+var type = 'REQUEST' // String |
+var opts = {
+  targetWallet: '$userPhone', // String |
+  status: 'COMPLETED', // String |
+}
+apiInstance.getTransfers(type, opts).then(
+  function (data) {
+    console.log('API called successfully. Returned data: ' + data)
+    console.log(data)
+  },
+  function (error) {
+    console.error(error)
+  },
+)
+```
+</Tab>
+<Tab title="C# Example Code">
+```json
+string type = "REQUEST";
+string target = "$userPhone";
+string source = null;
+string status = "COMPLETED";
+string xApiKey = "5b481fc2ae177010e197026ba5b51227c44243cd9a18e41be536566e";
+
+instance.Configuration.AddApiKey("x-api-key", xApiKey);
+
+var response = instance.GetTransfersWithCustomQuery(type, source, target, status);
+
+Console.WriteLine(response.Entities.Count);
+Console.WriteLine(response.Entities[0]);
+```
+</Tab>
+<Tab title="Java Example Code">
+```json
+Transfers transfers = sdkApiClient.getTransfersWithCustomQuery("?targetWallet=$userPhone&labels.type=REQUEST&labels.status=COMPLETED");
+System.out.println(transfers);
+```
+</Tab>
+</Tabs>
+
+### Obtener historial de transferencias enviadas
+
+**GET** `/v1/transfer?labels.type="REQUEST"&source="$userPhone"&labels.status="COMPLETED"&sortBy=created&sort=desc`
+
+
+
+<Tabs>
+<Tab title="Node Example Code">
+```json
+var xApiKey = '5b481fc2ae177010e197026ba5b51227c44243cd9a18e41be536566e' // String |
+var Tinapi = require('tin_api')
+var defaultClient = Tinapi.ApiClient.instance
+// Configure API key authorization: ApiKeyAuth
+var ApiKeyAuth = defaultClient.authentications['ApiKeyAuth']
+ApiKeyAuth.apiKey = xApiKey
+
+var apiInstance = new Tinapi.ActionApi()
+var type = 'REQUEST' // String |
+var opts = {
+  source: '$userPhone', // String |
+  status: 'COMPLETED', // String |
+}
+apiInstance.getTransfers(type, opts).then(
+  function (data) {
+    console.log('API called successfully. Returned data: ' + data)
+    console.log(data)
+  },
+  function (error) {
+    console.error(error)
+  },
+)
+```
+</Tab>
+<Tab title="C# Example Code">
+```json
+string type = "REQUEST";
+string source = "$userPhone";
+string target = null;
+string status = "COMPLETED";
+string xApiKey = "5b481fc2ae177010e197026ba5b51227c44243cd9a18e41be536566e";
+
+instance.Configuration.AddApiKey("x-api-key", xApiKey);
+
+var response = instance.GetTransfersWithCustomQuery(type, source, target, status);
+
+Console.WriteLine(response.Entities.Count);
+Console.WriteLine(response.Entities[0]);
+```
+</Tab>
+<Tab title="Java Example Code">
+```json
+Transfers transfers = sdkApiClient.getTransfersWithCustomQuery("?source=$userPhone&labels.type=REQUEST&labels.status=COMPLETED");
+System.out.println(transfers);
+```
+</Tab>
+</Tabs>

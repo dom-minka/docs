@@ -1,0 +1,560 @@
+---
+title: 'Tipos de Flujos'
+description: 'Tipos de Flujos para los participantes'
+icon: 'arrows-spin'
+---
+
+
+**TIN Cloud** soporta 5 tipos diferentes de flujos de transferencia inmediata. Dos de ellos están orientados al envío de dinero y tres al uso de solicitudes de pago P2P.
+
+### Tipos de flujo
+
+- **Tipo 1**: Transferencia P2P SEND, con SMS y aceptación (sin relación de confianza)
+- **Tipo 2**: Transferencia P2P SEND, transferencia inmediata (con relación de confianza)
+- **Tipo 3**: Transferencia P2P REQUEST
+- **Tipo 4**: Transferencia P2P SEND, transferencia inmediata a número de cuenta
+- **Tipo 5**: Transferencia P2P REQUEST, solicitud a un número de cuenta
+
+Cada transferencia P2P se representa con **3 acciones** dentro del núcleo de TIN Cloud:
+
+- **UPLOAD**: Débito de la cuenta bancaria del usuario origen y creación de la acción UPLOAD.
+- **SEND o REQUEST**: Movimiento de fondos entre cuentas de usuario.
+- **DOWNLOAD**: Crédito en la cuenta bancaria del usuario destino y creación de la acción DOWNLOAD.
+
+---
+
+### Relaciones de Confianza
+
+Los usuarios pueden optar por crear una relación de confianza con otros usuarios. Esta relación de confianza se establece entre el **wallet del usuario origen** (número de teléfono) y el **signer del usuario destino** (cuenta bancaria). Es una relación unidireccional. Que el signer destino confíe en el wallet del origen **no implica** que el origen confíe en el destino.
+
+- Si **existe** relación de confianza, TIN Cloud ejecuta el flujo completo de forma automática y el usuario destino recibe el dinero inmediatamente. En este caso, **no se envía un SMS** desde TIN Cloud. Esta funcionalidad puede ser implementada opcionalmente por la aplicación del banco.
+
+- Si **no existe** relación de confianza:
+  - El usuario destino debe **aceptar o rechazar** manualmente la transferencia pendiente.
+  - TIN Cloud enviará un **SMS** notificando al usuario destino sobre la transferencia pendiente.
+  - El usuario destino tiene **24 horas** para ingresar a la aplicación del banco y aceptar la transferencia. Si no lo hace, la transferencia será automáticamente **rechazada**.
+
+---
+
+### Tipo 1: Transferencia P2P SEND con aceptación (sin relación de confianza)
+
+Este flujo se ejecuta en dos casos:
+
+1. El wallet del usuario destino **no tiene una relación de confianza** con el signer del usuario origen.
+2. El wallet del usuario destino **no tiene un signer registrado** (cuenta bancaria) para recibir transferencias TIN.
+```mermaid
+sequenceDiagram
+    autonumber
+    participant UO as Usuario Origen
+    participant EO as Entidad Originadora
+    participant ACH as ACH Colombia
+    participant PF as Motor Prevención Fraude ACH
+    participant ER as Entidad Receptora
+    participant UR as Usuario Receptor
+
+    UO->>EO: 1. Ingresa al canal del banco
+    EO->>UO: 2. Autentica usuario
+    UO->>EO: 3. Selecciona Transferencias inmediatas
+    EO->>UO: 4. Presenta opción enviar $
+    UO->>EO: 5. Ingresa datos de transferencia y envía
+
+    EO->>ACH: 6. Envía transferencia
+    ACH->>ACH: 7. Asigna CUS
+    ACH->>PF: 8. Envía Tx a evaluar
+    PF-->>ACH: 10. Retorna fraude sí/no
+    ACH->>EO: 9. Envía #CUS
+    ACH->>UR: 11. Envía SMS usuario receptor
+
+    UR->>ER: 12. Ingresa al canal Banco y selecciona transf inmediatas
+    ER->>UR: 15. Presenta Tx pendientes
+    UR->>ER: 16. Elige cuenta, ingresa número celular originador y aprueba
+
+    ER->>ACH: 13. Consulta Tx pendientes
+    ACH->>ER: 14. Envía Tx pendientes
+    ER->>ACH: 17. Envía confirmación
+    ACH->>EO: 18. Envía estado final
+    EO->>UO: 20. Confirma al usuario
+    EO->>ACH: 19. Envía estado final
+
+```
+
+
+## Flujos de Acción 
+
+```mermaid
+flowchart TB
+    %% Estilo de nodos
+    classDef wallet fill:#dddddd,stroke:#444,stroke-width:1px
+    classDef signer fill:#cc9999,stroke:#444,stroke-width:1px
+    classDef keeper fill:#884444,stroke:#444,stroke-width:1px,color:#fff
+
+    %% Usuario origen
+    subgraph "Usuario emisor (Wallet bridge)"
+        SUW_W["W"]:::wallet
+        SUW_S["S"]:::signer
+        SUW_K["K"]:::keeper
+    end
+
+    %% Banco origen
+    subgraph "Banco emisor (Wallet límite)"
+        SBW_W["W"]:::wallet
+        SBW_S["S"]:::signer
+        SBW_K["K"]:::keeper
+    end
+
+    %% Usuario receptor
+    subgraph "Usuario receptor (Wallet bridge)"
+        TUW_W["W"]:::wallet
+        TUW_S["S"]:::signer
+        TUW_K["K"]:::keeper
+    end
+
+    %% Banco receptor
+    subgraph "Banco receptor (Wallet límite)"
+        TBW_W["W"]:::wallet
+        TBW_S["S"]:::signer
+        TBW_K["K"]:::keeper
+    end
+
+    %% Relaciones internas (visual, no funcional)
+    SUW_W --> SUW_S --> SUW_K
+    SBW_W --> SBW_S --> SBW_K
+    TUW_W --> TUW_S --> TUW_K
+    TBW_W --> TBW_S --> TBW_K
+
+    %% Acciones entre entidades
+    SUW_K -->|Action UPLOAD<br/>Débito| SBW_K
+    SUW_K -->|Action SEND| TUW_K
+    TUW_K -->|Action DOWNLOAD<br/>Crédito| TBW_K
+    SBW_K -->|REJECT<br/>Action DOWNLOAD<br/>Crédito| SUW_K
+
+```
+
+## Codigo de Flujo
+
+```mermaid
+sequenceDiagram
+    autonumber
+    participant UO as Usuario Originador
+    participant CFO as Canal Entidad Financiera Originadora
+    participant IO as Integración Entidad Financiera Originadora
+    participant SDK_O as SDK Integración Entidad Originadora
+    participant TI as Transferencias Inmediatas
+    participant SDK_R as SDK Integración Entidad Receptora
+    participant IR as Integración Entidad Financiera Receptora
+    participant CFR as Canal Entidad Financiera Receptora
+    participant UR as Usuario Receptor
+
+    UO->>CFO: Ingresa al canal de la entidad financiera
+    CFO->>UO: Presenta mecanismos de autenticación
+    UO->>CFO: Se autentica en la entidad financiera
+    CFO->>UO: Propone opciones de menú
+    UO->>CFO: Selecciona transferencias inmediatas
+    CFO->>UO: Presenta formulario de transferencia
+    UO->>CFO: Ingresa información de la transferencia
+
+    CFO->>IO: Envía información
+    IO->>CFO: return
+
+    IO->>SDK_O: generar llaves
+    SDK_O-->>IO: return
+
+    IO->>TI: createWalletUsuario
+    TI-->>IO: return
+    IO->>TI: newTransfer
+    TI-->>IO: return
+    IO->>TI: createSigner
+    TI-->>IO: return
+    IO->>TI: activarWallet
+    TI-->>IO: return
+    IO->>TI: createTransferencias
+    TI-->>IO: return con CUS
+
+    IO->>SDK_O: realiza débito
+    SDK_O->>TI: consume servicio débito
+    TI-->>SDK_O: return
+    SDK_O-->>IO: return
+
+    IO->>TI: Consume débito
+    TI-->>IO: return
+
+    IO->>TI: realizaUpdate
+    TI-->>IO: return
+
+    TI->>UR: Enviar SMS tiene transferencia pendiente
+    UR-->>TI: return
+
+    UR->>CFR: Ingresa a entidad financiera
+    CFR->>UR: return
+    UR->>CFR: Selecciona transferencias pendientes
+    CFR->>UR: return
+
+    CFR->>IR: consulta transferencias pendientes
+    IR->>CFR: return
+    IR->>IR: Envía consulta
+    IR-->>IR: return
+
+    IR->>CFR: return
+    CFR->>UR: Presenta transferencias pendientes
+
+    UR->>CFR: Acepta transferencia
+    CFR->>IR: callback
+    IR->>IR: Acepta transferencia
+    IR-->>CFR: return
+    CFR-->>UR: return
+
+    IR->>TI: llama servicio crédito
+    TI->>SDK_R: Realiza crédito
+    SDK_R->>TI: return
+    TI->>TI: realizar crédito
+    TI->>TI: dispone recursos
+    TI-->>SDK_R: return
+    SDK_R-->>TI: return
+
+    IO->>TI: Firma transacción entre signer de usuarios
+    TI-->>IO: return
+
+    IO->>TI: consume servicio transfer
+    TI-->>IO: return
+
+    IO->>TI: consume servicio status
+    TI-->>IO: return
+
+    IO->>IO: self actualizar estado final
+    IO-->>TI: return
+
+    IO->>CFO: informar al usuario
+    CFO-->>UO: informar al usuario
+    UO-->>CFO: return
+
+```
+
+## Tipo 2: Transferencia P2P - Envío inmediato (con relación de confianza)
+
+Este flujo ejecuta una transferencia P2P inmediata de extremo a extremo en el caso de que el **firmante del usuario destino tenga una relación de confianza con el wallet del usuario origen**.
+
+<Info>
+Cuando existe una relación de confianza, el sistema Transfiya realiza automáticamente el flujo completo de la transferencia sin necesidad de aceptación manual por parte del usuario receptor.
+</Info>
+
+```mermaid
+sequenceDiagram
+    autonumber
+    participant UO as Usuario Final
+    participant EO as Entidad Originadora
+    participant ACH as ACH Colombia
+    participant PF as Motor Prevención Fraude ACH
+    participant ER as Entidad Receptora
+    participant UR as Usuario Final Receptor
+
+    UO->>EO: 1. Ingresa al canal del Banco
+    EO->>UO: 2. Autentica usuario
+    UO->>EO: 3. Selecciona Transferencias inmediatas
+    EO->>UO: 4. Presenta opción enviar $
+    UO->>EO: 5. Ingresa datos de transferencia y envía
+
+    EO->>ACH: 6. Envía transferencia
+    ACH->>ACH: 7. Asigna CUS
+    ACH->>PF: 8. Envía Tx a evaluar
+    PF-->>ACH: 10. Retorna fraude sí/no
+    ACH->>EO: 9. Envía #CUS
+    ACH->>ER: 11. Envía transferencia Banco receptor
+    ER->>ACH: 12. Confirma transacción
+    ACH->>ER: 13. Confirma transacción
+    ACH->>EO: 14. Envía estado final
+    EO->>UO: 16. Confirma al usuario
+    EO->>ACH: 15. Enviar estado final
+```
+
+## Flujo de Acción
+
+
+##Flujo de Código
+```mermaid
+sequenceDiagram
+    autonumber
+    participant UO as Usuario Originador
+    participant CEO as Canal Entidad Financiera Originadora
+    participant IEO as Integración Entidad Financiera Originadora
+    participant SDKO as SDK Integración Entidad Originador
+    participant TI as Transferencias Inmediatas
+    participant SDKR as SDK Integración Entidad Receptora
+    participant IER as Integración Entidad Financiera Receptora
+    participant CER as Canal Entidad Financiera Receptora
+    participant UR as Usuario Receptor
+
+    UO->>CEO: Ingresa al canal de la entidad financiera
+    CEO->>UO: Presenta mecanismos de autenticación
+    UO->>CEO: Se autentica ante la entidad financiera
+    CEO->>UO: Propone opciones de menú
+    UO->>CEO: Selecciona transferencias inmediatas
+    CEO->>UO: Presenta formulario de transferencia
+    UO->>CEO: Ingresa información de la transferencia
+    CEO->>IEO: Envía información
+    IEO->>SDKO: Generar llaves
+    SDKO-->>IEO: return
+    IEO->>TI: createWalletUsuario
+    TI-->>IEO: return
+    IEO->>TI: newTransfer
+    TI-->>IEO: return
+    IEO->>TI: createWallet
+    TI-->>IEO: return
+    IEO->>TI: activateWallet
+    TI-->>IEO: return
+    IEO->>TI: createTransferencias
+    TI-->>IEO: return
+    IEO->>TI: Consume debit
+    TI-->>IEO: return
+    IEO->>TI: realizarUpdate
+    TI-->>IEO: return
+
+    CEO->>TI: Firma transacción entre signer de usuarios
+    TI-->>CEO: return
+
+    CEO->>TI: consume servicio transfer
+    TI-->>CEO: return
+
+    CEO->>TI: consume servicio status
+    TI-->>CEO: return
+
+    TI->>SDKR: llama servicio crédito
+    SDKR->>IER: realizar download
+    IER->>CER: Realiza crédito
+    CER->>UR: Notifica al usuario
+    CER-->>IER: return
+    IER-->>SDKR: return
+    SDKR-->>TI: return
+
+    CEO->>UO: Informar al usuario
+    CEO->>TI: self actualizar estado final
+    TI-->>CEO: return
+    CEO-->>UO: return
+
+```
+
+## TIPO 3: Transferencia P2P de Solicitud (Request)
+
+Este flujo se ejecuta en el caso en que el firmante del usuario receptor está solicitando un pago desde el monedero del usuario originador.
+
+```mermaid
+sequenceDiagram
+    autonumber
+    participant UO as Usuario Final<br/>Entidad Originadora
+    participant EO as Entidad Originadora
+    participant ACH as ACH Colombia
+    participant PF as Motor Prevención<br/>Fraude ACH
+    participant ER as Entidad Receptora
+    participant UR as Usuario Final<br/>Entidad Receptora
+
+    UO->>EO: 1. Ingresa al canal del Banco
+    EO-->>UO: 2. Autentica usuario
+    UO->>EO: 3. Selecciona Transferencias inmediatas
+    EO-->>UO: 4. Presenta opción solicitar $
+    UO->>EO: 5. Ingresa datos de transferencia y envía
+
+    EO->>ACH: 6. Envía transferencia
+    ACH->>ACH: 7. Asigna CUS
+    ACH->>PF: 8. Envía Tx a evaluar
+    PF-->>ACH: 10. Retorna fraude sí/no
+    ACH->>EO: 9. Envía # CUS
+    ACH->>UR: 11. Envía SMS usuario receptor
+
+    UR->>ER: 12. Ingresa al canal Banco<br/>Selecciona transf inmediatas
+    ER-->>UR: 15. Presenta Tx pendientes
+    UR->>ER: 16. Elige cuenta, ingresa<br/># cel originador y aprueba
+
+    ER->>ACH: 13. Consulta Tx pendientes
+    ACH-->>ER: 14. Envía Tx pendientes
+    ER->>ACH: 17. Envía confirmación
+    ACH->>EO: 18. Envía estado final
+    EO->>ACH: 19. Enviar estado final
+    EO-->>UO: 20. Confirma al usuario
+```
+
+## Flujo de Acción
+
+## Flujo de Código
+
+```mermaid
+sequenceDiagram
+    autonumber
+    participant UO as Usuario Originador
+    participant CEO as Canal Entidad Financiera Originadora
+    participant IEO as Integración Entidad Financiera Originadora
+    participant SDKO as SDK Integración Entidad Originadora
+    participant TI as Transferencias Inmediatas
+    participant SDKR as SDK Integración Entidad Receptora
+    participant IER as Integración Entidad Financiera Receptora
+    participant CER as Canal Entidad Financiera Receptora
+    participant UR as Usuario Receptor
+
+    UO->>CEO: Ingresa al canal de la entidad financiera
+    CEO->>UO: presenta mecanismo de autenticación
+    UO->>CEO: Se autentica ante la entidad financiera
+    CEO->>UO: Presenta opciones de menú
+    UO->>CEO: Selecciona transferencias inmediatas
+    CEO->>UO: presenta formulario de transferencia
+    UO->>CEO: Ingresa información de la transferencia
+    CEO->>IEO: Envía información
+    IEO->>SDKO: generar llaves
+    SDKO->>SDKO: createWalletUsuario
+    SDKO-->>IEO: return
+    SDKO->>SDKO: newSigner
+    SDKO-->>IEO: return
+    SDKO->>SDKO: newKeeper
+    SDKO-->>IEO: return
+    SDKO->>SDKO: activarWallet
+    SDKO-->>IEO: return
+    SDKO->>SDKO: crearTransferencia
+    SDKO-->>IEO: return
+
+    TI->>UR: Enviar SMS tiene transferencia pendiente
+
+    UR->>CER: Ingresa entidad financiera
+    CER->>UR: return
+    UR->>CER: selecciona transferencias pendientes
+    CER->>IER: Envía consulta
+    IER->>SDKR: consulta transferencias pendientes
+    SDKR-->>IER: return
+    IER-->>CER: return
+    CER-->>UR: return
+
+    UR->>CER: Acepta transferencia
+    CER->>IER: callback
+    IER->>SDKR: Acepta transferencia
+    SDKR-->>IER: return
+    IER-->>CER: return
+    CER-->>UR: return
+
+    IER->>SDKR: llama servicio débito
+    SDKR->>SDKR: realizar upload
+    SDKR-->>IER: return
+    IER->>TI: realiza débito
+    TI-->>IER: return
+
+    TI->>SDKO: consume servicio transfer
+    SDKO->>TI: return
+
+    TI->>SDKR: consume servicio crédito
+    SDKR->>SDKR: realiza download
+    SDKR-->>TI: return
+
+    SDKR->>IER: realizar crédito
+    IER->>CER: notifica al canal
+    CER->>UR: notifica al usuario
+
+    TI->>CEO: informar al usuario
+    CEO->>UO: informar al usuario
+
+```
+
+### Tipo 4: Transferencia P2P SEND, transferencia inmediata a un número de cuenta
+
+Este flujo se ejecuta en el caso en que el destino de una transferencia SEND sea una referencia de cuenta (`<tipo>:<número>@<banco>`). El flujo de procesamiento es el mismo que para transferencias SEND regulares, con la única diferencia en el comportamiento de aceptación.
+
+En lugar de notificar al usuario mediante SMS, el sistema notificará directamente al banco de destino a través del bridge para registrar al usuario y aceptar la transferencia. Este modelo de aceptación nos permite procesar pagos hacia cualquier cuenta sin que los usuarios tengan que registrarse manualmente en el sistema antes de recibir transferencias.
+
+> 💡 **Nota:** Si el usuario ya se encuentra registrado en el sistema, el flujo de la transferencia es idéntico al de las transferencias Tipo 2.
+
+
+```mermaid
+sequenceDiagram
+    autonumber
+    participant BancoOrigen as Banco Emisor
+    participant Transfiya as TransfiYa
+    participant BancoDestino as Banco Receptor
+
+    BancoOrigen->>Transfiya: Crear transferencia
+    loop Validación de reglas
+        Transfiya-->>Transfiya: Validar reglas de negocio
+    end
+    Transfiya-->>BancoOrigen: Transferencia creada
+
+    alt [débito (asíncrono)]
+        Transfiya->>BancoOrigen: Llamar endpoint de débito
+        loop Procesar débito
+            BancoOrigen-->>BancoOrigen: Procesar débito
+        end
+        BancoOrigen->>Transfiya: Continuar transferencia
+    end
+
+    loop Resolución
+        Transfiya-->>Transfiya: Resolver signer de destino
+        Transfiya-->>Transfiya: Aceptar transferencia
+    end
+
+    alt [acción (síncrona)]
+        Transfiya->>BancoOrigen: Llamar endpoint de acción
+        loop Procesar acción
+            BancoOrigen-->>BancoOrigen: Procesar acción
+        end
+        BancoOrigen->>Transfiya: Respuesta de acción
+    end
+
+    alt [crédito (asíncrono)]
+        Transfiya->>BancoDestino: Llamar endpoint de crédito
+        loop Procesar crédito
+            BancoDestino-->>BancoDestino: Procesar crédito
+        end
+        BancoDestino->>Transfiya: Continuar transferencia
+    end
+
+    BancoOrigen->>Transfiya: Llamar estado
+    Transfiya-->>BancoOrigen: Respuesta estado
+
+    Transfiya->>BancoDestino: Llamar estado
+    BancoDestino-->>Transfiya: Respuesta estado
+
+```
+
+<Info>
+
+El procesamiento de la transferencia en el caso en que el usuario destinatario **no esté registrado en el sistema** es similar, con la única diferencia de que **la transferencia no se aceptará automáticamente**. En su lugar, **TransfiYa notificará al banco receptor para registrar al usuario**, y el banco deberá aceptar la transferencia una vez finalizado el proceso de onboarding.
+
+</Info>
+```mermaid
+sequenceDiagram
+    autonumber
+    participant SB as Source Bank
+    participant TY as TransfiYa
+    participant TB as Target Bank
+
+    SB->>TY: 1. Create transfer
+    TY->>TY: 2. Validate business rules
+    TY-->>SB: 3. Transfer created
+
+    alt debit (async)
+        TY->>SB: 4. Call debit
+        SB->>SB: 5. Process debit
+        SB->>TY: 6. Continue transfer
+    end
+
+    TY->>TY: 7. Resolve target signer
+
+    alt accept (async)
+        TY->>TB: 8. Call status (PENDING)
+        TB-->>TY: 9. Confirm receipt
+        TB->>TB: 10. Validate account
+        TB-->>TY: 11. Create signer
+        TY-->>TB: 12. Signer response
+        TB-->>TY: 13. Accept transfer
+    end
+
+    alt action (sync)
+        TY->>SB: 14. Call Action
+        SB->>SB: 15. Process action
+        SB-->>TY: 16. Action response
+    end
+
+    alt credit (async)
+        TY->>TB: 17. Call credit
+        TB->>TB: 18. Process credit
+        TB-->>TY: 19. Continue transfer
+    end
+
+    SB->>TY: 20. Call status
+    TY-->>SB: 21. Status response
+
+    TY->>TB: 22. Call status
+    TB-->>TY: 23. Status response
+```

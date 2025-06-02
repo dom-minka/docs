@@ -1,0 +1,135 @@
+---
+title: 'Tipo 1 Aceptar o Rechazar'
+description: 'Aceptar o Rechazar una transacción'
+icon: 'circle-check'
+---
+
+### Aceptar una transferencia P2P
+
+Para aceptar una transferencia P2P, el banco debe usar un **POST** al endpoint `/v1/transfer/:tx_ref/accept` de la API de TIN.
+
+El parámetro `tx_ref` (CUS) se obtiene de la lista de transferencias pendientes.
+
+<Warning>
+Para aceptar una transferencia es obligatorio enviar el `signer` en el cuerpo de la solicitud. El cuerpo **no debe estar vacío**.
+</Warning>
+
+<Tabs>
+<Tab title="cURL Code Example">
+```json
+curl -X POST -H "API_KEY: 5b481fc2ae177010e197026ba5b51227c44243cd9a18e41be536566e" -H "Authorization: Bearer asdfwXTdDQFimVQOMdn9bOGHJh8KrqnFi34sugYqgrULRCb" -H "Content-Type: application/json" -d '{
+	"signer": {
+		"handle": "wuser_bridge_address",
+	}
+}' "https://ach-minka-stg.transferenciasinmediatas.com/v1/transfer/oXnhHqKaaDOYVlhYd/accept"
+```
+</Tab>
+<Tab title="Java Code Example">
+```json
+
+// tx_ref (CUS)
+String txRef = "oXnhHqKaaDOYVlhYd";
+AcceptTransferRequest req =new AcceptTransferRequest();
+WalletObject wallet = new WalletObject();
+SignerObject signer = new SignerObject();
+// Signer and wallet of target user
+signer.setHandle("wabpqXPdBA19dB3h2QmVHoniRTnd52J4SX");
+wallet.setHandle("$573004431529");
+
+req.setWallet(wallet);
+req.setSigner(signer);
+
+CreateTransferResponse createTransferResponse = sdkApiClient.acceptTransfer(req, txRef);
+System.out.println(createTransferResponse);
+```
+</Tab>
+<Tab title=".NET C# Code Example">
+```json
+TransferApi instance = new TransferApi();
+instance.Configuration.AddApiKey("API_KEY","5b481fc2ae177010e197026b39c58cdb000f4c3897e841714e82c84c");
+
+AcceptTransferRequest acceptTransReq = new AcceptTransferRequest();
+string txRef = "oXnhHqKaaDOYVlhYd";
+acceptTransReq.Signer = new SignerObject();
+acceptTransReq.Signer.Handle = "Signer target"
+instance.AcceptP2Ptranfer(txRef, acceptTransReq);
+```
+</Tab>
+<Tab title="Node Code Example2">
+```json
+TransferApi instance = new TransferApi();
+instance.Configuration.AddApiKey("API_KEY","5b481fc2ae177010e197026b39c58cdb000f4c3897e841714e82c84c");
+
+AcceptTransferRequest acceptTransReq = new AcceptTransferRequest();
+string txRef = "oXnhHqKaaDOYVlhYd";
+acceptTransReq.Signer = new SignerObject();
+acceptTransReq.Signer.Handle = "Signer target"
+instance.AcceptP2Ptranfer(txRef, acceptTransReq);
+```
+</Tab>
+
+</Tabs>
+
+### Rechazar una transferencia P2P
+
+Para rechazar una transferencia P2P, el banco debe usar un **POST** al endpoint `/v1/transfer/:tx_ref/reject` de la API de TIN.
+
+El parámetro `tx_ref` (CUS) se obtiene de la lista de transferencias pendientes.
+
+<Tabs>
+<Tab title="cURL Code Example">
+```json
+curl -X POST -H "API_KEY: 5b481fc2ae177010e197026ba5b51227c44243cd9a18e41be536566e" -H "Authorization: Bearer asdfwXTdDQFimVQOMdn9bOGHJh8KrqnFi34sugYqgrULRCb" -H "Content-Type: application/json" -d '{
+}' "https://ach-minka-stg.transferenciasinmediatas.com/v1/transfer/oXnhHqKaaDOYVlhYd/reject"
+```
+</Tab>
+<Tab title="Java Code Example">
+```json
+// tx_ref (CUS)
+String txRef = "oXnhHqKaaDOYVlhYd";
+RejectTransferRequest req =new RejectTransferRequest();
+WalletObject wallet = new WalletObject();
+SignerObject signer = new SignerObject();
+// Signer and wallet of target user
+signer.setHandle("wabpqXPdBA19dB3h2QmVHoniRTnd52J4SX");
+wallet.setHandle("$573004431529");
+
+req.setWallet(wallet);
+req.setSigner(signer);
+
+CreateTransferResponse createTransferResponse = sdkApiClient.rejectTransfer(req, txRef);
+System.out.println(createTransferResponse);
+```
+</Tab>
+
+<Tab title=".NET C# Code Example">
+```json
+TransferApi instance = new TransferApi();
+instance.Configuration.AddApiKey("API_KEY","5b481fc2ae177010e197026b39c58cdb000f4c3897e841714e82c84c");
+
+string txRef = "oXnhHqKaaDOYVlhYd";
+instance.RejectTransferRequest(txRef);
+```
+</Tab>
+<Tab title="Node Code Example">
+```json
+var Tinapi = require('tin_api')
+var defaultClient = Tinapi.ApiClient.instance
+// Configure API key authorization: ApiKeyAuth
+var ApiKeyAuth = defaultClient.authentications['ApiKeyAuth']
+ApiKeyAuth.apiKey = 'YOUR API KEY'
+
+var apiInstance = new Tinapi.TransferApi()
+var txRef = 'oXnhHqKaaDOYVlhYd' // String |
+apiInstance.rejectP2Ptranfer(txRef).then(
+  function (data) {
+    console.log('API called successfully. Returned data: ' + data)
+  },
+  function (error) {
+    console.error(error)
+  },
+)
+```
+</Tab>
+
+</Tabs>

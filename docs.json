@@ -185,6 +185,20 @@
                 ]
               },
               {
+                "group": "Flujos",
+                "icon": "mask",
+                "pages": [
+                  "es/v1.71/generals/flows/intro-flows",
+                  "es/v1.71/generals/flows/type1-type2-send-transfer",
+                  "es/v1.71/generals/flows/type1-transaction-history",
+                  "es/v1.71/generals/flows/type1-accept-reject",
+                  "es/v1.71/generals/flows/type1-trust-transactions",
+                  "es/v1.71/generals/flows/type3-request-transfer",
+                  "es/v1.71/generals/flows/type3-transaction-history",
+                  "es/v1.71/generals/flows/type3-accept-reject"
+                ]
+              },
+              {
                 "group": "Guias de uso",
                 "icon": "mask",
                 "pages": [
@@ -192,7 +206,8 @@
                   "es/v1.71/generals/guides/how-to-create-claims",
                   "es/v1.71/generals/guides/how-to-create-reconciliation",
                   "es/v1.71/generals/guides/how-to-generate-keys-signing",
-                  "es/v1.71/generals/guides/how-to-create-automatic-reject"
+                  "es/v1.71/generals/guides/how-to-create-automatic-reject",
+                  "es/v1.71/generals/guides/how-to-reverse"
                 ]
               }
             ]
