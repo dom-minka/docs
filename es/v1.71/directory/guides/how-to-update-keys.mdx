@@ -1,7 +1,7 @@
 ---
-title: 'Cómo modificar llaves'
-description: 'Guia del proceso de modificación de las llaves'
-icon: 'pen'
+title: "Cómo modificar llaves"
+description: "Guia del proceso de modificación de las llaves"
+icon: "pen"
 ---
 
 ## Introducción
@@ -19,49 +19,49 @@ El nuevo modelo regulado simplifica el proceso de actualización, porque no util
 En el flujo actual para actualizar una llave con el que está vinculada la cuenta implica eliminar un singer y crear nuevo vínculo.
 
 <Tabs>
-    <Tab title="Nuevo flujo">
-        ```mermaid
-        sequenceDiagram
-       	autonumber
-       	participant b as Participante
-       	participant ty as Transfiya
-        participant cd as DICE
-
-        b ->> +ty: Acutalizar signer
-        ty ->> +cd: Validar con DICE
-        cd -->> -ty: Respuesta DICE
-        ty ->> ty: Actualizar signer
-        ty -->> -b: Respuesta signer
-        ```
-    </Tab>
-    <Tab title="Flujo anterior">
-      ```mermaid
-      sequenceDiagram
-     	autonumber
-     	participant b as Bank
-     	participant ty as Transfiya
-
-        b ->> +ty: Buscar wallet
-        ty -->> -b: Respuesta wallet
-        b ->> +ty: Actualizar wallet (eliminar signer)
-        ty -->> -b: Respuesta wallet
-        b ->> +ty: Mapeo wallet signer
-        ty -->> -b: Respuesta signer
-        alt wallet existe
-          b ->> +ty: Actualizar wallet con signer
-          ty ->> ty: Actualziar wallet
-          ty -->> -b: Respuesta
-        else wallet doesn't exist
-          b ->> +ty: Crear nuevo wallet con signer
-          ty ->> ty: Crear wallet
-          ty -->> -b: Respuesta
-        end
-        ```
-    </Tab>
+  <Tab title="Nuevo flujo">
+    ```mermaid
+    sequenceDiagram
+    autonumber
+    participant b as Participante
+    participant ty as Transfiya
+    participant cd as DICE
+    
+    b ->> +ty: Acutalizar signer
+    ty ->> +cd: Validar con DICE
+    cd -->> -ty: Respuesta DICE
+    ty ->> ty: Actualizar signer
+    ty -->> -b: Respuesta signer
+    ```
+  </Tab>
+  <Tab title="Flujo anterior">
+    ```mermaid
+    sequenceDiagram
+      autonumber
+      participant b as Bank
+      participant ty as Transfiya
+    
+      b ->> +ty: Buscar wallet
+      ty -->> -b: Respuesta wallet
+      b ->> +ty: Actualizar wallet (eliminar signer)
+      ty -->> -b: Respuesta wallet
+      b ->> +ty: Mapeo wallet signer
+      ty -->> -b: Respuesta signer
+      alt wallet existe
+        b ->> +ty: Actualizar wallet con signer
+        ty ->> ty: Actualziar wallet
+        ty -->> -b: Respuesta
+      else wallet doesn't exist
+        b ->> +ty: Crear nuevo wallet con signer
+        ty ->> ty: Crear wallet
+        ty -->> -b: Respuesta
+      end
+    ```
+  </Tab>
 </Tabs>
 
 <Info>
-    El modelo actual de billeteras permanecerá activo para garantizar compatibilidad con los sistemas existentes.
+  El modelo actual de billeteras permanecerá activo para garantizar compatibilidad con los sistemas existentes.
 </Info>
 
 ## Ejemplos de API
@@ -75,10 +75,12 @@ PUT /v1/signer/{handle}
 ```
 
 ---
-| Parameter | Type | Description |
-| --------- | ---- | ----------- |
-| handle | string | 26-35 characters Alphanumeric characters allowed base58 structure |
-| labels | object | Metadata describing the address. Use them to describe the details of the signer. |
+
+| Parameter | Type   | Description                                                                      |
+| --------- | ------ | -------------------------------------------------------------------------------- |
+| handle    | string | 26-35 characters Alphanumeric characters allowed base58 structure                |
+| labels    | object | Metadata describing the address. Use them to describe the details of the signer. |
+
 ---
 
 <Tabs>
@@ -141,28 +143,37 @@ PUT /v1/signer/{handle}
 ### Códigos de Error
 
 ---
-| Error Code | Description |
-| --------- | ----------- |
-| 99 | Unexpected server error |
-| 100 | You don't have permissions to access this method |
-| 102 | Invalid labels |
-| 118 | Resource schema validation error |
-| 121 | Signer not found in database |
+
+| Error Code | Description                                      |
+| ---------- | ------------------------------------------------ |
+| 99         | Unexpected server error                          |
+| 100        | You don't have permissions to access this method |
+| 102        | Invalid labels                                   |
+| 118        | Resource schema validation error                 |
+| 121        | Signer not found in database                     |
+
 ---
 
 ### Cambio de llave de un signer
 
-La modificación de los alias de signer es una de las operaciones de llave contempladas en el marco regulatorio del SPI. Esta operación debemos entenderla internamente como una cancelación del valor de la llave actual y la creación de una nueva.
+La modificación de los alias de **signer** es una de las operaciones de llave contempladas dentro del marco regulatorio del SPI. Esta operación debe entenderse internamente como una **cancelación del valor de la llave actual y la creación de una nueva**.
+
+Para este caso de uso, se habilitó el campo **"**`allowImmediateReuse"`, el cual debe enviarse con el valor:
+
+- `true`: si la operación corresponde a una **modificación** del alias.
+- `false`: si se trata de una **cancelación definitiva**.
 
 ```java HTTP
 PUT /v1/signer/{handle}
 ```
 
 ---
-| Parameter | Type | Description |
-| --------- | ---- | ----------- |
-| handle | string | 26-35 characters Alphanumeric characters allowed base58 structure |
-| labels | object | Metadata describing the address. Use them to describe the details of the signer. |
+
+| Parameter | Type   | Description                                                                      |
+| --------- | ------ | -------------------------------------------------------------------------------- |
+| handle    | string | 26-35 characters Alphanumeric characters allowed base58 structure                |
+| labels    | object | Metadata describing the address. Use them to describe the details of the signer. |
+
 ---
 
 <Tabs>
@@ -174,7 +185,8 @@ PUT /v1/signer/{handle}
       -H "Content-Type: application/json" \
       -d '{
         "labels": {
-          "status": "INACTIVE"
+          "status": "INACTIVE",
+          "allowImmediateReuse":true
         }
       }' "URL/v1/signer/wRFmYXS2sP9ho9VCZ3j4FuP1j55ABeFvsF"
     ```
@@ -308,13 +320,15 @@ Crear un nuevo signer con un alias diferente y asociar los mismos datos de usuar
 </Tabs>
 
 ---
-| Error Code | Description |
-| --------- | ----------- |
-| 99 | Unexpected server error |
-| 100 | You don't have permissions to access this method |
-| 102 | Invalid labels |
-| 118 | Resource schema validation error |
-| 121 | Signer not found in database |
+
+| Error Code | Description                                      |
+| ---------- | ------------------------------------------------ |
+| 99         | Unexpected server error                          |
+| 100        | You don't have permissions to access this method |
+| 102        | Invalid labels                                   |
+| 118        | Resource schema validation error                 |
+| 121        | Signer not found in database                     |
+
 ---
 
 ### Cambio de información personal de un signer
@@ -324,11 +338,14 @@ Para modificar la información personal de un signer, se realiza por medio de la
 ```java HTTP
 PUT /v1/signer/{handle}
 ```
+
 ---
-| Parameter | Type | Description |
-| --------- | ---- | ----------- |
-| handle | string | 26-35 characters Alphanumeric characters allowed base58 structure |
-| labels | object | Metadata describing the address. Use them to describe the details of the signer. |
+
+| Parameter | Type   | Description                                                                      |
+| --------- | ------ | -------------------------------------------------------------------------------- |
+| handle    | string | 26-35 characters Alphanumeric characters allowed base58 structure                |
+| labels    | object | Metadata describing the address. Use them to describe the details of the signer. |
+
 ---
 
 <Tabs>
@@ -340,11 +357,11 @@ PUT /v1/signer/{handle}
       -H "Content-Type: application/json" \
       -d '{
         "labels": {
-	        "lastName": "Garcia",
-	        "identification": "54812184282"
+            "lastName": "Garcia",
+            "identification": "54812184282"
         }
       }' "URL/v1/signer/wRFmYXS2sP9ho9VCZ3j4FuP1j55ABeFvsF"
-      ```
+    ```
   </Tab>
   <Tab title="Response">
     ```javascript {10,12}
@@ -392,11 +409,13 @@ PUT /v1/signer/{handle}
 ### Códigos de Error
 
 ---
-| Error Code | Description |
-| --------- | ----------- |
-| 99 | Unexpected server error |
-| 100 | You don't have permissions to access this method |
-| 102 | Invalid labels |
-| 118 | Resource schema validation error |
-| 121 | Signer not found in database |
+
+| Error Code | Description                                      |
+| ---------- | ------------------------------------------------ |
+| 99         | Unexpected server error                          |
+| 100        | You don't have permissions to access this method |
+| 102        | Invalid labels                                   |
+| 118        | Resource schema validation error                 |
+| 121        | Signer not found in database                     |
+
 ---
