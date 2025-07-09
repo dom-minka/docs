@@ -139,7 +139,11 @@
                 "icon": "mask",
                 "pages": [
                   "es/v1.71/b2b/guides/how-to-create-account-keys",
-                   "es/v1.71/b2b/guides/how-to-create-transfer"
+                   "es/v1.71/b2b/guides/how-to-create-transfer",
+                   "es/v1.71/b2b/guides/How-to-lookup-a-signer",
+                   "es/v1.71/b2b/guides/how-to-collect-payments-Request",
+                   "es/v1.71/b2b/guides/how-to-create-signer-business",
+                   "es/v1.71/b2b/guides/how-to-setup-business-rules"
                   
                 ]
               },
