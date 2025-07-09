@@ -1,0 +1,62 @@
+---
+title: "Como crear llaves de negocio"
+description: "En esta guía encontraremos un ejemplo de cómo crear un signer tipo business"
+---
+
+### Ejemplo de creación llave de negocio
+
+A continuación se presenta un ejemplo de creación de una llave tipo 'BUSINESS' y un análisis comparativo con la implementación actual en Transfiya:
+
+<Tabs>
+  <Tab title="Request">
+    ```json
+    curl -X POST \
+     -H "x-api-key: <API_KEY>" \
+     -H "Authorization: Bearer <TOKEN>" \
+     -H "Content-Type: application/json" \
+     -d '{
+       "labels": {
+    
+         "type": "BUSINESS",
+         "name": "Cognito Inc",
+         "proprietary": "NIT",
+         "identification": "900123456",
+         "bankAccountType": "SVGS",
+         "bankAccountNumber": "12345654321",
+         "routerReference": "$bancorojo"
+       },
+       "keeper": [{
+         "scheme": "ecdsa-ed25519",
+         "public": "0463e75c8b975f069813ca8e6c36c0b6fd246eac708affb7ed2c6480fa201defe8725322d6380ec66e94f6dcb49f635c0ca51296e48da4a12b3ec66582a1297adf"
+       }]
+     }' "<base URL>/v1/signer"
+    ```
+  </Tab>
+  <Tab title="Response">
+    ```json
+    {
+      "signer_id": "4c57ac39-16f0-489b-89d9-bddfcd352a36",
+      "handle": "wRFmYXS2sP9ho9VCZ3j4FuP1j55ABeFvsF",
+      "labels": {
+         "type": "BUSINESS",
+         "name": "Cognito Inc",
+         "proprietary": "NIT",
+         "identification": "900123456",
+         "bankAccountType": "SVGS",
+         "bankAccountNumber": "12345654321",
+         "routerReference": "$bancorojo"
+      },
+      "keeper": [
+        {
+          "scheme": "ecdsa-ed25519",
+          "public": "0463e75c8b975f069813ca8e6c36c0b6fd246eac708affb7ed2c6480fa201defe8725322d6380ec66e94f6dcb49f635c0ca51296e48da4a12b3ec66582a1297adf"
+        }
+      ],
+      "error": {
+        "code": 0,
+        "message": "Success"
+      }
+    }
+    ```
+  </Tab>
+</Tabs>
