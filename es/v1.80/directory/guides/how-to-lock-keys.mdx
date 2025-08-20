@@ -1,0 +1,139 @@
+---
+title: "Cómo bloquear llaves"
+description: "Como bloquear llaves en Transfiya"
+---
+
+## Introducción
+
+La gestión de llaves en los Sistemas de Pago de Bajo Valor Inmediatos (SPBVI) constituye un elemento esencial para garantizar la seguridad, la interoperabilidad y la trazabilidad de las operaciones financieras entre clientes y participantes. En este marco, la funcionalidad de **bloqueo de llaves** se establece como un mecanismo preventivo que permite suspender temporalmente el uso de una llave asociada a un medio de pago, con el fin de mitigar riesgos asociados a fraude, suplantación, inactividad del medio de pago u otras situaciones que puedan comprometer la confianza del ecosistema.
+
+De acuerdo con la **Circular Reglamentaria Externa DSP-465 del Banco de la República**, el bloqueo puede ser solicitado directamente por el cliente o ejecutado por el participante únicamente en los casos autorizados: suspensión del medio de pago por riesgos de seguridad o cuando este sea clasificado como inactivo. En ambos escenarios, los participantes tienen la obligación de informar a la Entidad Administradora del Sistema de Pago de Bajo Valor Inmediato (EASPBVI), la cual debe reflejar en tiempo real la novedad en el Directorio Federado y posteriormente en el Directorio Centralizado, asegurando así la consistencia y disponibilidad de la información en todo el sistema.
+
+En este sentido, el **participante** adquiere responsabilidades claras:
+
+- Adecuar sus canales de servicio para permitir al cliente el ejercicio pleno de la funcionalidad de bloqueo y reactivación de sus llaves.
+- Informar de manera oportuna y transparente al cliente sobre las implicaciones del bloqueo, su alcance y los procedimientos asociados.
+- Cumplir estrictamente con las normas de seguridad y protección de datos personales previstas en la Ley 1581 de 2012 y sus reglamentos.
+- Reportar de inmediato a la EASPBVI las novedades generadas en los procesos de gestión de llaves, en cumplimiento de los tiempos y lineamientos operativos definidos por el Banco de la República.
+
+De esta forma, la implementación del bloqueo de llaves no solo contribuye a la protección de los usuarios, sino que refuerza la responsabilidad de los participantes en la administración segura y transparente de los medios de pago dentro de los SPBVI, fortaleciendo la confianza en la infraestructura de pagos inmediata del país.
+
+### Ejemplo de bloqueo de llaves por participante
+
+A continuación se presenta un ejemplo de bloqueo de una llave por entidad participante:
+
+<CodeGroup>
+
+```json Request
+curl -X PUT \
+  -H "x-api-key: <API_KEY>" \
+  -H "Authorization: Bearer <TOKEN>" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "labels": {
+      "status": "SUSPENDED_BY_PARTICIPANT"
+      
+    }
+  }' "URL/v1/signer/wRFmYXS2sP9ho9VCZ3j4FuP1j55ABeFvsF"
+```
+
+
+```json Response
+{
+  "signer_id": "4c57ac39-16f0-489b-89d9-bddfcd352a36",
+  "handle": "wRFmYXS2sP9ho9VCZ3j4FuP1j55ABeFvsF",
+  "labels": {
+    "aliasType": "EMAIL",
+    "aliasValue": "jorge@company.io",
+    "status": "SUSPENDED_BY_PARTICIPANT",
+    "type": "PERSON",
+    "firstName": "Jorge",
+    "proprietary": "CC",
+    "identification": "1010101010",
+    "bankAccountType": "SVGS",
+    "bankAccountNumber": "12345654321",
+    "bankBicfi": "7095",
+    "bankName": "Banco Rojo",
+    "routerReference": "$bancorojo",
+    "createdBy": "$minka",
+    "targetSpbviCode": "TFY"
+    "created": "2024-10-11T11:59:24.241-05:00",
+    "updated": "2024-10-11T12:01:11.121-05:00",
+    "consented": "2024-10-11T11:59:24.241-05:00",
+    "received": "2024-10-11T11:59:22.241-05:00",
+    "dispatched": "2024-10-11T11:59:22.517-05:00"
+  },
+  "keeper": [
+    {
+      "scheme": "ecdsa-ed25519",
+      "public": "0463e75c8b975f069813ca8e6c36c0b6fd246eac708affb7ed2c6480fa201defe8725322d6380ec66e94f6dcb49f635c0ca51296e48da4a12b3ec66582a1297adf"
+    }
+  ],
+  "error": {
+    "code": 0,
+    "message": "Success"
+  }
+}
+```
+
+</CodeGroup>
+
+### Ejemplo de bloqueo de llaves por cliente
+
+A continuación se presenta un ejemplo de bloqueo de una llave por cliente:
+
+<CodeGroup>
+
+```json Request
+curl -X PUT \
+  -H "x-api-key: <API_KEY>" \
+  -H "Authorization: Bearer <TOKEN>" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "labels": {
+      "status": "SUSPENDED_BY_CLIENT"
+      
+    }
+  }' "URL/v1/signer/wRFmYXS2sP9ho9VCZ3j4FuP1j55ABeFvsF"
+```
+
+
+```json Response
+{
+  "signer_id": "4c57ac39-16f0-489b-89d9-bddfcd352a36",
+  "handle": "wRFmYXS2sP9ho9VCZ3j4FuP1j55ABeFvsF",
+  "labels": {
+    "aliasType": "EMAIL",
+    "aliasValue": "jorge@company.io",
+    "status": "SUSPENDED_BY_CLIENT",
+    "type": "PERSON",
+    "firstName": "Jorge",
+    "proprietary": "CC",
+    "identification": "1010101010",
+    "bankAccountType": "SVGS",
+    "bankAccountNumber": "12345654321",
+    "bankBicfi": "7095",
+    "bankName": "Banco Rojo",
+    "routerReference": "$bancorojo",
+    "createdBy": "$minka",
+    "targetSpbviCode": "TFY"
+    "created": "2024-10-11T11:59:24.241-05:00",
+    "updated": "2024-10-11T12:01:11.121-05:00",
+    "consented": "2024-10-11T11:59:24.241-05:00",
+    "received": "2024-10-11T11:59:22.241-05:00",
+    "dispatched": "2024-10-11T11:59:22.517-05:00"
+  },
+  "keeper": [
+    {
+      "scheme": "ecdsa-ed25519",
+      "public": "0463e75c8b975f069813ca8e6c36c0b6fd246eac708affb7ed2c6480fa201defe8725322d6380ec66e94f6dcb49f635c0ca51296e48da4a12b3ec66582a1297adf"
+    }
+  ],
+  "error": {
+    "code": 0,
+    "message": "Success"
+  }
+}
+```
+
+</CodeGroup>
