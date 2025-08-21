@@ -248,6 +248,28 @@ Los cambios en el modelo son mostrados en el ejemplo de diferencias en codigo.
   - Secuencia – (15 dígitos) número con secuencia ascendente. Debe ser único dentro de cada “yyyyMMdd”.
 </Info>
 
+<Info>
+  **Para iniciar órdenes de pago en Bre-B, no es obligatorio que el signer de origen incluya todas las etiquetas regulatorias.**\
+  Sin embargo, es fundamental garantizar un conjunto mínimo de campos para asegurar el correcto envío del dinero:
+
+  - `firstName`
+  - `lastName`
+  - `identification`
+  - `bankBicfi`
+  - `bankName`
+  - `proprietary`
+  - `bankAccountType`
+  - `bankAccountNumber`
+  - `targetSpbviCode`
+  - `name`
+  - `bankId`
+  - `aliasType`
+  - `aliasValue`
+
+  Es importante tener en cuenta que se puede continuar utilizando la estructura anterior, siempre que se aseguren estos campos mínimos. Alternativamente, se puede emplear la estructura basada en llaves que ya los incluye. En este último caso, la entidad deberá considerar los sus controles y excepciones aplicables según el estado del signer.
+</Info>
+
+
 ## Aceptación en el flujo regulado
 
 En el modelo regulado, la aceptación de una transferencia no depende de una acción explícita por parte del usuario final, como podría suceder en flujos tradicionales. Sin embargo, sí requiere de una validación formal por parte de la entidad financiera que actúa como banco receptor.
