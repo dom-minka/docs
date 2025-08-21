@@ -252,19 +252,14 @@ Los cambios en el modelo son mostrados en el ejemplo de diferencias en codigo.
   **Para iniciar órdenes de pago en Bre-B, no es obligatorio que el signer de origen incluya todas las etiquetas regulatorias.**\
   Sin embargo, es fundamental garantizar un conjunto mínimo de campos para asegurar el correcto envío del dinero:
 
-  - `firstName`
-  - `lastName`
-  - `identification`
-  - `bankBicfi`
-  - `bankName`
-  - `proprietary`
-  - `bankAccountType`
-  - `bankAccountNumber`
-  - `targetSpbviCode`
-  - `name`
-  - `bankId`
-  - `aliasType`
-  - `aliasValue`
+  - firstName 
+  - lastName 
+  - bankAccountNumber 
+  - bankAccountType 
+  - proprietary 
+  - identification 
+  - bankId 
+  - targetSpbviCode
 
   Es importante tener en cuenta que se puede continuar utilizando la estructura anterior, siempre que se aseguren estos campos mínimos. Alternativamente, se puede emplear la estructura basada en llaves que ya los incluye. En este último caso, la entidad deberá considerar los sus controles y excepciones aplicables según el estado del signer.
 </Info>
