@@ -8,14 +8,14 @@ icon: "money-bill-transfer"
 
 Acreditar al usuario destino es el último paso en el procesamiento de la transferencia. Para realizar esta operación, Transfiya
 
- llama al endpoint `credit` del banco destino y envía la acción principal (`main action`) en estado `COMPLETED` como payload.
+llama al endpoint `credit` del banco destino y envía la acción principal (`main action`) en estado `COMPLETED` como payload.
 
 El endpoint `credit` funciona de manera muy similar al endpoint `debit`, pero contempla un escenario adicional que debe ser manejado correctamente:
 
 <Info>
   El crédito se utiliza tanto para acreditar al usuario destino —que es el caso más común de este endpoint— como para acreditar al usuario origen
 
-   en escenarios de error, cuando los fondos deben ser devueltos al origen.
+  en escenarios de error, cuando los fondos deben ser devueltos al origen.
 </Info>
 
 ```mermaid
@@ -28,22 +28,24 @@ flowchart TD
 <Info>
   La implementación de la operación es la misma; la única diferencia está en determinar si se debe acreditar al origen
 
-   o al destino
+  o al destino
 
-   de la acción principal. Esta decisión se toma en función del estado de la acción principal:
+  de la acción principal. Esta decisión se toma en función del estado de la acción principal:
 
   - Si el estado de la acción principal es <code>
+    
     COMPLETED</code>
 
-     → caso exitoso, se debe acreditar al destino
+    → caso exitoso, se debe acreditar al destino
 
-     de la acción principal.
+    de la acción principal.
   - Si el estado de la acción principal es <code>
+    
     REJECTED</code>
 
-     → caso de reversa, se debe acreditar al origen
+    → caso de reversa, se debe acreditar al origen
 
-     de la acción principal para devolver los fondos a la cuenta de origen en caso de errores durante el procesamiento.
+    de la acción principal para devolver los fondos a la cuenta de origen en caso de errores durante el procesamiento.
 </Info>
 
 ```mermaid
@@ -613,6 +615,8 @@ A continuación, se describe el paso a paso de este proceso:
             "status": "COMPLETED",
             "tx_ref": "Lf13jsK83omPv3bOt",
             "tx_id": "20250114890915944TFY123456789012345",
+        	"received": "2025-01-14T20:40:57.322-05:00",
+        	"dispatched": "2025-01-14T20:40:58.322-05:00",
             "created": "2025-01-14T20:40:57.322-05:00",
             "updated": "2025-01-14T20:40:57.322-05:00",
             "description": "Payment for lunch",
