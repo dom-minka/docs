@@ -1,16 +1,17 @@
 ---
-title: 'Como enviar a Bre-B'
-description: 'Como iniciar un flujo regulatorio en Transfiya'
-icon: 'vault'
+title: "Como enviar a Bre-B"
+description: "Como iniciar un flujo regulatorio en Transfiya"
+icon: "vault"
 ---
 
 ## Envio con liquidacion en MOL
 
 ### Resumen de cambios para entidad
+
 Para cumplir con el flujo regulatorio, se usaría la misma integración del participante utilizando el concepto de Transfer para iniciar transferencias.
 
 <Note>
-Las interfaces de interacción no cambian para la entidad, ya que la plataforma cumple actualmente con la mayoría de los requisitos regulatorios.
+  Las interfaces de interacción no cambian para la entidad, ya que la plataforma cumple actualmente con la mayoría de los requisitos regulatorios.
 </Note>
 
 La liquidación con MOL y el manejo de tiempos ya están gestionados por la plataforma y no requieren cambios por parte de los participantes.
@@ -50,7 +51,7 @@ Cuando se inicia un transfer se activa uno de los flujos de pago orchestrados po
 Flujo que se va usar en la marcha blanca y despues de 1 de Semptiembre para flujo regulatorio es **SENDMOL**.
 
 <ResponseField name="labels.type" type="string[SENDMOL]">
-    Tipo de transferencia.
+  Tipo de transferencia.
 </ResponseField>
 
 Cambio principal de este flujo comparado con envio no regulado es en modelo de [liquidacion](../about/about-settelement) de fondos con MOL y [confirmacion de la cuenta](../about/about-accept).
@@ -65,176 +66,190 @@ Los cambios en el modelo son mostrados en el ejemplo de diferencias en codigo.
 
 <Tabs>
   <Tab title="Request">
-      ```json
-     curl -X POST \
-  -H "Content-Type: application/json" \
-  -H "x-api-key: <API_KEY>" \
-  -H "Authorization: Bearer <TOKEN>" \
-  -d '{
+    ```json
+    curl -X POST \
+    -H "Content-Type: application/json" \
+    -H "x-api-key: <API_KEY>" \
+    -H "Authorization: Bearer <TOKEN>" \
+    -d '{
     "source": "wXxwpxB32saqfmfMxAQD4SVWWhhn6akLC2",
     "target": "wRFmYXS2sP9ho9VCZ3j4FuP1j55ABeFvsF",
     "symbol": "$tin",
     "amount": "100",
     "labels": {
-      "description": "Payment for lunch",
-      "domain": "tin",
-      "type": "SENDMOL",
-      "sourceChannel": "APP",
-      "tx_id": "20250114890915944TFY123456789012345",
-      "received": "2025-01-14T20:40:57.322-05:00",
-      "dispatched": "2025-01-14T20:40:58.322-05:00",
-      "deviceFingerPrint": {
-        "hash": "26fff5af6441f8e15a71e8d62c361714484b1b308c99e8eb68ca85e2a7e0dc58",
-        "ipAddress": "2001:0db8:85a3:0000:0000:8a2e:0370:7334",
-        "country": "Colombia",
-        "city": "Bogotá",
-        "mobileDevice": "990000862471854",
-        "SIMCardId": "8991101200003204510",
-        "model": "Huawei Mate 20 Pro",
-        "operator": "Bharti Airtel Limited"
-      }
+    "description": "Payment for lunch",
+    "domain": "tin",
+    "type": "SENDMOL",
+    "sourceChannel": "APP",
+    "tx_id": "20250114890915944TFY123456789012345",
+    "received": "2025-01-14T20:40:57.322-05:00",
+    "dispatched": "2025-01-14T20:40:58.322-05:00",
+    "deviceFingerPrint": {
+      "hash": "26fff5af6441f8e15a71e8d62c361714484b1b308c99e8eb68ca85e2a7e0dc58",
+      "ipAddress": "2001:0db8:85a3:0000:0000:8a2e:0370:7334",
+      "country": "Colombia",
+      "city": "Bogotá",
+      "mobileDevice": "990000862471854",
+      "SIMCardId": "8991101200003204510",
+      "model": "Huawei Mate 20 Pro",
+      "operator": "Bharti Airtel Limited"
     }
-  }' "<TRANSFIYA URL>/v1/transfer"
-        ```
+    }
+    }' "<TRANSFIYA URL>/v1/transfer"
+    ```
   </Tab>
   <Tab title="Response">
-      ```diff
-      {
-        "source": "wXxwpxB32saqfmfMxAQD4SVWWhhn6akLC2",
-      - "target": "$573002414263",
-      + "target": "wfvmRir8XxRtoEuUBDkv3BP4T7BQezwm1f",
-        "amount": "100.00",
-        "symbol": "$tin",
-        "labels": {
-          "hash": "PENDING",
-          "type": "SENDMOL",
-          "domain": "tin",
-          "flowId": "Lf13jsK83omPv3bOt",
-          "status": "PENDING",
-          "tx_ref": "Lf13jsK83omPv3bOt",
-      +   "tx_mol": "20250114890915944TFY123456789012345", // nuevo campo
-      +   "received": "2025-01-14T20:40:57.322-05:00",
-      +   "dispatched": "2025-01-14T20:40:57.322-05:00",
-          "created": "2025-01-14T20:40:57.322-05:00",
-          "updated": "2025-01-14T20:40:57.322-05:00",
-          "description": "DEV - SEND trx 01",
-          "sourceChannel": "APP",
-          "deviceFingerPrint": {
-            "city": "Bogotá",
-            "hash": "26fff5af6441f8e15a71e8d62c361714484b1b308c99e8eb68ca85e2a7e0dc58",
-            "model": "Huawei Mate 20 Pro",
-            "country": "Colombia",
-            "operator": "Bharti Airtel Limited",
-            "SIMCardId": "8991101200003204510",
-            "ipAddress": "2001:0db8:85a3:0000:0000:8a2e:0370:7334",
-            "mobileDevice": "990000862471854"
-          }
-        },
-        "snapshot": {
-          "source": {
-            "signer": {
-              "handle": "wXxwpxB32saqfmfMxAQD4SVWWhhn6akLC2",
-              "labels": {
-                "name": "Jorge Alejandro Fernandez Garcia",
-      +         "proprietary": "CC",
-      +	        "identification": "1010101010",
-      +         "bankAccountType": "SVGS",
-      +         "bankAccountNumber": "12345654321",
-      + 	      "bankId": "891234918",
-      +         "targetSpbviCode": "TFY",
-      -         "created": "2022-04-12T16:17:49.322-05:00",
-      -         "createdBy": "tcYV0MRoklTXUwSFFkkQ",
-      -         "description": "new descr",
-      -         "routerReference": "$bancorojo"
-              }
-            },
-      -     "wallet": {
-      -       "handle": "$575555544444",
-      -       "labels": {
-      -         "name": "Test user 9",
-      -         "type": "PERSON",
-      -         "created": "2022-04-12T16:17:33.322-05:00",
-      -         "updated": "2022-04-14T09:30:33.322-05:00",
-      -         "createdBy": "$bancorojo"
-      -       },
-      -       "signer": [
-      -         "wXxwpxB32saqfmfMxAQD4SVWWhhn6akLC2",
-      -         "weqYJCU6MN193yJ63XehjT3VWFAAguAHHV"
-      -       ],
-      -       "default": "wXxwpxB32saqfmfMxAQD4SVWWhhn6akLC2"
-      -     }
-      -   },
-      -   "symbol": {
-      -     "signer": {
-      -       "handle": "wfvmRir8XxRtoEuUBDkv3BP4T7BQezwm1f",
-      -       "labels": {
-      -         "type": "SYMBOL",
-      -         "created": "2022-03-17T22:08:07.322-05:00",
-      -         "createdBy": "$minka"
-      -       }
-      -     },
-      -     "wallet": {
-      -       "handle": "$tin",
-      -       "labels": {
-      -         "name": "tin",
-      -         "type": "SYMBOL",
-      -         "created": "2022-03-17T22:08:09.234-05:00",
-      -         "updated": "2022-04-13T12:36:46.234-05:00",
-      -         "createdBy": "$minka"
-      -       },
-      -       "signer": [
-      -         "wfvmRir8XxRtoEuUBDkv3BP4T7BQezwm1f"
-      -       ],
-      -       "default": "wfvmRir8XxRtoEuUBDkv3BP4T7BQezwm1f"
-      -     }
+    ```diff
+    {
+      "source": "wXxwpxB32saqfmfMxAQD4SVWWhhn6akLC2",
+    - "target": "$573002414263",
+    + "target": "wfvmRir8XxRtoEuUBDkv3BP4T7BQezwm1f",
+      "amount": "100.00",
+      "symbol": "$tin",
+      "labels": {
+        "hash": "PENDING",
+        "type": "SENDMOL",
+        "domain": "tin",
+        "flowId": "Lf13jsK83omPv3bOt",
+        "status": "PENDING",
+        "tx_ref": "Lf13jsK83omPv3bOt",
+    +   "tx_mol": "20250114890915944TFY123456789012345", // nuevo campo
+    +   "received": "2025-01-14T20:40:57.322-05:00",
+    +   "dispatched": "2025-01-14T20:40:57.322-05:00",
+        "created": "2025-01-14T20:40:57.322-05:00",
+        "updated": "2025-01-14T20:40:57.322-05:00",
+        "description": "DEV - SEND trx 01",
+        "sourceChannel": "APP",
+        "deviceFingerPrint": {
+          "city": "Bogotá",
+          "hash": "26fff5af6441f8e15a71e8d62c361714484b1b308c99e8eb68ca85e2a7e0dc58",
+          "model": "Huawei Mate 20 Pro",
+          "country": "Colombia",
+          "operator": "Bharti Airtel Limited",
+          "SIMCardId": "8991101200003204510",
+          "ipAddress": "2001:0db8:85a3:0000:0000:8a2e:0370:7334",
+          "mobileDevice": "990000862471854"
+        }
+      },
+      "snapshot": {
+        "source": {
+          "signer": {
+            "handle": "wXxwpxB32saqfmfMxAQD4SVWWhhn6akLC2",
+            "labels": {
+              "name": "Jorge Alejandro Fernandez Garcia",
+    +         "proprietary": "CC",
+    +	        "identification": "1010101010",
+    +         "bankAccountType": "SVGS",
+    +         "bankAccountNumber": "12345654321",
+    + 	      "bankId": "891234918",
+    +         "targetSpbviCode": "TFY",
+    -         "created": "2022-04-12T16:17:49.322-05:00",
+    -         "createdBy": "tcYV0MRoklTXUwSFFkkQ",
+    -         "description": "new descr",
+    -         "routerReference": "$bancorojo"
+            }
           },
-          "target": {
-            "signer": {
-      +       "handle": "wfvmRir8XxRtoEuUBDkv3BP4T7BQezwm1f",
-              "labels": {
-                "name": "Jorge Alejandro Fernandez Garcia",
-      +         "proprietary": "CC",
-      +	        "identification": "1010101010",
-      +         "bankAccountType": "SVGS",
-      +         "bankAccountNumber": "12345654321",
-      + 	      "bankId": "891234918",
-      +         "targetSpbviCode": "TFY",
-      -         "created": "2022-04-12T16:17:49-05:00",
-      -         "createdBy": "tcYV0MRoklTXUwSFFkkQ",
-      -         "description": "new descr",
-      -         "routerReference": "$bancorojo"
-              }
-            },
-      -     "wallet": {
-      -       "handle": "$573002414263",
-      -       "labels": {
-      -         "type": "PERSON",
-      -         "created": "2022-03-23T11:00:55.332-05:00",
-      -         "updated": "2022-03-23T11:00:55.334-05:00"
-      -       }
-      -     }
-          }
+    -     "wallet": {
+    -       "handle": "$575555544444",
+    -       "labels": {
+    -         "name": "Test user 9",
+    -         "type": "PERSON",
+    -         "created": "2022-04-12T16:17:33.322-05:00",
+    -         "updated": "2022-04-14T09:30:33.322-05:00",
+    -         "createdBy": "$bancorojo"
+    -       },
+    -       "signer": [
+    -         "wXxwpxB32saqfmfMxAQD4SVWWhhn6akLC2",
+    -         "weqYJCU6MN193yJ63XehjT3VWFAAguAHHV"
+    -       ],
+    -       "default": "wXxwpxB32saqfmfMxAQD4SVWWhhn6akLC2"
+    -     }
+    -   },
+    -   "symbol": {
+    -     "signer": {
+    -       "handle": "wfvmRir8XxRtoEuUBDkv3BP4T7BQezwm1f",
+    -       "labels": {
+    -         "type": "SYMBOL",
+    -         "created": "2022-03-17T22:08:07.322-05:00",
+    -         "createdBy": "$minka"
+    -       }
+    -     },
+    -     "wallet": {
+    -       "handle": "$tin",
+    -       "labels": {
+    -         "name": "tin",
+    -         "type": "SYMBOL",
+    -         "created": "2022-03-17T22:08:09.234-05:00",
+    -         "updated": "2022-04-13T12:36:46.234-05:00",
+    -         "createdBy": "$minka"
+    -       },
+    -       "signer": [
+    -         "wfvmRir8XxRtoEuUBDkv3BP4T7BQezwm1f"
+    -       ],
+    -       "default": "wfvmRir8XxRtoEuUBDkv3BP4T7BQezwm1f"
+    -     }
         },
-        "error": {
-          "code": 0,
-          "message": "Success"
-        },
-        "action_id": "35de4d3d-3aba-4fb3-b110-d004ce2aabb2",
-        "id": "35de4d3d-3aba-4fb3-b110-d004ce2aabb2"
-      }
-      ```
+        "target": {
+          "signer": {
+    +       "handle": "wfvmRir8XxRtoEuUBDkv3BP4T7BQezwm1f",
+            "labels": {
+              "name": "Jorge Alejandro Fernandez Garcia",
+    +         "proprietary": "CC",
+    +	        "identification": "1010101010",
+    +         "bankAccountType": "SVGS",
+    +         "bankAccountNumber": "12345654321",
+    + 	      "bankId": "891234918",
+    +         "targetSpbviCode": "TFY",
+    -         "created": "2022-04-12T16:17:49-05:00",
+    -         "createdBy": "tcYV0MRoklTXUwSFFkkQ",
+    -         "description": "new descr",
+    -         "routerReference": "$bancorojo"
+            }
+          },
+    -     "wallet": {
+    -       "handle": "$573002414263",
+    -       "labels": {
+    -         "type": "PERSON",
+    -         "created": "2022-03-23T11:00:55.332-05:00",
+    -         "updated": "2022-03-23T11:00:55.334-05:00"
+    -       }
+    -     }
+        }
+      },
+      "error": {
+        "code": 0,
+        "message": "Success"
+      },
+      "action_id": "35de4d3d-3aba-4fb3-b110-d004ce2aabb2",
+      "id": "35de4d3d-3aba-4fb3-b110-d004ce2aabb2"
+    }
+    ```
   </Tab>
   <Tab title="Error">
-  ```diff
-    {
-      "error": {
-        "code": 118,
-        "message": "Parameter labels.tx_id contains unsupported characters"
+    ```diff
+      {
+        "error": {
+          "code": 118,
+          "message": "Parameter labels.tx_id contains unsupported characters"
+        }
       }
-    }
-   ```
+    ```
   </Tab>
 </Tabs>
+
+<Warning>
+  ## tx_id
+
+  - Identificación única asignada por el SPBVI Originador para identificar inequívocamente la transacción en el ecosistema. Esta identificación se transmite sin cambios, a lo largo del flujo de pago después de que el SPBVI Originador asigna la identificación: 
+
+    ### "yyyyMMdd#########XXX123456789012345"
+  - yyyyMMdd - fecha (8 caracteres), en horario local y que corresponde a la fecha del momento en que el SPBVI originador recibe la confirmación de la orden de pago y/o transferencia de fondo inmediata por parte del Participante Originador.
+  - NIT - (9 caracteres - #########) NIT del Participante Originador (sin dígito de verificación) o código asignado por el BR.
+  - Sigla del SPBVI Originador XXX- Corresponde a la abreviación del Sistema de Pago de Bajo Valor
+
+    Inmediato Originador de acuerdo con la Tabla correspondiente (ver Tabla de códigos).
+  - Secuencia – (15 dígitos) número con secuencia ascendente. Debe ser único dentro de cada “yyyyMMdd”.
+</Warning>
 
 ## Aceptación en el flujo regulado
 
@@ -248,7 +263,7 @@ Este paso de aceptación es obligatorio antes de continuar con el procesamiento 
 
 Una vez realizada esta validación, el banco destinatario confirma la aceptación utilizando el mecanismo estándar ya existente en TransfiYa para flujos asincrónicos. Esta aceptación por parte de la entidad equivale a una aprobación regulatoria que habilita a continuar con la operación de crédito y la posterior liquidación a través del MOL.
 
-<Info icon="shield-check">
+<Info>
   Este modelo permite cumplir con la normativa vigente sin necesidad de cambiar los componentes fundamentales de la arquitectura de TransfiYa, facilitando así la adaptación de los bancos al nuevo flujo SPI.
 </Info>
 
