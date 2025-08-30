@@ -10,7 +10,7 @@
   "navigation": {
     "versions": [
       {
-        "version": "1.83",
+        "version": "1.84",
         "tabs": [
           {
             "tab": "Directorio Federado",
@@ -19,34 +19,35 @@
                 "group": "Como empezar",
                 "icon": "mask",
                 "pages": [
-                  "es/v1.83/directory/intro/intro-directory",
-                  "es/v1.83/directory/intro/intro-ux"
+                  "es/v1.84/directory/intro/intro-directory",
+                  "es/v1.84/directory/intro/intro-ux"
                 ]
               },
               {
                 "group": "Guias de uso",
                 "icon": "book",
                 "pages": [
-                  "es/v1.83/directory/guides/how-to-create-keys",
-                  "es/v1.83/directory/guides/how-to-resolve-keys",
-                  "es/v1.83/directory/guides/how-to-update-keys",
-                  "es/v1.83/directory/guides/how-to-cancel-keys",
-                  "es/v1.83/directory/guides/how-to-sync-dice",
-                  "es/v1.83/directory/guides/how-to-send-timestamps",
-                  "es/v1.83/directory/guides/how-to-lock-keys",
-                  "es/v1.83/directory/guides/how-to-reactivate-keys"
+                  "es/v1.84/directory/guides/how-to-create-keys",
+                  "es/v1.84/directory/guides/how-to-resolve-keys",
+                  "es/v1.84/directory/guides/how-to-update-keys",
+                  "es/v1.84/directory/guides/how-to-cancel-keys",
+                  "es/v1.84/directory/guides/how-to-sync-dice",
+                  "es/v1.84/directory/guides/how-to-send-timestamps",
+                  "es/v1.84/directory/guides/how-to-lock-keys",
+                  "es/v1.84/directory/guides/how-to-reactivate-keys"
                 ]
               },
               {
                 "group": "Acerca de",
                 "icon": "code",
                 "pages": [
-                  "es/v1.83/directory/about/about-signers",
-                  "es/v1.83/directory/about/about-validations",
-                  "es/v1.83/directory/about/about-data-model",
-                  "es/v1.83/directory/about/about-errors",
-                  "es/v1.83/directory/about/about-timestamps",
-                  "es/v1.83/directory/about/about-key-status"
+                  "es/v1.84/directory/about/about-signers",
+                  "es/v1.84/directory/about/about-validations",
+                  "es/v1.84/directory/about/about-data-model",
+                  "es/v1.84/directory/about/about-errors",
+                  "es/v1.84/directory/about/about-timestamps",
+                  "es/v1.84/directory/about/about-key-status",
+                  "es/v1.84/directory/about/about-errors"
                 ]
               },
               {
@@ -61,7 +62,7 @@
                 "group": "Archivos de Soporte",
                 "icon": "code",
                 "pages": [
-                  "es/v1.83/directory/support/support-files"
+                  "es/v1.84/directory/support/support-files"
                 ]
 
               }
@@ -73,30 +74,30 @@
               {
                 "group": "Como empezar",
                 "icon": "mask",
-                "pages": ["es/v1.83/transfers-mol/intro/intro-mol"]
+                "pages": ["es/v1.84/transfers-mol/intro/intro-mol"]
               },
               {
                 "group": "Guias de uso",
                 "icon": "mask",
                 "pages": [
-                  "es/v1.83/transfers-mol/guides/how-to-send-mol",
-                  "es/v1.83/transfers-mol/guides/how-to-debit-sender",
-                  "es/v1.83/transfers-mol/guides/how-to-accept-transfers",
-                  "es/v1.83/transfers-mol/guides/how-to-sign-transfer",
-                  "es/v1.83/transfers-mol/guides/how-to-credit-receiver",
-                  "es/v1.83/transfers-mol/guides/how-to-notify",
-                  "es/v1.83/transfers-mol/guides/how-to-send-timestamps"
+                  "es/v1.84/transfers-mol/guides/how-to-send-mol",
+                  "es/v1.84/transfers-mol/guides/how-to-debit-sender",
+                  "es/v1.84/transfers-mol/guides/how-to-accept-transfers",
+                  "es/v1.84/transfers-mol/guides/how-to-sign-transfer",
+                  "es/v1.84/transfers-mol/guides/how-to-credit-receiver",
+                  "es/v1.84/transfers-mol/guides/how-to-notify",
+                  "es/v1.84/transfers-mol/guides/how-to-send-timestamps"
                 ]
               },
               {
                 "group": "Acerca de",
                 "icon": "mask",
                 "pages": [
-                  "es/v1.83/transfers-mol/about/about-current-flow",
-                  "es/v1.83/transfers-mol/about/about-new-flow",
-                  "es/v1.83/transfers-mol/about/about-regulatory-changes",
-                  "es/v1.83/transfers-mol/about/about-settlement",
-                  "es/v1.83/transfers-mol/about/about-transfers"
+                  "es/v1.84/transfers-mol/about/about-current-flow",
+                  "es/v1.84/transfers-mol/about/about-new-flow",
+                  "es/v1.84/transfers-mol/about/about-regulatory-changes",
+                  "es/v1.84/transfers-mol/about/about-settlement",
+                  "es/v1.84/transfers-mol/about/about-transfers"
                 ]
               },
               {
@@ -119,7 +120,7 @@
                 "group": "Archivos de Soporte",
                 "icon": "code",
                 "pages": [
-                  "es/v1.83/transfers-mol/support/support-files"
+                  "es/v1.84/transfers-mol/support/support-files"
                 ]
 
               }
@@ -132,20 +133,20 @@
                 "group": "Introducción",
                 "icon": "mask",
                 "pages": [
-                  "es/v1.83/b2b/intro/intro-b2b",
-                  "es/v1.83/b2b/intro/use-cases"
+                  "es/v1.84/b2b/intro/intro-b2b",
+                  "es/v1.84/b2b/intro/use-cases"
                 ]
               },
               {
                 "group": "Guias de uso",
                 "icon": "mask",
                 "pages": [
-                  "es/v1.83/b2b/guides/how-to-create-account-keys",
-                   "es/v1.83/b2b/guides/how-to-create-transfer",
-                   "es/v1.83/b2b/guides/How-to-lookup-a-signer",
-                   "es/v1.83/b2b/guides/how-to-collect-payments-Request",
-                   "es/v1.83/b2b/guides/how-to-create-signer-business",
-                   "es/v1.83/b2b/guides/how-to-setup-business-rules"
+                  "es/v1.84/b2b/guides/how-to-create-account-keys",
+                   "es/v1.84/b2b/guides/how-to-create-transfer",
+                   "es/v1.84/b2b/guides/How-to-lookup-a-signer",
+                   "es/v1.84/b2b/guides/how-to-collect-payments-Request",
+                   "es/v1.84/b2b/guides/how-to-create-signer-business",
+                   "es/v1.84/b2b/guides/how-to-setup-business-rules"
                   
                 ]
               },
@@ -182,38 +183,38 @@
                 "group": "APIs de Participantes",
                 "icon": "mask",
                 "pages": [
-                  "es/v1.83/generals/participant-apis/intro-apis",
-                  "es/v1.83/generals/participant-apis/configuration-endpoints",
-                  "es/v1.83/generals/participant-apis/debit-endpoint",
-                  "es/v1.83/generals/participant-apis/credit-endpoint",
-                  "es/v1.83/generals/participant-apis/action-endpoint",
-                  "es/v1.83/generals/participant-apis/status-endpoint"
+                  "es/v1.84/generals/participant-apis/intro-apis",
+                  "es/v1.84/generals/participant-apis/configuration-endpoints",
+                  "es/v1.84/generals/participant-apis/debit-endpoint",
+                  "es/v1.84/generals/participant-apis/credit-endpoint",
+                  "es/v1.84/generals/participant-apis/action-endpoint",
+                  "es/v1.84/generals/participant-apis/status-endpoint"
                 ]
               },
               {
                 "group": "Flujos",
                 "icon": "mask",
                 "pages": [
-                  "es/v1.83/generals/flows/intro-flows",
-                  "es/v1.83/generals/flows/type1-type2-send-transfer",
-                  "es/v1.83/generals/flows/type1-transaction-history",
-                  "es/v1.83/generals/flows/type1-accept-reject",
-                  "es/v1.83/generals/flows/type1-trust-transactions",
-                  "es/v1.83/generals/flows/type3-request-transfer",
-                  "es/v1.83/generals/flows/type3-transaction-history",
-                  "es/v1.83/generals/flows/type3-accept-reject"
+                  "es/v1.84/generals/flows/intro-flows",
+                  "es/v1.84/generals/flows/type1-type2-send-transfer",
+                  "es/v1.84/generals/flows/type1-transaction-history",
+                  "es/v1.84/generals/flows/type1-accept-reject",
+                  "es/v1.84/generals/flows/type1-trust-transactions",
+                  "es/v1.84/generals/flows/type3-request-transfer",
+                  "es/v1.84/generals/flows/type3-transaction-history",
+                  "es/v1.84/generals/flows/type3-accept-reject"
                 ]
               },
               {
                 "group": "Guias de uso",
                 "icon": "mask",
                 "pages": [
-                  "es/v1.83/generals/guides/how-to-authorize",
-                  "es/v1.83/generals/guides/how-to-create-claims",
-                  "es/v1.83/generals/guides/how-to-create-reconciliation",
-                  "es/v1.83/generals/guides/how-to-generate-keys-signing",
-                  "es/v1.83/generals/guides/how-to-create-automatic-reject",
-                  "es/v1.83/generals/guides/how-to-reverse"
+                  "es/v1.84/generals/guides/how-to-authorize",
+                  "es/v1.84/generals/guides/how-to-create-claims",
+                  "es/v1.84/generals/guides/how-to-create-reconciliation",
+                  "es/v1.84/generals/guides/how-to-generate-keys-signing",
+                  "es/v1.84/generals/guides/how-to-create-automatic-reject",
+                  "es/v1.84/generals/guides/how-to-reverse"
                 ]
               }
             ]
@@ -224,12 +225,12 @@
               {
                 "group": "Despliegues",
                 "icon": "mask",
-                "pages": ["es/v1.83/release-notes/release-notes-stg"]
+                "pages": ["es/v1.84/release-notes/release-notes-stg"]
               },
               {
                 "group": "SDK",
                 "icon": "mask",
-                "pages": ["es/v1.83/release-notes/sdk-releases"]
+                "pages": ["es/v1.84/release-notes/sdk-releases"]
               }  
 
 

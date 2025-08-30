@@ -1,0 +1,111 @@
+---
+title: "Errores de MOL"
+description: "Guía completa sobre el manejo de errores en el sistema MOL"
+icon: "triangle-exclamation"
+---
+
+## **Resumen**
+
+Transfiya implementa un sistema de gestión de errores fundamentado en el estándar HTTP, proporcionando una estructura clara y coherente para el manejo de excepciones.Aunque los sistemas externos emplean códigos de error particulares, Transfiya ha desarrollado un mecanismo de mapeo que convierte automáticamente estos códigos a su propia arquitectura estandarizada de errores HTTP. Esta avanzada capacidad de normalización optimiza significativamente el proceso de integración para los participantes del ecosistema, minimizando o incluso eliminando por completo la necesidad de desarrollar lógicas personalizadas para el tratamiento de errores específicos.
+
+Los errores de MOL y DICE se incluyen aquí solo con fines de referencia. El participante no necesita mapear errores de DICE directamente.
+
+\*\*Mensajes de error Transfiya \*\*Cuando se produce un error durante una transferencia o en el sistema de MOL, la plataforma responde con códigos de estado HTTP específicos y un objeto de error estructurado que proporciona información detallada sobre la incidencia. El sistema implementa una clasificación estratégica de códigos de error organizados en rangos específicos, facilitando una categorización clara, identificación rápida y resolución eficiente de incidencias. La estructura de errores está distribuida estratégicamente según el tipo de participante afectado:
+
+- `1xx` - Errores de sistema TransfiYa
+- `3xx` - Errores de participantes
+
+El sistema Transfiya implementa un protocolo de respuesta estandarizado. Todas las solicitudes procesadas exitosamente hacia la plataforma retornan invariablemente un código de estado HTTP`200`. Cuando ocurre algún error durante el procesamiento, el sistema devuelve un objeto de error estructurado que contiene un código numérico específico y una descripción clara del problema, facilitando su identificación y resolución.
+
+<CodeGroup>
+
+```json Estructura
+{
+    "error": {
+        "code": <error_code>,
+        "message": "<error_message>"
+    }
+}
+```
+
+
+```json Ejemplo
+{
+   "error": {
+        "code": 307,
+        "message": "Inactive account"
+  }
+}
+```
+
+</CodeGroup>
+
+En el caso de respuestas exitosas, un objeto de error con código `0` se añade a la respuesta original.
+
+### [**​**](https://transfiya.me/es/v1.83/directory/about/about-errors#estrategia-de-mapeo-integral)
+
+\*\*Estrategia de mapeo integral \*\*TransfiYa implementa validaciones exhaustivas de todos los campos y esquemas según los requisitos regulatorios, lo que mitiga significativamente la posibilidad de que ocurran errores del **MOL.** No obstante, documentamos estos mapeos de errores como medida preventiva para garantizar una respuesta adecuada ante situaciones excepcionales o imprevistas que pudieran presentarse. La estrategia general de mapeo es la siguiente:
+
+| **Categoria**                    | **Descripcion**                                                                                                     |
+| :------------------------------- | :------------------------------------------------------------------------------------------------------------------ |
+| `118 - ResourceValidationError`  | Los errores de validación de campos                                                                                 |
+| `121 - ResourceNotFoundError`    | Los errores relacionados con referencias inválidas, por ejemplo, ID de participante inválido                        |
+| `123 - DomainRuleViolationError` | Todas las reglas de negocio, por ejemplo, el tiempo después del cual se puede volver a utilizar una clave cancelada |
+| `136 - ApiError`                 | Todos los errores técnicos, por ejemplo, problemas relacionados con una configuración inválida                      |
+| `100 - ForbiddenError`           | Los errores de seguridad                                                                                            |
+
+**Mapeo de Errores MOL**
+
+<Accordion title="Mapeo de Errores MOL" icon="sparkles">
+  | **BanRep Reason Code** | **BanRep Status Code** | **BanRep Operation** | **BanRep Description**                                                                            | **Internal Code** | **Internal Name**                     | **Internal Default Message**                          |
+  | :--------------------- | :--------------------- | :------------------- | :------------------------------------------------------------------------------------------------ | :---------------- | :------------------------------------ | :---------------------------------------------------- |
+  | U000                   | ACTC                   | Credit Transfer      | Success                                                                                           | 200               | Success                               | Operation completed successfully.                     |
+  | U120                   | RJCT                   | Gestión de Redes     | Inbound Channel Signed Out                                                                        | 330               | FinancialEntityConnectionError        | Cannot connect to the financial entity.               |
+  | U119                   | RJCT                   | Credit Transfer      | SessionValidationFailed                                                                           | 317               | FinancialEntityStatusError            | Financial entity does not confirm transaction status. |
+  | U112                   | RJCT                   | Credit Transfer      | MaxAmountCheckFailed                                                                              | 381               | MaxAmountCheckFailedError             | Maximum amount check failed.                          |
+  | U125                   | RJCT                   | Credit Transfer      | InboundBankClassifierNotFound                                                                     | 341               | InboundBankClassifierNotFoundError    | Inbound bank classifier not found.                    |
+  | U126                   | RJCT                   | Credit Transfer      | OutboundBankIdCannotBeDetermined                                                                  | 342               | OutboundBankIdUndeterminedError       | Cannot determine outbound bank id.                    |
+  | U122                   | RJCT                   | Credit Transfer      | InboundBankNotActive                                                                              | 343               | InboundBankNotActiveError             | Inbound bank is not active.                           |
+  | U908                   | RJCT                   | Credit Transfer      | Rejection lock validation                                                                         | 410               | RejectionLockValidationError          | Rejection due to lock validation.                     |
+  | U908                   | RJCT                   | Credit Transfer      | Debtor not found in CUD Account table                                                             | 421               | DebtorNotFoundInCUD                   | Debtor not found in CUD account table.                |
+  | U908                   | RJCT                   | Credit Transfer      | Creditor not found in CUD Account table                                                           | 422               | CreditorNotFoundInCUD                 | Creditor not found in CUD account table.              |
+  | U908                   | RJCT                   | Credit Transfer      | Invalid transaction debtor participant is inactive                                                | 431               | DebtorParticipantInactive             | Debtor participant is inactive.                       |
+  | U908                   | RJCT                   | Credit Transfer      | Invalid transaction  creditor participant is inactive                                             | 432               | CreditorParticipantInactive           | Creditor participant is inactive.                     |
+  | U908                   | RJCT                   | Credit Transfer      | Invalid transaction  receiving participant is locked                                              | 433               | ReceivingParticipantLocked            | Receiving participant is locked.                      |
+  | U908                   | RJCT                   | Credit Transfer      | Invalid transaction  originating participant is locked                                            | 434               | OriginatingParticipantLocked          | Originating participant is locked.                    |
+  | U908                   | RJCT                   | Credit Transfer      | Invalid transaction  originating and receiving participants are locked                            | 435               | BothParticipantsLocked                | Originating and receiving participants are locked.    |
+  | U908                   | RJCT                   | Credit Transfer      | Debtor Agent Id must be 1 to 9 characters                                                         | 441               | DebtorAgentIdLengthInvalid            | Debtor Agent Id length invalid.                       |
+  | U908                   | RJCT                   | Credit Transfer      | Debtor Account ID must exist and be 1 to 34 characters                                            | 442               | DebtorAccountIdInvalid                | Debtor Account ID invalid or missing.                 |
+  | U908                   | RJCT                   | Credit Transfer      | Debtor Account Prtry must be registered in Dictionary                                             | 443               | DebtorAccountPrtryNotRegistered       | Debtor Account Prtry not registered in dictionary.    |
+  | U908                   | RJCT                   | Credit Transfer      | Debtor Name must exist and be 1 to 140 characters                                                 | 444               | DebtorNameInvalid                     | Debtor Name invalid or missing.                       |
+  | U908                   | RJCT                   | Credit Transfer      | Debtor Id must be 1 to 18 alphanumeric characters                                                 | 445               | DebtorIdInvalid                       | Debtor Id invalid length/format.                      |
+  | U908                   | RJCT                   | Credit Transfer      | Debtor SchemeNm must be registered in Dictionary                                                  | 446               | DebtorSchemeNotRegistered             | Debtor SchemeNm not registered in dictionary.         |
+  | U908                   | RJCT                   | Credit Transfer      | Creditor Agent Id must be 1 to 9 characters                                                       | 451               | CreditorAgentIdLengthInvalid          | Creditor Agent Id length invalid.                     |
+  | U908                   | RJCT                   | Credit Transfer      | Creditor Account Id must exist and be 1 to 34 characters                                          | 452               | CreditorAccountIdInvalid              | Creditor Account ID invalid or missing.               |
+  | U908                   | RJCT                   | Credit Transfer      | Creditor Account Prtry must be registered in Dictionary                                           | 453               | CreditorAccountPrtryNotRegistered     | Creditor Account Prtry not registered in dictionary.  |
+  | U908                   | RJCT                   | Credit Transfer      | Creditor Nm must exist and be 1 to 140 characters                                                 | 454               | CreditorNameInvalid                   | Creditor Name invalid or missing.                     |
+  | U908                   | RJCT                   | Credit Transfer      | Creditor Id must be 1 to 18 alphanumeric characters                                               | 455               | CreditorIdInvalid                     | Creditor Id invalid length/format.                    |
+  | U908                   | RJCT                   | Credit Transfer      | Creditor SchemeNm must be registered in Dictionary                                                | 456               | CreditorSchemeNotRegistered           | Creditor SchemeNm not registered in dictionary.       |
+  | U908                   | RJCT                   | Credit Transfer      | InstdAgt Name field must be a type registered in the dictionary                                   | 461               | InstdAgtNameTypeInvalid               | Instructed Agent name type not registered.            |
+  | U908                   | RJCT                   | Credit Transfer      | InstgAgt Name field must be a type registered in the dictionary                                   | 462               | InstgAgtNameTypeInvalid               | Instructing Agent name type not registered.           |
+  | U908                   | RJCT                   | Credit Transfer      | NbOfTxs must be 1                                                                                 | 471               | NumberOfTransactionsInvalid           | NbOfTxs must be 1.                                    |
+  | U908                   | RJCT                   | Credit Transfer      | SttlmMtd must be CLRG                                                                             | 472               | SettlementMethodInvalid               | Settlement method must be CLRG.                       |
+  | U908                   | RJCT                   | Credit Transfer      | Amount Value is a mandatory field                                                                 | 473               | AmountMissing                         | Amount is mandatory.                                  |
+  | U908                   | RJCT                   | Credit Transfer      | Currency Code must be 'COP'                                                                       | 474               | InvalidCurrencyCOPOnly                | Currency must be COP.                                 |
+  | U908                   | RJCT                   | Credit Transfer      | Transaction Id must be unique and comply with the format                                          | 475               | TransactionIdInvalid                  | Transaction ID not unique/invalid format.             |
+  | U908                   | RJCT                   | Credit Transfer      | EndToEndId must match the Transaction ID                                                          | 476               | EndToEndIdMismatch                    | EndToEndId must match Transaction ID.                 |
+  | U908                   | RJCT                   | Credit Transfer      | The account of the source participant and the account of the destination participant do not exist | 477               | SourceOrDestinationAccountMissing     | Source and/or destination account does not exist.     |
+  | B001                   | RJCT                   | Credit transfer      | Time-Out declarado por el SPBVI Originador                                                        | 300               | BankClientTimeOutError                | Error timeout.                                        |
+  | B002                   | RJCT                   | Credit transfer      | Time-Out declarado por el SPBVI Receptor                                                          | 305               | ReceptorTimeoutError                  | Timeout declared by receptor.                         |
+  | B301                   | RJCT                   | Credit transfer      | Time-Out declarado por el SPBVI Originador en la consulta de un pago                              | 306               | OriginatorQueryTimeoutError           | Timeout during payment query (originator).            |
+  | B302                   | RJCT                   | Credit transfer      | Time-Out declarado por el SPBVI Receptor en la consulta de un pago                                | 307               | ReceptorQueryTimeoutError             | Timeout during payment query (receptor).              |
+  | B101                   | RJCT                   | Credit transfer      | Error en las validaciones de la cuenta del Consumidor financiero Receptor                         | 480               | ReceiverAccountValidationError        | Receiver account validation failed.                   |
+  | B102                   | RJCT                   | Credit transfer      | Número de cuenta del Cliente Receptor inválido                                                    | 452               | CreditorAccountIdInvalid              | Creditor account number invalid.                      |
+  | B103                   | RJCT                   | Credit transfer      | Identificación Cliente Receptor errada                                                            | 455               | CreditorIdInvalid                     | Receiver identification invalid/incorrect.            |
+  | B104                   | RJCT                   | Credit transfer      | Tipo de medio de pago del Cliente Receptor es errado                                              | 457               | CreditorPaymentMediumTypeInvalid      | Receiver payment medium type invalid.                 |
+  | B105                   | RJCT                   | Credit transfer      | Cuenta del Cliente Receptor no existe                                                             | 458               | CreditorAccountNotFound               | Receiver account does not exist.                      |
+  | B106                   | RJCT                   | Credit transfer      | Control de riesgos por sospecha de fraude                                                         | 319               | TransferFraudError                    | Transfer was marked as fraud.                         |
+  | B107                   | RJCT                   | Credit transfer      | Excede el monto máximo del depósito de bajo monto  ordinarios o inclusivos                        | 382               | LowValueDepositLimitExceededError     | Exceeded low-value deposit limits.                    |
+  | B108                   | RJCT                   | Credit transfer      | Excede el monto máximo del SPBVI                                                                  | 383               | SPBVILimitExceededError               | Exceeded SPBVI maximum amount.                        |
+  | B109                   | RJCT                   | Credit transfer      | Excede el monto máximo del Participante Receptor                                                  | 384               | ReceiverParticipantLimitExceededError | Exceeded receiver participant maximum amount.         |
+</Accordion>
