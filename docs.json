@@ -46,8 +46,7 @@
                   "es/v1.84/directory/about/about-data-model",
                   "es/v1.84/directory/about/about-errors",
                   "es/v1.84/directory/about/about-timestamps",
-                  "es/v1.84/directory/about/about-key-status",
-                  "es/v1.84/directory/about/about-errors"
+                  "es/v1.84/directory/about/about-key-status"
                 ]
               },
               {
@@ -97,7 +96,8 @@
                   "es/v1.84/transfers-mol/about/about-new-flow",
                   "es/v1.84/transfers-mol/about/about-regulatory-changes",
                   "es/v1.84/transfers-mol/about/about-settlement",
-                  "es/v1.84/transfers-mol/about/about-transfers"
+                  "es/v1.84/transfers-mol/about/about-transfers",
+                  "es/v1.84/transfers-mol/about/about-errors"
                 ]
               },
               {
