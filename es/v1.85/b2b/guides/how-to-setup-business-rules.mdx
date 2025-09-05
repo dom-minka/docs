@@ -1,0 +1,69 @@
+---
+title: "¿Cómo actualizar reglas de negocio para una empresa?"
+description: "Se pueden configurar reglas de negocio para firmantes (signers) que sean de tipo business. Las reglas que se pueden parametrizar son las siguientes:"
+icon: 'rotate'
+---
+
+| Regla                                | Campo en el objeto `signer`             | Tipo   | Longitud / Validación                                        |
+| ------------------------------------ | --------------------------------------- | ------ | ------------------------------------------------------------ |
+| Monto máximo de transferencia        | `labels.maxAmountOfTransfer`            | Number | Habilitado para recibir el valor máximo para el tipo de dato |
+| Cantidad de transferencias en el día | `labels.dailyCountOfTransfersLimit`     | Number | Habilitado para recibir el valor máximo para el tipo de dato |
+| Monto acumulado en el día            | `labels.dailySumAmountOfTransfersLimit` | Number | Habilitado para recibir el valor máximo para el tipo de dato |
+
+```json
+Request:
+
+curl -X PUT \
+  -H "x-api-key: API_KEY" \
+  -H "Authorization: Bearer TOKEN" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "labels": {
+      "maxAmountOfTransfer": 10000000,
+      "dailyCountOfTransfersLimit": 100,
+      "dailySumAmountOfTransfersLimit": 100000000
+    }
+  }' "URL/v1/signer/SIGNER_HANDLE"
+```
+
+```json
+Response:
+ 
+{
+ "id": "11259be1-e38a-4970-bfc8-c7824e29ae76",
+"handle": "wXxwpxB32saqfmfMxAQD4SVWWhhn6akLC2", "labels": {
+        "type": "PERSON",
+        "createdBy": "tcYV0MRoklTXUwSFFkkQ",
+        "created": "2022-04-12T16:17:49-05:00",
+        "routerReference": "$bancorojo",
+        "name": "",
+        "maxAmountOfTransfer": 10000000,
+        "dailyCountOfTransfersLimit": 100,
+        "dailySumAmountOfTransfersLimit": 100000000
+ },
+ "signer_id": "11259be1-e38a-4970-bfc8-c7824e29ae76",
+ "keeper": [
+        {
+            "public": "04513ecd39384a91181df50fa995e63995c9d2e683f8a607bd43b939f607dc269958653eef349e864
+8af85a5f369a0c19432c2c60a9bc483eac45c43811ef96fc7",
+            "scheme": "ecdsa-ed25519",
+        }
+ ],
+ "error": {
+        "code": 0,
+        "message": "Success"
+ }
+}
+```
+
+## Lista de códigos de error
+
+A continuación se listan los códigos de error asociados a esta operación:
+
+| Código de error | Descripción                                      | HTTP Status |
+|-----------------|--------------------------------------------------|-------------|
+| 99              | Error inesperado del servidor                    | 400         |
+| 100             | No tienes permisos para acceder a este método    | 403         |
+| 102             | Etiquetas inválidas                              | 400         |
+| 118             | Error de validación del esquema del recurso      | 400         |
+| 121             | Firmante no encontrado en la base de datos       | 400         |

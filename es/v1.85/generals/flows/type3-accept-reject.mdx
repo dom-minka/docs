@@ -1,0 +1,129 @@
+---
+title: 'Tipo 3 Aceptar o Rechazar'
+description: 'Aceptar o Rechazar una transacción'
+icon: 'circle-check'
+---
+
+## Aceptar transferencia P2P (Tipo 3)
+
+Para aceptar una transferencia P2P de tipo `REQUEST`, el banco debe utilizar el siguiente endpoint de la API de TIN: POST /v1/transfer/{CUS}/accept
+
+El parámetro `{CUS}` (también conocido como `tx_ref`) se obtiene de la **lista de transferencias pendientes** que el usuario puede visualizar desde su canal bancario.
+
+<Warning>
+Es obligatorio enviar el **signer** (cuenta firmante del usuario) en el cuerpo de la petición.  
+El cuerpo **no puede estar vacío**.
+</Warning>
+
+<Info>
+Una vez aceptada, se inicia el proceso de débito automático desde el usuario originador hacia el usuario solicitante.
+</Info>
+
+
+
+<Tabs>
+<Tab title="cURL Code Example">
+```json
+curl -X POST -H "x-api-key: 5b481fc2ae177010e197026ba5b51227c44243cd9a18e41be536566e" -H "Authorization: Bearer asdfwXTdDQFimVQOMdn9bOGHJh8KrqnFi34sugYqgrULRCb" -H "Content-Type: application/json" -d '{
+	"signer": {
+		"handle": "wabpqXPdBA19dB3h2QmVHoniRTnd52J4SX",
+	}
+}' "https://ach-minka-stg.transferenciasinmediatas.com/v1/transfer/oXnhHqKaaDOYVlhYd/accept"
+```
+</Tab>
+<Tab title="Java Code Example">
+```json
+
+String cus = "oXnhHqKaaDOYVlhYd";
+AcceptTransferRequest req =new AcceptTransferRequest();
+SignerObject signer = new SignerObject();
+
+signer.setHandle("wabpqXPdBA19dB3h2QmVHoniRTnd52J4SX");
+req.setSigner(signer);
+
+CreateTransferResponse createTransferResponse = sdkApiClient.acceptTransfer(req, cus);
+System.out.println(createTransferResponse);
+```
+</Tab>
+<Tab title="C# Code Example">
+```json
+string cus = "oXnhHqKaaDOYVlhYd";
+AcceptTransferRequest acceptTransReq = new AcceptTransferRequest();
+
+acceptTransReq.Signer = new SignerObject();
+acceptTransReq.Signer.Handle = "wabpqXPdBA19dB3h2QmVHoniRTnd52J4SX"
+
+instance.AcceptP2Ptranfer(cus, acceptTransReq);
+```
+</Tab>
+<Tab title="Node Code Example">
+```json
+var transferApi = new Tinapi.TransferApi()
+var cus = 'oXnhHqKaaDOYVlhYd'
+var acceptReq = new Tinapi.AcceptTransferRequest()
+
+acceptReq.handle = 'wabpqXPdBA19dB3h2QmVHoniRTnd52J4SX'
+var opts = {
+  acceptTransferRequest: acceptReq,
+}
+
+transferApi.acceptP2Ptranfer(cus, opts).then(
+  function (data) {
+    console.log('API called successfully. Returned data: ' + data)
+  },
+  function (error) {
+    console.error(error)
+  },
+)
+```
+</Tab>
+
+</Tabs>
+
+### Rechazar una transferencia P2P
+
+Para rechazar una transferencia P2P, el banco debe usar un **POST** al endpoint `/v1/transfer/{CUS}/reject` de la API de TIN.
+
+El parámetro `tx_ref` (CUS) se obtiene de la lista de transferencias pendientes.
+
+<Tabs>
+<Tab title="cURL Code Example">
+```json
+curl -X POST -H "x-api-key: 5b481fc2ae177010e197026ba5b51227c44243cd9a18e41be536566e" -H "Authorization: Bearer asdfwXTdDQFimVQOMdn9bOGHJh8KrqnFi34sugYqgrULRCb" -H "Content-Type: application/json" -d '{
+}' "https://ach-minka-stg.transferenciasinmediatas.com/v1/transfer/oXnhHqKaaDOYVlhYd/reject"
+```
+</Tab>
+<Tab title="Java Code Example">
+```json
+String cus = "oXnhHqKaaDOYVlhYd";
+
+CreateTransferResponse createTransferResponse = sdkApiClient.rejectTransfer(null, cus);
+System.out.println(createTransferResponse);
+```
+</Tab>
+
+<Tab title=".NET C# Code Example">
+```json
+TransferApi transferApi = new TransferApi();
+var cus = "oXnhHqKaaDOYVlhYd";
+
+transferApi.RejectP2Ptranfer(cus);
+```
+</Tab>
+<Tab title="Node Code Example">
+```json
+var transferApi = new Tinapi.TransferApi()
+var cus = 'oXnhHqKaaDOYVlhYd'
+
+transferApi.rejectP2Ptranfer(cus).then(
+  function (data) {
+    console.log('API called successfully. Returned data: ' + data)
+  },
+  function (error) {
+    console.error(error)
+  },
+)
+```
+</Tab>
+
+</Tabs>

@@ -1,0 +1,101 @@
+---
+title: "Experiencia de usuario"
+description: "Cambios en canales para habilitar Bre-B"
+icon: "tablet-screen-button"
+---
+
+## Introducción
+
+La regulación establece directrices específicas para las diferentes secciones que deben incluirse en la zona Bre-B.
+
+Los usuarios deberán tener acceso a la zona sello Bre-B (con su respectivo logo) en un primer nivel después de completar el flujo de autenticación de cada banco. Esta opción debe mostrarse en la pantalla principal (Home) con el mismo nivel jerárquico que acciones importantes como enviar dinero o consultar transacciones.
+
+Si existen otros puntos de acceso a los servicios de Bre-B, tales como las secciones de envío de dinero, configuración o lectura/envío de QR, la entidad financiera podrá incorporar la imagen gráfica y el nombre de Bre-B en dichas áreas.
+
+<Info>
+  Puedes descargar la guía de experiencia de usuario (UX) en PDF desde el siguiente enlace. Este documento ha sido elaborado por Transfiya para apoyar a las entidades participantes en la implementación del nuevo flujo regulatorio bajo el modelo SPI. Incluye todos los pasos y lineamientos visuales para una correcta integración.
+
+  <a href="/uxtransfiyabreb.pdf" download>
+  📥 Descargar Manual UX
+
+  </a>
+</Info>
+
+### Secciones dentro de la Zona Bre-B
+
+Una vez dentro de la zona Bre-B, se requieren las siguientes secciones y funcionalidades.
+
+A continuación, se presenta una lista general seguida de un apartado para cada sección, donde se detallan sus características junto con ejemplos de experiencia en la aplicación de un banco ficticio.
+
+Transferencias y pagos
+
+1. Con llave
+
+- Con código QR
+  - Leer
+  - Generar
+
+2. Procesos de llaves
+
+- Registro
+- Modificación
+- Cancelación
+- Portabilidad
+- Bloqueo
+- Reactivación
+- Consulta
+
+3. Histórico de transacciones
+
+- Historial de movimientos
+- Solicitud de devolución
+- Solicitud de reversión
+
+4. Peticiones, quejas y reclamos
+5. Otras funcionalidades
+
+## Transferencias y pagos
+
+### Envío de dinero
+
+Para enviar dinero a una llave el usuario tiene diferentes posibilidades, digitar la llave directamente en un campo o seleccionar de su lista de contactos para facilitar el acceso a llaves tipo celular o mail. El punto de entrada también puede variar de acuerdo a la experiencia de cada app, siendo impresindíble que uno de estos puntos de entrada sea a través de la zona Bre-B \> Transferencias.
+
+![](./assets/1.Transferencias.png)
+
+### Leer código QR
+
+Permitir al usuario leer un QR para realizar un pago
+
+> ![](./assets/2.LeerQR.png)
+
+### Crear Código QR
+
+Para la creación de código QR el usuario podrá realizarlo a través de la zona Bre-B, el cual es obligatorio dentro de lo propuesto por la regulación, también cada entidad podrá utilizar cualquier otro punto relacionado a la experiencia QR como punto de ingreso para sus usuarios
+
+## Procesos de llaves
+
+Dentro de los procesos relacionados a llaves, la propuesta es que en una sola sección llamada "Administración de llaves", los usuarios puedan acceder a ejecutar las acciones listadas en la regulación.
+
+### Registro de llave
+
+Operación que realiza el Cliente para elegir la(s) Llave(s) y asociarla(s) con su Medio de Pago, previa autenticación del Cliente en los términos definidos por el Participante y de la autorización para el tratamiento de sus datos personales.
+
+### Modificación de llave
+
+Operación que realiza el Cliente para modificar su(s) Llave(s) inscrita(s) por otra(s) Llave(s) del mismo tipo o de otro tipo, y/o el Medio de Pago asociado a ella(s) por otro Medio de Pago del Participante donde se encuentra registrada la Llave
+
+### Cancelación de llave
+
+Operación que realiza el Cliente para cancelar el registro de la(s) Llave(s) inscrita(s).
+
+### Portabilidad
+
+Este flujo aún no está definido dentro de la regulación, por lo cual no se especifica en esta guía.
+
+### Bloqueo de llave
+
+El usuario puede desactivar su llave y activarla dentro de un periodo de 30 días. Si el usuario no reactiva su llave en este periodo, la llave sera cancelada.
+
+### Activación de llave
+
+Esta acción solo se podrá ejecutar sobre las llaves que el usuario bloqueo anteriormente.

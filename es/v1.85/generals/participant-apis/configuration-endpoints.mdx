@@ -1,0 +1,125 @@
+---
+title: 'Configuración General'
+icon: 'gear'
+---
+
+Cada participante debe registrar las URLs de sus endpoints utilizando el Dashboard de TransfiYa. Estos endpoints permiten que TIN Cloud se comunique correctamente con los sistemas del banco durante todo el ciclo de vida de la transferencia.
+
+<Info icon="info">
+Desde el Dashboard se deben configurar las URLs de los siguientes 4 endpoints junto con sus métodos de autenticación.
+</Info>
+
+
+## Métodos de Autenticación
+
+TransfiYa permite que cada banco configure uno o más métodos de autenticación para proteger sus endpoints de API REST. A continuación se explican los métodos compatibles y su configuración.
+
+<Warning>
+La nube de TIN requiere un token válido en cada llamada. Actualmente no existe un mecanismo de reintento automático en caso de error al obtener el token, por lo tanto, cualquier error activa el flujo de reversión.
+</Warning>
+
+### Método: `NONE`
+
+No se utiliza ningún mecanismo de autenticación. Este es el comportamiento por defecto.
+
+- `routerAuthMethod` debe configurarse como `NONE`.
+
+```json
+"routerAuthMethod": "NONE"
+```
+---
+
+### Método: `API_KEY`
+
+Permite que el banco configure una clave de API como mecanismo de autenticación.
+
+- El valor de la clave debe incluirse en el header `x-api-key`.
+- `routerAuthMethod` debe ser `API_KEY`.
+- En `routerAuthParams` se define el campo `x-api-key` con su valor.
+
+```json
+"routerAuthMethod": "API_KEY",
+"routerAuthParams": {
+	"x-api-key": "API_KEY_VALUE"
+}
+```
+
+---
+
+### Método: `OAUTH2.0`
+
+Permite autenticación vía OAuth 2.0. Soporta dos flujos:
+
+#### Flujo: `client_credentials`
+
+- Requiere el `tokenUrl`, `grantType`, `clientId`, `clientSecret` y `scope`.
+- El `grantType` debe ser `client_credentials`.
+
+```json
+"routerAuthMethod": "OAUTH2.0",
+"routerAuthParams": {
+	"tokenUrl": "https://www.bankdomain.com/oauth/token",
+	"grantType": "client_credentials",
+	"clientId": "CLIENT_ID",
+	"clientSecret": "CLIENT_SECRET",
+	"scope": "SCOPE"
+}
+```
+
+#### Flujo: `password`
+
+- Requiere el `tokenUrl`, `grantType`, `username`, `password` y `scope`.
+- El `grantType` debe ser `password`.
+```json
+"routerAuthMethod": "OAUTH2.0",
+"routerAuthParams": {
+	"tokenUrl": "https://www.bankdomain.com/oauth/token",
+	"grantType": "password",
+	"username": "USERNAME",
+	"password": "PASSWORD",
+	"scope": "SCOPE"
+}
+```
+<Info>
+Una vez generado el token, se incluye en el cuerpo de las solicitudes realizadas al banco junto con las credenciales.
+</Info>
+
+---
+
+### Autenticación con Múltiples Métodos
+
+Es posible combinar mecanismos de autenticación.
+
+- En `routerAuthMethod` se listan los métodos separados por `+`, por ejemplo: `OAUTH2.0+API_KEY`.
+- En `routerAuthParams` se deben incluir los parámetros correspondientes a cada método.
+
+---
+```json
+"routerAuthMethod": "OAUTH2.0+API_KEY",
+"routerAuthParams": {
+	"tokenUrl": "https://www.bankdomain.com/oauth/token",
+	"grantType": "client_credentials",
+	"clientId": "CLIENT_ID",
+	"clientSecret": "CLIENT_SECRET",
+	"scope": "SCOPE",
+	"x-api-key": "API_KEY_VALUE"
+}
+```
+### Integración con IBM API Connect
+
+Si el banco utiliza IBM API Connect, es necesario añadir el campo adicional `apiConnect: true` en `routerAuthParams`.
+
+- Esto indica a TIN Cloud que debe aplicar configuraciones específicas para integrarse correctamente con IBM API Connect.
+
+```json
+"routerAuthMethod": "OAUTH2.0+API_KEY",
+"routerAuthParams": {
+	"tokenUrl": "https://www.bankdomain.com/oauth/token",
+	"grantType": "client_credentials",
+	"clientId": "CLIENT_ID",
+	"clientSecret": "CLIENT_SECRET",
+	"scope": "SCOPE",
+	"apiConnect": true
+	"x-api-key": "API_KEY_VALUE"
+}
+```

@@ -1,0 +1,150 @@
+---
+title: "Cómo reactivar llaves"
+description: "Guía del proceso de modificación de las llaves"
+icon: "pen"
+---
+
+## Introducción
+
+La **reactivación de llaves** es un proceso fundamental que permite restablecer el uso de una llave previamente bloqueada, garantizando así la continuidad de los servicios financieros del cliente una vez mitigadas las causas que originaron su suspensión. Esta funcionalidad asegura que los usuarios puedan recuperar el acceso a sus medios de pago de manera ágil y confiable, sin comprometer la seguridad del ecosistema de pagos.
+
+De acuerdo con la **Circular Reglamentaria Externa DSP-465 del Banco de la República**, la reactivación constituye una operación exclusiva del cliente, quien, previa autenticación y validación por parte del participante, puede solicitar que su llave vuelva a estar disponible para recibir órdenes de pago o transferencias inmediatas. No obstante, cuando el bloqueo haya sido originado por el participante —por riesgos de fraude, suplantación o inactividad del medio de pago—, la reactivación solo procederá una vez se verifique la superación de la condición que motivó la suspensión y solo podrá ser reactivada por el mismo actor (ver _"los estados"_).
+
+En este marco, los **participantes** tienen responsabilidades específicas que aseguran el correcto funcionamiento de la reactivación de llaves:
+
+- Adecuar sus canales de atención para que el cliente pueda solicitar la reactivación de forma sencilla, transparente y segura.
+- Verificar que las causas de bloqueo (fraude, suplantación o inactividad) hayan sido atendidas y resueltas antes de habilitar nuevamente la llave.
+- Garantizar que la actualización del estado de la llave se refleje en tiempo real en el Directorio Federado y en el Directorio Centralizado, en coordinación con la Entidad Administradora del SPBVI (EASPBVI).
+- Informar oportunamente al cliente sobre la activación exitosa, los tiempos de disponibilidad y cualquier condición asociada al restablecimiento de la llave.
+- Cumplir con las disposiciones sobre protección de datos y seguridad de la información, en línea con lo previsto en la Ley 1581 de 2012 y normas relacionadas.
+
+En consecuencia, la reactivación de llaves no solo restituye la capacidad transaccional del cliente, sino que también refuerza la confianza en los mecanismos de seguridad del sistema. Asimismo, consolida la responsabilidad del participante en la gestión transparente y eficaz de los procesos asociados al ciclo de vida de las llaves en los SPBVI.
+
+### Ejemplo de reactivación de llaves por participante
+
+A continuación se presenta un ejemplo de reactivación de una llave por entidad participante:
+
+<CodeGroup>
+
+```json Request
+curl -X PUT \
+  -H "x-api-key: <API_KEY>" \
+  -H "Authorization: Bearer <TOKEN>" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "labels": {
+        "status": "ACTIVE"
+        "participantReactivation": true
+      
+    }
+  }' "URL/v1/signer/wRFmYXS2sP9ho9VCZ3j4FuP1j55ABeFvsF"
+```
+
+
+```json Response
+{
+  "signer_id": "4c57ac39-16f0-489b-89d9-bddfcd352a36",
+  "handle": "wRFmYXS2sP9ho9VCZ3j4FuP1j55ABeFvsF",
+  "labels": {
+    "aliasType": "EMAIL",
+    "aliasValue": "jorge@company.io",
+    "status": "ACTIVE",
+    "type": "PERSON",
+    "firstName": "Jorge",
+    "proprietary": "CC",
+    "identification": "1010101010",
+    "bankAccountType": "SVGS",
+    "bankAccountNumber": "12345654321",
+    "bankBicfi": "7095",
+    "bankName": "Banco Rojo",
+    "routerReference": "$bancorojo",
+    "createdBy": "$minka",
+    "targetSpbviCode": "TFY"
+    "created": "2024-10-11T11:59:24.241-05:00",
+    "updated": "2024-10-11T12:01:11.121-05:00",
+    "consented": "2024-10-11T11:59:24.241-05:00",
+    "received": "2024-10-11T11:59:22.241-05:00",
+    "dispatched": "2024-10-11T11:59:22.517-05:00"
+  },
+  "keeper": [
+    {
+      "scheme": "ecdsa-ed25519",
+      "public": "0463e75c8b975f069813ca8e6c36c0b6fd246eac708affb7ed2c6480fa201defe8725322d6380ec66e94f6dcb49f635c0ca51296e48da4a12b3ec66582a1297adf"
+    }
+  ],
+  "error": {
+    "code": 0,
+    "message": "Success"
+  }
+}
+```
+
+</CodeGroup>
+
+### Ejemplo de bloqueo de llaves por cliente
+
+A continuación se presenta un ejemplo de reactivación de una llave por cliente:
+
+<CodeGroup>
+
+```json Request
+curl -X PUT \
+  -H "x-api-key: <API_KEY>" \
+  -H "Authorization: Bearer <TOKEN>" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "labels": {
+        "status": "ACTIVE"
+        "participantReactivation": false
+      
+    }
+  }' "URL/v1/signer/wRFmYXS2sP9ho9VCZ3j4FuP1j55ABeFvsF"
+```
+
+
+```json Response
+{
+  "signer_id": "4c57ac39-16f0-489b-89d9-bddfcd352a36",
+  "handle": "wRFmYXS2sP9ho9VCZ3j4FuP1j55ABeFvsF",
+  "labels": {
+    "aliasType": "EMAIL",
+    "aliasValue": "jorge@company.io",
+    "status": "ACTIVE",
+    "type": "PERSON",
+    "firstName": "Jorge",
+    "proprietary": "CC",
+    "identification": "1010101010",
+    "bankAccountType": "SVGS",
+    "bankAccountNumber": "12345654321",
+    "bankBicfi": "7095",
+    "bankName": "Banco Rojo",
+    "routerReference": "$bancorojo",
+    "createdBy": "$minka",
+    "targetSpbviCode": "TFY"
+    "created": "2024-10-11T11:59:24.241-05:00",
+    "updated": "2024-10-11T12:01:11.121-05:00",
+    "consented": "2024-10-11T11:59:24.241-05:00",
+    "received": "2024-10-11T11:59:22.241-05:00",
+    "dispatched": "2024-10-11T11:59:22.517-05:00"
+  },
+  "keeper": [
+    {
+      "scheme": "ecdsa-ed25519",
+      "public": "0463e75c8b975f069813ca8e6c36c0b6fd246eac708affb7ed2c6480fa201defe8725322d6380ec66e94f6dcb49f635c0ca51296e48da4a12b3ec66582a1297adf"
+    }
+  ],
+  "error": {
+    "code": 0,
+    "message": "Success"
+  }
+}
+```
+
+</CodeGroup>
+
+<Note>
+  El campo "participantReactivation" nos indica quien intenta realizar la reactivación.
+
+  - Si el valor recibido es `true`, significa que la reactivación la realiza el **participante**.
+  - Si el valor recibido es `false`, significa que la reactivación la realiza el **usuario**.
+</Note>

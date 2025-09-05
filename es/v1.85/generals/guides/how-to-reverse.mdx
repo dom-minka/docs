@@ -1,0 +1,87 @@
+---
+title: 'Cómo hacer una reversión'
+description: 'Guia del proceso de reversiones en Transfiya'
+icon: 'backward'
+---
+
+
+Un **flujo de reversión** es el conjunto de acciones necesarias para devolver el dinero al origen. Cuando ocurre un error en algún punto del flujo regular, se generan las acciones necesarias para revertir el movimiento de fondos. Al igual que las acciones regulares, estas acciones de reversión deben ser firmadas por las entidades financieras.
+
+Actualmente existen **dos tipos de acciones** asociadas al flujo de reversión:
+
+- **REJECT**: es la acción que permite devolver el dinero del usuario destino al usuario origen. Es la acción opuesta a la acción principal (SEND / REQUEST). Esta acción es creada por **TIN Cloud** y firmada por la entidad financiera que actuó como receptora en la transacción a través del endpoint `/action`.
+- **REVERSE DOWNLOAD**: es la acción que devuelve el dinero del usuario origen al banco origen. Es la inversa de la acción **UPLOAD**. Tanto la creación como la firma dependen del endpoint `/credit` de la entidad financiera que actuó como origen.
+
+Es importante destacar que cuando ocurre un error en el flujo regular, el **estado de la transferencia cambia a ERROR**, y la acción principal pasa a estado **REJECTED**, manteniéndose así hasta que la acción **REVERSE DOWNLOAD** sea firmada con éxito. En ese momento, la transferencia cambia su estado a **REJECTED**.
+
+⚠️ **IMPORTANTE:** Si ocurre un error durante la ejecución del flujo de reversión, el estado de la transferencia permanecerá en **ERROR**.
+
+---
+
+### Acciones realizadas por el flujo de reversión
+
+**Cuando inicia:**
+
+- Cambia el estado de la transferencia a `ERROR`.
+- Cambia el estado de la acción que falló a `ERROR` (la acción principal pasa a `REJECTED`).
+
+**Si finaliza con éxito:**
+
+- Cambia el estado de la transferencia a `REJECTED`.
+- Llama al endpoint `/status`.
+- Llama a **Monitor+ (341)**.
+
+---
+
+### Definiciones y Validaciones
+
+Si ocurre un error durante el proceso de reversión, la transferencia pasará a estado `ERROR` y será gestionada por el equipo de soporte.
+
+El objeto `error` de la transferencia se enviará al endpoint `/status` del banco (solo si la transferencia tiene estado final `REJECTED` o `COMPLETED`).
+
+Para revertir una acción, se deben cumplir las siguientes condiciones:
+
+- La acción debe tener un `hash`.
+- El proceso de reversión para la acción **no debe haber sido iniciado previamente**.
+
+Si el banco llama a `/continue` con una acción en error mientras el flujo de reversión ya ha comenzado, **la API ignorará la solicitud**.
+
+---
+
+### Comportamientos por tipo de error
+
+- Si el endpoint `/debit` retorna un error pero la acción **UPLOAD** fue completada, se llamará al endpoint `/credit` del origen.
+- Si el error ocurre después de completar la acción principal (**SEND** o **REQUEST**), se creará una acción **REJECT** y se llamará al endpoint `/credit` del origen.
+- Si el error ocurre con una acción **DOWNLOAD** completada, se cambiará el estado de la transferencia a **ERROR**.
+
+---
+
+### Validaciones en la respuesta de los bancos
+
+La respuesta de los endpoints `/debit`, `/transfer` y `/credit` del banco será validada. Si la respuesta no cumple con los requisitos, la transferencia permanecerá en el estado anterior y **no se generará flujo de reversión**. La transacción se detendrá en el punto donde el banco no respondió correctamente.
+
+**Respuestas inválidas incluyen:**
+
+- Objeto vacío
+- Acción sin `action_id`
+- Acción sin `labels.tx_ref`
+- Acción sin `labels.type`
+- Acción sin `labels.status`
+- Acción sin objeto `error` (solo si la respuesta es un error)
+- Incoherencia en `code` y `message` (por ejemplo, deben ser `"code": 0, "message": "Success"`)
+
+---
+
+### Impacto en el flujo
+
+#### Flujo Asíncrono
+
+- **/debit**: Sin efecto (el banco usa `/continue`).
+- **/transfer**: Transferencia queda en `ACCEPTED` o `ERROR`, acción principal en `COMPLETED` o `PENDING`.
+- **/credit**: Sin efecto (el banco usa `/continue`).
+
+#### Flujo Síncrono
+
+- **/debit**: Transferencia queda en `INITIATED`, acción **UPLOAD** en `COMPLETED` o `PENDING`.
+- **/transfer**: Transferencia queda en `ACCEPTED` o `ERROR`, acción principal en `COMPLETED` o `PENDING`.
+- **/credit**: Transferencia queda en `ACCEPTED` o `ERROR`, acción **DOWNLOAD** en `COMPLETED` o `PENDING`.

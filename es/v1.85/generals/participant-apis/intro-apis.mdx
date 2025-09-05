@@ -1,0 +1,72 @@
+---
+title: 'Introduccion APIs'
+description: 'Introducción a la sección de los apis que debe integrar los participantes'
+icon: 'cloud'
+---
+
+
+# Endpoints de API del Banco
+
+<Info>
+💡 **IMPORTANTE:** El banco puede elegir cualquier convención de nombres para definir sus endpoints. Se sugiere usar `/v1/debit`, `/v1/credit`, `/v1/transfer` y `/v1/status`, pero no es obligatorio.
+</Info>
+
+## `/v1/debit`
+
+Ejecuta una acción de tipo `UPLOAD` en la nube de TIN y realiza el débito en el core bancario.
+
+## `/v1/credit`
+
+Ejecuta una acción de tipo `DOWNLOAD` en la nube de TIN y realiza el crédito en el core bancario.
+
+## `/v1/action`
+
+Firma la transferencia del lado del banco.
+
+## `/v1/status`
+
+Canal de notificación para informar el estado de la transferencia.
+
+---
+
+## Motivos de Rechazo o Error
+
+En caso de que una transferencia sea rechazada por el banco, se debe incluir un código de error en la respuesta.
+
+| Código | Descripción | Tipo Original | Tipo Actual |
+|--------|-------------|----------------|--------------|
+| 300 | Tiempo de espera excedido | Error | Rechazo |
+| 301 | Fuente rechazó la transacción | Rechazo | Rechazo |
+| 302 | Destino rechazó la transferencia | Rechazo | Rechazo |
+| 303 | Datos de acceso inválidos en el banco | Rechazo | Rechazo |
+| 304 | Información de la transferencia inválida | Rechazo | Rechazo |
+| 305 | Usuario abandonó la transacción en el banco | Error | Rechazo |
+| 306 | Cuenta embargada | Rechazo | Rechazo |
+| 307 | Cuenta inactiva | Rechazo | Rechazo |
+| 308 | Cuenta cancelada | Rechazo | Rechazo |
+| 309 | Cuenta no existe | Rechazo | Rechazo |
+| 310 | Cuenta no habilitada | Rechazo | Rechazo |
+| 311 | Cuenta no asignada | Rechazo | Rechazo |
+| 312 | Cuenta saldada | Rechazo | Rechazo |
+| 313 | Usuario excede el límite transaccional autorizado | Rechazo | Rechazo |
+| 314 | Banco no disponible | Rechazo | Rechazo |
+| 315 | Fondos insuficientes | Rechazo | Rechazo |
+| 316 | Inconsistencia en los datos de la transacción | Rechazo | Rechazo |
+| 317 | Banco no confirma estado de la transacción | Error | Rechazo |
+| 318 | Transacción no registrada por el banco | Error | Rechazo |
+| 319 | Transferencia marcada como fraude | Rechazo | Rechazo |
+| 320 | Usuario no tiene habilitados pagos TIN | Error | Rechazo |
+| 321 | Estado de la transacción ha cambiado | Error | Rechazo |
+| 322 | Transacción rechazada por antifraude | Rechazo | Rechazo |
+| 323 | Navegador del usuario no compatible con TIN | Error | Rechazo |
+| 324 | Usuario inactivo en TIN (timeout) | Error | Rechazo |
+| 325 | Banco no acepta la inicialización de la transacción | Error | Rechazo |
+| 329 | Límite de transacción excedido por el usuario | Rechazo | Rechazo |
+| 330 | No se puede conectar con el banco | Error | Rechazo |
+| 331 | Plazo de transacción vencido | Error | Rechazo |
+| 332 | Error no definido del banco | Rechazo | Rechazo |
+| 333 | Doble abono | Reclamación | Rechazo |
+| 334 | Se abonó un valor diferente | Reclamación | Rechazo |
+| 335 | Se abonó a un usuario diferente | Reclamación | Rechazo |
+| 336 | Crédito no autorizado | Reclamación | Rechazo |
+| 337 | Transacción no autorizada | Reclamación | Rechazo |

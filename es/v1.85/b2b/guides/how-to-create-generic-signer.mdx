@@ -1,0 +1,99 @@
+---
+title: "Cómo registrar llaves genéricas"
+description: "Cómo registrar llaves genéricas en Transfiya"
+icon: "address-card"
+---
+
+## Introducción
+
+Ahora, el Directorio Federado de Transfiya permite la creación de **llaves genéricas**, las cuales se utilizan en el flujo de transferencias de **cuenta a cuenta** cuando la entidad receptora **no ha implementado el proceso de onboarding automático**.
+
+<Info>
+Estas llaves permiten ejecutar transferencias sin necesidad de que el signer del receptor sea creado en tiempo real.  
+**La entidad receptora debe registrar esta llave genérica una única vez** y quedará disponible para su uso en futuras operaciones.
+</Info>
+
+
+## Ejemplo de creación de llave
+
+Para la creación de llaves, se utilizará la interfaz de aplicación destinada a la creación de signers.
+
+La plataforma Transfiya utiliza tipos de signers y [esquemas dinámicos](../about/about-validations) para garantizar la integridad y consistencia de los datos en toda la plataforma. Esto incluye reglas de validación para diversos campos dentro del sistema.
+
+
+
+| Tipo signer | Schema aplicada | Descripción                                |
+| ----------- | --------------- | ------------------------------------------ |
+| `GENERIC`    | GENERIC          | Representa una entidad participante              |
+
+
+
+
+
+
+### Ejemplo llave generica
+
+A continuación se presenta un ejemplo de creación de una llave tipo 'GENERIC':
+
+<Tabs>
+  <Tab title="Request">
+    ```Diff
+    curl -X POST \
+     -H "x-api-key: <API_KEY>" \
+     -H "Authorization: Bearer <TOKEN>" \
+     -H "Content-Type: application/json" \
+     -d '{
+       "labels": {
+         "type": "GENERIC",
+         "firstName": "Jorge",
+         "secondName": "Manuel",
+         "lastName": "Diaz",
+         "secondLastName": "Padilla",
+         "proprietary": "CC",
+         "identification": "1010101010",
+         "bankAccountType": "SVGS",
+         "bankAccountNumber": "12345654321",
+         "routerReference": "$bancorojo",
+         "bankId": "891234918",
+       },
+       "keeper": [{
+         "scheme": "ecdsa-ed25519",
+         "public": "0463e75c8b975f069813ca8e6c36c0b6fd246eac708affb7ed2c6480fa201defe8725322d6380ec66e94f6dcb49f635c0ca51296e48da4a12b3ec66582a1297adf"
+       }]
+     }' "<base URL>/v1/signer"
+    ```
+  </Tab>
+  <Tab title="Response">
+    ```json
+    {
+      "signer_id": "4c57ac39-16f0-489b-89d9-bddfcd352a36",
+      "handle": "wRFmYXS2sP9ho9VCZ3j4FuP1j55ABeFvsF",
+      "labels": {
+        "status": "ACTIVE",
+        "type": "GENERIC",
+        "firstName": "Jorge",
+        "secondName": "Manuel",
+        "lastName": "Diaz",
+        "secondLastName": "Padilla",
+        "proprietary": "CC",
+        "identification": "1010101010",
+        "bankAccountType": "SVGS",
+        "bankAccountNumber": "12345654321",
+        "bankId": "891234918",
+        "routerReference": "$bancorojo",
+        "createdBy": "$minka"        
+      },
+      "keeper": [
+        {
+          "scheme": "ecdsa-ed25519",
+          "public": "0463e75c8b975f069813ca8e6c36c0b6fd246eac708affb7ed2c6480fa201defe8725322d6380ec66e94f6dcb49f635c0ca51296e48da4a12b3ec66582a1297adf"
+        }
+      ],
+      "error": {
+        "code": 0,
+        "message": "Success"
+      }
+    }
+    ```
+  </Tab>
+</Tabs>

@@ -1,0 +1,31 @@
+---
+title: 'Cómo crear Rechazos Automáticos'
+icon: 'circle-check'
+---
+
+
+Cualquier transacción será rechazada automáticamente si el usuario no la acepta a tiempo. Para gestionar esto, existe un **Cron Job** que se ejecuta cada minuto para revertir las transferencias desactualizadas que estén en estado regular, reversible y pendiente, marcándolas como **REJECTED**.
+
+Las transferencias que quedan atascadas en un estado irreversible **no deben ser revertidas** automáticamente por el cron job, sino que deben ser marcadas como **ERROR** y dejadas para revisión manual.
+
+⏱️ **El parámetro de tiempo es configurado por ACH en el Dashboard.**
+
+El tiempo configurado se aplica a transacciones en estado **PENDING** y reversibles. Para aquellas que se encuentren en estado **INITIATED** o **ACCEPTED**, el cron job esperará **3 minutos** antes de marcarlas como **ERROR**.
+
+### Escenarios a considerar
+
+1. **Transferencia tipo SEND en estado PENDING**  
+   Será procesada por el cron job y marcada como **REJECTED**.  
+   Si ocurre algún error del lado del banco, se marcará como **ERROR**.
+
+2. **Transferencia tipo SEND en estado INITIATED**  
+   Será procesada por el cron job y marcada como **ERROR**.
+
+3. **Transferencia tipo SEND en estado ACCEPTED**  
+   Será procesada por el cron job y marcada como **ERROR**.
+
+4. **Transferencia tipo REQUEST en estado PENDING**  
+   Será procesada por el cron job y marcada como **REJECTED**.
+
+5. **Transferencia tipo REQUEST en estado ACCEPTED**  
+   Será procesada por el cron job y marcada como **ERROR**.

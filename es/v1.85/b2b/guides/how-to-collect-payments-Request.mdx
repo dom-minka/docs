@@ -1,0 +1,79 @@
+---
+title: "Cómo recibir pagos"
+description: "Aprende cómo solicitar dinero en tiempo real usando Transfiya como método de pago."
+icon: "money-bill-transfer"
+---
+
+# Cómo recibir pagos
+
+Solicitar dinero usando una transferencia de dinero en tiempo real.
+
+Esta guía está dirigida a empresas que desean agregar **Transfiya** como un método de pago en tiempo real para recibir dinero de sus clientes.
+
+Cada movimiento de dinero o pago se inicia mediante un flujo de transferencia.
+
+Una **transferencia** representa un conjunto de acciones necesarias para mover fondos desde una fuente (como una cuenta bancaria, billetera o saldo de empresa) hacia un destino.
+
+## Endpoint para crear una transferencia
+
+Para iniciar un pago, es necesario crear un objeto de transferencia utilizando una llamada simple a la API REST:
+
+```http
+POST https://[baseURL]/v1/transfer
+```
+
+El objeto de transferencia utiliza una estructura de mensajería simple que forma la base del protocolo de Minka. Incluye los siguientes campos:
+
+- `source:` la fuente de los fondos
+- `target:` el destino de los fondos
+- `symbol:` el activo o moneda a transferir
+- `amount:` el monto a transferir
+
+Puedes encontrar más detalles sobre la estructura de la solicitud y la respuesta en la referencia de la API de Transferencias.
+
+La diferencia entre un envío (send o payout) y una solicitud (request o payin) es simplemente el orden de los campos `source` y `target` en las etiquetas (`labels`).
+
+### Ejemplo de cuerpo de solicitud
+
+```json
+{
+  "source": "$573051000001",
+  "target": "wdF75EWdSfXmEkDDwUv6N6FSUi1is92XnD",
+  "symbol": "$tin",
+  "amount": "2000",
+  "labels": {
+    "type": "REQUEST",
+    "description": "Prueba",
+    "domain": "tin",
+    "transactionPurpose": "TRANSFER",
+    "numberOfTransactions": "1",
+    "sourceChannel": "POS",
+    "tx_id": "{{$randomBitcoin}}",
+    "invoiceId": "11111",
+    "invoiceDetail": "999999"
+  }
+}
+```
+
+## Identificar una transferencia de tipo "REQUEST"
+
+Para identificar una transferencia de envío de dinero, es necesario configurar `labels.type` como `REQUEST`.
+
+<Info>
+  Actualmente soportamos dos formatos posibles para los campos `source` y `target`:
+
+  - **Wallets**: siempre comienzan con `"$57"` seguido de un número de teléfono de 10 dígitos, por ejemplo: `"$57350424242"`.
+  - **Firmantes (Signers)**: son alfanuméricos, como `"wS1EU4AtgzD6VDtsrJyGKXmkQdvkWt9Qeq"`, y **no** comienzan con `"$"`.
+</Info>
+
+Las transferencias con `labels.type` configurado como `REQUEST` se cancelan automáticamente después de 12 horas si el usuario fuente no las acepta.
+
+## Flujo simplificado de solicitud de transferencia
+
+El proceso simple de crear solicitudes de transferencia puede integrarse directamente en tu experiencia de usuario (UX) o ser llamado desde tu middleware para desembolsar fondos. Para más información, consulta la sección Solicitud de Transferencia.
+
+La transferencia permanecerá en estado **PENDING** hasta que el usuario acepte la solicitud en su aplicación bancaria.
+
+El flujo simplificado de solicitud de transferencia hacia una wallet (que representa el número de teléfono de una persona) puede visualizarse en el siguiente diagrama:
+
+![image.png](/images/image.png)
