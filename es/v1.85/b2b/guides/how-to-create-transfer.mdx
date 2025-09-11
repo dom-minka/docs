@@ -43,10 +43,10 @@ svgs:[10010010001@bancodebogota.co](mailto:10010010001@bancodebogota.co)
 Transferencias cuenta a cuenta con y sin signer de tipo cuenta
 
 <Info>
-  Cuando el usuario receptor ya está registrado en TransfiYa, la transferencia se acepta automáticamente tras la validación de reglas y ejecución del débito.
+  Cuando el usuario receptor ya está registrado en Transfiya, la transferencia se acepta automáticamente tras la validación de reglas y ejecución del débito.
   Sin embargo, si el usuario aún no está registrado, el flujo requiere una etapa adicional de onboarding:
 
-  TransfiYa notifica al banco destino que existe una transferencia pendiente.
+  Transfiya notifica al banco destino que existe una transferencia pendiente.
 
   El banco destino debe validar los datos y crear el firmante (usuario).
 
@@ -61,7 +61,7 @@ Esta diferencia impacta directamente en los tiempos de procesamiento y en la ló
     sequenceDiagram
       autonumber
       participant sb as Banco Origen
-      participant ty as TransfiYa
+      participant ty as Transfiya
       participant tb as Banco Destino
     
       sb ->>+ ty: Crear transferencia
@@ -102,7 +102,7 @@ Esta diferencia impacta directamente en los tiempos de procesamiento y en la ló
     sequenceDiagram
       autonumber
       participant sb as Banco Origen
-      participant ty as TransfiYa
+      participant ty as Transfiya
       participant tb as Banco Destino
     
       sb ->>+ ty: Crear transferencia
@@ -150,7 +150,7 @@ Esta diferencia impacta directamente en los tiempos de procesamiento y en la ló
     sequenceDiagram
       autonumber
       participant sb as Banco Origen
-      participant ty as TransfiYa
+      participant ty as Transfiya
       participant tb as Banco Destino
     
       sb ->>+ ty: Crear transferencia
@@ -188,7 +188,7 @@ Esta diferencia impacta directamente en los tiempos de procesamiento y en la ló
   </Tab>
 </Tabs>
 
-Crear una transferencia hacia una cuenta bancaria se realiza de la misma forma que cualquier otra transferencia en TransfiYa. La única diferencia es que, en el campo `target`, no se utiliza un **alias**, sino una **referencia directa a la cuenta bancaria**.
+Crear una transferencia hacia una cuenta bancaria se realiza de la misma forma que cualquier otra transferencia en Transfiya. La única diferencia es que, en el campo `target`, no se utiliza un **alias**, sino una **referencia directa a la cuenta bancaria**.
 
 <Info>
   Este tipo de transferencia es útil cuando se conoce directamente el número de cuenta, tipo de cuenta y banco destino, sin necesidad de pasar por el directorio de alias.
@@ -314,7 +314,7 @@ Crear una transferencia hacia una cuenta bancaria se realiza de la misma forma q
 
 ## 🧩 ¿Qué hacer si la cuenta destino no está registrada?
 
-En los flujos de transferencia **cuenta a cuenta**, es posible que la cuenta destino no tenga un *signer* activo en el sistema. En ese caso, **TransfiYa invoca automáticamente el endpoint `/credit` de la entidad receptora**, utilizando un *signer genérico*. Este mecanismo permite acreditar fondos incluso cuando el usuario aún no ha sido registrado formalmente.
+En los flujos de transferencia **cuenta a cuenta**, es posible que la cuenta destino no tenga un *signer* activo en el sistema. En ese caso, **Transfiya invoca automáticamente el endpoint `/credit` de la entidad receptora**, utilizando un *signer genérico*. Este mecanismo permite acreditar fondos incluso cuando el usuario aún no ha sido registrado formalmente.
 
 <Info>
 Para que esta funcionalidad funcione correctamente, la entidad receptora debe haber creado previamente un <strong>signer genérico</strong>. Puedes revisar cómo hacerlo en la sección de <a href="./how-to-create-generic-signer">Signers Genéricos</a>.
@@ -322,7 +322,7 @@ Para que esta funcionalidad funcione correctamente, la entidad receptora debe ha
 
 ### 🏦 ¿Cómo se acredita la cuenta?
 
-TransfiYa envía al endpoint `/credit` toda la información necesaria que la entidad receptora necesita para realizar la acreditación de fondos. Esta información viene dentro del campo `target.signer.labels` e incluye:
+Transfiya envía al endpoint `/credit` toda la información necesaria que la entidad receptora necesita para realizar la acreditación de fondos. Esta información viene dentro del campo `target.signer.labels` e incluye:
 
 - `name`: Nombre del titular
 - `proprietary`: Tipo de documento (ej. CC, NIT)
@@ -424,7 +424,7 @@ Este flujo permite interoperabilidad con cuentas no registradas, mejorando la ex
 
 ## 🕵️ ¿Qué hacer si no tengo la información de la cuenta del receptor?
 
-En algunos casos, la entidad originadora puede no tener acceso directo al tipo y número de cuenta del cliente receptor. Para estos escenarios, TransfiYa permite realizar una búsqueda utilizando alias registrados, ya sea para personas o empresas, mediante el **Directorio Federado**.
+En algunos casos, la entidad originadora puede no tener acceso directo al tipo y número de cuenta del cliente receptor. Para estos escenarios, Transfiya permite realizar una búsqueda utilizando alias registrados, ya sea para personas o empresas, mediante el **Directorio Federado**.
 
 Para ello, existen dos servicios disponibles:
 
