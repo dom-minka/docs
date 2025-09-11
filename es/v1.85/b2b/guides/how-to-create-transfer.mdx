@@ -8,9 +8,9 @@ Para soportar los modelos de transferencia en Transfiya para Empresas, es necesa
 
 ## 📌 Sintaxis de Referencia
 
-- **accountType**: tipo de cuenta (en minúsculas), basado en los valores estándar de Transfiya.
-- **accountNumber**: número de cuenta bancaria (coincide con `labels.bankAccountNumber` del firmante).
-- **bankReference**: dominio DNS válido del banco receptor.
+- **bankAccountType**: tipo de cuenta (en minúsculas), basado en los valores estándar de Transfiya.
+- **bankAccountNumber**: número de cuenta bancaria (coincide con `labels.bankAccountNumber` del firmante).
+- **routerReference**: dominio DNS válido del banco receptor.
 
 <Info>
   Este formato unificado garantiza consistencia y compatibilidad con los mecanismos de enrutamiento de Transfiya, facilitando la interoperabilidad entre participantes.
@@ -124,6 +124,46 @@ Esta diferencia impacta directamente en los tiempos de procesamiento y en la ló
         ty -->>- tb: Respuesta de creación
         tb ->> -ty: Aceptar transferencia
       end
+    
+      alt Acción (síncrona)
+        ty ->>+ sb: Llamar a acción
+        sb ->> sb: Procesar acción
+        sb -->>- ty: Respuesta de acción
+      end
+    
+      alt Crédito (asíncrono)
+        ty ->>+ tb: Llamar a crédito
+        tb ->> tb: Procesar crédito
+        tb ->> -ty: Continuar transferencia
+      end
+    
+      ty ->>+ sb: Consultar estado
+      sb -->>- ty: Respuesta de estado
+    
+      ty ->>+ tb: Consultar estado
+      tb -->>- ty: Respuesta de estado
+    ```
+  </Tab>
+  <Tab title="Flujo con Signer Genérico">
+    ```mermaid
+    sequenceDiagram
+      autonumber
+      participant sb as Banco Origen
+      participant ty as TransfiYa
+      participant tb as Banco Destino
+    
+      sb ->>+ ty: Crear transferencia
+      ty ->> ty: Validar reglas de negocio
+      ty -->>- sb: Transferencia creada
+    
+      alt Débito (asíncrono)
+        ty ->>+ sb: Llamar a débito
+        sb ->> sb: Procesar débito
+        sb ->> -ty: Continuar transferencia
+      end
+    
+      ty ->> ty: Resolver signer genérico
+      ty ->> ty: Aceptar transferencia
     
       alt Acción (síncrona)
         ty ->>+ sb: Llamar a acción

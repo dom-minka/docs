@@ -1,20 +1,20 @@
 ---
-title: "Cómo registrar llaves genéricas"
-description: "Cómo registrar llaves genéricas en Transfiya"
+title: "Cómo registrar signer genérico"
+description: "Cómo registrar signer genérico en Transfiya"
 icon: "address-card"
 ---
 
 ## Introducción
 
-Ahora, el Directorio Federado de Transfiya permite la creación de **llaves genéricas**, las cuales se utilizan en el flujo de transferencias de **cuenta a cuenta** cuando la entidad receptora **no ha implementado el proceso de onboarding automático**.
+Ahora, el Directorio Federado de Transfiya permite la creación de **signer genérico**, las cuales se utilizan en el flujo de transferencias de **cuenta a cuenta** cuando la entidad receptora **no ha implementado el proceso de onboarding automático**.
 
 <Info>
-Estas llaves permiten ejecutar transferencias sin necesidad de que el signer del receptor sea creado en tiempo real.  
-**La entidad receptora debe registrar esta llave genérica una única vez** y quedará disponible para su uso en futuras operaciones.
+Estos signers permiten ejecutar transferencias sin necesidad de que el signer del receptor sea creado en tiempo real.  
+**La entidad receptora debe registrar este signer genérico una única vez** y quedará disponible para su uso en futuras operaciones.
 </Info>
 
 
-## Ejemplo de creación de llave
+## Ejemplo de creación de Signer
 
 Para la creación de llaves, se utilizará la interfaz de aplicación destinada a la creación de signers.
 
@@ -31,7 +31,7 @@ La plataforma Transfiya utiliza tipos de signers y [esquemas dinámicos](../abou
 
 
 
-### Ejemplo llave generica
+### Ejemplo Signer Genérico
 
 A continuación se presenta un ejemplo de creación de una llave tipo 'GENERIC':
 
@@ -45,16 +45,14 @@ A continuación se presenta un ejemplo de creación de una llave tipo 'GENERIC':
      -d '{
        "labels": {
          "type": "GENERIC",
-         "firstName": "Jorge",
-         "secondName": "Manuel",
-         "lastName": "Diaz",
-         "secondLastName": "Padilla",
+         "firstName": "Entidad Participante",
+         "secondName": "Participante",
+         "lastName": "Generico",
+         "secondLastName": "A2A",
          "proprietary": "CC",
-         "identification": "1010101010",
-         "bankAccountType": "SVGS",
-         "bankAccountNumber": "12345654321",
+         "identification": "111111111",
          "routerReference": "$bancorojo",
-         "bankId": "891234918",
+         "bankId": "111111111",
        },
        "keeper": [{
          "scheme": "ecdsa-ed25519",
