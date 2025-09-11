@@ -422,3 +422,42 @@ La entidad receptora debe procesar la acreditación utilizando únicamente los d
 Este flujo permite interoperabilidad con cuentas no registradas, mejorando la experiencia del usuario sin sacrificar seguridad ni trazabilidad.
 </Info>
 
+## 🕵️ ¿Qué hacer si no tengo la información de la cuenta del receptor?
+
+En algunos casos, la entidad originadora puede no tener acceso directo al tipo y número de cuenta del cliente receptor. Para estos escenarios, TransfiYa permite realizar una búsqueda utilizando alias registrados, ya sea para personas o empresas, mediante el **Directorio Federado**.
+
+Para ello, existen dos servicios disponibles:
+
+- `lookup.dice`: para búsquedas reguladas bajo el modelo SPI.
+- `signer.lookup`: para búsquedas no reguladas.
+
+Estos métodos permiten al participante origen consultar el alias y recuperar toda la información necesaria del firmante receptor para poder inicializar correctamente una transacción de tipo cuenta a cuenta.
+
+### 🔍 Ejemplo de uso de `lookup.dice`
+
+```bash
+curl --location '{{url}}/v1/signer/lookup.dice' \
+--header 'Content-Type: application/json' \
+--header 'Authorization: Bearer <token>' \
+--data-raw '{
+  "aliasValue": "@testing",
+  "received": "2025-04-10T15:49:15.015-05:00",
+  "dispatched": "2025-04-10T15:49:15.015-05:00"
+}'
+```
+📦 ¿Qué devuelve la consulta?
+
+La respuesta del directorio incluye datos esenciales como:
+	•	Nombre completo del titular
+	•	Tipo de cuenta (svgs, cacc, etc.)
+	•	Número de cuenta
+	•	Tipo y número de documento
+	•	Banco asociado
+
+Con esta información, la entidad originadora puede construir la referencia de cuenta y ejecutar la transferencia como si ya conociera esos datos desde el inicio.
+<Info>
+Esta funcionalidad es especialmente útil en transferencias empresariales o institucionales donde las relaciones entre participantes están basadas en alias conocidos públicamente.
+</Info>
+
+
+
