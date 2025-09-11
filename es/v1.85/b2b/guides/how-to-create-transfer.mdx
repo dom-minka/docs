@@ -86,6 +86,7 @@ Esta diferencia impacta directamente en los tiempos de procesamiento y en la ló
       alt Crédito (asíncrono)
         ty ->>+ tb: Llamar a crédito
         tb ->> tb: Procesar crédito
+        tb ->> tb: Firma con Signer Registrado
         tb ->> -ty: Continuar transferencia
       end
     
@@ -174,6 +175,7 @@ Esta diferencia impacta directamente en los tiempos de procesamiento y en la ló
       alt Crédito (asíncrono)
         ty ->>+ tb: Llamar a crédito
         tb ->> tb: Procesar crédito
+        tb ->> tb: Firma con Signer Genérico
         tb ->> -ty: Continuar transferencia
       end
     
