@@ -6,13 +6,15 @@ icon: "circle-check"
 
 <Update label="2025-09-02" description="v1.85">
   - Se actualizan los códigos de error del MOL para diferenciarlos de los que actualmente utiliza el servicio. Además, se reorganizan conforme a los códigos que el MOL retorna en la actualidad.
-  - Se adiciona la funcionalidad de crear *signer genérico* en el sistema de Transfiya para Empresas.
+  - Se adiciona la funcionalidad de crear _signer genérico_ en el sistema de Transfiya para Empresas.
   - Se agregan los atributos de tipo de identificación, número de identificación y nombre en el flujo de cuenta a cuenta al momento de inicializar la transacción.
-  - Se habilita el uso de *signer genérico* en el flujo de cuenta a cuenta para acreditar transferencias sin necesidad de que la cuenta destino esté previamente registrada, evitando así el onboarding previo por parte de la entidad receptora.
+  - Se habilita el uso de _signer genérico_ en el flujo de cuenta a cuenta para acreditar transferencias sin necesidad de que la cuenta destino esté previamente registrada, evitando así el onboarding previo por parte de la entidad receptora.
+  - Se ajustan los campos mínimos del signer para poder originar transacciones en el flujo SENDMOL.
+  - Se Ajustan las descripciones de los códigos de error retornados por el DICE. (120 timeout - 123 cuando la llave está registrada por otra entidad financiera).
 </Update>
+
 <Update label="2025-08-29" description="v1.84">
   - Se agrega la homologación de códigos de eror del MOL
-  
 </Update>
 
 <Update label="2025-08-20" description="v1.83">
