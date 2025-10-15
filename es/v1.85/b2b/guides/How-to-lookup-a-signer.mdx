@@ -1,18 +1,16 @@
 ---
-title: "Como buscar un signer"
+title: "Como buscar una cuenta"
 description: "Aprende cómo obtener el firmante asociado a un alias utilizando la API de Transfiya."
-icon: 'magnifying-glass'
+icon: "magnifying-glass"
 ---
 
 import Info from '@components/InfoAlert'
 
-# Cómo consultar un signer
+# Cómo consultar una cuenta - Versión 1
 
-Esta guía está dirigida a las entidades que desean obtener el firmante asociado a un alias, ya que es más simple y rápido para los usuarios (personas o empresas) recordar una palabra clave que una información de pago extensa.
+Esta guía está destinada para que las Entidades Participantes que desean validar si un usuario receptor se encuentra creado en de Transfiya (signer).
 
-La API de Transfiya permite a los bancos consultar y resolver alias. El flujo para resolver manualmente un firmante antes de crear una transferencia requiere que el banco obtenga este firmante desde la API. Después de obtener el firmante del sistema, el banco utiliza el identificador del firmante como destino de la transferencia para crear una nueva. Si no se encuentra el firmante, significa que el usuario no está registrado en el sistema y no se puede crear la transferencia bajo el modelo regulado.
-
-Las transferencias a alias seguirán estando permitidas hasta que la regulación se aplique completamente, para mantener la compatibilidad con los bancos existentes en el sistema. Esto significa que cualquier banco nuevo puede implementar el modelo regulado y aún así enviar/recibir transferencias de bancos existentes, independientemente de si han migrado al flujo regulado o no.
+Un Signer es una representación de una credencial de pago en Transfiya, dentro de cada creación de Signer se almacena la información del usuario y la información de la cuenta, y debido a esto, las Entidades pueden hacer una búsqueda con la información del usuario y del banco para obtener el signer registrado.
 
 <Info>
   Los valores de alias no distinguen entre mayúsculas y minúsculas; se almacenan en mayúsculas. Estos valores se convierten a mayúsculas antes de almacenarse o usarse como parámetros de búsqueda (`labels.aliasValue`).
@@ -20,65 +18,49 @@ Las transferencias a alias seguirán estando permitidas hasta que la regulación
 
 ## Filtros disponibles para obtener un signer por alias
 
-Puedes usar los siguientes filtros en el endpoint `GET [baseUrl]/v1/signer`:
+Puedes usar los siguientes filtros en el endpoint `POST [baseUrl]/v1/signer/lookup`:
 
-- `labels.aliasValue`
-- `labels.status`
-- `labels.aliasType`
+- `labels.proprietary`
+- `labels.identification`
+- `labels.bankAccountNumber`
+- `labels.routerReference`
 
 ### Ejemplo de solicitud
 
 ```json
-curl -X GET \
-  -H "x-api-key: <API_KEY>" \
-  -H "Authorization: Bearer <TOKEN>" \
-  -H "Content-Type: application/json" "<base URL>/v1/signer/?labels.aliasValue=@jorge22&labels.status=ACTIVE"
+curl --location 'https://ach-minka-stg.transferenciasinmediatas.com/v1/signer/lookup' \
+--header 'Content-Type: application/json' \
+--header 'Authorization: Bearer ****' \
+--data '{
+    "labels": {
+        "proprietary": "NIT",
+        "identification": "804153241",
+        "bankAccountNumber": "335278945",
+        "routerReference": "$bancoamarillo"
+    }
+}'
 ```
 
 <Tabs>
   <Tab title="Response">
     ```json
     {
-      "entities": [
-        {
-          "signer_id": "4c57ac39-16f0-489b-89d9-bddfcd352a36",
-          "handle": "wRFmYXS2sP9ho9VCZ3j4FuP1j55ABeFvsF",
-          "labels": {
-            "aliasType": "ALPHANUM",
-            "aliasValue": "@JORGE22",
-            "status": "ACTIVE",
-            "type": "PERSON",
-            "firstName": "Jorge",
-            "proprietary": "CC",
-            "identification": "1010101010",
-            "bankAccountType": "SVGS",
-            "bankAccountNumber": "12345654321",
-            "bankBicfi": "7095",
-            "bankName": "Banco Rojo",
-            "bankId": "891234918",
-            "routerReference": "$bancorojo",
-            "createdBy": "$minka",
-            "targetSpbviCode": "TFY",
-            "created": "2024-10-11T11:59:24.241-05:00",
-            "consented": "2024-10-11T11:59:24.241-05:00"
-          },
-          "keeper": [
+        "pagination": {
+            "pageNum": 0,
+            "pageSize": 50
+        },
+        "error": {
+            "code": 0,
+            "message": "Success"
+        },
+        "entities": [
             {
-              "scheme": "ecdsa-ed25519",
-              "public": "0463e75c8b975f069813ca8e6c36c0b6fd246eac708affb7ed2c6480fa201defe8725322d6380ec66e94f6dcb49f635c0ca51296e48da4a12b3ec66582a1297adf"
+                "handle": "wL62NznU8SPZavTRsy2G3bQ7E2qFL8jpcM",
+                "wallets": []
             }
-          ]
-        }
-      ],
-      "pagination": {
-        "pageNum": 0,
-        "pageSize": 50
-      },
-      "error": {
-        "code": 0,
-        "message": "Success"
-      }
+        ]
     }
+    
     ```
   </Tab>
 </Tabs>
