@@ -1,0 +1,70 @@
+---
+title: "Como generar un QR"
+description: "Como generar un QR interoperable "
+---
+
+### Definición de producto
+
+El código QR (Quick Response) es una herramienta visual bidimensional con estructura cuadrada, diseñada para almacenar información codificada de forma eficiente. Su lectura es rápida y su capacidad supera la de los códigos de barras tradicionales. Puede ser estático, con contenido fijo, o dinámico, adaptándose a cada transacción mediante generación en tiempo real.
+
+En Colombia, esta tecnología se habilita como parte del sistema Bre-B de pagos inmediatos, en cumplimiento del artículo 104 de la Ley 2294 de 2023 y bajo la regulación del Banco de la República para transfrencias y/o pagos inmediatos a personas y comercios. El objetivo es facilitar pagos digitales mediante billeteras electrónicas y acceso móvil, utilizando el estándar internacional EMVCo. Esto permite que los usuarios realicen pagos sin contacto físico con la tarjeta, mejorando la seguridad y ampliando los puntos de aceptación en todo el país.
+
+### Tipos de QR:
+
+<Icon icon="qrcode" /> **<u>Estático</u>**
+
+Es un código de respuesta rápida que contiene información fija, como los datos del comercio o una llave destino (comercio o persona). Se genera una sola vez y no se actualiza con cada transacción. Por lo general, se imprime o se exhibe en un lugar visible (como una vitrina o factura), y el usuario debe ingresar manualmente el monto a pagar.\
+Para las Entidades Participantes, este tipo de QR representa una solución sencilla y de bajo costo para habilitar pagos, aunque con menor automatización y control sobre la transacción.
+
+<Icon icon="qrcode" /> **<u>Dinámico</u>**
+
+Este código se genera en tiempo real y contiene información específica de cada transacción, como el valor exacto, la llave destino (comercio o persona), la referencia de pago, entre otros. Al escanearlo, el usuario no necesita digitar ningún dato adicional: el pago se procesa automáticamente.\
+Desde el punto de vista de las Entidades Participantes, el QR dinámico permite una experiencia de pago más segura, rápida y trazable, ideal para integraciones con sistemas de facturación, puntos de venta y billeteras digitales.
+
+### Flujo para la generación y lectura con código QR:
+
+A continuación se relaciona el flujo para generación y lectura con código QR
+
+<img
+  src="/FlujoQR.PNG"
+  alt="Flujo QR PN"
+  title="Flujo QR PN"
+  className="mx-auto"
+/>
+
+### Especificaciones
+
+Las Entidades Participantes  que desen habilitar la generacion de código  QR a través de Transfiya, deberán tener en cuenta para la implementación, los siguientes campos cumplliendo el estándar EMVco y los lineamientos de Banco de la República :
+
+### Entrada:
+
+| **Campo **                    | **Tipo  ** | **Descripción **                                                                                                                                 | **Longitud**   | **Obligatorio ** |
+| :---------------------------- | :--------- | :----------------------------------------------------------------------------------------------------------------------------------------------- | :------------- | :--------------- |
+| pointOfInitiationMethod       | Lista      | Campo de tipo de QR - Valores válidos (ESTATICO y DINAMICO) - SIN tildes, sin importar mayusculas y minusculas                                   | Min 1 - Máx 8  | SI               |
+| merchantAccountInformation    | Objeto     |                                                                                                                                                  |                | SI               |
+| aliasType                     | Lista      | Tipo de llave - Valores válidos (IDENTIFICACION, CELULAR, EMAIL, TEXT, MERCHANTID)                                                               | Min 1 - Máx 20 | NO               |
+| aliasValue                    | Texto      | Valor de llave                                                                                                                                   | Min 1 - Máx 92 | NO               |
+| merchantCode                  | Texto      | Código de comercio                                                                                                                               | Min 1 - Máx 20 | NO               |
+| merchantName                  | Texto      | Nombre del comercio                                                                                                                              | Min 1 - Máx 20 | SI               |
+| merchantCity                  | Texto      | Ciudad del comercio                                                                                                                              | Min 1 - Máx 20 | SI               |
+| postalCode                    | Texto      | Código postal adquirente                                                                                                                         | Min 1 - Máx 6  | SI               |
+| merchantCategoryCode          | Texto      | MCC - (para PN: 0000 y para PJ: Valores del estándar ISO 18245) - No se validara la existencia del dato ISO                                      | Min 1 - Máx 4  | SI               |
+| additionalMerchantInformation | Objeto     |                                                                                                                                                  |                | SI               |
+| terminal                      | Texto      | Terminal alfanumérica asociada al comercio Ej: 12345                                                                                             | Min 1 - Máx 20 | SI               |
+| transactionPorpose            | Lista      | Valores válidos - (COMPRAS, ANULACIONES, TRANSFERENCIAS, RETIRO, RECAUDO, RECARGAS, DEPOSITO) - SIN tildes, sin importar mayusculas y minusculas | Min 1 - Máx 25 | SI               |
+| transaction                   | Objeto     |                                                                                                                                                  |                | SI               |
+| amount                        | Decimal    | Valor de la transacción, aplican las reglas para los valores de tipo decimal                                                                     | Min 1 - Máx 13 | SI               |
+| customData                    | Objeto     |                                                                                                                                                  |                | SI               |
+| valorIva                      | Decimal    | Valor del impuesto Iva, aplican las reglas para los valores de tipo decimal                                                                      | Min 1 - Máx 13 | NO               |
+| baseIva                       | Decimal    | Valor base IVA, aplican las reglas para los valores de tipo decimal                                                                              | Min 1 - Máx 13 | NO               |
+| valorInc                      | Decimal    | Valor del impuesto del INC (Impuessto Nacional al Consumo), aplican las reglas para los valores de tipo decimal                                  | Min 1 - Máx 13 | NO               |
+| idQr                          | Texto      | Identificador único de QR                                                                                                                        | Min 1 - Máx 35 | SI               |
+| channel                       | Texto      | Canal origen. Valore válidos (IM, POS, APP, ECOMM, MPOS, ATM, CB, OFC) - SIN tildes, sin importar mayusculas y minusculas                        | Min 1 - Máx 30 | SI               |
+
+### Salida:
+
+| **Campo **      | **Tipo  ** | **Descripción**                                         | **Longitud**   | **Obligatoriedad** |
+| :-------------- | :--------- | :------------------------------------------------------ | :------------- | :----------------- |
+| id              | Texto      | Identificador del QR en el sistema                      | Min 1 - Máx 36 | SI                 |
+| qrCode          | Texto      | Cadena de texto con el codigo generado en formato EMVCO | Min 1 - Máx 30 | SI                 |
+| fechaGeneracion | Texto      | Fecha en la que se genero en QR                         | N/A            | SI                 |
