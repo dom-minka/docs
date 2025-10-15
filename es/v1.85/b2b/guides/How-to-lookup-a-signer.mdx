@@ -12,11 +12,7 @@ Esta guía está destinada para que las Entidades Participantes que desean valid
 
 Un Signer es una representación de una credencial de pago en Transfiya, dentro de cada creación de Signer se almacena la información del usuario y la información de la cuenta, y debido a esto, las Entidades pueden hacer una búsqueda con la información del usuario y del banco para obtener el signer registrado.
 
-<Info>
-  Los valores de alias no distinguen entre mayúsculas y minúsculas; se almacenan en mayúsculas. Estos valores se convierten a mayúsculas antes de almacenarse o usarse como parámetros de búsqueda (`labels.aliasValue`).
-</Info>
-
-## Filtros disponibles para obtener un signer por alias
+## Filtros disponibles para obtener un signer por datos del beneficiario:
 
 Puedes usar los siguientes filtros en el endpoint `POST [baseUrl]/v1/signer/lookup`:
 
@@ -64,3 +60,75 @@ curl --location 'https://ach-minka-stg.transferenciasinmediatas.com/v1/signer/lo
     ```
   </Tab>
 </Tabs>
+
+# Cómo consultar una cuenta - Versión 2
+
+Esta versión del Signer Lookup está destinada para que las Entidades Participantes que desean validar si un usuario receptor se encuentra creado en de Transfiya (signer). Usando como datos de entrada el tipo de identificación y número de identificación del beneficiario.
+
+Transfiya permite a las Entidades, relacionar el caso de uso para ejecutar la respectiva resolución de la información de manera eficiente.
+
+A continuación, se relaciona los valores que permite recibir el campo _useCase:_
+
+| Valor    | Descripción                                                   |
+| -------- | ------------------------------------------------------------- |
+| b2p-send | Corresponde a una transacción tipo SEND de empresa a persona. |
+| b2b-send | Corresponde a una transacción tipo SEND de empresa a empresa. |
+
+### Ejemplo de solicitud
+
+```json
+curl --location 'https://ach-minka-stg.transferenciasinmediatas.com/v2/signer/lookup' \
+--header 'Content-Type: application/json' \
+--header 'Authorization: Bearer ****' \
+--data '{
+    "useCase": "b2b-send",
+    "labels": {
+        "proprietary": "NIT",
+        "identification": "804153241"
+        
+        
+    }
+}
+```
+
+Response
+
+```json
+{
+    "entities": [
+        {
+            "handle": "wWZd85BW1kCj5RgeNET6EC55sG5uGDqpWB",
+            "bankName": "Banco Amarillo",
+            "bankBicfi": "3854",
+            "proprietary": "NIT",
+            "identification": "804153241",
+            "routerReference": "$bancoamarillo",
+            "bankAccountNumber": "335278944"
+        },
+        {
+            "handle": "wL62NznU8SPZavTRsy2G3bQ7E2qFL8jpcM",
+            "bankName": "Banco Amarillo",
+            "bankBicfi": "3854",
+            "proprietary": "NIT",
+            "identification": "804153241",
+            "routerReference": "$bancoamarillo",
+            "bankAccountNumber": "335278945"
+        }
+    ],
+    "error": {
+        "code": 0,
+        "message": "Success"
+    }
+}
+```
+
+### Lista de códigos de error
+
+A continuación se listan los códigos de error asociados a esta operación:
+
+| **Código de error** | **Descripción**                               | **HTTP Status** |
+| :------------------ | :-------------------------------------------- | :-------------- |
+| 99                  | Error inesperado del servidor                 | 400             |
+| 100                 | No tienes permisos para acceder a este método | 403             |
+| 102                 | Etiquetas inválidas                           | 400             |
+| 118                 | Error de validación del esquema del recurso   | 400             |
