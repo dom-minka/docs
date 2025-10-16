@@ -34,7 +34,8 @@
                   "es/v1.85/directory/guides/how-to-sync-dice",
                   "es/v1.85/directory/guides/how-to-send-timestamps",
                   "es/v1.85/directory/guides/how-to-lock-keys",
-                  "es/v1.85/directory/guides/how-to-reactivate-keys"
+                  "es/v1.85/directory/guides/how-to-reactivate-keys",
+                  "es/v1.85/transfers-mol/guides/how-to-create-qr"
                 ]
               },
               {
@@ -79,7 +80,6 @@
                 "group": "Guias de uso",
                 "icon": "mask",
                 "pages": [
-                  "es/v1.85/transfers-mol/guides/how-to-create-qr",
                   "es/v1.85/transfers-mol/guides/how-to-send-mol",                
                   "es/v1.85/transfers-mol/guides/how-to-debit-sender",
                   "es/v1.85/transfers-mol/guides/how-to-accept-transfers",
