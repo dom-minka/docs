@@ -38,33 +38,33 @@ Las Entidades Participantes  que desen habilitar la generacion de código  QR a 
 
 ### Entrada:
 
-| **Campo **                    | **Tipo** | **Descripción **                                                                                                                                 | **Longitud**   | **Obligatorio ** |
-| :---------------------------- | :------- | :----------------------------------------------------------------------------------------------------------------------------------------------- | :------------- | :--------------- |
-| pointOfInitiationMethod       | Lista    | Campo de tipo de QR - Valores válidos (ESTATICO y DINAMICO) - SIN tildes, sin importar mayusculas y minusculas                                   | Min 1 - Máx 8  | SI               |
-| merchantAccountInformation    | Objeto   |                                                                                                                                                  |                | SI               |
-| aliasType                     | Lista    | Tipo de llave - Valores válidos (IDENTIFICACION, CELULAR, EMAIL, TEXT, MERCHANTID)                                                               | Min 1 - Máx 20 | NO               |
-| aliasValue                    | Texto    | Valor de llave                                                                                                                                   | Min 1 - Máx 92 | NO               |
-| merchantCode                  | Texto    | Código de comercio                                                                                                                               | Min 1 - Máx 20 | NO               |
-| merchantName                  | Texto    | Nombre del comercio                                                                                                                              | Min 1 - Máx 20 | SI               |
-| merchantCity                  | Texto    | Ciudad del comercio                                                                                                                              | Min 1 - Máx 20 | SI               |
-| postalCode                    | Texto    | Código postal adquirente                                                                                                                         | Min 1 - Máx 6  | SI               |
-| merchantCategoryCode          | Texto    | MCC - (para PN: 0000 y para PJ: Valores del estándar ISO 18245) - No se validara la existencia del dato ISO                                      | Min 1 - Máx 4  | SI               |
-| additionalMerchantInformation | Objeto   |                                                                                                                                                  |                | SI               |
-| terminal                      | Texto    | Terminal alfanumérica asociada al comercio Ej: 12345                                                                                             | Min 1 - Máx 20 | SI               |
-| transactionPorpose            | Lista    | Valores válidos - (COMPRAS, ANULACIONES, TRANSFERENCIAS, RETIRO, RECAUDO, RECARGAS, DEPOSITO) - SIN tildes, sin importar mayusculas y minusculas | Min 1 - Máx 25 | SI               |
-| transaction                   | Objeto   |                                                                                                                                                  |                | SI               |
-| amount                        | Decimal  | Valor de la transacción, aplican las reglas para los valores de tipo decimal                                                                     | Min 1 - Máx 13 | SI               |
-| customData                    | Objeto   |                                                                                                                                                  |                | SI               |
-| valorIva                      | Decimal  | Valor del impuesto Iva, aplican las reglas para los valores de tipo decimal                                                                      | Min 1 - Máx 13 | NO               |
-| baseIva                       | Decimal  | Valor base IVA, aplican las reglas para los valores de tipo decimal                                                                              | Min 1 - Máx 13 | NO               |
-| valorInc                      | Decimal  | Valor del impuesto del INC (Impuessto Nacional al Consumo), aplican las reglas para los valores de tipo decimal                                  | Min 1 - Máx 13 | NO               |
-| idQr                          | Texto    | Identificador único de QR                                                                                                                        | Min 1 - Máx 35 | SI               |
-| channel                       | Texto    | Canal origen. Valore válidos (IM, POS, APP, ECOMM, MPOS, ATM, CB, OFC) - SIN tildes, sin importar mayusculas y minusculas                        | Min 1 - Máx 30 | SI               |
+| \*\*Campo \*\*                | **Tipo** | \*\*Descripción \*\*                                                                                                                             | **Longitud**   | \*\*Obligatorio \*\* |
+| :---------------------------- | :------- | :----------------------------------------------------------------------------------------------------------------------------------------------- | :------------- | :------------------- |
+| pointOfInitiationMethod       | Lista    | Campo de tipo de QR - Valores válidos (ESTATICO y DINAMICO) - SIN tildes, sin importar mayusculas y minusculas                                   | Min 1 - Máx 8  | SI                   |
+| merchantAccountInformation    | Objeto   |                                                                                                                                                  |                | SI                   |
+| aliasType                     | Lista    | Tipo de llave - Valores válidos (IDENTIFICACION, CELULAR, EMAIL, TEXT, MERCHANTID)                                                               | Min 1 - Máx 20 | NO                   |
+| aliasValue                    | Texto    | Valor de llave                                                                                                                                   | Min 1 - Máx 92 | NO                   |
+| merchantCode                  | Texto    | Código de comercio                                                                                                                               | Min 1 - Máx 20 | NO                   |
+| merchantName                  | Texto    | Nombre del comercio                                                                                                                              | Min 1 - Máx 20 | SI                   |
+| merchantCity                  | Texto    | Ciudad del comercio                                                                                                                              | Min 1 - Máx 20 | SI                   |
+| postalCode                    | Texto    | Código postal adquirente                                                                                                                         | Min 1 - Máx 6  | SI                   |
+| merchantCategoryCode          | Texto    | MCC - (para PN: 0000 y para PJ: Valores del estándar ISO 18245) - No se validara la existencia del dato ISO                                      | Min 1 - Máx 4  | SI                   |
+| additionalMerchantInformation | Objeto   |                                                                                                                                                  |                | SI                   |
+| terminal                      | Texto    | Terminal alfanumérica asociada al comercio Ej: 12345                                                                                             | Min 1 - Máx 20 | SI                   |
+| transactionPorpose            | Lista    | Valores válidos - (COMPRAS, ANULACIONES, TRANSFERENCIAS, RETIRO, RECAUDO, RECARGAS, DEPOSITO) - SIN tildes, sin importar mayusculas y minusculas | Min 1 - Máx 25 | SI                   |
+| transaction                   | Objeto   |                                                                                                                                                  |                | SI                   |
+| amount                        | Decimal  | Valor de la transacción, aplican las reglas para los valores de tipo decimal                                                                     | Min 1 - Máx 13 | SI                   |
+| customData                    | Objeto   |                                                                                                                                                  |                | SI                   |
+| valorIva                      | Decimal  | Valor del impuesto Iva, aplican las reglas para los valores de tipo decimal                                                                      | Min 1 - Máx 13 | NO                   |
+| baseIva                       | Decimal  | Valor base IVA, aplican las reglas para los valores de tipo decimal                                                                              | Min 1 - Máx 13 | NO                   |
+| valorInc                      | Decimal  | Valor del impuesto del INC (Impuessto Nacional al Consumo), aplican las reglas para los valores de tipo decimal                                  | Min 1 - Máx 13 | NO                   |
+| idQr                          | Texto    | Identificador único de QR                                                                                                                        | Min 1 - Máx 35 | SI                   |
+| channel                       | Texto    | Canal origen. Valore válidos (IM, POS, APP, ECOMM, MPOS, ATM, CB, OFC) - SIN tildes, sin importar mayusculas y minusculas                        | Min 1 - Máx 30 | SI                   |
 
 ### Salida:
 
-| **Campo **      | **Tipo  ** | **Descripción**                                         | **Longitud**   | **Obligatoriedad** |
-| :-------------- | :--------- | :------------------------------------------------------ | :------------- | :----------------- |
-| id              | Texto      | Identificador del QR en el sistema                      | Min 1 - Máx 36 | SI                 |
-| qrCode          | Texto      | Cadena de texto con el codigo generado en formato EMVCO | Min 1 - Máx 30 | SI                 |
-| fechaGeneracion | Texto      | Fecha en la que se genero en QR                         | N/A            | SI                 |
+| \*\*Campo \*\*  | \*\*Tipo  \*\* | **Descripción**                                         | **Longitud**   | **Obligatoriedad** |
+| :-------------- | :------------- | :------------------------------------------------------ | :------------- | :----------------- |
+| id              | Texto          | Identificador del QR en el sistema                      | Min 1 - Máx 36 | SI                 |
+| qrCode          | Texto          | Cadena de texto con el codigo generado en formato EMVCO | Min 1 - Máx 30 | SI                 |
+| fechaGeneracion | Texto          | Fecha en la que se genero en QR                         | N/A            | SI                 |
