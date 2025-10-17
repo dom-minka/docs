@@ -10,7 +10,7 @@ Para soportar los modelos de transferencia en Transfiya para Empresas, es necesa
 
 - **bankAccountType**: tipo de cuenta (en minúsculas), basado en los valores estándar de Transfiya.
 - **bankAccountNumber**: número de cuenta bancaria (coincide con `labels.bankAccountNumber` del firmante).
-- **routerReference**: dominio DNS válido del banco receptor.
+- **routerReference**: código de compensación o Bicfi válido del banco receptor.
 
 <Info>
   Este formato unificado garantiza consistencia y compatibilidad con los mecanismos de enrutamiento de Transfiya, facilitando la interoperabilidad entre participantes.
@@ -34,17 +34,16 @@ A continuación se listan los tipos de cuenta reconocidos en Transfiya:
 
 ## 🌐 Referencia Bancaria
 
-El identificador del banco (`bankReference`) debe ser un dominio DNS válido, que permita una resolución clara y única del participante receptor.
+El identificador del banco (`bankReference`) debe ser el código de compensación o Bicfi válido, que permita una resolución clara y única del participante receptor.
 
 ## ✅ Ejemplo de referencia válida
 
-svgs:[10010010001@bancodebogota.co](mailto:10010010001@bancodebogota.co)
+svgs:44255107106500@1001
 
 Transferencias cuenta a cuenta con y sin signer de tipo cuenta
 
 <Info>
-  Cuando el usuario receptor ya está registrado en Transfiya, la transferencia se acepta automáticamente tras la validación de reglas y ejecución del débito.
-  Sin embargo, si el usuario aún no está registrado, el flujo requiere una etapa adicional de onboarding:
+  Cuando el usuario receptor ya está registrado en Transfiya, la transferencia se acepta automáticamente tras la validación de reglas y ejecución del débito. Sin embargo, si el usuario aún no está registrado, el flujo requiere una etapa adicional de onboarding:
 
   Transfiya notifica al banco destino que existe una transferencia pendiente.
 
@@ -207,7 +206,7 @@ Crear una transferencia hacia una cuenta bancaria se realiza de la misma forma q
     -H "Authorization: Bearer <TOKEN>" \
     -d '{
     "source": "wXxwpxB32saqfmfMxAQD4SVWWhhn6akLC2",
-    "target": "svgs:10010010001@bbva.co",
+    "target": "svgs:44255107106500@1001",
     "amount": "100.00",
     "symbol": "$tin",
     "labels": {
@@ -314,10 +313,14 @@ Crear una transferencia hacia una cuenta bancaria se realiza de la misma forma q
 
 ## 🧩 ¿Qué hacer si la cuenta destino no está registrada?
 
-En los flujos de transferencia **cuenta a cuenta**, es posible que la cuenta destino no tenga un *signer* activo en el sistema. En ese caso, **Transfiya invoca automáticamente el endpoint `/credit` de la entidad receptora**, utilizando un *signer genérico*. Este mecanismo permite acreditar fondos incluso cuando el usuario aún no ha sido registrado formalmente.
+En los flujos de transferencia **cuenta a cuenta**, es posible que la cuenta destino no tenga un _signer_ activo en el sistema. En ese caso, **`Transfiya invoca automáticamente el endpoint /credit de la entidad receptora`**, utilizando un _signer genérico_. Este mecanismo permite acreditar fondos incluso cuando el usuario aún no ha sido registrado formalmente.
 
 <Info>
-Para que esta funcionalidad funcione correctamente, la entidad receptora debe haber creado previamente un <strong>signer genérico</strong>. Puedes revisar cómo hacerlo en la sección de <a href="./how-to-create-generic-signer">Signers Genéricos</a>.
+  Para que esta funcionalidad funcione correctamente, la entidad receptora debe haber creado previamente un <strong>signer genérico</strong>
+  . Puedes revisar cómo hacerlo en la sección de <a href="./how-to-create-generic-signer">
+  Signers Genéricos</a>
+
+  .
 </Info>
 
 ### 🏦 ¿Cómo se acredita la cuenta?
@@ -332,7 +335,8 @@ Transfiya envía al endpoint `/credit` toda la información necesaria que la ent
 - `bankId`: Identificador del banco (BICFI)
 
 <Warning>
-Solo deben implementar este proceso aquellas entidades que <strong>no hayan implementado el onboarding automático</strong> para transferencias cuenta a cuenta y hayan configurado previamente un signer genérico.
+  Solo deben implementar este proceso aquellas entidades que <strong>no hayan implementado el onboarding automático</strong>
+   para transferencias cuenta a cuenta y hayan configurado previamente un signer genérico.
 </Warning>
 
 ### 🧪 Ejemplo del endpoint `/credit`
@@ -412,14 +416,14 @@ POST https://ban.co/transfiya/credit
     "action_id": "35de4d3d-3aba-4fb3-b110-d004ce2aabb2",
     "id": "35de4d3d-3aba-4fb3-b110-d004ce2aabb2"
     }
-```    
+```
 
 ✅ ¿Qué hace la entidad receptora?
 
 La entidad receptora debe procesar la acreditación utilizando únicamente los datos recibidos en target.signer.labels. Esto le permite evitar procesos de onboarding y acreditar directamente a la cuenta bancaria especificada por la entidad originadora.
 
 <Info>
-Este flujo permite interoperabilidad con cuentas no registradas, mejorando la experiencia del usuario sin sacrificar seguridad ni trazabilidad.
+  Este flujo permite interoperabilidad con cuentas no registradas, mejorando la experiencia del usuario sin sacrificar seguridad ni trazabilidad.
 </Info>
 
 ## 🕵️ ¿Qué hacer si no tengo la información de la cuenta del receptor?
@@ -445,19 +449,13 @@ curl --location '{{url}}/v1/signer/lookup.dice' \
   "dispatched": "2025-04-10T15:49:15.015-05:00"
 }'
 ```
+
 📦 ¿Qué devuelve la consulta?
 
-La respuesta del directorio incluye datos esenciales como:
-	•	Nombre completo del titular
-	•	Tipo de cuenta (svgs, cacc, etc.)
-	•	Número de cuenta
-	•	Tipo y número de documento
-	•	Banco asociado
+La respuesta del directorio incluye datos esenciales como: •	Nombre completo del titular •	Tipo de cuenta (svgs, cacc, etc.) •	Número de cuenta •	Tipo y número de documento •	Banco asociado
 
 Con esta información, la entidad originadora puede construir la referencia de cuenta y ejecutar la transferencia como si ya conociera esos datos desde el inicio.
+
 <Info>
-Esta funcionalidad es especialmente útil en transferencias empresariales o institucionales donde las relaciones entre participantes están basadas en alias conocidos públicamente.
+  Esta funcionalidad es especialmente útil en transferencias empresariales o institucionales donde las relaciones entre participantes están basadas en alias conocidos públicamente.
 </Info>
-
-
-
