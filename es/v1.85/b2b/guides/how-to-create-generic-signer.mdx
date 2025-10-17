@@ -9,10 +9,9 @@ icon: "address-card"
 Ahora, el Directorio Federado de Transfiya permite la creación de **signer genérico**, las cuales se utilizan en el flujo de transferencias de **cuenta a cuenta** cuando la entidad receptora **no ha implementado el proceso de onboarding automático**.
 
 <Info>
-Estos signers permiten ejecutar transferencias sin necesidad de que el signer del receptor sea creado en tiempo real.  
-**La entidad receptora debe registrar este signer genérico una única vez** y quedará disponible para su uso en futuras operaciones.
+  Estos signers permiten ejecutar transferencias sin necesidad de que el signer del receptor sea creado en tiempo real.\
+  **La entidad receptora debe registrar este signer genérico una única vez** y quedará disponible para su uso en futuras operaciones.
 </Info>
-
 
 ## Ejemplo de creación de Signer
 
@@ -20,18 +19,11 @@ Para la creación de llaves, se utilizará la interfaz de aplicación destinada 
 
 La plataforma Transfiya utiliza tipos de signers y [esquemas dinámicos](../about/about-validations) para garantizar la integridad y consistencia de los datos en toda la plataforma. Esto incluye reglas de validación para diversos campos dentro del sistema.
 
+| Tipo signer | Schema aplicada | Descripción                                                |
+| ----------- | --------------- | ---------------------------------------------------------- |
+| `GENERIC`   | GENERIC         | Representa una signer genérico de una Entidad Participante |
 
-
-| Tipo signer | Schema aplicada | Descripción                                |
-| ----------- | --------------- | ------------------------------------------ |
-| `GENERIC`    | GENERIC          | Representa una entidad participante              |
-
-
-
-
-
-
-### Ejemplo Signer Genérico
+### Ejemplo de creación: Signer Genérico
 
 A continuación se presenta un ejemplo de creación de una llave tipo 'GENERIC':
 
@@ -45,11 +37,8 @@ A continuación se presenta un ejemplo de creación de una llave tipo 'GENERIC':
      -d '{
        "labels": {
          "type": "GENERIC",
-         "firstName": "Entidad Participante",
-         "secondName": "Participante",
-         "lastName": "Generico",
-         "secondLastName": "A2A",
-         "proprietary": "CC",
+         "name": "Generico",
+         "proprietary": "NIT",
          "identification": "111111111",
          "routerReference": "$bancorojo",
          "bankId": "111111111",
@@ -67,13 +56,9 @@ A continuación se presenta un ejemplo de creación de una llave tipo 'GENERIC':
       "signer_id": "4c57ac39-16f0-489b-89d9-bddfcd352a36",
       "handle": "wRFmYXS2sP9ho9VCZ3j4FuP1j55ABeFvsF",
       "labels": {
-        "status": "ACTIVE",
         "type": "GENERIC",
-        "firstName": "Jorge",
-        "secondName": "Manuel",
-        "lastName": "Diaz",
-        "secondLastName": "Padilla",
-        "proprietary": "CC",
+        "name": "Generico",
+        "proprietary": "NIT",
         "identification": "1010101010",
         "bankAccountType": "SVGS",
         "bankAccountNumber": "12345654321",
@@ -95,3 +80,14 @@ A continuación se presenta un ejemplo de creación de una llave tipo 'GENERIC':
     ```
   </Tab>
 </Tabs>
+
+### Campos de entrada:
+
+| **Etiqueta**    | **Descripción**                                                                                | **Tipo** | **Longitud**                                                 | **Obligatoriedad** |
+| --------------- | ---------------------------------------------------------------------------------------------- | -------- | ------------------------------------------------------------ | ------------------ |
+| type            | Tipo de signer: GENERIC                                                                        | Texto    | N/A                                                          | Si                 |
+| name            | Nombre para identificación                                                                     | Texto    | 1-140 carácteres                                             | Si                 |
+| proprietary     | Tipo de documento, admite: CC,CE,PA,TI,NUIP,NIT,OTR,PPT y PEP                                  | Texto    | 1-4                                                          | Si                 |
+| identification  | Número de identificación                                                                       | Texto    | 1-18 carácteres                                              | Si                 |
+| routerReference | Identificador de billetera del banco en Transfiya.                                             | Texto    | 1- Máximo 34 caracteres alfanuméricos, debe comenzar con `$` | Si                 |
+| bankId          | Representa un número NIT del banco sin dígito de verificación o un código asignado por BanRep. | Texto    | 1-Máximo 9 caracteres numéricos                              | Si                 |
