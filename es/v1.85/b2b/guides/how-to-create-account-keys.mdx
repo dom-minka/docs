@@ -14,7 +14,7 @@ La plataforma Transfiya utiliza tipos de datos y [esquemas dinámicos](../about/
 | ----------- | --------------- | ------------------------------------------ |
 | `BUSINESS`  | BUSINESS        | Representa una empresa o persona jurídica. |
 
-## Sintaxis de Referencia
+## Sintaxis de Referencia para el campo _aliasValue_
 
 - **bankAccountType**: tipo de cuenta (en minúsculas), basado en los valores estándar de Transfiya.
 - **bankAccountNumber**: número de cuenta bancaria
@@ -46,7 +46,7 @@ El identificador del banco (`bankReference`) debe ser el código de compensació
 
 ## ✅ Ejemplo de referencia válida
 
-**<u>svgs:44255107106500@1001</u>**
+**<u>svgs:44255107106500@7095</u>**
 
 ### Ejemplo llave persona
 
@@ -62,14 +62,14 @@ A continuación se presenta un ejemplo de creación de una llave tipo 'BUSINESS'
     -d '{
     "labels": {
     "aliasType": "ACCOUNT",
-    "aliasValue": "svgs:1234@bbva.co",
+    "aliasValue": "svgs:1234@7095",
     "type": "BUSINESS",
     "name": "Jorge SAS",
     "proprietary": "NIT",
     "identification": "1010101010",
     "bankAccountType": "SVGS",
     "bankAccountNumber": "10010010001",
-    "routerReference": "$bbbva"
+    "routerReference": "$bancorojo"
     },
     "keeper": [{
     "scheme": "ecdsa-ed25519",
@@ -85,14 +85,14 @@ A continuación se presenta un ejemplo de creación de una llave tipo 'BUSINESS'
       "handle": "wRFmYXS2sP9ho9VCZ3j4FuP1j55ABeFvsF",
       "labels": {
         "aliasType": "ACCOUNT",
-        "aliasValue": "svgs:1234@bbva.co",
+        "aliasValue": "svgs:1234@b7095,
         "type": "BUSINESS",
         "name": "Jorge SAS",
         "proprietary": "NIT",
         "identification": "1010101010",
         "bankAccountType": "SVGS",
         "bankAccountNumber": "10010010001",
-        "routerReference": "$bbbva"
+        "routerReference": "$bancorojo"
         "created": "2024-10-11T11:59:24.241-05:00"
       },
       "keeper": [
@@ -109,3 +109,17 @@ A continuación se presenta un ejemplo de creación de una llave tipo 'BUSINESS'
     ```
   </Tab>
 </Tabs>
+
+### Campos de entrada:
+
+| **Etiqueta**      | **Descripción**                                               | **Tipo** | **Longitud**                                                 | **Obligatoriedad** |
+| :---------------- | :------------------------------------------------------------ | :------- | :----------------------------------------------------------- | :----------------- |
+| aliasType         | Tipo de llave: ACCOUNT                                        | Texto    | N/A                                                          | Si                 |
+| aliasValue        | Valor de la llave. Ej: svgs:44255107106500@1001               | Texto    | 1-Máximo 34 carácteres                                       | Si                 |
+| type              | Tipo de signer: BUSINESS                                      | Texto    | N/A                                                          | Si                 |
+| name              | Nombre para identificación                                    | Texto    | 1-140 carácteres                                             | Si                 |
+| proprietary       | Tipo de documento, admite: CC,CE,PA,TI,NUIP,NIT,OTR,PPT y PEP | Texto    | 1-4                                                          | Si                 |
+| identification    | Número de identificación                                      | Texto    | 1-18 carácteres                                              | Si                 |
+| bankAccountType   | Número de cuenta, admite: SVGS, TRAS,CACC,DBMO,DORD, DBMI     | Texto    | 1-4                                                          | Si                 |
+| bankAccountNumber | Número de la cuenta                                           | Texto    | 1-Máximo 34 dígitos                                          | Si                 |
+| routerReference   | Identificador de billetera del banco en Transfiya.            | Texto    | 1- Máximo 34 caracteres alfanuméricos, debe comenzar con `$` | Si                 |
