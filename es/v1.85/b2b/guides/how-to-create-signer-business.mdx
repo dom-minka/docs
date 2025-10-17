@@ -61,3 +61,15 @@ A continuación se presenta un ejemplo de creación de una llave tipo 'BUSINESS'
     ```
   </Tab>
 </Tabs>
+
+### Campos de entrada:
+
+| **Etiqueta**      | **Descripción**                                               | **Tipo** | **Longitud**                                                 | **Obligatoriedad** |
+| :---------------- | :------------------------------------------------------------ | :------- | :----------------------------------------------------------- | :----------------- |
+| type              | Tipo de signer: BUSINESS                                      | Texto    | N/A                                                          | Si                 |
+| name              | Nombre para identificación                                    | Texto    | 1-140 carácteres                                             | Si                 |
+| proprietary       | Tipo de documento, admite: CC,CE,PA,TI,NUIP,NIT,OTR,PPT y PEP | Texto    | 1-4                                                          | Si                 |
+| identification    | Número de identificación                                      | Texto    | 1-18 carácteres                                              | Si                 |
+| bankAccountType   | Número de cuenta, admite: SVGS, TRAS,CACC,DBMO,DORD, DBMI     | Texto    | 1-4                                                          | Si                 |
+| bankAccountNumber | Número de la cuenta                                           | Texto    | 1-Máximo 34 dígitos                                          | Si                 |
+| routerReference   | Identificador de billetera del banco en Transfiya.            | Texto    | 1- Máximo 34 caracteres alfanuméricos, debe comenzar con `$` | Si                 |
