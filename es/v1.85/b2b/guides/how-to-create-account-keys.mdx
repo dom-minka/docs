@@ -14,6 +14,40 @@ La plataforma Transfiya utiliza tipos de datos y [esquemas dinámicos](../about/
 | ----------- | --------------- | ------------------------------------------ |
 | `BUSINESS`  | BUSINESS        | Representa una empresa o persona jurídica. |
 
+## Sintaxis de Referencia
+
+- **bankAccountType**: tipo de cuenta (en minúsculas), basado en los valores estándar de Transfiya.
+- **bankAccountNumber**: número de cuenta bancaria
+- **routerReference**: código de compensación o Bicfi válido del banco.
+
+<Info>
+  Este formato unificado garantiza consistencia y compatibilidad con los mecanismos de enrutamiento de Transfiya, facilitando la interoperabilidad entre participantes.
+</Info>
+
+## 🏦 Tipos de Cuenta Soportados
+
+A continuación se listan los tipos de cuenta reconocidos en Transfiya:
+
+| Nombre                        | Valor  |
+| :---------------------------- | :----- |
+| Cuenta de ahorros             | `svgs` |
+| Cuenta corriente              | `cacc` |
+| Depósito de bajo monto        | `dbmo` |
+| Depósito ordinario            | `dord` |
+| Depósito inclusivo bajo monto | `dbmi` |
+
+<Tip>
+  Estos valores deben utilizarse exclusivamente en minúsculas y reflejan el tipo de cuenta real registrada por el firmante en el sistema financiero.
+</Tip>
+
+## 🌐 Referencia Bancaria
+
+El identificador del banco (`bankReference`) debe ser el código de compensación o Bicfi válido, que permita una resolución clara y única del participante receptor.
+
+## ✅ Ejemplo de referencia válida
+
+**<u>svgs:44255107106500@1001</u>**
+
 ### Ejemplo llave persona
 
 A continuación se presenta un ejemplo de creación de una llave tipo 'BUSINESS' donde el tipo de Alias es "ACCOUNT":
