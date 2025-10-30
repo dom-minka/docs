@@ -418,4 +418,16 @@ PUT /v1/signer/{handle}
 | 118        | Resource schema validation error                 |
 | 121        | Signer not found in database                     |
 
+### 🔐 **Actualización de datos y gestión de llaves en el sistema Bre-B**
+
+La correcta administración de las llaves en los Sistemas de Pago de Bajo Valor Inmediatos (SPBVI) es fundamental para garantizar la seguridad, trazabilidad e interoperabilidad de las transacciones. Cuando un usuario solicita la actualización de sus datos como el tipo de cuenta asociada a una llave es responsabilidad directa de la entidad participante ejecutar dicha modificación de forma inmediata y conforme a los lineamientos establecidos por el Banco de la República.
+
+Cualquier demora en el proceso puede generar acreditaciones erróneas de recursos económicos, afectando la integridad del sistema y la confianza del usuario. Según la normativa Bre-B, en especial la Circular Reglamentaria Externa DSP-465, los participantes deben reportar en tiempo real las novedades a la Entidad Administradora del SPBVI (EASPBVI), asegurando que los cambios se reflejen oportunamente en el Directorio Federado y el Directorio Centralizado.
+
+<Info>
+  📌 **Importante:** Si la entidad participante no actualiza oportunamente la llave tras una solicitud válida del usuario, y se generan errores en la acreditación de fondos, será responsable por las consecuencias derivadas de dicha omisión.
+</Info>
+
+Todo ajuste realizado en las llaves a solicitud del usuario ya sea por actualización de datos, cambio de medio de pago o cualquier otra modificación autorizada debe ser reportado en tiempo real a través del canal designado por la entidad financiera. Esta comunicación oportuna garantiza que la novedad se refleje de forma inmediata en el sistema Bre-B, preservando la integridad operativa y evitando errores en la acreditación de recursos.
+
 ---

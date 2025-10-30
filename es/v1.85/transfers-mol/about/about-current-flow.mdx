@@ -1,7 +1,7 @@
 ---
-title: Sobre Flujo Actual
-description: Descripción del flujo actual para transferencias tipo `SEND` en Transfiya, incluyendo detalles sobre llamadas, confirmaciones, y detección de fraude.
-icon: 'arrow-progress'
+title: "Sobre Flujo Actual"
+description: "Descripción del flujo actual para transferencias tipo `SEND` en Transfiya, incluyendo detalles sobre llamadas, confirmaciones, y detección de fraude."
+icon: "arrow-progress"
 ---
 
 ## Flujo actual de Transfiya
@@ -9,7 +9,7 @@ icon: 'arrow-progress'
 El flujo actual de procesamiento de transferencias tipo `SEND` en Transfiya funciona de la siguiente manera:
 
 <Info>
-Transfiya **no implementa actualmente** un protocolo de confirmación en dos fases (*two-phase commit*), aunque este podría incorporarse utilizando la llamada de `status` como segunda fase del proceso.
+  Transfiya **no implementa actualmente** un protocolo de confirmación en dos fases (_two-phase commit_), aunque este podría incorporarse utilizando la llamada de `status` como segunda fase del proceso.
 </Info>
 
 Las entidades financieras realizan los movimientos centrales durante las llamadas de `debit` (débito) y `credit` (crédito), motivo por el cual **estas llamadas son asincrónicas**. En algunos sistemas bancarios, los movimientos contables pueden tardar en completarse.
@@ -17,15 +17,15 @@ Las entidades financieras realizan los movimientos centrales durante las llamada
 La acción denominada `movement`, por su parte, **no tiene efecto sobre los saldos reales**; su único propósito es confirmar que los fondos pueden ser enviados al usuario destinatario.
 
 <Tip>
-Transfiya puede aceptar una transferencia automáticamente (Aceptación por usuario, Aceptación por transfiya) en casos donde existan firmantes por defecto, enlaces previos u otros mecanismos configurados.
+  Transfiya puede aceptar una transferencia automáticamente (Aceptación por usuario, Aceptación por transfiya) en casos donde existan firmantes por defecto, enlaces previos u otros mecanismos configurados.
 </Tip>
 
 Cuando el usuario tiene múltiples firmantes asociados, se le envía una **notificación para que confirme manualmente** la operación desde su aplicación bancaria.
 
-El sistema de detección de fraude (**Monitor+**) se activa **únicamente después de que la transferencia ha sido aceptada**, ya que es en ese momento cuando se conoce con certeza el destinatario final. Antes de esa etapa, el destinatario puede ser un alias no registrado.
+El sistema de detección de fraude se activa **únicamente después de que la transferencia ha sido aceptada**, ya que es en ese momento cuando se conoce con certeza el destinatario final. Antes de esa etapa, el destinatario puede ser un alias no registrado.
 
 <Warning>
-Las llamadas de `status` **no deben generar movimientos de saldo** en los sistemas bancarios. Estas llamadas se utilizan con fines informativos, como notificar al usuario o registrar el estado de la transacción.
+  Las llamadas de `status` **no deben generar movimientos de saldo** en los sistemas bancarios. Estas llamadas se utilizan con fines informativos, como notificar al usuario o registrar el estado de la transacción.
 </Warning>
 
 ### Vista general del proceso
@@ -50,7 +50,9 @@ sequenceDiagram
   ty ->> tb: Llamar a estado
   ty ->> af: Finalizar antifraude
 ```
+
 **Diagrama detallado del procesamiento de transferencias:**
+
 ```mermaid
 sequenceDiagram
   autonumber
