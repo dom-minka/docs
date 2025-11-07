@@ -1,0 +1,36 @@
+---
+description: "Description of your new file."
+title: "Como dispersar a llaves"
+---
+
+# Como dispersar a llaves
+
+La habilitación de **dispersión a llaves** representa un avance significativo en la forma en que las empresas gestionan sus pagos, permitiéndoles realizar transferencias de manera más ágil, segura y personalizada.
+
+Esta funcionalidad permite dispersar fondos directamente a cuentas asociadas a llaves digitales (como número de celular, correo electrónico o documento de identidad), eliminando la necesidad de conocer el número de cuenta del beneficiario. Esto no solo simplifica el proceso de pago, sino que también mejora la experiencia del usuario final, reduce errores operativos y fortalece la trazabilidad de las transacciones.
+
+Con la dispersión a llaves, las empresas podrán optimizar procesos como el pago de nómina, proveedores, incentivos y devoluciones, todo con mayor flexibilidad y control.
+
+### Flujo dispersión a llaves:
+
+![Flujo Send Llaves Pn](/images/FlujoSend_llaves.png)
+
+### Definiciones de la integración:
+
+Para la habilitación del flujo  de resolución de llave y procesamiento transaccional, las Entidades Participantes deben:
+
+1. \*\*Crear signer tipo Business \*\*
+
+   Las Entidades Participantes podrán identificar a cada Empresa originadora en Transfiya a través del proceso de creación de Signer tipo Business. El detalle de este proceso, se encuentra en [Como crear llaves de negocio - Transfiya Guide](https://transfiya.me/es/v1.85/b2b/guides/how-to-create-signer-business).
+2. **Crear signer tipo generico**
+
+   En caso de que lo deseen las Entidades Participantes podrán habilitar la dispersion de dinero hacía llaves usando un signer genérico sin la necesidad de identificar a cada originador en Transfiya. El detalle de este proceso, se encuentra en [Cómo registrar signer genérico - Transfiya Guide](https://transfiya.me/es/v1.85/b2b/guides/how-to-create-generic-signer).
+3. **Configurar reglas de negocio**
+
+   Cada signer tipo que actuará como originador ya sea tipo Business o Generico, debe tener reglas de negocio configuradas y parametrizadas en Transfiya, para esto las Entidades Participantes deberán asignar el monto máximo por transacción, la cantidad máxima diaria de transacciones y el monto acomulado diario a través de los mecánismos especificados en [¿Cómo actualizar reglas de negocio para una empresa? - Transfiya Guide](https://transfiya.me/es/v1.85/b2b/guides/how-to-setup-business-rules).
+4. **Resolver la llave del beneficiario**
+
+   Si el identificador del beneficiario es una llave, las Entidades Participantes deberán implementar y habilitar el flujo de resolución de llaves. Razón por la cual, deben integrar las características y propiedades de la resolución de llaves en Transfiya, teniendo como base [Cómo resolver llaves - Transfiya Guide](https://transfiya.me/es/v1.85/directory/guides/how-to-resolve-keys).
+5. **Procesamiento transaccional**
+
+   Una vez realizada la resolución de la llave del beneficiario, se puede proceder con el procesamiento transaccional en Transfiya a través de las capacidades actuales que las Entidades Participantes conocen. El detalle se encuentra en [Como enviar cuenta a cuenta - Transfiya Guide](https://transfiya.me/es/v1.85/b2b/guides/how-to-create-transfer).

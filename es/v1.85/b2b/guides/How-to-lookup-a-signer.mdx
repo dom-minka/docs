@@ -21,6 +21,15 @@ Puedes usar los siguientes filtros en el endpoint `POST [baseUrl]/v1/signer/look
 - `labels.bankAccountNumber`
 - `labels.routerReference`
 
+### Campos de entrada:
+
+| **Etiqueta**     | **Descripción**                                               | **Tipo** | **Longitud**                                                 | **Obligatoriedad** |
+| :--------------- | :------------------------------------------------------------ | :------- | :----------------------------------------------------------- | :----------------- |
+| proprietary      | Tipo de documento, admite: CC,CE,PA,TI,NUIP,NIT,OTR,PPT y PEP | Texto    | 1-4                                                          | Si                 |
+| identification   | Número de documento                                           | Texto    | 1-18 carácteres                                              | Si                 |
+| bankAccounNumber | Número de cuenta                                              | Texto    | 1-Máximo 34 dígitos                                          | Si                 |
+| routerReference  | Identificador de billetera del banco en Transfiya.            | Texto    | 1- Máximo 34 caracteres alfanuméricos, debe comenzar con `$` | Si                 |
+
 ### Ejemplo de solicitud
 
 ```json
@@ -73,6 +82,14 @@ A continuación, se relaciona los valores que permite recibir el campo _useCase:
 | -------- | ------------------------------------------------------------- |
 | b2p-send | Corresponde a una transacción tipo SEND de empresa a persona. |
 | b2b-send | Corresponde a una transacción tipo SEND de empresa a empresa. |
+
+### Campos de entrada:
+
+| **Etiqueta**   | **Descripción**                                               | **Tipo** | **Longitud**    | **Obligatoriedad** |
+| :------------- | :------------------------------------------------------------ | :------- | :-------------- | :----------------- |
+| useCase        | Caso de uso. Admite: b2p-send y b2b-send                      | Texto    | 1-8             | Si                 |
+| proprietary    | Tipo de documento, admite: CC,CE,PA,TI,NUIP,NIT,OTR,PPT y PEP | Texto    | 1-4             | Si                 |
+| identification | Número de documento                                           | Texto    | 1-18 carácteres | Si                 |
 
 ### Ejemplo de solicitud
 

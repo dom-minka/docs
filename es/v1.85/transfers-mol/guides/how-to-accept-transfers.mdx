@@ -196,7 +196,7 @@ A continuación, se detallan los pasos que debe seguir el banco para aceptar cor
     Puede ser un `signer.handle` (si el usuario ya está registrado) o una referencia bancaria del tipo `tipo-cuenta:número-cuenta@dominio-banco`, por ejemplo: `svgs:1001001000@bank.io`.
   </Step>
   <Step title="Banco destino verifica que la cuenta esté activa y pueda recibir pagos">
-    "Si, por ejemplo, la información proporcionada en la transferencia para realizar el crédito presenta errores en el tipo de cuenta, el banco debe rechazar la transferencia mediante el endpoint `/reject`, incluyendo un código como `828 - `**Target payment method error.**
+    Si la cuenta está cerrada, bloqueada o suspendida, el banco debe rechazar la transferencia mediante el endpoint `/reject`, incluyendo un código como `825 - `**Target account validation error.**
 
     <Tabs>
       <Tab title="Error Request">
@@ -209,8 +209,8 @@ A continuación, se detallan los pasos que debe seguir el banco para aceptar cor
                 "received": "2025-01-14T20:41:00.252-05:00",
                 "dispatched": "2025-01-14T20:41:00.552-05:00",
                 "error": {
-                "code": 828,
-                "message": "Target payment method error"
+                "code": 825,
+                "message": "Target account validation error"
                 }
             }' "<TRANSFIYA URL>/v1/transfer/<tx_ref>/reject"
         ```
@@ -232,7 +232,7 @@ A continuación, se detallan los pasos que debe seguir el banco para aceptar cor
     </Tabs>
   </Step>
   <Step title="Banco destino valida que la moneda y el monto sean válidos para la cuenta">
-    En caso de discrepancia, la operación debe rechazarse con un código de error como `304 - Transfer information is invalid`.
+    En caso de discrepancia, la operación debe rechazarse con un código de error como **833**`-`**Exceeds target bank maximum amount.**
 
     <Tabs>
       <Tab title="Error Request">
