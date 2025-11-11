@@ -35,9 +35,9 @@ A continuación se relaciona el flujo para generación y lectura con código QR
 ### Capacidades a ofrecer
 
 - **Exposición de API:** Transfiya ofrecerá una API para facilitar la integración de generación y lectura de QR.
-- Disponer canal para \*\*garantizar \*\*una comunicación \*\*segura \*\*y **eficiente**.
-- Transfiya entrega la cadena de datos para la \*\*generación \*\*de QR conforme al estándar **EMVco**.
-- Dentro del proceso de lectura, se ofrecerá la decodificación de imagen para \*\*interprerar \*\*el contenido del QR, obteniendo entre otros **la llave**, el **ID de QR**, **tipo de QR** y el **hash de seguridad**. El cual será entregado por Transfiya en formato JSON. para que la Entidad Participante origen orqueste el flujo transaccional.
+- Disponer canal para **garantizar **una comunicación **segura **y **eficiente**.
+- Transfiya entrega la cadena de datos para la **generación **de QR conforme al estándar **EMVco**.
+- Dentro del proceso de lectura, se ofrecerá la decodificación de imagen para **interprerar  **el contenido del QR, obteniendo entre otros **la llave**, el **ID de QR**, **tipo de QR** y el **hash de seguridad**. El cual será entregado por Transfiya en formato JSON. para que la Entidad Participante origen orqueste el flujo transaccional.
 
 ### Especificaciones para generación de QR
 
@@ -45,7 +45,7 @@ Las Entidades Participantes pueden habilitar la generacion de código  QR a trav
 
 ### Entrada:
 
-| **Campo **                    | **Tipo** | **Descripción **                                                                                                                                 | **Longitud**   | **Obligatorio** |
+| Campo                         | **Tipo** | **Descripción **                                                                                                                                 | **Longitud**   | **Obligatorio** |
 | :---------------------------- | :------- | :----------------------------------------------------------------------------------------------------------------------------------------------- | :------------- | :-------------- |
 | pointOfInitiationMethod       | Lista    | Campo de tipo de QR - Valores válidos (ESTATICO y DINAMICO) - SIN tildes, sin importar mayusculas y minusculas                                   | Min 1 - Máx 8  | SI              |
 | merchantAccountInformation    | Objeto   |                                                                                                                                                  |                | SI              |
@@ -82,31 +82,25 @@ Las Entidades Participantes pueden habilitar la lectura de código  QR a través
 
 ### Entrada:
 
-| **Campo ** | **Tipo** | Descripción                                                 | **Longitud**     | **Obligatorio ** |
+| **Campo ** | **Tipo** | **Descripción**                                             | **Longitud**     | **Obligatorio ** |
 | :--------- | :------- | :---------------------------------------------------------- | :--------------- | :--------------- |
 | qrCode     | Texto    | Cadena de texto con el codigo a consultar, en formato EMVCO | Min 30 - Máx 450 | SI               |
 
 ### Salida:
 
-| **Campo **                    | **Tipo** | **Descripción **                                                                                                                                 | **Longitud**   | **Obligatorio** |
-| :---------------------------- | :------- | :----------------------------------------------------------------------------------------------------------------------------------------------- | :------------- | :-------------- |
-| pointOfInitiationMethod       | Lista    | Campo de tipo de QR - Valores válidos (ESTATICO y DINAMICO) - SIN tildes, sin importar mayusculas y minusculas                                   | Min 1 - Máx 8  | SI              |
-| merchantAccountInformation    | Objeto   |                                                                                                                                                  |                | SI              |
-| aliasType                     | Lista    | Tipo de llave - Valores válidos (IDENTIFICACION, CELULAR, EMAIL, TEXT, MERCHANTID)                                                               | Min 1 - Máx 20 | NO              |
-| aliasValue                    | Texto    | Valor de llave                                                                                                                                   | Min 1 - Máx 92 | NO              |
-| merchantCode                  | Texto    | Código de comercio                                                                                                                               | Min 1 - Máx 20 | NO              |
-| merchantName                  | Texto    | Nombre del comercio                                                                                                                              | Min 1 - Máx 20 | SI              |
-| merchantCity                  | Texto    | Ciudad del comercio                                                                                                                              | Min 1 - Máx 20 | SI              |
-| postalCode                    | Texto    | Código postal adquirente                                                                                                                         | Min 1 - Máx 6  | SI              |
-| merchantCategoryCode          | Texto    | MCC - (para PN: 0000 y para PJ: Valores del estándar ISO 18245) - No se validara la existencia del dato ISO                                      | Min 1 - Máx 4  | SI              |
-| additionalMerchantInformation | Objeto   |                                                                                                                                                  |                | SI              |
-| terminal                      | Texto    | Terminal alfanumérica asociada al comercio Ej: 12345                                                                                             | Min 1 - Máx 20 | SI              |
-| transactionPorpose            | Lista    | Valores válidos - (COMPRAS, ANULACIONES, TRANSFERENCIAS, RETIRO, RECAUDO, RECARGAS, DEPOSITO) - SIN tildes, sin importar mayusculas y minusculas | Min 1 - Máx 25 | SI              |
-| transaction                   | Objeto   |                                                                                                                                                  |                | SI              |
-| amount                        | Decimal  | Valor de la transacción, aplican las reglas para los valores de tipo decimal                                                                     | Min 1 - Máx 13 | SI              |
-| customData                    | Objeto   |                                                                                                                                                  |                | SI              |
-| valorIva                      | Decimal  | Valor del impuesto Iva, aplican las reglas para los valores de tipo decimal                                                                      | Min 1 - Máx 13 | NO              |
-| baseIva                       | Decimal  | Valor base IVA, aplican las reglas para los valores de tipo decimal                                                                              | Min 1 - Máx 13 | NO              |
-| valorInc                      | Decimal  | Valor del impuesto del INC (Impuessto Nacional al Consumo), aplican las reglas para los valores de tipo decimal                                  | Min 1 - Máx 13 | NO              |
-| idQr                          | Texto    | Identificador único de QR                                                                                                                        | Min 1 - Máx 35 | SI              |
-| channel                       | Texto    | Canal origen. Valore válidos (IM, POS, APP, ECOMM, MPOS, ATM, CB, OFC) - SIN tildes, sin importar mayusculas y minusculas                        | Min 1 - Máx 30 | SI              |
+El sistema Transfiya retornará un JSON con los campos contenidos en la cadena TLV. Esta información es necesaria para que la Entidad Participante Origen ejecute el proceso de resolución de llave y la creación de la transacción.
+
+| **Campo**     | **Tipo** | **Descripcion**                 | **Ejemplo**                      |
+| :------------ | :------- | :------------------------------ | :------------------------------- |
+| Tag number    | objeto   | Numero del tag EMVCO            | 26                               |
+| Id            | Number   | Numero del tag EMVCO            | 26                               |
+| name          | Cadena   | Nombre del campo                | Merchant Account Information     |
+| len           | Number   | Tamaño del campo                | 32                               |
+| data          | objeto   | Contenido del tag               |                                  |
+| SubTag Number | Objeto   | Numero del subTag EMVCO         | 0                                |
+| Id            | Number   | Numero del subTag EMVCO         | 0                                |
+| name          | Number   | Nombre del campo                | Global Unique Identifier         |
+| len           | Cadena   | Tamaño del campo                | 14                               |
+| data          | Number   | Contenido del tag               | CO.COM.ACH.LLA                   |
+| rawdata       | Cadena   | Fragmento del TLV para este TAG | CO.COM.ACH.LLA                   |
+| rawdata       | Cadena   | Fragmento del TLV para este TAG | 0014CO.COM.ACH.LLA02103152466845 |
