@@ -35,9 +35,9 @@ A continuación se relaciona el flujo para generación y lectura con código QR
 ### Capacidades a ofrecer
 
 - **Exposición de API:** Transfiya ofrecerá una API para facilitar la integración de generación y lectura de QR.
-- Disponer canal para **garantizar **una comunicación **segura **y **eficiente**.
-- Transfiya entrega la cadena de datos para la **generación **de QR conforme al estándar **EMVco**.
-- Dentro del proceso de lectura, se ofrecerá la decodificación de imagen para **interprerar  **el contenido del QR, obteniendo entre otros **la llave**, el **ID de QR**, **tipo de QR** y el **hash de seguridad**. El cual será entregado por Transfiya en formato JSON. para que la Entidad Participante origen orqueste el flujo transaccional.
+- Disponer canal para **garantizar** una comunicación **segura** y **eficiente**.
+- Transfiya entrega la cadena de datos para la **generación** de QR conforme al estándar **EMVco**.
+- Dentro del proceso de lectura, se ofrecerá la decodificación de imagen para **interpretar** el contenido del QR, obteniendo entre otros **la llave**, el **ID de QR**, **tipo de QR** y el **hash de seguridad**. El cual será entregado por Transfiya en formato JSON. para que la Entidad Participante origen orqueste el flujo transaccional.
 
 ### Especificaciones para generación de QR
 
@@ -45,7 +45,7 @@ Las Entidades Participantes pueden habilitar la generacion de código  QR a trav
 
 ### Entrada:
 
-| Campo                         | **Tipo** | **Descripción **                                                                                                                                 | **Longitud**   | **Obligatorio** |
+| **Campo**                     | **Tipo** | **Descripción**                                                                                                                                  | **Longitud**   | **Obligatorio** |
 | :---------------------------- | :------- | :----------------------------------------------------------------------------------------------------------------------------------------------- | :------------- | :-------------- |
 | pointOfInitiationMethod       | Lista    | Campo de tipo de QR - Valores válidos (ESTATICO y DINAMICO) - SIN tildes, sin importar mayusculas y minusculas                                   | Min 1 - Máx 8  | SI              |
 | merchantAccountInformation    | Objeto   |                                                                                                                                                  |                | SI              |
@@ -70,7 +70,7 @@ Las Entidades Participantes pueden habilitar la generacion de código  QR a trav
 
 ### Salida:
 
-| **Campo **      | **Tipo** | **Descripción**                                         | **Longitud**     | **Obligatoriedad** |
+| **Campo**       | **Tipo** | **Descripción**                                         | **Longitud**     | **Obligatoriedad** |
 | :-------------- | :------- | :------------------------------------------------------ | :--------------- | :----------------- |
 | id              | Texto    | Identificador del QR en el sistema                      | Min 1 - Máx 36   | SI                 |
 | qrCode          | Texto    | Cadena de texto con el codigo generado en formato EMVCO | Min 30 - Máx 450 | SI                 |
@@ -82,9 +82,9 @@ Las Entidades Participantes pueden habilitar la lectura de código  QR a través
 
 ### Entrada:
 
-| **Campo ** | **Tipo** | **Descripción**                                             | **Longitud**     | **Obligatorio ** |
-| :--------- | :------- | :---------------------------------------------------------- | :--------------- | :--------------- |
-| qrCode     | Texto    | Cadena de texto con el codigo a consultar, en formato EMVCO | Min 30 - Máx 450 | SI               |
+| **Campo ** | **Tipo** | **Descripción**                                             | **Longitud**     | **Obligatorio** |
+| :--------- | :------- | :---------------------------------------------------------- | :--------------- | :-------------- |
+| qrCode     | Texto    | Cadena de texto con el codigo a consultar, en formato EMVCO | Min 30 - Máx 450 | SI              |
 
 ### Salida:
 
