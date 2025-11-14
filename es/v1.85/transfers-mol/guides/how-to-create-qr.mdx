@@ -43,12 +43,16 @@ A continuación se relaciona el flujo para generación y lectura con código QR
 
 Las Entidades Participantes pueden habilitar la generacion de código  QR a través de Transfiya, para esto deberán tener en cuenta para la implementación, los siguientes campos cumplliendo el estándar EMVco y los lineamientos de Banco de la República :
 
+```json
+POST /ach/eeff/v1/money-movements
+```
+
 ### Entrada:
 
 | **Campo**                     | **Tipo** | **Descripción**                                                                                                                                  | **Longitud**   | **Obligatorio** |
-| :---------------------------- | :------- | :----------------------------------------------------------------------------------------------------------------------------------------------- | :------------- | :-------------- |
+| ----------------------------- | -------- | ------------------------------------------------------------------------------------------------------------------------------------------------ | -------------- | --------------- |
 | pointOfInitiationMethod       | Lista    | Campo de tipo de QR - Valores válidos (ESTATICO y DINAMICO) - SIN tildes, sin importar mayusculas y minusculas                                   | Min 1 - Máx 8  | SI              |
-| merchantAccountInformation    | Objeto   |                                                                                                                                                  |                | SI              |
+| merchantAccountInformation    | Objeto   | -                                                                                                                                                | -              | SI              |
 | aliasType                     | Lista    | Tipo de llave - Valores válidos (IDENTIFICACION, CELULAR, EMAIL, TEXT, MERCHANTID)                                                               | Min 1 - Máx 20 | NO              |
 | aliasValue                    | Texto    | Valor de llave                                                                                                                                   | Min 1 - Máx 92 | NO              |
 | merchantCode                  | Texto    | Código de comercio                                                                                                                               | Min 1 - Máx 20 | NO              |
@@ -56,27 +60,110 @@ Las Entidades Participantes pueden habilitar la generacion de código  QR a trav
 | merchantCity                  | Texto    | Ciudad del comercio                                                                                                                              | Min 1 - Máx 20 | SI              |
 | postalCode                    | Texto    | Código postal adquirente                                                                                                                         | Min 1 - Máx 6  | SI              |
 | merchantCategoryCode          | Texto    | MCC - (para PN: 0000 y para PJ: Valores del estándar ISO 18245) - No se validara la existencia del dato ISO                                      | Min 1 - Máx 4  | SI              |
-| additionalMerchantInformation | Objeto   |                                                                                                                                                  |                | SI              |
+| additionalMerchantInformation | Objeto   | -                                                                                                                                                | -              | SI              |
 | terminal                      | Texto    | Terminal alfanumérica asociada al comercio Ej: 12345                                                                                             | Min 1 - Máx 20 | SI              |
 | transactionPorpose            | Lista    | Valores válidos - (COMPRAS, ANULACIONES, TRANSFERENCIAS, RETIRO, RECAUDO, RECARGAS, DEPOSITO) - SIN tildes, sin importar mayusculas y minusculas | Min 1 - Máx 25 | SI              |
-| transaction                   | Objeto   |                                                                                                                                                  |                | SI              |
+| transaction                   | Objeto   | -                                                                                                                                                | -              | SI              |
 | amount                        | Decimal  | Valor de la transacción, aplican las reglas para los valores de tipo decimal                                                                     | Min 1 - Máx 13 | SI              |
-| customData                    | Objeto   |                                                                                                                                                  |                | SI              |
+| customData                    | Objeto   | -                                                                                                                                                | -              | SI              |
 | valorIva                      | Decimal  | Valor del impuesto Iva, aplican las reglas para los valores de tipo decimal                                                                      | Min 1 - Máx 13 | NO              |
 | baseIva                       | Decimal  | Valor base IVA, aplican las reglas para los valores de tipo decimal                                                                              | Min 1 - Máx 13 | NO              |
 | valorInc                      | Decimal  | Valor del impuesto del INC (Impuessto Nacional al Consumo), aplican las reglas para los valores de tipo decimal                                  | Min 1 - Máx 13 | NO              |
-| idQr                          | Texto    | Identificador único de QR                                                                                                                        | Min 1 - Máx 35 | SI              |
-| channel                       | Texto    | Canal origen. Valore válidos (IM, POS, APP, ECOMM, MPOS, ATM, CB, OFC) - SIN tildes, sin importar mayusculas y minusculas                        | Min 1 - Máx 30 | SI              |
+| idQr                          | Texto    | Identificador único de QR - Debe ser un UUID de máximo 18 caracteres                                                                             | Min 1 - Máx 18 | SI              |
+| channel                       | Lista    | Canal origen. Valore válidos (IM, POS, APP, ECOMM, MPOS, ATM, CB, OFC) - SIN tildes, sin importar mayusculas y minusculas                        | Min 1 - Máx 30 | SI              |
+
+### Reglas para los valores de tipo decimal
+
+<Info>
+  **Ejemplos de valores permitidos:**\
+  A: 1000\
+  B: 1000.85 \
+  C: 1000.05 \
+  D: 1000.5\
+  \
+  **Reglas para el dato:**\
+  - Valor con dos (2) cifras decimales máximo\
+  - Puede no tener cifras decimales\
+  - Separador decimal el carácter punto (.) cuando aplique\
+  - Valores mayores o igual a cero\
+  - No puede ser NULL
+</Info>
+
+<CodeGroup>
+
+```json Request
+{
+  "meta": {
+    "requestId": "e7b9c1d0-f8a1-4b2c-9d0e-5a6b7c8d9e0f",
+    "version": "1.0.0",
+    "timestamp": "2025-11-12T21:09:00Z"
+  },
+  "data": {
+    "movementType": "QR",
+    "amount": 50000.5,
+    "currency": "COP",
+    "pointOfInitiationMethod": "ESTATICO",
+    "merchantAccountInformation": {
+      "aliasType": "CELULAR",
+      "aliasValue": "3101234567",
+      "merchantCode": "11111",
+      "merchantName": "Librería Central",
+      "merchantCity": "BOGOTA",
+      "postalCode": "110111",
+      "merchantCategoryCode": "5192"
+    },
+    "additionalMerchantInformation": {
+      "terminal": "POS001",
+      "transactionPorpose": "COMPRAS"
+    },
+    "customData": {
+      "ivaValue": 0,
+      "ivaBase": 50000.5,
+      "incValue": 0,
+      "qrId": "b7f9a3c4-2e10-47b9-bb0b-11e9a4c2f567",
+      "channel": "POS"
+    }
+  }
+}
+```
+
+</CodeGroup>
 
 ### Salida:
 
-| **Campo**       | **Tipo** | **Descripción**                                         | **Longitud**     | **Obligatoriedad** |
-| :-------------- | :------- | :------------------------------------------------------ | :--------------- | :----------------- |
-| id              | Texto    | Identificador del QR en el sistema                      | Min 1 - Máx 36   | SI                 |
-| qrCode          | Texto    | Cadena de texto con el codigo generado en formato EMVCO | Min 30 - Máx 450 | SI                 |
-| fechaGeneracion | Texto    | Fecha en la que se genero en QR                         | N/A              | SI                 |
+| **Campo**       | **Tipo** | **Descripción**                                       | **Longitud**     | **Obligatoriedad** |
+| :-------------- | :------- | :---------------------------------------------------- | :--------------- | :----------------- |
+| id              | Texto    | Identificador del QR en el sistema                    | Min 1 - Máx 36   | SI                 |
+| qrCode          | Texto    | Cadena de texto con el codigo generado en formato TLV | Min 30 - Máx 450 | SI                 |
+| fechaGeneracion | Texto    | Fecha en la que se genero en QR                       | N/A              | SI                 |
+| Status          | Texto    | Estado del QR                                         | Min 1 – Max 30   | SI                 |
 
-### Especificaciones para lectura de QR
+<CodeGroup>
+
+```json Response
+{
+  "meta": {
+    "requestId": "e7b9c1d0-f8a1-4b2c-9d0e-5a6b7c8d9e0f",
+    "timestamp": "2025-11-12T21:10:45Z",
+    "status": "SUCCESS",
+    "statusCode": "200",
+    "statusDesc": "QR generado exitosamente"
+  },
+  "data": {
+    "movementType": "QR",
+    "id": "6e2c8b72-9a45-4db3-bf34-3f1e78cb4a3a",
+    "qrCode": "00020101021226600014COLOMBIA12345678900210Librería Central5204000053031705405500005802CO5910BOGOTA6009COLOMBIA6304ABCD",
+    "fechaGeneracion": "2025-11-12T21:10:00Z",
+    "status": "PENDING"
+  }
+}
+```
+
+</CodeGroup>
+
+### Archivo descargable (.yaml): \
+\
+Especificaciones para lectura de QR
 
 Las Entidades Participantes pueden habilitar la lectura de código  QR a través de Transfiya, por lo cual deberán implementar las siguientes especificaciones:
 
