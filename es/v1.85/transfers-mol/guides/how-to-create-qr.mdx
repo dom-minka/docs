@@ -81,11 +81,12 @@ POST /ach/eeff/v1/money-movements
   C: 1000.05 \
   D: 1000.5\
   \
-  **Reglas para el dato:**\
-  - Valor con dos (2) cifras decimales máximo\
-  - Puede no tener cifras decimales\
-  - Separador decimal el carácter punto (.) cuando aplique\
-  - Valores mayores o igual a cero\
+  **Reglas para el dato:**\\
+
+  - Valor con dos (2) cifras decimales máximo\\
+  - Puede no tener cifras decimales\\
+  - Separador decimal el carácter punto (.) cuando aplique\\
+  - Valores mayores o igual a cero\\
   - No puede ser NULL
 </Info>
 
@@ -100,13 +101,13 @@ POST /ach/eeff/v1/money-movements
   },
   "data": {
     "movementType": "QR",
-    "amount": 50000.5,
+    "amount": 1000.85,
     "currency": "COP",
     "pointOfInitiationMethod": "ESTATICO",
     "merchantAccountInformation": {
       "aliasType": "CELULAR",
       "aliasValue": "3101234567",
-      "merchantCode": "11111",
+      "merchantCode": "",
       "merchantName": "Librería Central",
       "merchantCity": "BOGOTA",
       "postalCode": "110111",
@@ -117,10 +118,10 @@ POST /ach/eeff/v1/money-movements
       "transactionPorpose": "COMPRAS"
     },
     "customData": {
-      "ivaValue": 0,
-      "ivaBase": 50000.5,
-      "incValue": 0,
-      "qrId": "b7f9a3c4-2e10-47b9-bb0b-11e9a4c2f567",
+      "ivaValue": 1000,
+      "ivaBase": 1000.05,
+      "incValue": 1000.5,
+      "qrId": "b7f9a3c4-2e10-47",
       "channel": "POS"
     }
   }
@@ -152,7 +153,7 @@ POST /ach/eeff/v1/money-movements
   "data": {
     "movementType": "QR",
     "id": "6e2c8b72-9a45-4db3-bf34-3f1e78cb4a3a",
-    "qrCode": "00020101021226600014COLOMBIA12345678900210Librería Central5204000053031705405500005802CO5910BOGOTA6009COLOMBIA6304ABCD",
+    "qrCode": "00020101021226600014COLOMBIA12345678900210LIBRERIACENTRAL5204000053031705405500005802CO5910BOGOTA6009COLOMBIA6304ABCD",
     "fechaGeneracion": "2025-11-12T21:10:00Z",
     "status": "PENDING"
   }
@@ -161,7 +162,8 @@ POST /ach/eeff/v1/money-movements
 
 </CodeGroup>
 
-### Archivo descargable (.yaml): \
+### Archivo descargable (.yaml): \\
+
 \
 Especificaciones para lectura de QR
 
