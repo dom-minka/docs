@@ -205,5 +205,16 @@ A continuación, se detallan los pasos que debe seguir el banco para aceptar cor
             }
         }' "<TRANSFIYA URL>/v1/transfer/<tx_ref>/reject"
     ```
+
+    <Info>
+      Los bancos pueden rechazar transferencias llamando al endpoint `reject` de la transferencia e incluyendo un objeto `error` en el cuerpo con información adicional sobre el motivo del rechazo.
+
+      Los códigos de error devueltos por los bancos deben estar dentro del rango `3xx`.
+    </Info>
+    | Field name   | Descripción en español                                                                                                                 |
+    | :----------- | :------------------------------------------------------------------------------------------------------------------------------------- |
+    | `<tx_ref>`   | El campo `<tx_ref>` en la URL representa la referencia de la transferencia, que puede encontrarse en `labels.tx_ref` del `mainAction`. |
+    | `received`   | Marca de tiempo en formato ISO 8601. Representa el momento en que se recibió la llamada `status` desde Transfiya.                      |
+    | `dispatched` | Marca de tiempo en formato ISO 8601. Representa el momento en que se envió la llamada `reject` hacia Transfiya.                        |
   </Step>
 </Steps>
