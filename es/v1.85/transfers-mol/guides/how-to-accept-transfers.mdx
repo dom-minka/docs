@@ -195,3 +195,258 @@ A continuación, se detallan los pasos que debe seguir el banco para aceptar cor
   <Step title="El banco valida que la cuenta de destino exista">
     Puede ser un `signer.handle` (si el usuario ya está registrado) o una referencia bancaria del tipo `tipo-cuenta:número-cuenta@dominio-banco`, por ejemplo: `svgs:1001001000@bank.io`.
   </Step>
+  <Step title="Banco destino verifica que la cuenta esté activa y pueda recibir pagos">
+    Si la cuenta está cerrada, bloqueada o suspendida, el banco debe rechazar la transferencia mediante el endpoint `/reject`, incluyendo un código como `825 - `**Target account validation error.**
+
+    <Tabs>
+      <Tab title="Error Request">
+        ```json
+        curl -X POST \
+            -H "Content-Type: application/json" \
+            -H "x-api-key: <API_KEY>" \
+            -H "Authorization: Bearer <TOKEN>" \
+            -d '{
+                "received": "2025-01-14T20:41:00.252-05:00",
+                "dispatched": "2025-01-14T20:41:00.552-05:00",
+                "error": {
+                "code": 825,
+                "message": "Target account validation error"
+                }
+            }' "<TRANSFIYA URL>/v1/transfer/<tx_ref>/reject"
+        ```
+
+        <Info>
+          Los bancos pueden rechazar transferencias llamando al endpoint `reject` de la transferencia e incluyendo un objeto `error` en el cuerpo con información adicional sobre el motivo del rechazo.
+
+          Los códigos de error devueltos por los bancos deben estar dentro del rango `3xx`.
+        </Info>
+        | Field name   | Descripción en español                                                                                                                 |
+        | ------------ | -------------------------------------------------------------------------------------------------------------------------------------- |
+        | `<tx_ref>`   | El campo `<tx_ref>` en la URL representa la referencia de la transferencia, que puede encontrarse en `labels.tx_ref` del `mainAction`. |
+        | `received`   | Marca de tiempo en formato ISO 8601. Representa el momento en que se recibió la llamada `status` desde Transfiya.                      |
+        | `dispatched` | Marca de tiempo en formato ISO 8601. Representa el momento en que se envió la llamada `reject` hacia Transfiya.                        |
+      </Tab>
+      <Tab title>
+        
+      </Tab>
+    </Tabs>
+  </Step>
+  <Step title="Banco destino valida que la moneda y el monto sean válidos para la cuenta">
+    En caso de discrepancia, la operación debe rechazarse con un código de error como **833**`-`**Exceeds target bank maximum amount.**
+
+    <Tabs>
+      <Tab title="Error Request">
+        <Info>
+          Los bancos pueden rechazar transferencias llamando al endpoint `reject` de la transferencia y proporcionando un objeto `error` en el cuerpo con información adicional sobre el motivo del rechazo.
+
+          Los códigos de error devueltos por los bancos deben estar en el rango `8xx`.
+        </Info>
+        ```json
+        curl -X POST \
+        -H "Content-Type: application/json" \
+        -H "x-api-key: <API_KEY>" \
+        -H "Authorization: Bearer <TOKEN>" \
+        -d '{
+            "received": "2025-01-14T20:41:00.252-05:00",
+            "dispatched": "2025-01-14T20:41:00.552-05:00",
+            "error": {
+            "code": 833,
+            "message": "Exceeds target bank maximum amount"
+            }
+        }' "<TRANSFIYA URL>/v1/transfer/<tx_ref>/reject"
+        ```
+
+        | Field name   | Descripción en español                                                                                                            |
+        | ------------ | --------------------------------------------------------------------------------------------------------------------------------- |
+        | `<tx_ref>`   | El campo `<tx_ref>` en la URL representa la referencia de la transferencia, que se encuentra en `labels.tx_ref` del `mainAction`. |
+        | `received`   | Timestamp en formato ISO 8601. Representa el momento en que se recibió la llamada `status` desde Transfiya.                       |
+        | `dispatched` | Timestamp en formato ISO 8601. Representa el momento en que se envió la llamada `reject` a Transfiya.                             |
+      </Tab>
+      <Tab title>
+        
+      </Tab>
+    </Tabs>
+  </Step>
+  <Step title="Banco Destino verifica si la cuenta está registrada en Transfiya (onboarded)">
+    Se valida que exista un `signer` en el sistema y que cuente con una clave pública (`keeper`) válida asociada. Esta validacion la realiza el banco internamente, no debe ir a transfiya para realizarla.
+  </Step>
+  <Step title="Genera una clave privada (`keeper`) si la cuenta no está registrada">
+    Cada cuenta debe tener una clave criptográfica única. Esta se usa para firmar operaciones bajo el modelo de Transfiya.
+
+    <Info>
+      La seguridad de Transfiya se basa en criptografía de clave pública/privada. Esta clave se utiliza para autorizar cualquier pago asociado a la cuenta, por lo que **cada cuenta debe tener una clave única asociada**. Se recomienda utilizar los SDKs de Transfiya para generar estas claves de manera segura.
+    </Info>
+  </Step>
+  <Step title="Banco Destino Registra el `signer` en Transfiya">
+    El banco destino registra una cuenta en Transfiya creando un  signer vinculado a una clave pública, la cual está asociada a la clave privada generada previamente. Este signer contiene también metadatos adicionales sobre la cuenta y su titular, los cuales son necesarios para el correcto procesamiento de las transacciones dentro del sistema.
+
+    <Tabs>
+      <Tab title="Request Account Signer">
+        <Info>
+          No se requiere consentimiento del usuario para crear signers de cuenta que no estén vinculados a alias. Este tipo de signers son útiles para incorporar automáticamente cuentas de usuario sin necesidad de solicitar confirmación.
+        </Info>
+        ```json
+        curl -X POST \
+            -H "x-api-key: <API_KEY>" \
+            -H "Authorization: Bearer <TOKEN>" \
+            -H "Content-Type: application/json" \
+            -d '{
+            "labels": {
+                "aliasType": "NONE",
+                "type": "PERSON",
+                "firstName": "Jorge",
+                "secondName": "Alejandro",
+                "lastName": "Fernandez",
+                "secondLastName": "Garcia",
+                "proprietary": "CC",
+                "identification": "1010101010",
+                "bankAccountType": "SVGS",
+                "bankAccountNumber": "12345654321",
+                "routerReference": "$bancorojo"
+            },
+            "keeper": [{
+                "scheme": "ecdsa-ed25519",
+                "public": "0463e75c8b975f069813ca8e6c36c0b6fd246eac708affb7ed2c6480fa201defe8725322d6380ec66e94f6dcb49f635c0ca51296e48da4a12b3ec66582a1297adf"
+            }]
+            }' "<TRANSFIYA URL>/v1/signer"
+        ```
+      </Tab>
+      <Tab title="Response Account Signer">
+        ```json
+        curl -X POST \
+        -H "x-api-key: <API_KEY>" \
+        -H "Authorization: Bearer <TOKEN>" \
+        -H "Content-Type: application/json" \
+        -d '{
+        "labels": {
+            "aliasType": "NONE",
+            "type": "PERSON",
+            "firstName": "Jorge",
+            "secondName": "Alejandro",
+            "lastName": "Fernandez",
+            "secondLastName": "Garcia",
+            "proprietary": "CC",
+            "identification": "1010101010",
+            "bankAccountType": "SVGS",
+            "bankAccountNumber": "12345654321",
+            "routerReference": "$bancorojo"
+        },
+        "keeper": [{
+            "scheme": "ecdsa-ed25519",
+            "public": "0463e75c8b975f069813ca8e6c36c0b6fd246eac708affb7ed2c6480fa201defe8725322d6380ec66e94f6dcb49f635c0ca51296e48da4a12b3ec66582a1297adf"
+        }]
+        }' "<TRANSFIYA URL>/v1/signer"
+        ```
+      </Tab>
+      <Tab title="Request Alias Signer">
+        <Info>
+          Se requiere consentimiento del usuario para crear signers con alias.
+        </Info>
+        ```json
+        curl -X POST \
+           -H "x-api-key: <API_KEY>" \
+           -H "Authorization: Bearer <TOKEN>" \
+           -H "Content-Type: application/json" \
+           -d '{
+           "labels": {
+               "aliasType": "ALPHANUM",
+               "aliasValue": "@jorge22",
+               "type": "PERSON",
+               "firstName": "Jorge",
+               "secondName": "Alejandro",
+               "lastName": "Fernandez",
+               "secondLastName": "Garcia",
+               "proprietary": "CC",
+               "identification": "1010101010",
+               "bankAccountType": "SVGS",
+               "bankAccountNumber": "12345654321",
+               "routerReference": "$bancorojo",
+               "targetSpbviCode": "TFY"
+               "consented": "2025-01-14T20:42:00.152-05:00",
+               "received": "2025-01-14T20:41:00.252-05:00",
+               "dispatched": "2025-01-14T20:41:00.552-05:00"
+           },
+           "keeper": [{
+               "scheme": "ecdsa-ed25519",
+               "public": "0463e75c8b975f069813ca8e6c36c0b6fd246eac708affb7ed2c6480fa201defe8725322d6380ec66e94f6dcb49f635c0ca51296e48da4a12b3ec66582a1297adf"
+           }]
+           }' "<TRANSFIYA URL>/v1/signer"
+        ```
+
+        | Field name   | Valor del campo                                                                                                       |
+        | ------------ | --------------------------------------------------------------------------------------------------------------------- |
+        | `received`   | Timestamp en formato ISO 8601. Representa el momento en que se recibió la llamada `status` desde Transfiya.           |
+        | `dispatched` | Timestamp en formato ISO 8601. Representa el momento en que se envió la solicitud de creación del signer a Transfiya. |
+      </Tab>
+      <Tab title="Response Alias Signer">
+        ```json
+        curl -X POST \
+        -H "x-api-key: <API_KEY>" \
+        -H "Authorization: Bearer <TOKEN>" \
+        -H "Content-Type: application/json" \
+        -d '{
+        "labels": {
+            "aliasType": "ALPHANUM",
+            "aliasValue": "@jorge22",
+            "type": "PERSON",
+            "firstName": "Jorge",
+            "secondName": "Alejandro",
+            "lastName": "Fernandez",
+            "secondLastName": "Garcia",
+            "proprietary": "CC",
+            "identification": "1010101010",
+            "bankAccountType": "SVGS",
+            "bankAccountNumber": "12345654321",
+            "routerReference": "$bancorojo",
+            "targetSpbviCode": "TFY"
+            "consented": "2025-01-14T20:42:00.152-05:00",
+            "received": "2025-01-14T20:41:00.252-05:00",
+            "dispatched": "2025-01-14T20:41:00.552-05:00"
+        },
+        "keeper": [{
+            "scheme": "ecdsa-ed25519",
+            "public": "0463e75c8b975f069813ca8e6c36c0b6fd246eac708affb7ed2c6480fa201defe8725322d6380ec66e94f6dcb49f635c0ca51296e48da4a12b3ec66582a1297adf"
+        }]
+        }' "<TRANSFIYA URL>/v1/signer"
+        ```
+      </Tab>
+      <Tab title="Error Response">
+        ```json
+        {
+            "error": {
+                "code": 118,
+                "message": "Parameter labels.bankAccountNumber is required."
+            }
+        }
+        ```
+      </Tab>
+    </Tabs>
+  </Step>
+  <Step title="El banco destino acepta la transferencia `PENDING`">
+    El banco debe llamar al endpoint `/accept` incluyendo los campos `received`, `dispatched` y el `signer.handle` correspondiente.
+
+    <Info>
+      Esta aceptación es obligatoria antes de que se realice la operación de crédito que ocurre posterior a la liquidación con MOL.
+    </Info>
+    <Tabs>
+      <Tab title="Request">
+        ```json
+        curl -X POST \
+        -H "Content-Type: application/json" \
+        -H "x-api-key: <API_KEY>" \
+        -H "Authorization: Bearer <TOKEN>" \
+        -d '{
+            "received": "2025-01-14T20:42:00.252-05:00",
+            "dispatched": "2025-01-14T20:42:00.552-05:00",
+            "signer": {
+            "handle": "wRFmYXS2sP9ho9VCZ3j4FuP1j55ABeFvsF"
+            }
+        }' "<TRANSFIYA URL>/v1/transfer/<tx_ref>/accept"
+        ```
+      </Tab>
+      <Tab title>
+        
+      </Tab>
+    </Tabs>
+  </Step>
+</Steps>
