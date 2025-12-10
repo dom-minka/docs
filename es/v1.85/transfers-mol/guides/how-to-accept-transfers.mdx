@@ -82,5 +82,116 @@ Una vez realizado el débito al usuario origen y ejecutados los controles antifr
 
 Durante esta fase, el banco receptor debe validar la cuenta de destino, el monto, la moneda y el registro del usuario dentro del ecosistema Transfiya. Esta validación se notifica mediante el endpoint status, el cual indica que la transferencia se encuentra en estado PENDING.
 
-A continuación, se detallan los pasos que debe seguir el banco para aceptar correctamente una transferencia-:
+A continuación, se detallan los pasos que debe seguir el banco para aceptar correctamente una transferencia:
 
+<Steps>
+  <Step title="Transfiya llama al endpoint `status` del banco destino con estado `PENDING`">
+    Se realiza una solicitud `POST` al endpoint del banco con todos los datos relevantes de la transferencia. El campo `labels.status` estará en `PENDING`.
+
+    <Tabs>
+      <Tab title="Request">
+        ```json
+        POST https://ban.co/transfiya/status
+        {
+            "source": "wXxwpxB32saqfmfMxAQD4SVWWhhn6akLC2",
+            "target": "wRFmYXS2sP9ho9VCZ3j4FuP1j55ABeFvsF",
+            "amount": "100.00",
+            "symbol": "$tin",
+            "labels": {
+                "hash": "PENDING",
+                "type": "SENDMOL",
+                "domain": "tin",
+                "flowId": "Lf13jsK83omPv3bOt",
+                "status": "PENDING",
+                "tx_ref": "Lf13jsK83omPv3bOt",
+                "tx_id": "20250114890915944TFY123456789012345",
+                "received": "2025-01-14T20:40:57.322-05:00",
+                "dispatched": "2025-01-14T20:40:58.322-05:00",
+                "delivered": "2025-01-14T20:40:58.522-05:00",
+                "created": "2025-01-14T20:40:57.322-05:00",
+                "updated": "2025-01-14T20:40:57.322-05:00",
+                "description": "Payment for lunch",
+                "sourceChannel": "APP",
+                "deviceFingerPrint": {
+                "city": "Bogotá",
+                "hash": "26fff5af6441f8e15a71e8d62c361714484b1b308c99e8eb68ca85e2a7e0dc58",
+                "model": "Huawei Mate 20 Pro",
+                "country": "Colombia",
+                "operator": "Bharti Airtel Limited",
+                "SIMCardId": "8991101200003204510",
+                "ipAddress": "2001:0db8:85a3:0000:0000:8a2e:0370:7334",
+                "mobileDevice": "990000862471854"
+                }
+            },
+            "snapshot": {
+                "source": {
+                "signer": {
+                    "handle": "wXxwpxB32saqfmfMxAQD4SVWWhhn6akLC2",
+                    "labels": {
+                    "name": "Maria Fernanda Gomez",
+                    "proprietary": "CC",
+                        "identification": "2020202020",
+                    "bankAccountType": "SVGS",
+                    "bankAccountNumber": "95445654254",
+                    "bankId": "895554821",
+                    "targetSpbviCode": "TFY"
+                    }
+                },
+                },
+                "symbol": {
+                "signer": {
+                    "handle": "wMxKCAzsQBiUURDU3xD3xuSbVo1S9jmf3d",
+                    "labels": {
+                    "created": "2018-10-19T20:23:22.041Z",
+                    "createdBy": "ZhrQA3vcm17h2RRO4LrJ"
+                    }
+                }
+                },
+                "target": {
+                "signer": {
+                    "handle": "wRFmYXS2sP9ho9VCZ3j4FuP1j55ABeFvsF",
+                    "labels": {
+                    "name": "Jorge Alejandro Fernandez Garcia",
+                    "proprietary": "CC",
+                        "identification": "1010101010",
+                    "bankAccountType": "SVGS",
+                    "bankAccountNumber": "12345654321",
+                    "bankId": "891234918",
+                    "targetSpbviCode": "TFY"
+                    }
+                },
+                }
+            },
+            "error": {
+                "code": 0,
+                "message": "Success"
+            },
+            "action_id": "35de4d3d-3aba-4fb3-b110-d004ce2aabb2",
+            "id": "35de4d3d-3aba-4fb3-b110-d004ce2aabb2"
+            }
+        ```
+      </Tab>
+      <Tab title="Response">
+        <Info>
+          El banco destino responde para confirmar la recepción de la notificación. A partir de este punto, el procesamiento de la notificación es completamente asincrónico.
+        </Info>
+        ```json
+        {
+            "error": {
+                "code": 0,
+                "message": "Success"
+            }
+        }
+        ```
+
+        <Info>
+          La respuesta no necesita contener un cuerpo; el banco solo debe devolver una respuesta HTTP `200` para confirmar la recepción del llamado.
+
+          También se permite retornar un objeto JSON con el código de error `0` como indicación de que la llamada fue recibida sin errores.
+        </Info>
+      </Tab>
+    </Tabs>
+  </Step>
+  <Step title="El banco valida que la cuenta de destino exista">
+    Puede ser un `signer.handle` (si el usuario ya está registrado) o una referencia bancaria del tipo `tipo-cuenta:número-cuenta@dominio-banco`, por ejemplo: `svgs:1001001000@bank.io`.
+  </Step>
