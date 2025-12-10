@@ -90,7 +90,7 @@ A continuación, se detallan los pasos que debe seguir el banco para aceptar cor
 
     <CodeGroup>
 
-    ```json REQUEST
+    ```json REQUEST expandable
     POST https://ban.co/transfiya/status
     {
     "source": "wXxwpxB32saqfmfMxAQD4SVWWhhn6akLC2",
@@ -172,7 +172,7 @@ A continuación, se detallan los pasos que debe seguir el banco para aceptar cor
     ```
 
     
-    ```json RESPONSE
+    ```json RESPONSE expandable
     {
     "error": {
     "code": 0,
@@ -191,7 +191,7 @@ A continuación, se detallan los pasos que debe seguir el banco para aceptar cor
   <Step title="Banco destino verifica que la cuenta esté activa y pueda recibir pagos">
     Si la cuenta está cerrada, bloqueada o suspendida, el banco debe rechazar la transferencia mediante el endpoint `/reject`, incluyendo un código como `825 - `**Target account validation error.**
 
-    ```json
+    ```json expandable
     curl -X POST \
     -H "Content-Type: application/json" \
     -H "x-api-key: <API_KEY>" \
@@ -220,7 +220,7 @@ A continuación, se detallan los pasos que debe seguir el banco para aceptar cor
   <Step title="Banco destino valida que la moneda y el monto sean válidos para la cuenta">
     En caso de discrepancia, la operación debe rechazarse con un código de error como **833**`-`**Exceeds target bank maximum amount.**
 
-    ```json
+    ```json expandable
     curl -X POST \
     -H "Content-Type: application/json" \
     -H "x-api-key: <API_KEY>" \
@@ -261,7 +261,7 @@ A continuación, se detallan los pasos que debe seguir el banco para aceptar cor
 
     <CodeGroup>
 
-    ```json Request Account Signer
+    ```json Request Account Signer expandable
     curl -X POST \
         -H "x-api-key: <API_KEY>" \
         -H "Authorization: Bearer <TOKEN>" \
@@ -288,7 +288,7 @@ A continuación, se detallan los pasos que debe seguir el banco para aceptar cor
     ```
 
     
-    ```json Response Account Signer
+    ```json Response Account Signer expandable
     curl -X POST \
     -H "x-api-key: <API_KEY>" \
     -H "Authorization: Bearer <TOKEN>" \
@@ -315,7 +315,7 @@ A continuación, se detallan los pasos que debe seguir el banco para aceptar cor
     ```
 
     
-    ```json Request Alias Signer
+    ```json Request Alias Signer expandable
     curl -X POST \
        -H "x-api-key: <API_KEY>" \
        -H "Authorization: Bearer <TOKEN>" \
@@ -347,7 +347,7 @@ A continuación, se detallan los pasos que debe seguir el banco para aceptar cor
     ```
 
     
-    ```json Response Alias Signer
+    ```json Response Alias Signer expandable
     curl -X POST \
     -H "x-api-key: <API_KEY>" \
     -H "Authorization: Bearer <TOKEN>" \
@@ -378,6 +378,57 @@ A continuación, se detallan los pasos que debe seguir el banco para aceptar cor
     }' "<TRANSFIYA URL>/v1/signer"
     ```
 
+    
+    ```json Error Response expandable
+    curl -X POST \
+    -H "x-api-key: <API_KEY>" \
+    -H "Authorization: Bearer <TOKEN>" \
+    -H "Content-Type: application/json" \
+    -d '{
+    "labels": {
+        "aliasType": "ALPHANUM",
+        "aliasValue": "@jorge22",
+        "type": "PERSON",
+        "firstName": "Jorge",
+        "secondName": "Alejandro",
+        "lastName": "Fernandez",
+        "secondLastName": "Garcia",
+        "proprietary": "CC",
+        "identification": "1010101010",
+        "bankAccountType": "SVGS",
+        "bankAccountNumber": "12345654321",
+        "routerReference": "$bancorojo",
+        "targetSpbviCode": "TFY"
+        "consented": "2025-01-14T20:42:00.152-05:00",
+        "received": "2025-01-14T20:41:00.252-05:00",
+        "dispatched": "2025-01-14T20:41:00.552-05:00"
+    },
+    "keeper": [{
+        "scheme": "ecdsa-ed25519",
+        "public": "0463e75c8b975f069813ca8e6c36c0b6fd246eac708affb7ed2c6480fa201defe8725322d6380ec66e94f6dcb49f635c0ca51296e48da4a12b3ec66582a1297adf"
+    }]
+    }' "<TRANSFIYA URL>/v1/signer"
+    ```
+
     </CodeGroup>
+  </Step>
+  <Step title='El banco destino acepta la transferencia "PENDING"'>
+    El banco debe llamar al endpoint `/accept` incluyendo los campos `received`, `dispatched` y el `signer.handle` correspondiente.
+
+    Esta aceptación es obligatoria antes de que se realice la operación de crédito que ocurre posterior a la liquidación con MOL.
+
+    ```json expandable
+    curl -X POST \
+    -H "Content-Type: application/json" \
+    -H "x-api-key: <API_KEY>" \
+    -H "Authorization: Bearer <TOKEN>" \
+    -d '{
+        "received": "2025-01-14T20:42:00.252-05:00",
+        "dispatched": "2025-01-14T20:42:00.552-05:00",
+        "signer": {
+        "handle": "wRFmYXS2sP9ho9VCZ3j4FuP1j55ABeFvsF"
+        }
+    }' "<TRANSFIYA URL>/v1/transfer/<tx_ref>/accept"
+    ```
   </Step>
 </Steps>
