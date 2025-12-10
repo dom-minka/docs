@@ -5,3 +5,17 @@ icon: "file-check"
 ---
 
 ## Validación de aceptación por el banco destino
+
+Una vez realizado el débito, Transfiya ejecuta controles antifraude sobre la transferencia y contacta al banco destino para solicitar la aceptación del pago. Este paso permite al banco receptor validar la información de la cuenta destino y confirmar que el pago puede ser recibido correctamente.
+
+<Info>
+  Durante esta etapa, el banco DEBE realizar las siguientes validaciones:
+
+  Que la cuenta destino exista.
+
+  Que la cuenta esté activa y habilitada para recibir pagos.
+
+  Que la moneda de la cuenta coincida con la moneda de la transferencia.
+
+  Que el monto de la transferencia no supere los límites previamente definidos.
+</Info>
