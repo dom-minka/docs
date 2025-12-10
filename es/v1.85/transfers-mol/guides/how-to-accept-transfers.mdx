@@ -314,6 +314,38 @@ A continuación, se detallan los pasos que debe seguir el banco para aceptar cor
     }' "<TRANSFIYA URL>/v1/signer"
     ```
 
+    
+    ```json Request Alias Signer
+    curl -X POST \
+       -H "x-api-key: <API_KEY>" \
+       -H "Authorization: Bearer <TOKEN>" \
+       -H "Content-Type: application/json" \
+       -d '{
+       "labels": {
+           "aliasType": "ALPHANUM",
+           "aliasValue": "@jorge22",
+           "type": "PERSON",
+           "firstName": "Jorge",
+           "secondName": "Alejandro",
+           "lastName": "Fernandez",
+           "secondLastName": "Garcia",
+           "proprietary": "CC",
+           "identification": "1010101010",
+           "bankAccountType": "SVGS",
+           "bankAccountNumber": "12345654321",
+           "routerReference": "$bancorojo",
+           "targetSpbviCode": "TFY"
+           "consented": "2025-01-14T20:42:00.152-05:00",
+           "received": "2025-01-14T20:41:00.252-05:00",
+           "dispatched": "2025-01-14T20:41:00.552-05:00"
+       },
+       "keeper": [{
+           "scheme": "ecdsa-ed25519",
+           "public": "0463e75c8b975f069813ca8e6c36c0b6fd246eac708affb7ed2c6480fa201defe8725322d6380ec66e94f6dcb49f635c0ca51296e48da4a12b3ec66582a1297adf"
+       }]
+       }' "<TRANSFIYA URL>/v1/signer"
+    ```
+
     </CodeGroup>
   </Step>
 </Steps>
