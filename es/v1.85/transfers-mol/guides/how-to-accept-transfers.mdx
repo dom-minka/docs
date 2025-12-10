@@ -246,4 +246,7 @@ A continuación, se detallan los pasos que debe seguir el banco para aceptar cor
     | `received`   | Timestamp en formato ISO 8601. Representa el momento en que se recibió la llamada `status` desde Transfiya.                       |
     | `dispatched` | Timestamp en formato ISO 8601. Representa el momento en que se envió la llamada `reject` a Transfiya.                             |
   </Step>
+  <Step title="Banco Destino verifica si la cuenta está registrada en Transfiya (onboarded)">
+    Se valida que exista un `signer` en el sistema y que cuente con una clave pública (`keeper`) válida asociada. Esta validacion la realiza el banco internamente, no debe ir a transfiya para realizarla.
+  </Step>
 </Steps>
