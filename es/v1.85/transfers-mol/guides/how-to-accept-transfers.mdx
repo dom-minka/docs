@@ -183,4 +183,27 @@ A continuación, se detallan los pasos que debe seguir el banco para aceptar cor
 
     </CodeGroup>
   </Step>
+  <Step title="El banco valida que la cuenta de destino exista">
+    Puede ser un `signer.handle` (si el usuario ya está registrado) o una referencia bancaria del tipo `tipo-cuenta:número-cuenta@dominio-banco`, por ejemplo:
+
+    `svgs:1001001000@bank.io`.
+  </Step>
+  <Step title="Banco destino verifica que la cuenta esté activa y pueda recibir pagos">
+    Si la cuenta está cerrada, bloqueada o suspendida, el banco debe rechazar la transferencia mediante el endpoint `/reject`, incluyendo un código como `825 - `**Target account validation error.**
+
+    ```json
+    curl -X POST \
+        -H "Content-Type: application/json" \
+        -H "x-api-key: <API_KEY>" \
+        -H "Authorization: Bearer <TOKEN>" \
+        -d '{
+            "received": "2025-01-14T20:41:00.252-05:00",
+            "dispatched": "2025-01-14T20:41:00.552-05:00",
+            "error": {
+            "code": 825,
+            "message": "Target account validation error"
+            }
+        }' "<TRANSFIYA URL>/v1/transfer/<tx_ref>/reject"
+    ```
+  </Step>
 </Steps>
