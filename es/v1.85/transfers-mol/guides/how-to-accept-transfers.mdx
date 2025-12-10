@@ -256,4 +256,37 @@ A continuación, se detallan los pasos que debe seguir el banco para aceptar cor
       La seguridad de Transfiya se basa en criptografía de clave pública/privada. Esta clave se utiliza para autorizar cualquier pago asociado a la cuenta, por lo que **cada cuenta debe tener una clave única asociada**. Se recomienda utilizar los SDKs de Transfiya para generar estas claves de manera segura.
     </Info>
   </Step>
+  <Step title='Banco Destino Registra el "signer" en Transfiya'>
+    El banco destino registra una cuenta en Transfiya creando un  signer vinculado a una clave pública, la cual está asociada a la clave privada generada previamente. Este signer contiene también metadatos adicionales sobre la cuenta y su titular, los cuales son necesarios para el correcto procesamiento de las transacciones dentro del sistema.
+
+    <CodeGroup>
+
+    ```json Account Signer
+    curl -X POST \
+        -H "x-api-key: <API_KEY>" \
+        -H "Authorization: Bearer <TOKEN>" \
+        -H "Content-Type: application/json" \
+        -d '{
+        "labels": {
+            "aliasType": "NONE",
+            "type": "PERSON",
+            "firstName": "Jorge",
+            "secondName": "Alejandro",
+            "lastName": "Fernandez",
+            "secondLastName": "Garcia",
+            "proprietary": "CC",
+            "identification": "1010101010",
+            "bankAccountType": "SVGS",
+            "bankAccountNumber": "12345654321",
+            "routerReference": "$bancorojo"
+        },
+        "keeper": [{
+            "scheme": "ecdsa-ed25519",
+            "public": "0463e75c8b975f069813ca8e6c36c0b6fd246eac708affb7ed2c6480fa201defe8725322d6380ec66e94f6dcb49f635c0ca51296e48da4a12b3ec66582a1297adf"
+        }]
+        }' "<TRANSFIYA URL>/v1/signer"
+    ```
+
+    </CodeGroup>
+  </Step>
 </Steps>
