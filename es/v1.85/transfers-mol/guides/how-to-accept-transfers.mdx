@@ -49,3 +49,37 @@ Para aceptar una transferencia, el banco debe reaccionar a la notificación envi
 <Info>
   En este capítulo nos enfocaremos exclusivamente en el manejo del estado PENDING a través del endpoint status. Los demás estados (COMPLETED y REJECTED) serán abordados más adelante en el flujo de procesamiento.
 </Info>
+
+## Aceptación de transferencia – Pasos detallados
+
+```mermaid
+sequenceDiagram
+  autonumber
+  participant ty as Transfiya
+  participant tb as Banco Destino
+
+  ty ->> tb: Notificar estado PENDIENTE
+  tb -->> ty: Respuesta
+  tb ->> tb: Validar que<br/> la cuenta exista
+  tb ->> tb: Validar que<br/> la cuenta esté activa
+  tb ->> tb: Validar monto<br/> y moneda de la transferencia
+  tb ->> tb: Validar que<br/> la cuenta esté registrada
+
+  alt la cuenta no está registrada
+    tb ->> tb: Crear y almacenar<br />keeper
+    tb ->> +ty: Crear signer
+    ty -->> -tb: Respuesta del signer
+  end
+
+  tb ->> ty: Aceptar transferencia
+```
+
+<Info>
+  A continuación detallamos los pasos del diagrama de secuencia con el detalle tecnico.
+</Info>
+
+Una vez realizado el débito al usuario origen y ejecutados los controles antifraude, Transfiya contacta al banco destino para solicitar la aceptación de la transferencia. Esta etapa es crítica para asegurar que el pago pueda ser recibido correctamente.
+
+Durante esta fase, el banco receptor debe validar la cuenta de destino, el monto, la moneda y el registro del usuario dentro del ecosistema Transfiya. Esta validación se notifica mediante el endpoint status, el cual indica que la transferencia se encuentra en estado PENDING.
+
+A continuación, se detallan los pasos que debe seguir el banco para aceptar correctamente una transferencia:
