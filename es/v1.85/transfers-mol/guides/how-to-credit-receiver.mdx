@@ -82,7 +82,7 @@ A continuación, se describe el paso a paso de este proceso:
 
     <Tabs>
       <Tab title="Request Exitoso">
-        ```json
+        ```json expandable
         POST https://ban.co/transfiya/credit
         {
             "source": "wXxwpxB32saqfmfMxAQD4SVWWhhn6akLC2",
@@ -173,7 +173,7 @@ A continuación, se describe el paso a paso de este proceso:
         <Info>
           `bankSigner` representa el firmante de liquidación que es registrado por el banco durante su incorporación con Transfiya. Este firmante mantiene el balance total disponible para el banco dentro del sistema.
         </Info>
-        ```json
+        ```json expandable
         curl -X POST \
             -H "Content-Type: application/json" \
             -H "x-api-key: <API_KEY>" \
@@ -207,7 +207,7 @@ A continuación, se describe el paso a paso de este proceso:
         <Info>
           Pueden añadirse campos adicionales a estas respuestas como parte de nuevas funcionalidades. Las implementaciones de los bancos DEBEN ser resilientes ante la adición de nuevos campos.
         </Info>
-        ```json
+        ```json expandable
         {
             "source": "wRFmYXS2sP9ho9VCZ3j4FuP1j55ABeFvsF",
             "target": "wNbBi3CcZzggFJ9dvDWk35srVGgaAVLzUr",
@@ -280,7 +280,7 @@ A continuación, se describe el paso a paso de este proceso:
         <Info>
           El código de estado HTTP para errores será `4xx` o `5xx`. El cuerpo de la respuesta puede incluir información adicional del error en el formato descrito anteriormente, si dicha información está disponible.
         </Info>
-        ```json
+        ```json expandable
         {
            "error": {
                "code": 121,
@@ -297,7 +297,7 @@ A continuación, se describe el paso a paso de este proceso:
 
     <Tabs>
       <Tab title="Response Exitoso">
-        ```json
+        ```json expandable
         {
         "source": "wNbBi3CcZzggFJ9dvDWk35srVGgaAVLzUr",
           "target": "wLd9MEASjQQTYywoXnDNwTRpgwiDfyHj6U",
@@ -434,7 +434,7 @@ A continuación, se describe el paso a paso de este proceso:
 
     <Tabs>
       <Tab title="Request">
-        ```json
+        ```json expandable
         curl -X PUT \
         -H "Content-Type: application/json" \
         -H "x-api-key: <API_KEY>" \
@@ -452,7 +452,7 @@ A continuación, se describe el paso a paso de este proceso:
         | `labels.tx_id`         | Identificador único de la transacción que el banco ejecutó para acreditar los fondos en la cuenta de destino.                                                                  |
       </Tab>
       <Tab title="Response">
-        ```json
+        ```json expandable
         {
             "source": "wRFmYXS2sP9ho9VCZ3j4FuP1j55ABeFvsF",
             "target": "wNbBi3CcZzggFJ9dvDWk35srVGgaAVLzUr",
@@ -531,7 +531,7 @@ A continuación, se describe el paso a paso de este proceso:
 
           Transfiya utiliza firmas criptográficas como prueba de que los participantes autorizaron los movimientos de saldo. Los datos se hashean primero y luego se firman utilizando claves privadas que **nunca deben compartirse** con TransfiYa. Los algoritmos de firma y hash están documentados, y los SDKs de TransfiYa permiten realizar estas operaciones de forma sencilla para facilitar la integración.
         </Info>
-        ```json
+        ```json expandable
         curl -X POST \
             -H "Content-Type: application/json" \
             -H "x-api-key: <API_KEY>" \
@@ -577,7 +577,7 @@ A continuación, se describe el paso a paso de este proceso:
         | `meta.signatures`      | Firma del `hash` generada con la clave privada del firmante fuente. Incluye: `schema` (algoritmo), `signer`, `public` (clave pública) y `string` (firma).  |
       </Tab>
       <Tab title="Response Exitoso">
-        ```json
+        ```json expandable
         {
             "source": "wRFmYXS2sP9ho9VCZ3j4FuP1j55ABeFvsF",
             "target": "wNbBi3CcZzggFJ9dvDWk35srVGgaAVLzUr",
@@ -642,7 +642,7 @@ A continuación, se describe el paso a paso de este proceso:
         ```
       </Tab>
       <Tab title="Error Response">
-        ```json
+        ```json expandable
         {
             "source": "wRFmYXS2sP9ho9VCZ3j4FuP1j55ABeFvsF",
             "target": "wNbBi3CcZzggFJ9dvDWk35srVGgaAVLzUr",
@@ -715,7 +715,7 @@ A continuación, se describe el paso a paso de este proceso:
         <Info>
           Para continuar con el procesamiento de la transferencia, basta con llamar al endpoint `continue` y proporcionar las marcas de tiempo requeridas por la regulación.
         </Info>
-        ```json
+        ```json expandable
         curl -X POST \
         -H "Content-Type: application/json" \
         -H "x-api-key: <API_KEY>" \
@@ -818,7 +818,7 @@ A continuación, se describe el paso a paso de este proceso:
         <Info>
           Los códigos de error devueltos por los bancos deben estar en el rango `3xx`.
         </Info>
-        ```json
+        ```json expandable
         curl -X POST \
         -H "Content-Type: application/json" \
         -H "x-api-key: <API_KEY>" \

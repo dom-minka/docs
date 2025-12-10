@@ -51,7 +51,7 @@ sequenceDiagram
 
     <Tabs>
       <Tab title="Request">
-        ```json
+        ```json expandable
         POST https://ban.co/transfiya/debit
         {
         "source": "wXxwpxB32saqfmfMxAQD4SVWWhhn6akLC2",
@@ -139,7 +139,7 @@ sequenceDiagram
 
     <Tabs>
       <Tab title="Request">
-        ```diff
+        ```json expandable
         curl -X POST \
         -H "Content-Type: application/json" \
         -H "x-api-key: <API_KEY>" \
@@ -252,7 +252,7 @@ sequenceDiagram
 
     <Tabs>
       <Tab title="Exitosa">
-        ```json
+        ```json expandable
         {
           "source": "wNbBi3CcZzggFJ9dvDWk35srVGgaAVLzUr",
           "target": "wLd9MEASjQQTYywoXnDNwTRpgwiDfyHj6U",
@@ -542,7 +542,7 @@ sequenceDiagram
     </Info>
     <Tabs>
       <Tab title="Request">
-        ```json
+        ```json expandable
         curl -X PUT \
         -H "Content-Type: application/json" \
         -H "x-api-key: <API_KEY>" \
@@ -637,7 +637,7 @@ sequenceDiagram
         <Info>
           Transfiya valida la firma del objeto IOU recibido y lo almacena en el libro mayor, si todo es válido. Esta operación también marca la acción `UPLOAD` como `COMPLETED`.
         </Info>
-        ```json
+        ```json expandable
         curl -X POST \
             -H "Content-Type: application/json" \
             -H "x-api-key: <API_KEY>" \
@@ -815,7 +815,7 @@ sequenceDiagram
         <Info>
           Para continuar con el procesamiento de la transferencia, es suficiente con llamar al endpoint `continue` y proporcionar las marcas de tiempo requeridas por la regulación.
         </Info>
-        ```json
+        ```json expandable
         curl -X POST \
             -H "Content-Type: application/json" \
             -H "x-api-key: <API_KEY>" \
