@@ -19,3 +19,33 @@ Una vez realizado el débito, Transfiya ejecuta controles antifraude sobre la tr
 
   Que el monto de la transferencia no supere los límites previamente definidos.
 </Info>
+
+La notificación de este paso se realiza mediante el endpoint status. Este endpoint es utilizado por Transfiya para comunicar los cambios de estado de las transferencias a las entidades participantes.
+
+Los estados actualmente soportados por este endpoint son:
+
+PENDING: la transferencia está pendiente de aceptación por parte del banco destino.
+
+COMPLETED: la transferencia se ha completado exitosamente.
+
+REJECTED: la transferencia fue rechazada debido a un error durante el procesamiento.
+
+<Tip>
+  Las validaciones de aceptación DEBEN realizarse inmediatamente cuando la transferencia entra en estado PENDING.
+</Tip>
+
+```mermaid
+flowchart TD
+    tya[Transfiya] -->|&nbsp;POST /status&nbsp;| banco[Banco]
+    banco --> estado{Procesar notificación<br />de estado}
+    estado -->|&nbsp;COMPLETADO&nbsp;| completado[Finalizar<br />transferencia]:::deshabilitado
+    estado -->|&nbsp;PENDIENTE&nbsp;| pendiente[Validar<br />y aceptar]
+    estado -->|&nbsp;RECHAZADO&nbsp;| rechazado[Limpiar<br />transferencia]:::deshabilitado
+    classDef deshabilitado color:gray,stroke:gray,stroke-dasharray:5,5
+```
+
+Para aceptar una transferencia, el banco debe reaccionar a la notificación enviada por Transfiya con estado PENDING. Esta notificación indica que la transferencia está en espera de validación por parte del banco destino.
+
+<Info>
+  En este capítulo nos enfocaremos exclusivamente en el manejo del estado PENDING a través del endpoint status. Los demás estados (COMPLETED y REJECTED) serán abordados más adelante en el flujo de procesamiento.
+</Info>
