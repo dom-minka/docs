@@ -11,6 +11,10 @@ Esta funcionalidad permite dispersar fondos directamente a cuentas asociadas a l
 
 Con la dispersión a llaves, las empresas podrán optimizar procesos como el pago de nómina, proveedores, incentivos y devoluciones, todo con mayor flexibilidad y control.
 
+Es importante tener en cuenta que, la dispersión a llaves se podrá habilitar de 2 maneras:\
+**1. Habilitación de Bre-b:** A través de esta capacidad, la Entidad Origen podrá enviar transferencias inmediatas a llaves registradas en Bre-b y su respectiva liquidación en el MOL de Banco de la Republica, teniendo en cuenta los requerimientos de vinculación, controles y topes transaccionales establecidos por el banco central.\
+**2. Ecosistema Transfiya:** Las Entidades participantes podrán procesar el envío de transferencias inmediantes a llaves registradas en Bre-b y que estas llaves estén asociadas a Entidades Participantes con una conexión activa en Transfiya. Bajo este esquema, el proceso de compensación y liquidación se hace en Transfiya (Prefondeo y Reintegro) y los topes transaccionales serán configurados y administrados por la Entidad Participante origen.
+
 ### Flujo dispersión a llaves:
 
 ![Flujo Send Llaves Pn](/images/FlujoSend_llaves.png)
@@ -19,7 +23,7 @@ Con la dispersión a llaves, las empresas podrán optimizar procesos como el pag
 
 Para la habilitación del flujo  de resolución de llave y procesamiento transaccional, las Entidades Participantes deben:
 
-1. \*\*Crear signer tipo Business \*\*
+1. **Creación de Signer tipo Business**
 
    Las Entidades Participantes podrán identificar a cada Empresa originadora en Transfiya a través del proceso de creación de Signer tipo Business. El detalle de este proceso, se encuentra en [Como crear llaves de negocio - Transfiya Guide](https://transfiya.me/es/v1.85/b2b/guides/how-to-create-signer-business).
 2. **Crear signer tipo generico**
