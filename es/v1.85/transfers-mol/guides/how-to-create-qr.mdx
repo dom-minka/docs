@@ -141,7 +141,7 @@ POST /ach/eeff/v1/money-movements
 
 <CodeGroup>
 
-```json Response
+```json Response Exitoso
 {
   "meta": {
     "requestId": "e7b9c1d0-f8a1-4b2c-9d0e-5a6b7c8d9e0f",
@@ -157,6 +157,94 @@ POST /ach/eeff/v1/money-movements
     "fechaGeneracion": "2025-11-12T21:10:00Z",
     "status": "PENDING"
   }
+}
+```
+
+
+```json Response Error 400
+{
+  "meta": {
+    "requestId": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+    "timestamp": "2025-12-24T15:53:56.295Z",
+    "status": "SUCCESS",
+    "statusCode": "str",
+    "statusDesc": "string"
+  },
+  "errors": [
+    {
+      "code": [
+        1013,
+        1005
+      ],
+      "detail": "Descripción del error"
+    }
+  ]
+}
+```
+
+
+```json Response Error 401
+{
+  "meta": {
+    "requestId": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+    "timestamp": "2025-12-24T15:53:56.303Z",
+    "status": "SUCCESS",
+    "statusCode": "str",
+    "statusDesc": "string"
+  },
+  "errors": [
+    {
+      "code": [
+        1013,
+        1005
+      ],
+      "detail": "Descripción del error"
+    }
+  ]
+}
+```
+
+
+```json Response Error 403
+{
+  "meta": {
+    "requestId": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+    "timestamp": "2025-12-24T15:53:56.309Z",
+    "status": "SUCCESS",
+    "statusCode": "str",
+    "statusDesc": "string"
+  },
+  "errors": [
+    {
+      "code": [
+        1013,
+        1005
+      ],
+      "detail": "Descripción del error"
+    }
+  ]
+}
+```
+
+
+```json Response Error 500
+{
+  "meta": {
+    "requestId": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+    "timestamp": "2025-12-24T15:53:56.391Z",
+    "status": "SUCCESS",
+    "statusCode": "str",
+    "statusDesc": "string"
+  },
+  "errors": [
+    {
+      "code": [
+        1013,
+        1005
+      ],
+      "detail": "Descripción del error"
+    }
+  ]
 }
 ```
 
