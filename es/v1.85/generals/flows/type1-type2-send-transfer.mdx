@@ -1,7 +1,7 @@
 ---
-title: 'Tipo1, Tipo 2 - Envío de transferecia'
-description: 'Tipos de Flujos para los participantes'
-icon: 'money-bill-transfer'
+title: "Tipo1, Tipo 2 - Envío de transferecia"
+description: "Tipos de Flujos para los participantes"
+icon: "money-bill-transfer"
 ---
 
 ### Tipo 1 y Tipo 2: Transferencias P2P (SEND)
@@ -15,279 +15,286 @@ Este método orquesta la ejecución completa del flujo de transferencia P2P en T
 
 La ejecución de este endpoint permite iniciar la acción `SEND`, que a su vez gestionará las acciones necesarias como `UPLOAD` (débito), `SEND` (transferencia) y `DOWNLOAD` (crédito), dependiendo del tipo de flujo que se aplique.
 
+<img
+  src="/images/type1-images-one.png"
+  alt="Descripción del diagrama"
+  width="600px"
+/>
 
-<img src="/images/type1-images-one.png" alt="Descripción del diagrama" width="600px" />
-
-<Warning title="IMPORTANTE">
-Antes de iniciar una transferencia, debes agregar los detalles del dispositivo (`Device Fingerprint`) en el objeto `labels.deviceFingerPrint`.
+<Warning>
+  Antes de iniciar una transferencia, debes agregar los detalles del dispositivo (`Device Fingerprint`) en el objeto `labels.deviceFingerPrint`.
 </Warning>
 
 #### Ejemplo de solicitud cURL
 
 <Tabs>
   <Tab title="Request">
-  ```json
-        curl -X POST -H "API_KEY: 5b481fc2ae177010e197026ba5b51227c44243cd9a18e41be536566e" -H "Authorization: Bearer asdfwXTdDQFimVQOMdn9bOGHJh8KrqnFi34sugYqgrULRCb" -H "Content-Type: application/json" -d '{
-            "source": "wsource_user_bridge_address",
-            "target": "$target_user_phone_number",
-            "symbol": "$tin",
-            "amount": "AMOUNT",
-            "labels": {
-                "type": "SEND",
-                "description": "Description of a transfer",
-                "sourceCreated": "ISO_TIMESTAMP",
-                "transactionPurpose": "TRANSFER",
-            "numberOfTransactions": "1",
-                "sourceChannel": "APP",
-            "deviceFingerprint": {
-                    "hash": "26fff5af6441f8e15a71e8d62c361714484b1b308c99e8eb68ca85e2a7e0dc58",
-                "ipAddress": "190.242.46.190",
-                "geolocation": " ",
-                "country": "Colombia",
-                "city": "Bogota",
-                "mobileDevice": "a",
-                "SIMCardId": "a",
-                "model": "a",
-                "operator": "D"
-                }
-            }
-        }' "https://ach-minka-tst.transferenciasinmediatas.com/v1/transfer"
-  ```
+    ```json
+          curl -X POST -H "API_KEY: 5b481fc2ae177010e197026ba5b51227c44243cd9a18e41be536566e" -H "Authorization: Bearer asdfwXTdDQFimVQOMdn9bOGHJh8KrqnFi34sugYqgrULRCb" -H "Content-Type: application/json" -d '{
+              "source": "wsource_user_bridge_address",
+              "target": "$target_user_phone_number",
+              "symbol": "$tin",
+              "amount": "AMOUNT",
+              "labels": {
+                  "type": "SEND",
+                  "description": "Description of a transfer",
+                  "sourceCreated": "ISO_TIMESTAMP",
+                  "transactionPurpose": "TRANSFER",
+              "numberOfTransactions": "1",
+                  "sourceChannel": "APP",
+              "deviceFingerprint": {
+                      "hash": "26fff5af6441f8e15a71e8d62c361714484b1b308c99e8eb68ca85e2a7e0dc58",
+                  "ipAddress": "190.242.46.190",
+                  "geolocation": " ",
+                  "country": "Colombia",
+                  "city": "Bogota",
+                  "mobileDevice": "a",
+                  "SIMCardId": "a",
+                  "model": "a",
+                  "operator": "D"
+                  }
+              }
+          }' "https://ach-minka-tst.transferenciasinmediatas.com/v1/transfer"
+    ```
   </Tab>
   <Tab title="Response">
-  ```json   
-  Response 200 OK
-
-    {
-        "source": "wsource_user_bridge_address",
-        "target": "$target_user_phone_number",
-        "symbol": "$tin",
-        "amount": "AMOUNT",
-        "labels": {
-            "tx_ref": "15368665012276089",
-            "type": "SEND",
-            "status": "PENDING",
-            "description": "Description of a transfer",
-            "transactionPurpose": "TRANSFER",
-            "sourceCreated": "2018-08-03T09:58:01.906Z",
-            "created": "2018-08-03T09:58:01.906Z",
-        "numberOfTransactions": "1",
-        "deviceFingerprint": {
-            "hash": "26fff5af6441f8e15a71e8d62c361714484b1b308c99e8eb68ca85e2a7e0dc58",
-            "ipAddress": "190.242.46.190",
-            "geolocation": " ",
-            "country": "Colombia",
-            "city": "Bogota",
-            "mobileDevice": "a",
-            "SIMCardId": "a",
-            "model": "a",
-            "operator": "D"
-            }
-        },
-        "error": {
-            "code": 0,
-            "message": "Success"
-        }
-    }  
+    ```json
+    Response 200 OK
+    
+      {
+          "source": "wsource_user_bridge_address",
+          "target": "$target_user_phone_number",
+          "symbol": "$tin",
+          "amount": "AMOUNT",
+          "labels": {
+              "tx_ref": "15368665012276089",
+              "type": "SEND",
+              "status": "PENDING",
+              "description": "Description of a transfer",
+              "transactionPurpose": "TRANSFER",
+              "sourceCreated": "2018-08-03T09:58:01.906Z",
+              "created": "2018-08-03T09:58:01.906Z",
+          "numberOfTransactions": "1",
+          "deviceFingerprint": {
+              "hash": "26fff5af6441f8e15a71e8d62c361714484b1b308c99e8eb68ca85e2a7e0dc58",
+              "ipAddress": "190.242.46.190",
+              "geolocation": " ",
+              "country": "Colombia",
+              "city": "Bogota",
+              "mobileDevice": "a",
+              "SIMCardId": "a",
+              "model": "a",
+              "operator": "D"
+              }
+          },
+          "error": {
+              "code": 0,
+              "message": "Success"
+          }
+      }  
     ```
   </Tab>
   <Tab title="Error">
-  ```json
-  Response 400 Bad Request
-
-{
-	"source": "wsource_user_bridge_address",
-	"target": "$target_user_phone_number",
-	"symbol": "$tin",
-	"amount": "AMOUNT",
-	"labels": {
-		"tx_ref": "15368665012276089",
-		"type": "SEND",
-		"status": "REJECTED",
-		"description": "Description of a transfer",
-		"transactionPurpose": "TRANSFER",
-		"sourceCreated": "2018-08-03T09:58:01.906Z",
-		"created": "2018-08-03T09:58:01.906Z",
-    "numberOfTransactions": "1",
-    "deviceFingerprint": {
-		"hash": "26fff5af6441f8e15a71e8d62c361714484b1b308c99e8eb68ca85e2a7e0dc58",
-	    "ipAddress": "190.242.46.190",
-	    "geolocation": " ",
-	    "country": "Colombia",
-	    "city": "Bogota",
-	    "mobileDevice": "a",
-	    "SIMCardId": "a",
-	    "model": "a",
-	    "operator": "D"
-		}
-	},
-	"error": {
-		"code": 123,
-		"message": "Number of transactions exceeded."
-	}
-}
-  ```
+    ```json
+    Response 400 Bad Request
+    
+    {
+      "source": "wsource_user_bridge_address",
+      "target": "$target_user_phone_number",
+      "symbol": "$tin",
+      "amount": "AMOUNT",
+      "labels": {
+      	"tx_ref": "15368665012276089",
+      	"type": "SEND",
+      	"status": "REJECTED",
+      	"description": "Description of a transfer",
+      	"transactionPurpose": "TRANSFER",
+      	"sourceCreated": "2018-08-03T09:58:01.906Z",
+      	"created": "2018-08-03T09:58:01.906Z",
+      "numberOfTransactions": "1",
+      "deviceFingerprint": {
+      	"hash": "26fff5af6441f8e15a71e8d62c361714484b1b308c99e8eb68ca85e2a7e0dc58",
+          "ipAddress": "190.242.46.190",
+          "geolocation": " ",
+          "country": "Colombia",
+          "city": "Bogota",
+          "mobileDevice": "a",
+          "SIMCardId": "a",
+          "model": "a",
+          "operator": "D"
+      	}
+      },
+      "error": {
+      	"code": 123,
+      	"message": "Number of transactions exceeded."
+      }
+    }
+    ```
   </Tab>
 </Tabs>
 
 <Tabs>
-<Tab title="C# Example Code">  
-
-```json
-CreateTransferRequest createTransferRequest = new CreateTransferRequest();
-createTransferRequest.Source = "wsource_user_bridge_address";
-createTransferRequest.Target = "$target_user_phone_number";
-Dictionary<String, object> labels = new Dictionary<String, Object>();
-createTransferRequest.Labels = labels;
-labels["type"] = "SEND";
-labels["description"] = "Description of a transfer";
-createTransferRequest.Amount = "AMOUNT";
-createTransferRequest.Symbol = "$tin";
-
-
-instance.Configuration.AddApiKey("x-api-key","5b481fc2ae177010e197026b39c58cdb000f4c3897e841714e82c84c");
-
-var response = instance.CreateTinTransfer(createTransferRequest);
-```
-</Tab>
-<Tab title="Java Example Code">  
-```json
-CreateTransferRequest tinTranfer = new CreateTransferRequest();
-CreateTransferRequestLabels labels = new CreateTransferRequestLabels();
-DeviceFingerPrint deviceFingerPrint = new DeviceFingerPrint();
-
-deviceFingerPrint.setCity("Bogota");
-deviceFingerPrint.setCountry("Colombia");
-deviceFingerPrint.setGeolocation(" ");
-deviceFingerPrint.setHash("26fff5af6441f8e15a71e8d62c361714484b1b308c99e8eb68ca85e2a7e0dc58");
-deviceFingerPrint.setIpAddress("190.242.46.190");
-deviceFingerPrint.setMobileDevice("a");
-deviceFingerPrint.setSiMCardId("a");
-deviceFingerPrint.setModel("a");
-deviceFingerPrint.setOperator("a");
-
-labels.setTxId("34242342sdfe3432r23");
-labels.setType("SEND");
-labels.setDescription("Description of a transfer");
-labels.setTransactionPurpose("transactionPurpose");
-labels.setSourceCreated("2018-08-03T09:58:01.906Z");
-labels.setNumberOfTransactions("1");
-labels.setDeviceFingerPrint(deviceFingerPrint);
-
-tinTranfer.setSource("wsource_user_bridge_address");
-tinTranfer.setTarget("$target_user_phone_number");
-tinTranfer.setAmount("10000");
-tinTranfer.setSymbol("$tin");
-tinTranfer.setLabels(labels);
-
-CreateTransferResponse tinTransfer = sdkApiClient.createTinTransfer(tinTranfer);
-
-System.out.println(tinTransfer);
-```
-</Tab>
-<Tab title="NodeJS Example Code">  
-```json
-var Tinapi = require('tinapi_');
-var defaultClient = Tinapi.ApiClient.instance;
-// Configure API key authorization: ApiKeyAuth
-var ApiKeyAuth = defaultClient.authentications['ApiKeyAuth'];
-ApiKeyAuth.apiKey = '5b481fc2ae177010e197026b39c58cdb000f4c3897e841714e82c84c';
-
-var apiInstance = new Tinapi.TransferApi();
-var createTransferRequest = new Tinapi.CreateTransferRequest(); // CreateTransferRequest |
-createTransferRequest.source = "wsource_user_bridge_address";
-createTransferRequest.target = "$target_user_phone_number";
-var labels = {};
-createTransferRequest.Labels = labels;
-labels.type = "SEND";
-labels.description. = "Description of a transfer";
-createTransferRequest.amount = "AMOUNT";
-createTransferRequest.symbol = "$tin";
-
-apiInstance.createTinTransfer(createTransferRequest).then(function(data) {
-  console.log(data);
-	console.log('API called successfully. Returned data: ' + data);
-}, function(error) {
-  console.error(error);
-});
-```
-</Tab>
+  <Tab title="C# Example Code">
+    ```json
+    CreateTransferRequest createTransferRequest = new CreateTransferRequest();
+    createTransferRequest.Source = "wsource_user_bridge_address";
+    createTransferRequest.Target = "$target_user_phone_number";
+    Dictionary<String, object> labels = new Dictionary<String, Object>();
+    createTransferRequest.Labels = labels;
+    labels["type"] = "SEND";
+    labels["description"] = "Description of a transfer";
+    createTransferRequest.Amount = "AMOUNT";
+    createTransferRequest.Symbol = "$tin";
+    
+    
+    instance.Configuration.AddApiKey("x-api-key","5b481fc2ae177010e197026b39c58cdb000f4c3897e841714e82c84c");
+    
+    var response = instance.CreateTinTransfer(createTransferRequest);
+    ```
+  </Tab>
+  <Tab title="Java Example Code">
+    ```json
+    CreateTransferRequest tinTranfer = new CreateTransferRequest();
+    CreateTransferRequestLabels labels = new CreateTransferRequestLabels();
+    DeviceFingerPrint deviceFingerPrint = new DeviceFingerPrint();
+    
+    deviceFingerPrint.setCity("Bogota");
+    deviceFingerPrint.setCountry("Colombia");
+    deviceFingerPrint.setGeolocation(" ");
+    deviceFingerPrint.setHash("26fff5af6441f8e15a71e8d62c361714484b1b308c99e8eb68ca85e2a7e0dc58");
+    deviceFingerPrint.setIpAddress("190.242.46.190");
+    deviceFingerPrint.setMobileDevice("a");
+    deviceFingerPrint.setSiMCardId("a");
+    deviceFingerPrint.setModel("a");
+    deviceFingerPrint.setOperator("a");
+    
+    labels.setTxId("34242342sdfe3432r23");
+    labels.setType("SEND");
+    labels.setDescription("Description of a transfer");
+    labels.setTransactionPurpose("transactionPurpose");
+    labels.setSourceCreated("2018-08-03T09:58:01.906Z");
+    labels.setNumberOfTransactions("1");
+    labels.setDeviceFingerPrint(deviceFingerPrint);
+    
+    tinTranfer.setSource("wsource_user_bridge_address");
+    tinTranfer.setTarget("$target_user_phone_number");
+    tinTranfer.setAmount("10000");
+    tinTranfer.setSymbol("$tin");
+    tinTranfer.setLabels(labels);
+    
+    CreateTransferResponse tinTransfer = sdkApiClient.createTinTransfer(tinTranfer);
+    
+    System.out.println(tinTransfer);
+    ```
+  </Tab>
+  <Tab title="NodeJS Example Code">
+    ```json
+    var Tinapi = require('tinapi_');
+    var defaultClient = Tinapi.ApiClient.instance;
+    // Configure API key authorization: ApiKeyAuth
+    var ApiKeyAuth = defaultClient.authentications['ApiKeyAuth'];
+    ApiKeyAuth.apiKey = '5b481fc2ae177010e197026b39c58cdb000f4c3897e841714e82c84c';
+    
+    var apiInstance = new Tinapi.TransferApi();
+    var createTransferRequest = new Tinapi.CreateTransferRequest(); // CreateTransferRequest |
+    createTransferRequest.source = "wsource_user_bridge_address";
+    createTransferRequest.target = "$target_user_phone_number";
+    var labels = {};
+    createTransferRequest.Labels = labels;
+    labels.type = "SEND";
+    labels.description. = "Description of a transfer";
+    createTransferRequest.amount = "AMOUNT";
+    createTransferRequest.symbol = "$tin";
+    
+    apiInstance.createTinTransfer(createTransferRequest).then(function(data) {
+      console.log(data);
+    	console.log('API called successfully. Returned data: ' + data);
+    }, function(error) {
+      console.error(error);
+    });
+    ```
+  </Tab>
 </Tabs>
 
 ### Crear Relación de Confianza
 
-Para realizar una transferencia de tipo **TYPE2**, se requiere crear un vínculo de confianza (*trust link*) antes de ejecutar la solicitud de transferencia.
+Para realizar una transferencia de tipo **TYPE2**, se requiere crear un vínculo de confianza (_trust link_) antes de ejecutar la solicitud de transferencia.
 
 Cuando existe una relación de confianza, cualquier transacción generada desde un `signer` dentro del `wallet` origen será transferida inmediatamente al `signer` de destino definido en el vínculo de confianza, sin necesidad de aceptación manual por parte del usuario receptor.
 
 <Info>
-Las relaciones de confianza permiten ejecutar flujos de transferencia inmediatos sin enviar notificaciones ni requerir aceptación por parte del receptor.
+  Las relaciones de confianza permiten ejecutar flujos de transferencia inmediatos sin enviar notificaciones ni requerir aceptación por parte del receptor.
 </Info>
 
 <Tabs>
-<Tab title="cURL Example Code">  
-```json
-curl -X PUT -H "x-api-key: 5b481fc2ae177010e197026ba5b51227c44243cd9a18e41be536566e" -H "Authorization: Bearer asdfwXTdDQFimVQOMdn9bOGHJh8KrqnFi34sugYqgrULRCb" -H "Content-Type: application/json" -d '{
-"source": "$USER1_PHONE_NUMBER",
-"target": "USER2_SIGNER",
-"type": "TRUST"
-}' "https://ach-minka-stg.transferenciasinmediatas.com/v1/link/"
-```
-</Tab>
-<Tab title="C# Example Code">  
-```json
-CreateLinkRequest createLinkRequest = new CreateLinkRequest();
-createLinkRequest.Source = "$USER1_PHONE_NUMBER";
-createLinkRequest.Target = "USER2_SIGNER";
-createLinkRequest.Type = CreateLinkRequest.TypeEnum.TRUST;
-string X_API_KEY = "5b481fc2ae177010e197026ba5b51227c44243cd9a18e41be536566e";
-
-instance.Configuration.AddApiKey("X_API_KEY", X_API_KEY);
-var response = instance.CreateLink(createLinkRequest);
-Console.WriteLine(response);
-```
-</Tab>
-<Tab title="Java Example Code">  
-```json
-LinkItem link = sdkApiClient.createLink("$USER1_PHONE_NUMBER", "USER2_SIGNER", io.minka.api.model.CreateLinkRequest.TypeEnum.TRUST);
-System.out.println(link);
-```
-</Tab>
-<Tab title="Node Example Code">  
-
-```json
-var Tinapi = require('tin_api')
-var defaultClient = Tinapi.ApiClient.instance
-// Configure API key authorization: ApiKeyAuth
-var ApiKeyAuth = defaultClient.authentications['ApiKeyAuth']
-ApiKeyAuth.xApiKey = '5b481fc2ae177010e197026ba5b51227c44243cd9a18e41be536566e'
-
-var apiInstance = new Tinapi.LinksApi()
-var createLinkRequest = new Tinapi.CreateLinkRequest() //
-createLinkRequest.source = '$USER1_PHONE_NUMBER'
-createLinkRequest.target = 'USER2_SIGNER'
-createLinkRequest.type = 'TRUST'
-
-apiInstance.createLink(createLinkRequest).then(
-  function (data) {
-    console.log('API called successfully. Returned data: ' + data)
-  },
-  function (error) {
-    console.error(error)
-  },
-)
-```
-</Tab>
-
+  <Tab title="cURL Example Code">
+    ```json
+    curl -X PUT -H "x-api-key: 5b481fc2ae177010e197026ba5b51227c44243cd9a18e41be536566e" -H "Authorization: Bearer asdfwXTdDQFimVQOMdn9bOGHJh8KrqnFi34sugYqgrULRCb" -H "Content-Type: application/json" -d '{
+    "source": "$USER1_PHONE_NUMBER",
+    "target": "USER2_SIGNER",
+    "type": "TRUST"
+    }' "https://ach-minka-stg.transferenciasinmediatas.com/v1/link/"
+    ```
+  </Tab>
+  <Tab title="C# Example Code">
+    ```json
+    CreateLinkRequest createLinkRequest = new CreateLinkRequest();
+    createLinkRequest.Source = "$USER1_PHONE_NUMBER";
+    createLinkRequest.Target = "USER2_SIGNER";
+    createLinkRequest.Type = CreateLinkRequest.TypeEnum.TRUST;
+    string X_API_KEY = "5b481fc2ae177010e197026ba5b51227c44243cd9a18e41be536566e";
+    
+    instance.Configuration.AddApiKey("X_API_KEY", X_API_KEY);
+    var response = instance.CreateLink(createLinkRequest);
+    Console.WriteLine(response);
+    ```
+  </Tab>
+  <Tab title="Java Example Code">
+    ```json
+    LinkItem link = sdkApiClient.createLink("$USER1_PHONE_NUMBER", "USER2_SIGNER", io.minka.api.model.CreateLinkRequest.TypeEnum.TRUST);
+    System.out.println(link);
+    ```
+  </Tab>
+  <Tab title="Node Example Code">
+    ```json
+    var Tinapi = require('tin_api')
+    var defaultClient = Tinapi.ApiClient.instance
+    // Configure API key authorization: ApiKeyAuth
+    var ApiKeyAuth = defaultClient.authentications['ApiKeyAuth']
+    ApiKeyAuth.xApiKey = '5b481fc2ae177010e197026ba5b51227c44243cd9a18e41be536566e'
+    
+    var apiInstance = new Tinapi.LinksApi()
+    var createLinkRequest = new Tinapi.CreateLinkRequest() //
+    createLinkRequest.source = '$USER1_PHONE_NUMBER'
+    createLinkRequest.target = 'USER2_SIGNER'
+    createLinkRequest.type = 'TRUST'
+    
+    apiInstance.createLink(createLinkRequest).then(
+      function (data) {
+        console.log('API called successfully. Returned data: ' + data)
+      },
+      function (error) {
+        console.error(error)
+      },
+    )
+    ```
+  </Tab>
 </Tabs>
 
 ### Buscar transferencia en el Dashboard
 
 Para consultar una transferencia, ve a la sección **Transferencias** en el Dashboard, donde encontrarás el listado completo de todas las transferencias realizadas.
 
-<img src="/images/type1-images-two.png" alt="Descripción del diagrama" width="600px" />
+<img
+  src="/images/type1-images-two.png"
+  alt="Descripción del diagrama"
+  width="600px"
+/>
 
 Haz clic en **"detalles"** para ver la información detallada de una transferencia específica.
 
-<img src="/images/type1-images-three.png" alt="Descripción del diagrama" width="600px" />
-
+<img
+  src="/images/type1-images-three.png"
+  alt="Descripción del diagrama"
+  width="600px"
+/>

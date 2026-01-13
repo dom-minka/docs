@@ -1,6 +1,6 @@
 ---
-title: 'Tipo 3 - Solicitar Transferencia'
-icon: 'money-bill-transfer'
+title: "Tipo 3 - Solicitar Transferencia"
+icon: "money-bill-transfer"
 ---
 
 ## Crear transferencia P2P de tipo REQUEST
@@ -12,275 +12,288 @@ En este flujo, **el usuario receptor es quien crea la transacción de tipo REQUE
 Una vez que la transacción es creada exitosamente, se envía un **SMS al usuario originador** con la instrucción de ingresar a cualquiera de los canales del banco para **aprobar o rechazar la solicitud de dinero**.
 
 <Warning>
-Para este tipo de transferencias **no existe una relación de confianza definida**.
+  Para este tipo de transferencias **no existe una relación de confianza definida**.
 </Warning>
 
 <Info>
-En transferencias donde `type="REQUEST"`:
+  En transferencias donde `type="REQUEST"`:
 
-- El campo `target` representa el **signer (cuenta)** del usuario receptor.
-- El campo `source` representa el **número de teléfono (wallet)** del usuario originador.
+  - El campo `target` representa el **signer (cuenta)** del usuario receptor.
+  - El campo `source` representa el **número de teléfono (wallet)** del usuario originador.
 
-Esto es **lo opuesto** al tipo de transferencia `SEND`, donde `source` es el signer y `target` el wallet.
+  Esto es **lo opuesto** al tipo de transferencia `SEND`, donde `source` es el signer y `target` el wallet.
 </Info>
 
 <Tabs>
-<Tab title="cURL Example">
-```json
-curl -X POST -H "x-api-key: 5b481fc2ae177010e197026ba5b51227c44243cd9a18e41be536566e" -H "Authorization: Bearer asdfwXTdDQFimVQOMdn9bOGHJh8KrqnFi34sugYqgrULRCb" -H "Content-Type: application/json" -d '{
-	"source": "$source_user_phone_number",
-	"target": "wtarget_user_bridge_address",
-	"symbol": "$tin",
-	"amount": "10.00",
-	"labels": {
-		"sourceChannel": "APP",
-		"type": "REQUEST",
-		"description": "Description of a transfer",
-		"transactionPurpose": "TRANSFER",
-    "numberOfTransactions": "1",
-    "deviceFingerprint": {
-			"hash": "26fff5af6441f8e15a71e8d62c361714484b1b308c99e8eb68ca85e2a7e0dc58",
-	    "ipAddress": "190.242.46.190",
-	    "country": "Colombia",
-	    "city": "Bogotá",
-	    "mobileDevice": "990000862471854",
-	    "SIMCardId": "8991101200003204510",
-	    "model": "Huawei Mate 20 Pro",
-	    "operator": "Bharti Airtel Limited",
-		}
-	}
-}' "https://ach-minka-stg.transferenciasinmediatas.com/v1/transfer"
-```
-</Tab>
-<Tab title="Java Example Code">
-```json
-
-CreateTransferRequest tinTranfer = new CreateTransferRequest();
-tinTranfer.setSource("$source_user_phone_number");
-tinTranfer.setTarget("wtarget_user_bridge_address");
-tinTranfer.setAmount("10.00");
-tinTranfer.setSymbol("$tin");
-
-CreateTransferRequestLabels labels = new CreateTransferRequestLabels();
-labels.setType("REQUEST");
-labels.setDescription = "Description of a transfer";
-labels.setSourceChannel = "APP";
-labels.setTransactionPurpose = "TRANSFER";
-labels.setNumberOfTransactions = "1";
-
-DeviceFingerPrint deviceFingerPrint = new DeviceFingerPrint();
-deviceFingerPrint.setCity("Bogotá");
-deviceFingerPrint.setCountry("Colombia");
-deviceFingerPrint.setHash("26fff5af6441f8e15a71e8d62c361714484b1b308c99e8eb68ca85e2a7e0dc58");
-deviceFingerPrint.setIpAddress("190.242.46.190");
-deviceFingerPrint.setMobileDevice("990000862471854");
-deviceFingerPrint.setSiMCardId("8991101200003204510");
-deviceFingerPrint.setModel("Huawei Mate 20 Pro");
-deviceFingerPrint.setOperator("Bharti Airtel Limited");
-
-labels.setDeviceFingerPrint(deviceFingerPrint);
-
-tinTranfer.setLabels(labels);
-
-CreateTransferResponse tinTransfer = sdkApiClient.createTinTransfer(tinTranfer);
-
-System.out.println(tinTransfer);
-```
-</Tab>
-<Tab title="C# Example Code">
-```json
-CreateTransferRequest createTransferRequest = new CreateTransferRequest();
-createTransferRequest.Source = "$source_user_phone_number";
-createTransferRequest.Target = "wtarget_user_bridge_address";
-createTransferRequest.Amount = "10.00";
-createTransferRequest.Symbol = "$tin";
-
-CreateTransferRequestLabels labels = new CreateTransferRequestLabels();
-labels.type = "REQUEST";
-labels.description = "Description of a transfer";
-labels.SourceChannel = "APP";
-labels.TransactionPurpose = "TRANSFER";
-labels.NumberOfTransactions = "1";
-
-DeviceFingerPrint deviceFingerPrint = new DeviceFingerPrint();
-deviceFingerPrint.City = "Bogotá";
-deviceFingerPrint.Country = "Colombia";
-deviceFingerPrint.Hash = "26fff5af6441f8e15a71e8d62c361714484b1b308c99e8eb68ca85e2a7e0dc58";
-deviceFingerPrint.IpAddress = "190.242.46.190";
-deviceFingerPrint.MobileDevice = "990000862471854";
-deviceFingerPrint.SiMCardId = "8991101200003204510";
-deviceFingerPrint.Model = "Huawei Mate 20 Pro";
-deviceFingerPrint.Operator = "Bharti Airtel Limited";
-
-labels.DeviceFingerPrint = deviceFingerPrint;
-
-createTransferRequest.Labels = labels;
-
-instance.Configuration.AddApiKey("xApiKey","5b481fc2ae177010e197026ba5b51227c44243cd9a18e41be536566e");
-
-var response = instance.CreateTinTransfer(createTransferRequest);
-```
-</Tab>
-<Tab title="Node Example Code">
-```json
-const Tinapi = require('tin_api')
-const defaultClient = Tinapi.ApiClient.instance
-// Configure API key authorization: ApiKeyAuth
-const ApiKeyAuth = defaultClient.authentications['ApiKeyAuth']
-ApiKeyAuth.apiKey = '5b481fc2ae177010e197026ba5b51227c44243cd9a18e41be536566e'
-
-const apiInstance = new Tinapi.TransferApi()
-const createTransferRequest = new Tinapi.CreateTransferRequest() // CreateTransferRequest |
-createTransferRequest.source = '$source_user_phone_number'
-createTransferRequest.target = 'wtarget_user_bridge_address'
-createTransferRequest.amount = '10.00'
-createTransferRequest.symbol = '$tin'
-
-createTransferRequest.Labels = {
-  type: 'REQUEST',
-  description: 'Description of a transfer',
-  transactionPurpose: 'TRANSFER',
-  numberOfTransactions: '1',
-  deviceFingerprint: {
-    hash: '26fff5af6441f8e15a71e8d62c361714484b1b308c99e8eb68ca85e2a7e0dc58',
-    ipAddress: '190.242.46.190',
-    country: 'Colombia',
-    city: 'Bogota',
-    mobileDevice: '990000862471854',
-    SIMCardId: '8991101200003204510',
-    model: 'Huawei Mate 20 Pro',
-    operator: 'Bharti Airtel Limited',
-  },
-}
-
-apiInstance
-  .createTinTransfer(createTransferRequest)
-  .then(function (data) {
-    console.log('API called successfully. Returned data: ' + data)
-  })
-  .catch(function (error) {
-    console.error(error)
-  })
-```
-</Tab>
-<Tab title="Response">
-```json
-{
-  "action_id": "51bfcf60-314c-4b66-b7ff-8a0675918ee5",
-  "source": "$source_user_phone_number",
-	"target": "wtarget_user_bridge_address",
-	"symbol": "$tin",
-	"amount": "10.00",
-  "labels": {
-      "description": "Description of a transfer",
-      "domain": "tin",
-      "type": "REQUEST",
-      "sourceChannel": "APP",
-      "transactionPurpose": "TRANSFER",
-      "numberOfTransactions": "1",
-      "tx_ref": "CUS (Código Único de Seguimiento)",
-      "status": "PENDING",
-      "hash": "PENDING",
-      "created": "YYYY-MM-DDTHH:MM:SS-05:00",
-      "updated": "YYYY-MM-DDTHH:MM:SS-05:00"
-      "deviceFingerPrint": {
-          "hash": "26fff5af6441f8e15a71e8d62c361714484b1b308c99e8eb68ca85e2a7e0dc58",
-          "ipAddress": "190.242.46.190",
-          "country": "Colombia",
-          "city": "Bogotá",
-          "mobileDevice": "990000862471854",
-          "SIMCardId": "8991101200003204510",
-          "model": "Huawei Mate 20 Pro",
-          "operator": "Bharti Airtel Limited"
-      }
-  },
-  "snapshot": {
-      "source": {
-          "wallet": {
-							"handle": "$source_user_phone_number",
-              "signer": [
-                  "wsource_user_bridge_address_1",
-                  "wsource_user_bridge_address_2",
-                  "wsource_user_bridge_address_3"
-              ],
-              "labels": {
-                  "type": "PERSON",
-                  "created": "YYYY-MM-DDTHH:MM:SS-05:00"
-              }
-          },
-          "signer": {
-              "labels": {}
-          }
+  <Tab title="cURL Example">
+    ```json
+    curl -X POST -H "x-api-key: 5b481fc2ae177010e197026ba5b51227c44243cd9a18e41be536566e" -H "Authorization: Bearer asdfwXTdDQFimVQOMdn9bOGHJh8KrqnFi34sugYqgrULRCb" -H "Content-Type: application/json" -d '{
+    	"source": "$source_user_phone_number",
+    	"target": "wtarget_user_bridge_address",
+    	"symbol": "$tin",
+    	"amount": "10.00",
+    	"labels": {
+    		"sourceChannel": "APP",
+    		"type": "REQUEST",
+    		"description": "Description of a transfer",
+    		"transactionPurpose": "TRANSFER",
+        "numberOfTransactions": "1",
+        "deviceFingerprint": {
+    			"hash": "26fff5af6441f8e15a71e8d62c361714484b1b308c99e8eb68ca85e2a7e0dc58",
+    	    "ipAddress": "190.242.46.190",
+    	    "country": "Colombia",
+    	    "city": "Bogotá",
+    	    "mobileDevice": "990000862471854",
+    	    "SIMCardId": "8991101200003204510",
+    	    "model": "Huawei Mate 20 Pro",
+    	    "operator": "Bharti Airtel Limited",
+    		}
+    	}
+    }' "https://ach-minka-stg.transferenciasinmediatas.com/v1/transfer"
+    ```
+  </Tab>
+  <Tab title="Java Example Code">
+    ```json
+    
+    CreateTransferRequest tinTranfer = new CreateTransferRequest();
+    tinTranfer.setSource("$source_user_phone_number");
+    tinTranfer.setTarget("wtarget_user_bridge_address");
+    tinTranfer.setAmount("10.00");
+    tinTranfer.setSymbol("$tin");
+    
+    CreateTransferRequestLabels labels = new CreateTransferRequestLabels();
+    labels.setType("REQUEST");
+    labels.setDescription = "Description of a transfer";
+    labels.setSourceChannel = "APP";
+    labels.setTransactionPurpose = "TRANSFER";
+    labels.setNumberOfTransactions = "1";
+    
+    DeviceFingerPrint deviceFingerPrint = new DeviceFingerPrint();
+    deviceFingerPrint.setCity("Bogotá");
+    deviceFingerPrint.setCountry("Colombia");
+    deviceFingerPrint.setHash("26fff5af6441f8e15a71e8d62c361714484b1b308c99e8eb68ca85e2a7e0dc58");
+    deviceFingerPrint.setIpAddress("190.242.46.190");
+    deviceFingerPrint.setMobileDevice("990000862471854");
+    deviceFingerPrint.setSiMCardId("8991101200003204510");
+    deviceFingerPrint.setModel("Huawei Mate 20 Pro");
+    deviceFingerPrint.setOperator("Bharti Airtel Limited");
+    
+    labels.setDeviceFingerPrint(deviceFingerPrint);
+    
+    tinTranfer.setLabels(labels);
+    
+    CreateTransferResponse tinTransfer = sdkApiClient.createTinTransfer(tinTranfer);
+    
+    System.out.println(tinTransfer);
+    ```
+  </Tab>
+  <Tab title="C# Example Code">
+    ```json
+    CreateTransferRequest createTransferRequest = new CreateTransferRequest();
+    createTransferRequest.Source = "$source_user_phone_number";
+    createTransferRequest.Target = "wtarget_user_bridge_address";
+    createTransferRequest.Amount = "10.00";
+    createTransferRequest.Symbol = "$tin";
+    
+    CreateTransferRequestLabels labels = new CreateTransferRequestLabels();
+    labels.type = "REQUEST";
+    labels.description = "Description of a transfer";
+    labels.SourceChannel = "APP";
+    labels.TransactionPurpose = "TRANSFER";
+    labels.NumberOfTransactions = "1";
+    
+    DeviceFingerPrint deviceFingerPrint = new DeviceFingerPrint();
+    deviceFingerPrint.City = "Bogotá";
+    deviceFingerPrint.Country = "Colombia";
+    deviceFingerPrint.Hash = "26fff5af6441f8e15a71e8d62c361714484b1b308c99e8eb68ca85e2a7e0dc58";
+    deviceFingerPrint.IpAddress = "190.242.46.190";
+    deviceFingerPrint.MobileDevice = "990000862471854";
+    deviceFingerPrint.SiMCardId = "8991101200003204510";
+    deviceFingerPrint.Model = "Huawei Mate 20 Pro";
+    deviceFingerPrint.Operator = "Bharti Airtel Limited";
+    
+    labels.DeviceFingerPrint = deviceFingerPrint;
+    
+    createTransferRequest.Labels = labels;
+    
+    instance.Configuration.AddApiKey("xApiKey","5b481fc2ae177010e197026ba5b51227c44243cd9a18e41be536566e");
+    
+    var response = instance.CreateTinTransfer(createTransferRequest);
+    ```
+  </Tab>
+  <Tab title="Node Example Code">
+    ```json
+    const Tinapi = require('tin_api')
+    const defaultClient = Tinapi.ApiClient.instance
+    // Configure API key authorization: ApiKeyAuth
+    const ApiKeyAuth = defaultClient.authentications['ApiKeyAuth']
+    ApiKeyAuth.apiKey = '5b481fc2ae177010e197026ba5b51227c44243cd9a18e41be536566e'
+    
+    const apiInstance = new Tinapi.TransferApi()
+    const createTransferRequest = new Tinapi.CreateTransferRequest() // CreateTransferRequest |
+    createTransferRequest.source = '$source_user_phone_number'
+    createTransferRequest.target = 'wtarget_user_bridge_address'
+    createTransferRequest.amount = '10.00'
+    createTransferRequest.symbol = '$tin'
+    
+    createTransferRequest.Labels = {
+      type: 'REQUEST',
+      description: 'Description of a transfer',
+      transactionPurpose: 'TRANSFER',
+      numberOfTransactions: '1',
+      deviceFingerprint: {
+        hash: '26fff5af6441f8e15a71e8d62c361714484b1b308c99e8eb68ca85e2a7e0dc58',
+        ipAddress: '190.242.46.190',
+        country: 'Colombia',
+        city: 'Bogota',
+        mobileDevice: '990000862471854',
+        SIMCardId: '8991101200003204510',
+        model: 'Huawei Mate 20 Pro',
+        operator: 'Bharti Airtel Limited',
       },
-      "target": {
-          "wallet": {
-              "labels": {
-                  "channelSms": "target_user_phone_number",
-                  "type": "PERSON",
-                  "created": "YYYY-MM-DDTHH:MM:SS-05:00"
-              },
-              "signer": [
-                  "wtarget_user_bridge_address_1",
-                  "wtarget_user_bridge_address_2",
-                  "wtarget_user_bridge_address_3"
-              ],
-              "handle": "$target_user_phone_number"
-          },
-          "signer": {
-              "handle": "wtarget_user_bridge_address_1",
-              "labels": {
-                  "bankAccountType": "TRAS",
-                  "routerFormat": "ISO20022",
-                  "proprietary": "CE",
-                  "countryOfResidence": "AT",
-                  "email": "ludwig.boltzmann@minka.io",
-                  "sourceChannel": "WEB",
-                  "bankBicfi": "7095",
-                  "firstName": "Ludwig Eduard",
-                  "mobile": "3120021844",
-                  "createdBy": "EAGWCCSvcTKdR3AVOXWB",
-                  "routerReference": "$bancorojo",
-                  "bankName": "Banco Rojo",
-                  "created": "2020-02-24T15:22:41-05:00",
-                  "lastName": "Boltzmann",
-                  "identification": "9876543210",
-                  "bankAccountNumber": "12345678902"
-              }
-          }
-      },
-      "symbol": {
-          "wallet": {
-              "labels": {
-                  "created": "YYYY-MM-DDTHH:MM:SS-05:00",
-                  "type": "symbol"
-              },
-              "signer": [
-                  "wsymbol_user_bridge_address"
-              ],
-              "handle": "$tin",
-              "default": "wsymbol_user_bridge_address"
-          },
-          "signer": {
-              "handle": "wsymbol_user_bridge_address",
-              "labels": {
-                  "createdBy": "SYMBOL_ID",
-                  "created": "YYYY-MM-DDTHH:MM:SS.SSSZ"
-              }
-          }
-      }
-    },
-    "error": {
-        "code": 0,
-        "message": "Success"
     }
-}
-```
-</Tab>
-
+    
+    apiInstance
+      .createTinTransfer(createTransferRequest)
+      .then(function (data) {
+        console.log('API called successfully. Returned data: ' + data)
+      })
+      .catch(function (error) {
+        console.error(error)
+      })
+    ```
+  </Tab>
+  <Tab title="Response">
+    ```json
+    {
+      "action_id": "51bfcf60-314c-4b66-b7ff-8a0675918ee5",
+      "source": "$source_user_phone_number",
+    	"target": "wtarget_user_bridge_address",
+    	"symbol": "$tin",
+    	"amount": "10.00",
+      "labels": {
+          "description": "Description of a transfer",
+          "domain": "tin",
+          "type": "REQUEST",
+          "sourceChannel": "APP",
+          "transactionPurpose": "TRANSFER",
+          "numberOfTransactions": "1",
+          "tx_ref": "CUS (Código Único de Seguimiento)",
+          "status": "PENDING",
+          "hash": "PENDING",
+          "created": "YYYY-MM-DDTHH:MM:SS-05:00",
+          "updated": "YYYY-MM-DDTHH:MM:SS-05:00"
+          "deviceFingerPrint": {
+              "hash": "26fff5af6441f8e15a71e8d62c361714484b1b308c99e8eb68ca85e2a7e0dc58",
+              "ipAddress": "190.242.46.190",
+              "country": "Colombia",
+              "city": "Bogotá",
+              "mobileDevice": "990000862471854",
+              "SIMCardId": "8991101200003204510",
+              "model": "Huawei Mate 20 Pro",
+              "operator": "Bharti Airtel Limited"
+          }
+      },
+      "snapshot": {
+          "source": {
+              "wallet": {
+    							"handle": "$source_user_phone_number",
+                  "signer": [
+                      "wsource_user_bridge_address_1",
+                      "wsource_user_bridge_address_2",
+                      "wsource_user_bridge_address_3"
+                  ],
+                  "labels": {
+                      "type": "PERSON",
+                      "created": "YYYY-MM-DDTHH:MM:SS-05:00"
+                  }
+              },
+              "signer": {
+                  "labels": {}
+              }
+          },
+          "target": {
+              "wallet": {
+                  "labels": {
+                      "channelSms": "target_user_phone_number",
+                      "type": "PERSON",
+                      "created": "YYYY-MM-DDTHH:MM:SS-05:00"
+                  },
+                  "signer": [
+                      "wtarget_user_bridge_address_1",
+                      "wtarget_user_bridge_address_2",
+                      "wtarget_user_bridge_address_3"
+                  ],
+                  "handle": "$target_user_phone_number"
+              },
+              "signer": {
+                  "handle": "wtarget_user_bridge_address_1",
+                  "labels": {
+                      "bankAccountType": "TRAS",
+                      "routerFormat": "ISO20022",
+                      "proprietary": "CE",
+                      "countryOfResidence": "AT",
+                      "email": "ludwig.boltzmann@minka.io",
+                      "sourceChannel": "WEB",
+                      "bankBicfi": "7095",
+                      "firstName": "Ludwig Eduard",
+                      "mobile": "3120021844",
+                      "createdBy": "EAGWCCSvcTKdR3AVOXWB",
+                      "routerReference": "$bancorojo",
+                      "bankName": "Banco Rojo",
+                      "created": "2020-02-24T15:22:41-05:00",
+                      "lastName": "Boltzmann",
+                      "identification": "9876543210",
+                      "bankAccountNumber": "12345678902"
+                  }
+              }
+          },
+          "symbol": {
+              "wallet": {
+                  "labels": {
+                      "created": "YYYY-MM-DDTHH:MM:SS-05:00",
+                      "type": "symbol"
+                  },
+                  "signer": [
+                      "wsymbol_user_bridge_address"
+                  ],
+                  "handle": "$tin",
+                  "default": "wsymbol_user_bridge_address"
+              },
+              "signer": {
+                  "handle": "wsymbol_user_bridge_address",
+                  "labels": {
+                      "createdBy": "SYMBOL_ID",
+                      "created": "YYYY-MM-DDTHH:MM:SS.SSSZ"
+                  }
+              }
+          }
+        },
+        "error": {
+            "code": 0,
+            "message": "Success"
+        }
+    }
+    ```
+  </Tab>
 </Tabs>
 
 ## Dashboard - Transferencias
 
-<img src="/images/type3-images-one.png" alt="Descripción del diagrama" width="600px" />
-<img src="/images/type3-images-two.png" alt="Descripción del diagrama" width="600px" />
-<img src="/images/type3-images-three.png" alt="Descripción del diagrama" width="600px" />
+<img
+  src="/images/type3-images-one.png"
+  alt="Descripción del diagrama"
+  width="600px"
+/>
+
+<img
+  src="/images/type3-images-two.png"
+  alt="Descripción del diagrama"
+  width="600px"
+/>
+
+<img
+  src="/images/type3-images-three.png"
+  alt="Descripción del diagrama"
+  width="600px"
+/>

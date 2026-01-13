@@ -1,8 +1,7 @@
 ---
-title: 'Tipo 1 Gestion de Relaciones de Confianza'
-icon: 'handshake'
+title: "Tipo 1 Gestion de Relaciones de Confianza"
+icon: "handshake"
 ---
-
 
 Para implementar TIN en las aplicaciones bancarias, existen elementos comunes de experiencia de usuario (UX) que la mayoría de los bancos utilizarán. Estos elementos incluyen:
 
@@ -16,7 +15,7 @@ Cuando existe una relación de confianza, la transferencia se ejecuta automátic
 
 📌 **Nota:** Quien acepta o crea una relación de confianza es siempre el **usuario receptor**.
 
-```mermaid 
+```mermaid
 sequenceDiagram
     autonumber
     participant UO as Usuario Final (Origen)
@@ -59,138 +58,135 @@ sequenceDiagram
     EO ->> UO: Confirma al usuario
     ER ->> UR: Confirma al usuario
 
-
 ```
 
 ## Crear un link de confianza
+
 <Tabs>
-<Tab title="cURL Example">
-```json
-curl -X POST -H "x-api-key: 5b481fc2ae177010e197026ba5b51227c44243cd9a18e41be536566e" -H "Authorization: Bearer asdfwXTdDQFimVQOMdn9bOGHJh8KrqnFi34sugYqgrULRCb" -H "Content-Type: application/json" -d '{
-    source: "$sourceWallet",
-    target: "targetSigner",
-    type: "TRUST"
-}' "https://ach-minka-stg.transferenciasinmediatas.com/v1/link/"
-``` 
-</Tab>
-<Tab title="Node Example Code">
-```json
-const link = new TinApi.LinksApi()
-
-link
-  .createLink({
-    source: '$573010071856',
-    target: 'wck4oHkeP9YUojTH1LRUf8sXRFMbCaxPDT',
-    type: CreateLinkRequest.TypeEnum.TRUST,
-  })
-  .then((response) => console.log(response))
-  .catch((error) => console.log(error))
-```
-</Tab>
-<Tab title="C# Example Code">
-```json
-LinksApi linksApi = new LinksApi();
-CreateLinkRequest createLinkRequest = new CreateLinkRequest();
-
-createLinkRequest.Source = "$573010071856";
-createLinkRequest.Target = "wck4oHkeP9YUojTH1LRUf8sXRFMbCaxPDT";
-createLinkRequest.Type = CreateLinkRequest.TypeEnum.TRUST;
-
-LinkItem linkResponse = linksApi.CreateLink(createLinkRequest);
-Console.WriteLine(linkResponse);
-```
-</Tab>
-<Tab title="Java Example Code">
-```json
-try {
-    String source = "$573010071856";
-    String target = "wck4oHkeP9YUojTH1LRUf8sXRFMbCaxPDT";
-    LinkItem link = sdkApiClient.createLink(source, target,
-    io.minka.api.model.CreateLinkRequest.TypeEnum.TRUST);
-    System.out.println(link);
-} catch (ExceptionResponseTinApi exceptionResponseTinApi) {
-    exceptionResponseTinApi.printStackTrace();
-}
-```
-</Tab>
-
+  <Tab title="cURL Example">
+    ```json
+    curl -X POST -H "x-api-key: 5b481fc2ae177010e197026ba5b51227c44243cd9a18e41be536566e" -H "Authorization: Bearer asdfwXTdDQFimVQOMdn9bOGHJh8KrqnFi34sugYqgrULRCb" -H "Content-Type: application/json" -d '{
+        source: "$sourceWallet",
+        target: "targetSigner",
+        type: "TRUST"
+    }' "https://ach-minka-stg.transferenciasinmediatas.com/v1/link/"
+    ```
+  </Tab>
+  <Tab title="Node Example Code">
+    ```json
+    const link = new TinApi.LinksApi()
+    
+    link
+      .createLink({
+        source: '$573010071856',
+        target: 'wck4oHkeP9YUojTH1LRUf8sXRFMbCaxPDT',
+        type: CreateLinkRequest.TypeEnum.TRUST,
+      })
+      .then((response) => console.log(response))
+      .catch((error) => console.log(error))
+    ```
+  </Tab>
+  <Tab title="C# Example Code">
+    ```json
+    LinksApi linksApi = new LinksApi();
+    CreateLinkRequest createLinkRequest = new CreateLinkRequest();
+    
+    createLinkRequest.Source = "$573010071856";
+    createLinkRequest.Target = "wck4oHkeP9YUojTH1LRUf8sXRFMbCaxPDT";
+    createLinkRequest.Type = CreateLinkRequest.TypeEnum.TRUST;
+    
+    LinkItem linkResponse = linksApi.CreateLink(createLinkRequest);
+    Console.WriteLine(linkResponse);
+    ```
+  </Tab>
+  <Tab title="Java Example Code">
+    ```json
+    try {
+        String source = "$573010071856";
+        String target = "wck4oHkeP9YUojTH1LRUf8sXRFMbCaxPDT";
+        LinkItem link = sdkApiClient.createLink(source, target,
+        io.minka.api.model.CreateLinkRequest.TypeEnum.TRUST);
+        System.out.println(link);
+    } catch (ExceptionResponseTinApi exceptionResponseTinApi) {
+        exceptionResponseTinApi.printStackTrace();
+    }
+    ```
+  </Tab>
 </Tabs>
 
 ## Eliminar un Link de Confianza
 
 <Tabs>
-<Tab title="cURL Example">
-```json
-curl -X DELETE -H "x-api-key: 5b481fc2ae177010e197026ba5b51227c44243cd9a18e41be536566e" -H "Authorization: Bearer asdfwXTdDQFimVQOMdn9bOGHJh8KrqnFi34sugYqgrULRCb" -H "Content-Type: application/json" "https://ach-minka-stg.transferenciasinmediatas.com/v1/link/da7726e4-c2bd-4bc3-a8f6-cdeb0378164a"
-```
-</Tab>
-<Tab title="Java Example Code">
-```json
-sdkApiClient.deleteLink("LINK_ID");
-```
-</Tab>
-<Tab title="C# Example Code">
-```json
-LinkItem linkResponse = linksApi.DeleteLink("LINK_ID");
-```
-</Tab>
-<Tab title="Node Example Code">
-```json
-link.deleteLink('LINK_ID')
-.then(response => console.log(response))
-.catch(error => console.log(error));
-```
-</Tab>
-
+  <Tab title="cURL Example">
+    ```json
+    curl -X DELETE -H "x-api-key: 5b481fc2ae177010e197026ba5b51227c44243cd9a18e41be536566e" -H "Authorization: Bearer asdfwXTdDQFimVQOMdn9bOGHJh8KrqnFi34sugYqgrULRCb" -H "Content-Type: application/json" "https://ach-minka-stg.transferenciasinmediatas.com/v1/link/da7726e4-c2bd-4bc3-a8f6-cdeb0378164a"
+    ```
+  </Tab>
+  <Tab title="Java Example Code">
+    ```json
+    sdkApiClient.deleteLink("LINK_ID");
+    ```
+  </Tab>
+  <Tab title="C# Example Code">
+    ```json
+    LinkItem linkResponse = linksApi.DeleteLink("LINK_ID");
+    ```
+  </Tab>
+  <Tab title="Node Example Code">
+    ```json
+    link.deleteLink('LINK_ID')
+    .then(response => console.log(response))
+    .catch(error => console.log(error));
+    ```
+  </Tab>
 </Tabs>
 
 ## Listar todos los links de confianza
 
 <Tabs>
-<Tab title="cURL Example">
-```json
-curl -X GET -H "x-api-key: 5b481fc2ae177010e197026ba5b51227c44243cd9a18e41be536566e" -H "Authorization: Bearer asdfwXTdDQFimVQOMdn9bOGHJh8KrqnFi34sugYqgrULRCb" -H "Content-Type: application/json" "https://ach-minka-stg.transferenciasinmediatas.com/v1/link?target=targetSigner&type=TRUST"
-```
-</Tab>
-<Tab title="Java Example Code">
-```json
-String target = "targetSigner";
-ListLinks links = sdkApiClient.getLinks(null,  target, "TRUST");
-System.out.println(links);
-```
-</Tab>
-<Tab title="C# Example Code">
-```json
-string target = "targetSigner";
-string API_KEY = "5b481fc2ae177010e197026b39c58cdb000f4c3897e841714e82c84c";
-instance.Configuration.AddApiKey("x-api-key", API_KEY);
-var response = instance.GetLink(null, target, "TRUST");
-Console.WriteLine(response);
-```
-</Tab>
-<Tab title="Node Example Code">
-```json
-var Tinapi = require('tinapi_');
-var defaultClient = Tinapi.ApiClient.instance;
-// Configure API key authorization: ApiKeyAuth
-var ApiKeyAuth = defaultClient.authentications['ApiKeyAuth'];
-ApiKeyAuth.apiKey = API_KEY;
-// Uncomment the following line to set a prefix for the API key, e.g. "Token" (defaults to null)
-//ApiKeyAuth.apiKeyPrefix = 'Token';
-
-var apiInstance = new Tinapi.LinksApi();
-var opts = {
-    'target': "targetSigner",
-    'type': 'TRUST'
-};
-apiInstance.getLink(opts).then(function(data) {
-    console.log('API called successfully. Returned data: ' + data);
-    console.log(JSON.stringify(data));
-
-}, function(error) {
-    console.error(error);
-});
-```
-</Tab>
-
+  <Tab title="cURL Example">
+    ```json
+    curl -X GET -H "x-api-key: 5b481fc2ae177010e197026ba5b51227c44243cd9a18e41be536566e" -H "Authorization: Bearer asdfwXTdDQFimVQOMdn9bOGHJh8KrqnFi34sugYqgrULRCb" -H "Content-Type: application/json" "https://ach-minka-stg.transferenciasinmediatas.com/v1/link?target=targetSigner&type=TRUST"
+    ```
+  </Tab>
+  <Tab title="Java Example Code">
+    ```json
+    String target = "targetSigner";
+    ListLinks links = sdkApiClient.getLinks(null,  target, "TRUST");
+    System.out.println(links);
+    ```
+  </Tab>
+  <Tab title="C# Example Code">
+    ```json
+    string target = "targetSigner";
+    string API_KEY = "5b481fc2ae177010e197026b39c58cdb000f4c3897e841714e82c84c";
+    instance.Configuration.AddApiKey("x-api-key", API_KEY);
+    var response = instance.GetLink(null, target, "TRUST");
+    Console.WriteLine(response);
+    ```
+  </Tab>
+  <Tab title="Node Example Code">
+    ```json
+    var Tinapi = require('tinapi_');
+    var defaultClient = Tinapi.ApiClient.instance;
+    // Configure API key authorization: ApiKeyAuth
+    var ApiKeyAuth = defaultClient.authentications['ApiKeyAuth'];
+    ApiKeyAuth.apiKey = API_KEY;
+    // Uncomment the following line to set a prefix for the API key, e.g. "Token" (defaults to null)
+    //ApiKeyAuth.apiKeyPrefix = 'Token';
+    
+    var apiInstance = new Tinapi.LinksApi();
+    var opts = {
+        'target': "targetSigner",
+        'type': 'TRUST'
+    };
+    apiInstance.getLink(opts).then(function(data) {
+        console.log('API called successfully. Returned data: ' + data);
+        console.log(JSON.stringify(data));
+    
+    }, function(error) {
+        console.error(error);
+    });
+    ```
+  </Tab>
 </Tabs>
