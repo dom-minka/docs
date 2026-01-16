@@ -25,17 +25,6 @@
             "tab": "Directorio Federado",
             "groups": [
               {
-                "group": "QR",
-                "pages": [
-                  "1-85/directorio-federado/tecnologia-de-acceso-qr/como-consultar-un-qr",
-                  "1-85/directorio-federado/tecnologia-de-acceso-qr/como-actualizar-el-estado-de-un-qr",
-                  "1-85/directorio-federado/tecnologia-de-acceso-qr/como-leer-un-qr",
-                  "1-85/directorio-federado/tecnologia-de-acceso-qr/como-validar-un-qr",
-                  "1-85/directorio-federado/tecnologia-de-acceso-qr/como-generar-un-qr",
-                  "1-85/directorio-federado/tecnologia-de-acceso-qr/tecnologia-de-acceso-qr"
-                ]
-              },
-              {
                 "group": "Como empezar",
                 "icon": "mask",
                 "pages": [
@@ -56,6 +45,17 @@
                   "es/v1.85/directory/guides/how-to-lock-keys",
                   "es/v1.85/directory/guides/how-to-reactivate-keys",
                   "es/v1.85/transfers-mol/guides/how-to-create-qr"
+                ]
+              },
+              {
+                "group": "QR",
+                "pages": [
+                  "1-85/directorio-federado/tecnologia-de-acceso-qr/como-consultar-un-qr",
+                  "1-85/directorio-federado/tecnologia-de-acceso-qr/como-actualizar-el-estado-de-un-qr",
+                  "1-85/directorio-federado/tecnologia-de-acceso-qr/como-leer-un-qr",
+                  "1-85/directorio-federado/tecnologia-de-acceso-qr/como-validar-un-qr",
+                  "1-85/directorio-federado/tecnologia-de-acceso-qr/como-generar-un-qr",
+                  "1-85/directorio-federado/tecnologia-de-acceso-qr/tecnologia-de-acceso-qr"
                 ]
               },
               {
