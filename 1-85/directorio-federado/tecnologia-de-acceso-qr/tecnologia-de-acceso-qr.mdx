@@ -2,3 +2,27 @@
 title: 'Tecnologia de acceso QR'
 ---
 
+### Definición de producto
+
+El código QR (Quick Response) es una herramienta visual bidimensional con estructura cuadrada, diseñada para almacenar información codificada de forma eficiente. Su lectura es rápida y su capacidad supera la de los códigos de barras tradicionales. Puede ser estático, con contenido fijo, o dinámico, adaptándose a cada transacción mediante generación en tiempo real.
+
+En Colombia, esta tecnología se habilita como parte del sistema Bre-B de pagos inmediatos, en cumplimiento del artículo 104 de la Ley 2294 de 2023 y bajo la regulación del Banco de la República para transfrencias y/o pagos inmediatos a personas y comercios. El objetivo es facilitar pagos digitales mediante billeteras electrónicas y acceso móvil, utilizando el estándar internacional EMVCo. Esto permite que los usuarios realicen pagos sin contacto físico con la tarjeta, mejorando la seguridad y ampliando los puntos de aceptación en todo el país.
+
+### Tipos de QR:
+
+<Icon icon="qrcode" /> **<u>Estático</u>**
+
+Es un código de respuesta rápida que contiene información fija, como los datos del comercio o una llave destino (comercio o persona). Se genera una sola vez y no se actualiza con cada transacción. Por lo general, se imprime o se exhibe en un lugar visible (como una vitrina o factura), y el usuario debe ingresar manualmente el monto a pagar.\
+Para las Entidades Participantes, este tipo de QR representa una solución sencilla y de bajo costo para habilitar pagos, aunque con menor automatización y control sobre la transacción.
+
+<Icon icon="qrcode" /> **<u>Dinámico</u>**
+
+Este código se genera en tiempo real y contiene información específica de cada transacción, como el valor exacto, la llave destino (comercio o persona), la referencia de pago, entre otros. Al escanearlo, el usuario no necesita digitar ningún dato adicional: el pago se procesa automáticamente.\
+Desde el punto de vista de las Entidades Participantes, el QR dinámico permite una experiencia de pago más segura, rápida y trazable, ideal para integraciones con sistemas de facturación, puntos de venta y billeteras digitales.
+
+### Capacidades a ofrecer
+
+- **Exposición de API:** Transfiya ofrecerá una API para facilitar la integración de generación y lectura de QR.
+- Disponer canal para **garantizar** una comunicación **segura** y **eficiente**.
+- Transfiya entrega la cadena de datos para la **generación** de QR conforme al estándar **EMVco**.
+- Dentro del proceso de lectura, se ofrecerá la decodificación de imagen para **interpretar** el contenido del QR, obteniendo entre otros **la llave**, el **ID de QR**, **tipo de QR** y el **hash de seguridad**. El cual será entregado por Transfiya en formato JSON. para que la Entidad Participante origen orqueste el flujo transaccional.
