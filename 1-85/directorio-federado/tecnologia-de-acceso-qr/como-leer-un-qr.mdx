@@ -7,13 +7,13 @@ icon: "pen"
 
 Las Entidades Participantes pueden habilitar la lectura de código  QR a través de Transfiya, por lo cual deberán implementar las siguientes especificaciones:
 
-### Entrada:
+### Campos de Entrada:
 
 | **Campo** | **Tipo** | **Descripción**                                             | **Longitud**     | **Obligatorio** |
 | :-------- | :------- | :---------------------------------------------------------- | :--------------- | :-------------- |
 | qrCode    | Texto    | Cadena de texto con el codigo a consultar, en formato EMVCO | Min 30 - Máx 450 | SI              |
 
-### Salida:
+### Campos de Salida:
 
 El sistema Transfiya retornará un JSON con los campos contenidos en la cadena TLV. Esta información es necesaria para que la Entidad Participante Origen ejecute el proceso de resolución de llave y la creación de la transacción.
 
