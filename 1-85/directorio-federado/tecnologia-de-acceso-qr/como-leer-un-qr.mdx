@@ -2,3 +2,31 @@
 title: 'Cómo leer un QR'
 ---
 
+### Especificaciones para lectura de QR
+
+Las Entidades Participantes pueden habilitar la lectura de código  QR a través de Transfiya, por lo cual deberán implementar las siguientes especificaciones:
+
+### Entrada:
+
+| **Campo** | **Tipo** | **Descripción**                                             | **Longitud**     | **Obligatorio** |
+| :-------- | :------- | :---------------------------------------------------------- | :--------------- | :-------------- |
+| qrCode    | Texto    | Cadena de texto con el codigo a consultar, en formato EMVCO | Min 30 - Máx 450 | SI              |
+
+### Salida:
+
+El sistema Transfiya retornará un JSON con los campos contenidos en la cadena TLV. Esta información es necesaria para que la Entidad Participante Origen ejecute el proceso de resolución de llave y la creación de la transacción.
+
+| **Campo**     | **Tipo** | **Descripcion**                 | **Ejemplo**                      |
+| :------------ | :------- | :------------------------------ | :------------------------------- |
+| Tag number    | objeto   | Numero del tag EMVCO            | 26                               |
+| Id            | Number   | Numero del tag EMVCO            | 26                               |
+| name          | Cadena   | Nombre del campo                | Merchant Account Information     |
+| len           | Number   | Tamaño del campo                | 32                               |
+| data          | objeto   | Contenido del tag               |                                  |
+| SubTag Number | Objeto   | Numero del subTag EMVCO         | 0                                |
+| Id            | Number   | Numero del subTag EMVCO         | 0                                |
+| name          | Number   | Nombre del campo                | Global Unique Identifier         |
+| len           | Cadena   | Tamaño del campo                | 14                               |
+| data          | Number   | Contenido del tag               | CO.COM.ACH.LLA                   |
+| rawdata       | Cadena   | Fragmento del TLV para este TAG | CO.COM.ACH.LLA                   |
+| rawdata       | Cadena   | Fragmento del TLV para este TAG | 0014CO.COM.ACH.LLA02103152466845 |
