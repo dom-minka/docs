@@ -3,3 +3,14 @@ title: "Como consultar un QR"
 icon: "pen"
 ---
 
+### Consultar código QR
+
+Esta operación permite a las entidades participantes consultar la información de un código QR a partir del id.
+
+A través de esta operación, el sistema recibe el id como parámetro y retorna los datos asociados al código QR previamente generado, incluyendo su estado actual, la cadena EMVCo y otros atributos relevantes.
+
+Esta funcionalidad es útil para validar la existencia del QR, obtener su información estructurada y realizar procesos posteriores como validaciones o actualizaciones de estado.
+
+```json
+GET {{baseUrl}}/qr/consultarEmv/:id
+```
