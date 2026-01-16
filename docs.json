@@ -26,7 +26,6 @@
             "groups": [
               {
                 "group": "QR",
-                "hidden": true,
                 "pages": [
                   "1-85/directorio-federado/tecnologia-de-acceso-qr/como-consultar-un-qr",
                   "1-85/directorio-federado/tecnologia-de-acceso-qr/como-actualizar-el-estado-de-un-qr",
