@@ -8,6 +8,15 @@
     "dark": "#002E83"
   },
   "navigation": {
+    "global": {
+      "anchors": [
+        {
+          "anchor": "Community",
+          "icon": "slack",
+          "href": "https://www.slack.com/minkainc"
+        }
+      ]
+    },
     "versions": [
       {
         "version": "1.85",
@@ -15,6 +24,18 @@
           {
             "tab": "Directorio Federado",
             "groups": [
+              {
+                "group": "QR",
+                "hidden": true,
+                "pages": [
+                  "1-85/directorio-federado/tecnologia-de-acceso-qr/como-consultar-un-qr",
+                  "1-85/directorio-federado/tecnologia-de-acceso-qr/como-actualizar-el-estado-de-un-qr",
+                  "1-85/directorio-federado/tecnologia-de-acceso-qr/como-leer-un-qr",
+                  "1-85/directorio-federado/tecnologia-de-acceso-qr/como-validar-un-qr",
+                  "1-85/directorio-federado/tecnologia-de-acceso-qr/como-generar-un-qr",
+                  "1-85/directorio-federado/tecnologia-de-acceso-qr/tecnologia-de-acceso-qr"
+                ]
+              },
               {
                 "group": "Como empezar",
                 "icon": "mask",
@@ -56,7 +77,6 @@
                   "source": "/public/spi-v3.yaml",
                   "directory": "directory"
                 }
-
               },
               {
                 "group": "Archivos de Soporte",
@@ -64,7 +84,6 @@
                 "pages": [
                   "es/v1.85/directory/support/support-files"
                 ]
-
               }
             ]
           },
@@ -74,13 +93,15 @@
               {
                 "group": "Como empezar",
                 "icon": "mask",
-                "pages": ["es/v1.85/transfers-mol/intro/intro-mol"]
+                "pages": [
+                  "es/v1.85/transfers-mol/intro/intro-mol"
+                ]
               },
               {
                 "group": "Guias de uso",
                 "icon": "mask",
                 "pages": [
-                  "es/v1.85/transfers-mol/guides/how-to-send-mol",               
+                  "es/v1.85/transfers-mol/guides/how-to-send-mol",
                   "es/v1.85/transfers-mol/guides/how-to-debit-sender",
                   "es/v1.85/transfers-mol/guides/how-to-accept-transfers",
                   "es/v1.85/transfers-mol/guides/how-to-sign-transfer",
@@ -107,7 +128,6 @@
                   "source": "/public/spi-banksv3.yaml",
                   "directory": "transfers-mol"
                 }
-
               },
               {
                 "group": "APIs Transfiya",
@@ -115,7 +135,6 @@
                   "source": "/public/tinapiv8.yaml",
                   "directory": "transfers-mol-2"
                 }
-
               },
               {
                 "group": "Archivos de Soporte",
@@ -123,7 +142,6 @@
                 "pages": [
                   "es/v1.85/transfers-mol/support/support-files"
                 ]
-
               }
             ]
           },
@@ -143,23 +161,19 @@
                 "icon": "mask",
                 "pages": [
                   "es/v1.85/b2b/guides/how-to-create-account-keys",
-                   "es/v1.85/b2b/guides/how-to-create-transfer",
-                   "es/v1.85/b2b/guides/how-to-create-generic-signer",
-                   "es/v1.85/b2b/guides/How-to-lookup-a-signer",
-                   "es/v1.85/b2b/guides/How-to-send-key",
-                   "es/v1.85/b2b/guides/how-to-collect-payments-Request",
-                   "es/v1.85/b2b/guides/how-to-create-signer-business",
-                   "es/v1.85/b2b/guides/how-to-setup-business-rules"
-                  
+                  "es/v1.85/b2b/guides/how-to-create-transfer",
+                  "es/v1.85/b2b/guides/how-to-create-generic-signer",
+                  "es/v1.85/b2b/guides/How-to-lookup-a-signer",
+                  "es/v1.85/b2b/guides/How-to-send-key",
+                  "es/v1.85/b2b/guides/how-to-collect-payments-Request",
+                  "es/v1.85/b2b/guides/how-to-create-signer-business",
+                  "es/v1.85/b2b/guides/how-to-setup-business-rules"
                 ]
               },
               {
                 "group": "Acerca de",
                 "icon": "mask",
-                "pages": [
-                 
-                  
-                ]
+                "pages": []
               },
               {
                 "group": "APIs Banco",
@@ -167,7 +181,6 @@
                   "source": "/public/spi-banksv3.yaml",
                   "directory": "b2b"
                 }
-
               },
               {
                 "group": "APIs Transfiya",
@@ -175,7 +188,6 @@
                   "source": "/public/tinapiv8.yaml",
                   "directory": "b2b-2"
                 }
-
               }
             ]
           },
@@ -228,18 +240,19 @@
               {
                 "group": "Despliegues",
                 "icon": "mask",
-                "pages": ["es/v1.85/release-notes/release-notes-stg"]
+                "pages": [
+                  "es/v1.85/release-notes/release-notes-stg"
+                ]
               },
               {
                 "group": "SDK",
                 "icon": "mask",
-                "pages": ["es/v1.85/release-notes/sdk-releases"]
-              }  
-
-
+                "pages": [
+                  "es/v1.85/release-notes/sdk-releases"
+                ]
+              }
             ]
           }
-
         ]
       },
       {
@@ -288,7 +301,6 @@
                   "source": "/public/spi-v3.yaml",
                   "directory": "directory"
                 }
-
               },
               {
                 "group": "Archivos de Soporte",
@@ -296,7 +308,6 @@
                 "pages": [
                   "es/v1.84/directory/support/support-files"
                 ]
-
               }
             ]
           },
@@ -306,7 +317,9 @@
               {
                 "group": "Como empezar",
                 "icon": "mask",
-                "pages": ["es/v1.84/transfers-mol/intro/intro-mol"]
+                "pages": [
+                  "es/v1.84/transfers-mol/intro/intro-mol"
+                ]
               },
               {
                 "group": "Guias de uso",
@@ -339,7 +352,6 @@
                   "source": "/public/spi-banksv3.yaml",
                   "directory": "transfers-mol"
                 }
-
               },
               {
                 "group": "APIs Transfiya",
@@ -347,7 +359,6 @@
                   "source": "/public/tinapiv8.yaml",
                   "directory": "transfers-mol-2"
                 }
-
               },
               {
                 "group": "Archivos de Soporte",
@@ -355,7 +366,6 @@
                 "pages": [
                   "es/v1.84/transfers-mol/support/support-files"
                 ]
-
               }
             ]
           },
@@ -375,21 +385,17 @@
                 "icon": "mask",
                 "pages": [
                   "es/v1.84/b2b/guides/how-to-create-account-keys",
-                   "es/v1.84/b2b/guides/how-to-create-transfer",
-                   "es/v1.84/b2b/guides/How-to-lookup-a-signer",
-                   "es/v1.84/b2b/guides/how-to-collect-payments-Request",
-                   "es/v1.84/b2b/guides/how-to-create-signer-business",
-                   "es/v1.84/b2b/guides/how-to-setup-business-rules"
-                  
+                  "es/v1.84/b2b/guides/how-to-create-transfer",
+                  "es/v1.84/b2b/guides/How-to-lookup-a-signer",
+                  "es/v1.84/b2b/guides/how-to-collect-payments-Request",
+                  "es/v1.84/b2b/guides/how-to-create-signer-business",
+                  "es/v1.84/b2b/guides/how-to-setup-business-rules"
                 ]
               },
               {
                 "group": "Acerca de",
                 "icon": "mask",
-                "pages": [
-                 
-                  
-                ]
+                "pages": []
               },
               {
                 "group": "APIs Banco",
@@ -397,7 +403,6 @@
                   "source": "/public/spi-banksv3.yaml",
                   "directory": "b2b"
                 }
-
               },
               {
                 "group": "APIs Transfiya",
@@ -405,7 +410,6 @@
                   "source": "/public/tinapiv8.yaml",
                   "directory": "b2b-2"
                 }
-
               }
             ]
           },
@@ -458,18 +462,19 @@
               {
                 "group": "Despliegues",
                 "icon": "mask",
-                "pages": ["es/v1.84/release-notes/release-notes-stg"]
+                "pages": [
+                  "es/v1.84/release-notes/release-notes-stg"
+                ]
               },
               {
                 "group": "SDK",
                 "icon": "mask",
-                "pages": ["es/v1.84/release-notes/sdk-releases"]
-              }  
-
-
+                "pages": [
+                  "es/v1.84/release-notes/sdk-releases"
+                ]
+              }
             ]
           }
-
         ]
       },
       {
@@ -515,7 +520,6 @@
                   "source": "/public/spi-v3.yaml",
                   "directory": "directory"
                 }
-
               },
               {
                 "group": "Archivos de Soporte",
@@ -523,7 +527,6 @@
                 "pages": [
                   "es/v1.70/directory/support/support-files"
                 ]
-
               }
             ]
           },
@@ -533,7 +536,9 @@
               {
                 "group": "Como empezar",
                 "icon": "mask",
-                "pages": ["es/v1.70/transfers-mol/intro/intro-mol"]
+                "pages": [
+                  "es/v1.70/transfers-mol/intro/intro-mol"
+                ]
               },
               {
                 "group": "Guias de uso",
@@ -564,7 +569,6 @@
                   "source": "/public/spi-banksv3.yaml",
                   "directory": "transfers-mol"
                 }
-
               },
               {
                 "group": "APIs Transfiya",
@@ -572,7 +576,6 @@
                   "source": "/public/tinapiv8.yaml",
                   "directory": "transfers-mol-2"
                 }
-
               },
               {
                 "group": "Archivos de Soporte",
@@ -580,7 +583,6 @@
                 "pages": [
                   "es/v1.70/transfers-mol/support/support-files"
                 ]
-
               }
             ]
           },
@@ -590,18 +592,19 @@
               {
                 "group": "Despliegues",
                 "icon": "mask",
-                "pages": ["es/v1.70/release-notes/release-notes-stg"]
+                "pages": [
+                  "es/v1.70/release-notes/release-notes-stg"
+                ]
               },
               {
                 "group": "SDK",
                 "icon": "mask",
-                "pages": ["es/v1.70/release-notes/sdk-releases"]
-              }  
-
-
+                "pages": [
+                  "es/v1.70/release-notes/sdk-releases"
+                ]
+              }
             ]
           }
-
         ]
       },
       {
@@ -647,7 +650,6 @@
                   "source": "/public/spi-v3.yaml",
                   "directory": "directory"
                 }
-
               },
               {
                 "group": "Archivos de Soporte",
@@ -655,7 +657,6 @@
                 "pages": [
                   "es/v1.69/directory/support/support-files"
                 ]
-
               }
             ]
           },
@@ -665,7 +666,9 @@
               {
                 "group": "Como empezar",
                 "icon": "mask",
-                "pages": ["es/v1.69/transfers-mol/intro/intro-mol"]
+                "pages": [
+                  "es/v1.69/transfers-mol/intro/intro-mol"
+                ]
               },
               {
                 "group": "Guias de uso",
@@ -696,7 +699,6 @@
                   "source": "/public/spi-banksv3.yaml",
                   "directory": "transfers-mol"
                 }
-
               },
               {
                 "group": "APIs Transfiya",
@@ -704,7 +706,6 @@
                   "source": "/public/tinapiv8.yaml",
                   "directory": "transfers-mol-2"
                 }
-
               },
               {
                 "group": "Archivos de Soporte",
@@ -712,7 +713,6 @@
                 "pages": [
                   "es/v1.69/transfers-mol/support/support-files"
                 ]
-
               }
             ]
           },
@@ -722,18 +722,19 @@
               {
                 "group": "Despliegues",
                 "icon": "mask",
-                "pages": ["es/v1.69/release-notes/release-notes-stg"]
+                "pages": [
+                  "es/v1.69/release-notes/release-notes-stg"
+                ]
               },
               {
                 "group": "SDK",
                 "icon": "mask",
-                "pages": ["es/v1.69/release-notes/sdk-releases"]
-              }  
-
-
+                "pages": [
+                  "es/v1.69/release-notes/sdk-releases"
+                ]
+              }
             ]
           }
-
         ]
       },
       {
@@ -778,7 +779,6 @@
                   "source": "/public/spi-v3.yaml",
                   "directory": "directory"
                 }
-
               },
               {
                 "group": "Archivos de Soporte",
@@ -786,7 +786,6 @@
                 "pages": [
                   "es/v1.66/directory/support/support-files"
                 ]
-
               }
             ]
           },
@@ -796,7 +795,9 @@
               {
                 "group": "Como empezar",
                 "icon": "mask",
-                "pages": ["es/v1.66/transfers-mol/intro/intro-mol"]
+                "pages": [
+                  "es/v1.66/transfers-mol/intro/intro-mol"
+                ]
               },
               {
                 "group": "Guias de uso",
@@ -827,7 +828,6 @@
                   "source": "/public/spi-banksv3.yaml",
                   "directory": "transfers-mol"
                 }
-
               },
               {
                 "group": "APIs Transfiya",
@@ -835,7 +835,6 @@
                   "source": "/public/tinapiv8.yaml",
                   "directory": "transfers-mol-2"
                 }
-
               },
               {
                 "group": "Archivos de Soporte",
@@ -843,7 +842,6 @@
                 "pages": [
                   "es/v1.66/transfers-mol/support/support-files"
                 ]
-
               }
             ]
           },
@@ -853,31 +851,22 @@
               {
                 "group": "Despliegues",
                 "icon": "mask",
-                "pages": ["es/v1.66/release-notes/release-notes-stg"]
+                "pages": [
+                  "es/v1.66/release-notes/release-notes-stg"
+                ]
               },
               {
                 "group": "SDK",
                 "icon": "mask",
-                "pages": ["es/v1.66/release-notes/sdk-releases"]
-              }  
-
-
+                "pages": [
+                  "es/v1.66/release-notes/sdk-releases"
+                ]
+              }
             ]
           }
-
         ]
       }
-      
-    ],
-    "global": {
-      "anchors": [
-        {
-          "anchor": "Community",
-          "href": "https://www.slack.com/minkainc",
-          "icon": "slack"
-        }
-      ]
-    }
+    ]
   },
   "logo": {
     "light": "/logo/light.svg",
