@@ -14,6 +14,32 @@ PATCH /ach/bk/v1/money-movement/qr/{id}
 NOTA: Enviar el ID del QR (el que se entregó en la generación del mismo) en el path
 
 
+### Estados soportados
+
+| **Estado** | **Tipo de QR**        | **Descripción**                                                                 |
+|------------|------------------------|---------------------------------------------------------------------------------|
+| ACTIVE     | Estático / Dinámico    | Todo QR inicia en este estado. Indica que está disponible para pago.            |
+| INACTIVE   | Solo Estático          | Estado final. El QR ya no está disponible para recibir pagos.                  |
+| CANCELED   | Solo Dinámico          | Estado final. El comercio lo canceló antes de cualquier transacción.           |
+| PAID       | Solo Dinámico          | Estado final. Se recibió la notificación de pago exitosa. El QR no puede volverse a usar. |
+| EXPIRED    | Solo Dinámico          | Estado final. Se superó el tiempo de vigencia del QR. No puede utilizarse.     |
+
+
+### Transiciones Permitidas — QR Estático
+
+| **Estado Actual** | **Evento / Causa**          | **Estado Siguiente** |
+|-------------------|-----------------------------|-----------------------|
+| ACTIVE            | Solicitud de inhabilitación | INACTIVE              |
+
+
+### Transiciones Permitidas — QR Dinámico
+
+| **Estado Actual** | **Evento / Causa**             | **Estado Siguiente** |
+|-------------------|--------------------------------|-----------------------|
+| ACTIVE            | Comercio cancela               | CANCELED              |
+| ACTIVE            | Notificación exitosa de pago   | PAID                  |
+| ACTIVE            | Expira vigencia                | EXPIRED               |
+
 ### Campos de Entrada
 
 | **Campo**       | **Tipo**   | **Descripción**                                                           | **Formato**                                   | **Obligatorio** |
