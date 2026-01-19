@@ -79,3 +79,228 @@ El sistema Transfiya retornará un JSON con los campos contenidos en la cadena T
 | **error**              | **object**     |                                                                               |                                              |
 | code               | integer    | Código de error generado (cero si no hay errores)                              | 1005                                          |
 | message            | string     | Mensaje de error (vacío si no hay errores)                                     | Fallas técnicas                               |
+
+<CodeGroup>
+
+```json Response Exitoso
+
+{
+  "meta": {
+    "requestId": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+    "timestamp": "2026-01-15T00:03:39.558Z",
+    "status": "SUCCESS",
+    "statusCode": "200",
+    "statusDesc": "OK"
+  },
+  "data": {
+    "movementType": "QRPARSER",
+    "26": {
+      "id": "26",
+      "name": "Merchant Account Information",
+      "len": 32,
+      "data": {
+        "00": {
+          "id": "00",
+          "name": "Global Unique Identifier",
+          "len": 14,
+          "data": "CO.COM.CRB.LLA",
+          "rawData": "CO.COM.CRB.LLA"
+        },
+        "02": {
+          "id": "02",
+          "name": "Merchant ID",
+          "len": 10,
+          "data": "3152466845",
+          "rawData": "3152466845"
+        }
+      },
+      "rawData": "0014CO.COM.CRB.LLA02103152466845"
+    },
+    "49": {
+      "id": "49",
+      "name": "Merchant Account Information",
+      "len": 25,
+      "data": {
+        "00": {
+          "id": "00",
+          "name": "Global Unique Identifier",
+          "len": 14,
+          "data": "CO.COM.CRB.RED",
+          "rawData": "CO.COM.CRB.RED"
+        },
+        "01": {
+          "id": "01",
+          "name": "Merchat PAN",
+          "len": 3,
+          "data": "CRB",
+          "rawData": "CRB"
+        }
+      },
+      "rawData": "0014CO.COM.CRB.RED0103CRB"
+    },
+    "52": {
+      "id": "52",
+      "name": "Merchant Category Code",
+      "len": 4,
+      "data": "0000 (No Mcc)",
+      "rawData": "0000"
+    },
+    "53": {
+      "id": "53",
+      "name": "Transaction Currency",
+      "len": 3,
+      "data": "170",
+      "rawData": "170"
+    },
+    "54": {
+      "id": "54",
+      "name": "Transaction Amount",
+      "len": 1,
+      "data": "0",
+      "rawData": "0"
+    },
+    "58": {
+      "id": "58",
+      "name": "Country Code",
+      "len": 2,
+      "data": "CO (Colombia)",
+      "rawData": "CO"
+    },
+    "59": {
+      "id": "59",
+      "name": "Merchant Name",
+      "len": 16,
+      "data": "Fernando Guevara",
+      "rawData": "Fernando Guevara"
+    },
+    "60": {
+      "id": "60",
+      "name": "Merchant City",
+      "len": 6,
+      "data": "BOGOTA",
+      "rawData": "BOGOTA"
+    },
+    "61": {
+      "id": "61",
+      "name": "Postal Code",
+      "len": 7,
+      "data": "0852469",
+      "rawData": "0852469"
+    },
+    "63": {
+      "id": "63",
+      "name": "CRC",
+      "len": 4,
+      "data": "58EE",
+      "rawData": "58EE"
+    },
+    "80": {
+      "id": "80",
+      "name": "Unreserved Templates",
+      "len": 27,
+      "data": "0016CO.COM.CRB.CANAL0103POS",
+      "rawData": "0016CO.COM.CRB.CANAL0103POS"
+    },
+    "81": {
+      "id": "81",
+      "name": "Unreserved Templates",
+      "len": 25,
+      "data": "0015CO.COM.CRB.CIVA010203",
+      "rawData": "0015CO.COM.CRB.CIVA010203"
+    },
+    "82": {
+      "id": "82",
+      "name": "Unreserved Templates",
+      "len": 26,
+      "data": "0014CO.COM.CRB.IVA01040.00",
+      "rawData": "0014CO.COM.CRB.IVA01040.00"
+    },
+    "83": {
+      "id": "83",
+      "name": "Unreserved Templates",
+      "len": 27,
+      "data": "0015CO.COM.CRB.BASE01040.00",
+      "rawData": "0015CO.COM.CRB.BASE01040.00"
+    },
+    "84": {
+      "id": "84",
+      "name": "Unreserved Templates",
+      "len": 25,
+      "data": "0015CO.COM.CRB.CINC010203",
+      "rawData": "0015CO.COM.CRB.CINC010203"
+    },
+    "85": {
+      "id": "85",
+      "name": "Unreserved Templates",
+      "len": 26,
+      "data": "0014CO.COM.CRB.INC01040.00",
+      "rawData": "0014CO.COM.CRB.INC01040.00"
+    },
+    "90": {
+      "id": "90",
+      "name": "Unreserved Templates",
+      "len": 56,
+      "data": "0016CO.COM.CRB.TRXID0132783c523252644c36bd1fc12c9d902289",
+      "rawData": "0016CO.COM.CRB.TRXID0132783c523252644c36bd1fc12c9d902289"
+    },
+    "91": {
+      "id": "91",
+      "name": "Unreserved Templates",
+      "len": 86,
+      "data": "0014CO.COM.CRB.SEC0164124efbfba7f08162e6048dee671aa1e0cd141fea3dc222b49823e2aecc96f532",
+      "rawData": "0014CO.COM.CRB.SEC0164124efbfba7f08162e6048dee671aa1e0cd141fea3dc222b49823e2aecc96f532"
+    },
+    "00": {
+      "id": "00",
+      "name": "Payload Format Indicator",
+      "len": 2,
+      "data": "01",
+      "rawData": "01"
+    },
+    "01": {
+      "id": "01",
+      "name": "Point of Initiation Method",
+      "len": 2,
+      "data": "11",
+      "rawData": "11"
+    }
+  }
+}
+
+```
+
+```json Response Error 400
+{
+  "meta": {
+    "requestId": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+    "timestamp": "2026-01-15T00:03:39.558Z",
+    "status": "ERROR",
+    "statusCode": "400",
+    "statusDesc": "Bad Request"
+  },
+  "error": {
+    "code": "1013",
+    "message": "El contenido enviado no es válido o está mal cifrado"
+  }
+}
+
+```
+
+```json Response Error 500
+
+{
+  "meta": {
+    "requestId": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+    "timestamp": "2026-01-15T00:03:39.558Z",
+    "status": "ERROR",
+    "statusCode": "500",
+    "statusDesc": "Internal Server Error"
+  },
+  "error": {
+    "code": "1005",
+    "message": "Fallas Técnicas"
+  }
+}
+
+```
+</CodeGroup>
