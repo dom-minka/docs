@@ -3,48 +3,313 @@ title: "Cómo validar un QR"
 icon: "pen"
 ---
 
-### Validar código QR
+### Especificaciones para validación de QR
 
-xx
+Las Entidades Participantes pueden realizar la interpretación de un código QR leído y obtener en formato JSON la información que contiene. 
 
 ```json
-GET {{baseUrl}}/qr/consultarEmv/:id
+POST /ach/bk/v1/money-movement/qr
 ```
 
-### Campos de Entrada:
+### Campos de Entrada
 
 
-### Reglas 
+### Campos de Entrada
 
-<Info>
+| **Campo**             | **Tipo**   | **Descripción**                                                                 | **Formato**                                   | **Obligatorio** |
+|-----------------------|------------|---------------------------------------------------------------------------------|-----------------------------------------------|------------------|
+| meta                  | object     | -                                                                               | -                                             | SI               |
+| requestId             | uuid       | Código generado por la entidad participante para identificar el paquete         | a1b2c3d4-e5f6-7890-abcd-ef1234567890          | SI               |
+| timestamp             | datetime   | Fecha y hora de la solicitud de generación del código QR                        | 2025-12-23T18:16:35.099Z                      | SI               |
+| version               | string     | Versión del esquema, enviar el valor "1.0"                                      | 1.0                                           | SI               |
 
-</Info>
+### data
+
+| **Campo**             | **Tipo**   | **Descripción**                                                                 | **Formato**                                   | **Obligatorio** |
+|-----------------------|------------|---------------------------------------------------------------------------------|-----------------------------------------------|------------------|
+| data                  | object     | -                                                                               | -                                             | SI               |
+| movementType          | enum       | Tipo de operación a realizar. [QR, QRVALIDATE, QRPARSER]                        | QRPARSER                                      | SI               |
+| useCaseInformation    | object     | -                                                                               | -                                             | SI               |
+| idQr                  | string     | Campo para la identificación de la transacción. (Tag 90)                        | CO.COM.ACH.RED3748349738748374               | SI               |
+| crc                   | string     | Código de redundancia cíclica del QR (Tag 63)                                   | 3A5F                                          | NO               |
+| hash                  | string     | Cadena de caracteres de seguridad del QR (Tag 91)                               | 7f9c2ba4e88f827d616045507605853ed73b4761f1d1f6c5e9f7f0f4b7a4f1f0 | NO |
 
 <CodeGroup>
 
-```json Request
+```json Request 
 {
- 
+  "meta": {
+    "requestId": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+    "timestamp": "2026-01-15T17:18:15.761Z",
+    "version": "1.0"
+  },
+  "data": {
+    "movementType": "QRVALIDATE",
+    "useCaseInformation": {
+      "idQr": "CO.COM.ACH.RED3748349738748374",
+      "crc": "3A5F",
+      "hash": "7f9c2ba4e88f827d616045507605853ed73b4761f1d1f6c5e9f7f0f4b7a4f1f0"
+    }
+  }
 }
 ```
 
 </CodeGroup>
 
 ### Campos de Salida:
-              |
+
+
+### Campos de Respuesta
+
+| **Campo**        | **Tipo**   | **Descripción**                                                             | **Formato**                                   |
+|------------------|------------|-----------------------------------------------------------------------------|-----------------------------------------------|
+| meta             | object     | -                                                                           | -                                             |
+| requestId        | uuid       | Código generado por la entidad participante para identificar el paquete     | a1b2c3d4-e5f6-7890-abcd-ef1234567890          |
+| timestamp        | datetime   | Fecha y hora de la respuesta a la solicitud de generación del código QR     | 2025-12-23T18:16:35.099Z                      |
+| status           | enum       | Estado de la respuesta. SUCCESS, ERROR                                      | SUCCESS                                       |
+| statusCode       | string     | Código HTTP de la respuesta                                                 | 200                                           |
+| statusDesc       | string     | Descripción del código HTTP                                                 | OK                                            |
+| data             | object     | -                                                                           | -                                             |
+| movementType     | enum       | Tipo de operación a realizar. [QR, QRVALIDATE, QRPARSER]                    | QRVALIDATE                                    |
+| qr               | object     | -                                                                           | -                                             |
+| Tag number       | object     | Número del tag EMVCO                                                        | 26                                            |
+| id               | string     | Número del tag EMVCO                                                        | 26                                            |
+| name             | string     | Nombre del campo                                                            | Merchant Account Information                  |
+| len              | string     | Tamaño del campo                                                            | 32                                            |
+| data             | object     | Contenido del tag                                                           | -                                             |
+| SubTag Number    | object     | Número del subTag EMVCO                                                     | 26                                            |
+| id               | string     | Número del subTag EMVCO                                                     | 01                                            |
+| name             | string     | Nombre del campo                                                            | Global Unique Identifier                      |
+| len              | string     | Tamaño del campo                                                            | 14                                            |
+| data             | string     | Contenido del tag                                                           | CO.COM.ACH.LLA                                |
+| rawdata          | string     | Fragmento del TLV para este TAG                                             | CO.COM.ACH.LLA                                |
+| rawdata          | string     | Fragmento del TLV para este TAG                                             | 0014CO.COM.ACH.LLA02103152466845              |
+| error            | object     | -                                                                           | -                                             |
+| code             | integer    | Código de error generado (cero si no hay errores)                           | 1005                                          |
+| message          | string     | Mensaje de error (vacío si no hay errores)                                  | Fallas técnicas                               |
+
+
+### Campos de Respuesta
+
 
 <CodeGroup>
+
 ```json Response Exitoso
 {
- 
+  "meta": {
+    "requestId": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+    "timestamp": "2026-01-15T00:03:39.558Z",
+    "status": "SUCCESS",
+    "statusCode": "200",
+    "statusDesc": "OK"
+  },
+  "data": {
+    "movementType": "QRPARSER",
+    "qr": {
+      "26": {
+        "id": "26",
+        "name": "Merchant Account Information",
+        "len": 32,
+        "data": {
+          "00": {
+            "id": "00",
+            "name": "Global Unique Identifier",
+            "len": 14,
+            "data": "CO.COM.CRB.LLA",
+            "rawData": "CO.COM.CRB.LLA"
+          },
+          "02": {
+            "id": "02",
+            "name": "Merchant ID",
+            "len": 10,
+            "data": "3152466845",
+            "rawData": "3152466845"
+          }
+        },
+        "rawData": "0014CO.COM.CRB.LLA02103152466845"
+      },
+      "49": {
+        "id": "49",
+        "name": "Merchant Account Information",
+        "len": 25,
+        "data": {
+          "00": {
+            "id": "00",
+            "name": "Global Unique Identifier",
+            "len": 14,
+            "data": "CO.COM.CRB.RED",
+            "rawData": "CO.COM.CRB.RED"
+          },
+          "01": {
+            "id": "01",
+            "name": "Merchat PAN",
+            "len": 3,
+            "data": "CRB",
+            "rawData": "CRB"
+          }
+        },
+        "rawData": "0014CO.COM.CRB.RED0103CRB"
+      },
+      "52": {
+        "id": "52",
+        "name": "Merchant Category Code",
+        "len": 4,
+        "data": "0000 (No Mcc)",
+        "rawData": "0000"
+      },
+      "53": {
+        "id": "53",
+        "name": "Transaction Currency",
+        "len": 3,
+        "data": "170",
+        "rawData": "170"
+      },
+      "54": {
+        "id": "54",
+        "name": "Transaction Amount",
+        "len": 1,
+        "data": "0",
+        "rawData": "0"
+      },
+      "58": {
+        "id": "58",
+        "name": "Country Code",
+        "len": 2,
+        "data": "CO (Colombia)",
+        "rawData": "CO"
+      },
+      "59": {
+        "id": "59",
+        "name": "Merchant Name",
+        "len": 16,
+        "data": "Fernando Guevara",
+        "rawData": "Fernando Guevara"
+      },
+      "60": {
+        "id": "60",
+        "name": "Merchant City",
+        "len": 6,
+        "data": "BOGOTA",
+        "rawData": "BOGOTA"
+      },
+      "61": {
+        "id": "61",
+        "name": "Postal Code",
+        "len": 7,
+        "data": "0852469",
+        "rawData": "0852469"
+      },
+      "63": {
+        "id": "63",
+        "name": "CRC",
+        "len": 4,
+        "data": "58EE",
+        "rawData": "58EE"
+      },
+      "80": {
+        "id": "80",
+        "name": "Unreserved Templates",
+        "len": 27,
+        "data": "0016CO.COM.CRB.CANAL0103POS",
+        "rawData": "0016CO.COM.CRB.CANAL0103POS"
+      },
+      "81": {
+        "id": "81",
+        "name": "Unreserved Templates",
+        "len": 25,
+        "data": "0015CO.COM.CRB.CIVA010203",
+        "rawData": "0015CO.COM.CRB.CIVA010203"
+      },
+      "82": {
+        "id": "82",
+        "name": "Unreserved Templates",
+        "len": 26,
+        "data": "0014CO.COM.CRB.IVA01040.00",
+        "rawData": "0014CO.COM.CRB.IVA01040.00"
+      },
+      "83": {
+        "id": "83",
+        "name": "Unreserved Templates",
+        "len": 27,
+        "data": "0015CO.COM.CRB.BASE01040.00",
+        "rawData": "0015CO.COM.CRB.BASE01040.00"
+      },
+      "84": {
+        "id": "84",
+        "name": "Unreserved Templates",
+        "len": 25,
+        "data": "0015CO.COM.CRB.CINC010203",
+        "rawData": "0015CO.COM.CRB.CINC010203"
+      },
+      "85": {
+        "id": "85",
+        "name": "Unreserved Templates",
+        "len": 26,
+        "data": "0014CO.COM.CRB.INC01040.00",
+        "rawData": "0014CO.COM.CRB.INC01040.00"
+      },
+      "90": {
+        "id": "90",
+        "name": "Unreserved Templates",
+        "len": 56,
+        "data": "0016CO.COM.CRB.TRXID0132783c523252644c36bd1fc12c9d902289",
+        "rawData": "0016CO.COM.CRB.TRXID0132783c523252644c36bd1fc12c9d902289"
+      },
+      "91": {
+        "id": "91",
+        "name": "Unreserved Templates",
+        "len": 86,
+        "data": "0014CO.COM.CRB.SEC0164124efbfba7f08162e6048dee671aa1e0cd141fea3dc222b49823e2aecc96f532",
+        "rawData": "0014CO.COM.CRB.SEC0164124efbfba7f08162e6048dee671aa1e0cd141fea3dc222b49823e2aecc96f532"
+      },
+      "00": {
+        "id": "00",
+        "name": "Payload Format Indicator",
+        "len": 2,
+        "data": "01",
+        "rawData": "01"
+      },
+      "01": {
+        "id": "01",
+        "name": "Point of Initiation Method",
+        "len": 2,
+        "data": "11",
+        "rawData": "11"
+      }
+    }
+  }
 }
 ```
 
-
 ```json Response Error 400
 {
- 
+  "meta": {
+    "requestId": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+    "timestamp": "2026-01-15T00:03:39.558Z",
+    "status": "ERROR",
+    "statusCode": "400",
+    "statusDesc": "Bad Request"
+  },
+  "error": {
+    "code": "1013",
+    "message": "El contenido enviado no es válido o está mal cifrado"
+  }
 }
+```
+
+```json Response Error 500
+{
+  "meta": {
+    "requestId": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+    "timestamp": "2026-01-15T00:03:39.558Z",
+    "status": "ERROR",
+    "statusCode": "500",
+    "statusDesc": "Internal Server Error"
+  },
+  "error": {
+    "code": "1005",
+    "message": "Fallas Técnicas"
+  }
+}
+```
 </CodeGroup>
-
-
