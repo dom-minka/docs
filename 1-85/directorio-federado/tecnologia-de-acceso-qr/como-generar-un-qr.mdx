@@ -154,122 +154,88 @@ POST /ach/bk/v1/money-movement/qr
 
 </CodeGroup>
 
-### Campos de Salida:
 
-| **Campo**       | **Tipo** | **Descripción**                                       | **Longitud**     | **Obligatoriedad** |
-| :-------------- | :------- | :---------------------------------------------------- | :--------------- | :----------------- |
-| id              | Texto    | Identificador del QR en el sistema                    | Min 1 - Máx 36   | SI                 |
-| qrCode          | Texto    | Cadena de texto con el codigo generado en formato TLV | Min 30 - Máx 450 | SI                 |
-| fechaGeneracion | Texto    | Fecha en la que se genero en QR                       | N/A              | SI                 |
-| Status          | Texto    | Estado del QR                                         | Min 1 – Max 30   | SI                 |
+### Campos de Salida
+
+| **Campo**           | **Tipo**   | **Descripción**                                                                                     | **Formato**                                    |
+|---------------------|------------|-----------------------------------------------------------------------------------------------------|------------------------------------------------|
+| meta                | object     | -                                                                                                   | -                                              |
+| requestId           | uuid       | Código generado por la entidad participante para identificar el paquete                             | a1b2c3d4-e5f6-7890-abcd-ef1234567890           |
+| timestamp           | datetime   | Fecha y hora de la respuesta a la solicitud de generación del código QR                             | 2025-12-23T18:16:35.099Z                       |
+| status              | enum       | Estado de la respuesta. Valores: **SUCCESS, ERROR**                                                 | SUCCESS                                        |
+| statusCode          | string     | Código HTTP de la respuesta                                                                          | 200                                            |
+| statusDesc          | string     | Descripción del código HTTP                                                                          | OK                                             |
+| data                | object     | -                                                                                                   | -                                              |
+| id                  | uuid       | Identificador único del QR en el sistema                                                            | a1b2c3d4-e5f6-7890-abcd-ef1234567890           |
+| qrCode              | string     | Cadena de texto en formato EMVCo (TLV) que contiene el código QR generado                          | Cadena TLV                                     |
+| creationDateTime    | datetime   | Fecha y hora en la que se generó el QR                                                               | 2025-12-23T18:16:35.099Z                       |
+| qrStatus            | enum       | Estado actual del QR: **HABILITADO, INHABILITADO, CANCELADO, PAGADO, EXPIRADO**                     | HABILITADO                                     |
+| movementType        | enum       | Tipo de operación. Valores: **QR, QRVALIDATE, QRPARSER**                                             | QR                                             |
+| duration            | integer    | Vigencia del QR. Indica el tiempo durante el cual el QR es válido                                    | 5                                              |
+| expirationDateTime  | datetime   | Fecha y hora de expiración del QR (ISO 8601, UTC-0 con “Z”)                                          | 2025-12-23T18:16:35.099Z                       |
+| imageB64            | string     | Imagen del QR en base 64                                                                             | Binario de la imagen                           |
+| error               | object     | -                                                                                                   | -                                              |
+| code                | integer    | Código del error (cero si no hay errores)                                                            | 1005                                           |
+| message             | string     | Mensaje de error (vacío si no hay errores)                                                           | Fallas técnicas                                |
 
 <CodeGroup>
 
 ```json Response Exitoso
-{
-  "meta": {
-    "requestId": "e7b9c1d0-f8a1-4b2c-9d0e-5a6b7c8d9e0f",
-    "timestamp": "2025-11-12T21:10:45Z",
-    "status": "SUCCESS",
-    "statusCode": "200",
-    "statusDesc": "QR generado exitosamente"
-  },
-  "data": {
-    "movementType": "QR",
-    "id": "6e2c8b72-9a45-4db3-bf34-3f1e78cb4a3a",
-    "qrCode": "00020101021226600014COLOMBIA12345678900210LIBRERIACENTRAL5204000053031705405500005802CO5910BOGOTA6009COLOMBIA6304ABCD",
-    "fechaGeneracion": "2025-11-12T21:10:00Z",
-    "status": "PENDING"
-  }
+
+{ 
+    "meta": { 
+        "requestId": "3fa85f64-5717-4562-b3fc-2c963f66afa6", 
+        "timestamp": "2026-01-15T00:03:39.558Z", 
+        "status": "SUCCESS", 
+        "statusCode": "200", 
+        "statusDesc": "OK" 
+    }, 
+    "data": { 
+        "id": "fcc765f9-8e2b-4251-86e0-5fead7f3f0fe", 
+        "qrCode": "00020101021126320014CO.COM.ACH.LLA0510000169664749250014CO.COM.ACH.RED0103ACH5303170540410005802CO5913Julián Suarez6006Bogota610611405662110701008020080270016CO.COM.ACH.CANAL0103POS81250015CO.COM.ACH.CIVA01020382230014CO.COM.ACH.IVA0101083240015CO.COM.ACH.BASE0101084250015CO.COM.ACH.CINC01020385230014CO.COM.ACH.INC0101090590016CO.COM.ACH.TRXID0135CO.COM.ACH.RED34E81961EB12640F5B2D191860014CO.COM.ACH.SEC01648f66c1e3a2e6b0ee5358cd566f935eec8d30efb218f33aa17b316542fe2ab1b06304ACEA", 
+        "creationDate": "2026-01-16T20:05:18.494Z", 
+        "qrStatus": "HABILITADO", 
+        "movementType": "QR", 
+"duration": "0", 
+        "expirationDate": "2026-01-16T20:05:18.494Z", 
+        "imageB64": "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L6m8oTJVTCpTxaQyVZxUPKEyVZyoTBVvqJxUnKhMFScVk8pUMalMFScqU8WJylRxovJGxaQyVXzpYq211u1irbXW7WKttdbth5cqTireqJhUpooTlSdUpopJZao4UTlROamYVN5QeaPiCZWTikllqjhRmSomlScqnqg4UZkqJpWpYlKZKiaVJ1SmikllqphU3qiYVE5UporfdLHWWut2sdZa63ax1lrr9sNLKicVk8pUcaIyVTxRMak8oXKiMlVMFZPKScVfqphU/pLKicoTKlPFpDJVnKhMFZPKScWXVKaKE5Wp4qTiSxWTylRxojKpTBVfulhrrXW7WGutdbtYa611++GlijdUpooTlaliUpkqnqiYVL5UMalMKicVk8pUMalMFZPKVHGiMlVMFScqT1S8oTJVnKhMFf9lKlPFVPGEyhMqU8WkMlVMKicVk8qkMlW8cbHWWut2sdZa63ax1lrr9sNLKlPFScWkcqIyVUwqU8VJxYnKVHGi8psqJpUTlROVL6k8UTGpTBWTylTxRMWJyonKExWTylRxojJVTCpvqEwVT1RMKpPKicpJxb/pYq211u1irbXW7WKttdbN/sH/MJWp4kRlqphUpoovqZxUnKicVDyhMlWcqJxUnKhMFU+o/KaKJ1ROKk5UpoonVJ6omFS+VPGEyknFX7pYa611u1hrrXW7WGutdfvhJZW/VPGbKv5SxaQyVbyhMlWcqHxJ5UsVJypTxaTyhMpUcVJxojJVnKhMFVPFEypvVEwqJypTxRsqJxVvXKy11rpdrLXWul2stda6/fCxii+pPKEyVUwVb6hMFU9UTConKlPFpHJS8UTFpDJVPFExqUwqJxUnKk9UTConFW+oTBWTyknFEyonFZPKVPGlit9U8aWLtdZat4u11lq3i7XWWrcffpnKExVPVJyoTBWTylQxqUwVJyr/JpUvVUwqU8UTFScqk8oTFScqJypfqphUTireqJhUJpWpYlKZKiaVE5W/pDJVvHGx1lrrdrHWWut2sdZa6/bD/ziVk4qTikllqphUvlRxonJS8YTKVDGpvKEyVUwqU8UbFScqJxWTylTxhMpU8YbKGxWTyhMqJxUnKlPFpPJExaTypYu11lq3i7XWWreLtdZatx/+n1OZKk4qJpUnKn6TylRxovJGxaRyUjGp/CWVqWJSmVSmijcqJpWTiknlpGJS+VLFpDJVnKhMFU9UnKhMFV+6WGutdbtYa611u1hrrXX74ZdV/KaKSeUNlTdUpopJ5aRiqphUJpU3VKaKk4oTlZOKSeWk4ksVk8qXVJ5QeULlpOIJlZOKSeWk4kRlqjhR+UsXa621bhdrrbVuF2uttW4/fEzlL6lMFU+oTBWTyhsqU8UbFZPKGxWTyhMVJxVPVPylihOVqeKNijdUpooTlaliUjlReUPljYoTlanijYu11lq3i7XWWreLtdZaN/sHa621uFhrrXW7WGutdbtYa611u1hrrXW7WGutdbtYa611u1hrrXW7WGutdbtYa611u1hrrXW7WGutdbtYa611u1hrrXW7WGutdbtYa611+z96XlMp3xigvAAAAABJRU5ErkJggg==" 
+    } 
 }
 ```
 
 
 ```json Response Error 400
+
 {
   "meta": {
     "requestId": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
-    "timestamp": "2025-12-24T15:53:56.295Z",
-    "status": "SUCCESS",
-    "statusCode": "str",
-    "statusDesc": "string"
+    "timestamp": "2026-01-15T00:03:39.558Z",
+    "status": "ERROR",
+    "statusCode": "400",
+    "statusDesc": "Bad Request"
   },
-  "errors": [
-    {
-      "code": [
-        1013,
-        1005
-      ],
-      "detail": "Descripción del error"
-    }
-  ]
+  "error": {
+    "code": "1013",
+    "message": "El contenido enviado no es válido o está mal cifrado"
+  }
 }
 ```
-
-
-```json Response Error 401
-{
-  "meta": {
-    "requestId": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
-    "timestamp": "2025-12-24T15:53:56.303Z",
-    "status": "SUCCESS",
-    "statusCode": "str",
-    "statusDesc": "string"
-  },
-  "errors": [
-    {
-      "code": [
-        1013,
-        1005
-      ],
-      "detail": "Descripción del error"
-    }
-  ]
-}
-```
-
-
-```json Response Error 403
-{
-  "meta": {
-    "requestId": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
-    "timestamp": "2025-12-24T15:53:56.309Z",
-    "status": "SUCCESS",
-    "statusCode": "str",
-    "statusDesc": "string"
-  },
-  "errors": [
-    {
-      "code": [
-        1013,
-        1005
-      ],
-      "detail": "Descripción del error"
-    }
-  ]
-}
-```
-
 
 ```json Response Error 500
 {
   "meta": {
     "requestId": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
-    "timestamp": "2025-12-24T15:53:56.391Z",
-    "status": "SUCCESS",
-    "statusCode": "str",
-    "statusDesc": "string"
+    "timestamp": "2026-01-15T00:03:39.558Z",
+    "status": "ERROR",
+    "statusCode": "500",
+    "statusDesc": "Internal Server Error"
   },
-  "errors": [
-    {
-      "code": [
-        1013,
-        1005
-      ],
-      "detail": "Descripción del error"
-    }
-  ]
+  "error": {
+    "code": "1005",
+    "message": "Fallas Técnicas"
+  }
 }
+
 ```
 
 </CodeGroup>
