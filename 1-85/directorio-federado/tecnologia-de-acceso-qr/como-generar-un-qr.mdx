@@ -5,10 +5,12 @@ icon: "pen"
 
 ### Especificaciones para generación de QR
 
-Las Entidades Participantes pueden habilitar la generacion de código  QR a través de Transfiya, para esto deberán tener en cuenta para la implementación, los siguientes campos cumplliendo el estándar EMVco y los lineamientos de Banco de la República :
+Las Entidades Participantes pueden habilitar la generación de códigos QR a través de Transfiya. Para su implementación, deberán tener en cuenta los siguientes campos, cumpliendo con el estándar EMVCo y los lineamientos del Banco de la República.
+
+Es posible generar códigos QR estáticos o dinámicos, tanto para personas naturales como para empresas, utilizando los siguientes campos de entrada
 
 ```json
-POST /ach/eeff/v1/money-movements
+POST /ach/bk/v1/money-movement/qr
 ```
 
 ### Campos de Entrada:
