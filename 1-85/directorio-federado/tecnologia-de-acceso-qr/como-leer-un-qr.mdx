@@ -56,18 +56,13 @@ El sistema Transfiya retornará un JSON con los campos contenidos en la cadena T
 
 | **Campo**          | **Tipo**   | **Descripción**                                                                | **Formato**                                   |
 |--------------------|------------|--------------------------------------------------------------------------------|-----------------------------------------------|
-| meta               | object     | -                                                                              | -                                             |
+| **meta**               | **object**     |                                                                               |                                              |
 | requestId          | uuid       | Código generado por la entidad participante para identificar el paquete        | a1b2c3d4-e5f6-7890-abcd-ef1234567890          |
 | timestamp          | datetime   | Fecha y hora de la respuesta a la solicitud de generación del código QR        | 2025-12-23T18:16:35.099Z                      |
 | status             | enum       | Estado de la respuesta. SUCCESS, ERROR                                         | SUCCESS                                       |
 | statusCode         | string     | Código HTTP de la respuesta                                                    | 200                                           |
 | statusDesc         | string     | Descripción del código HTTP                                                    | OK                                            |
-
-### data
-
-| **Campo**          | **Tipo**   | **Descripción**                                                                | **Formato**                                   |
-|--------------------|------------|--------------------------------------------------------------------------------|-----------------------------------------------|
-| data               | object     | -                                                                              | -                                             |
+| **data**               | **object**     |                                                                               |                                              |
 | movementType       | enum       | Tipo de operación a realizar. [QR, QRVALIDATE, QRPARSER]                       | QRPARSER                                      |
 | Tag number         | object     | Número del tag EMVCO                                                           | 26                                            |
 | id                 | string     | Número del tag EMVCO                                                           | 26                                            |
@@ -81,11 +76,6 @@ El sistema Transfiya retornará un JSON con los campos contenidos en la cadena T
 | data               | string     | Contenido del tag                                                              | CO.COM.ACH.LLA                                |
 | rawdata            | string     | Fragmento del TLV para este TAG                                                | CO.COM.ACH.LLA                                |
 | rawdata            | string     | Fragmento del TLV para este TAG                                                | 0014CO.COM.ACH.LLA02103152466845              |
-
-### error
-
-| **Campo**          | **Tipo**   | **Descripción**                                                                | **Formato**                                   |
-|--------------------|------------|--------------------------------------------------------------------------------|-----------------------------------------------|
-| error              | object     | -                                                                              | -                                             |
+| **error**              | **object**     |                                                                               |                                              |
 | code               | integer    | Código de error generado (cero si no hay errores)                              | 1005                                          |
 | message            | string     | Mensaje de error (vacío si no hay errores)                                     | Fallas técnicas                               |
