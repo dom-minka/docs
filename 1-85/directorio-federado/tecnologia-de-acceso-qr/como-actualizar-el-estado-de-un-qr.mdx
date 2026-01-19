@@ -4,48 +4,117 @@ icon: "pen"
 ---
 
 
-### Actualizar el estado del QR
+### Especificaciones para actualización de estado del QR 
 
-xx
+Las Entidades Participantes pueden actualizar el estado del QR una vez haya sido usado y se requiera dar de baja.    
 
 ```json
-GET {{baseUrl}}/qr/consultarEmv/:id
+PATCH /ach/bk/v1/money-movement/qr/{id}
 ```
+NOTA: Enviar el ID del QR (el que se entregó en la generación del mismo) en el path
 
-### Campos de Entrada:
+### Campos de Entrada
 
 
-### Reglas 
+### Campos de Entrada
 
-<Info>
-
-</Info>
+| **Campo**       | **Tipo**   | **Descripción**                                                           | **Formato**                                   | **Obligatorio** |
+|-----------------|------------|---------------------------------------------------------------------------|-----------------------------------------------|------------------|
+| **meta**            | **object**     |                                                                          |                                              | **SI**               |
+| requestId       | uuid       | Código generado por la entidad participante para identificar el paquete   | a1b2c3d4-e5f6-7890-abcd-ef1234567890          | SI               |
+| timestamp       | datetime   | Fecha y hora de la solicitud de generación del código QR                  | 2025-12-23T18:16:35.099Z                      | SI               |
+| version         | string     | Versión del esquema, enviar el valor "1.0"                                | 1.0                                           | SI               |
+| **data**            | **object**     |                                                                          |                                              | **SI**               |
+| movementType    | enum       | Tipo de operación a realizar. [QR, QRVALIDATE, QRPARSER]                  | QR                                            | SI               |
+| status          | enum       | Estado de código QR. [INACTIVE, CANCELED, PAID]                           | PAID                                          | SI               |
 
 <CodeGroup>
-
-```json Request
+  
+```json Request 
 {
- 
+  "meta": {
+    "requestId": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+    "timestamp": "2026-01-16T01:48:22.252Z",
+    "version": "1.0"
+  },
+  "data": {
+    "movementType": "QR",
+    "status": "INACTIVE"
+  }
 }
 ```
-
 </CodeGroup>
 
 ### Campos de Salida:
-              |
+
+
+### Campos de Respuesta
+
+| **Campo**               | **Tipo**   | **Descripción**                                                        | **Formato**                                   |
+|-------------------------|------------|------------------------------------------------------------------------|-----------------------------------------------|
+| **meta**                    | **object**     |                                                                       |                                              |
+| requestId               | uuid       | Código generado por la entidad participante para identificar el paquete | a1b2c3d4-e5f6-7890-abcd-ef1234567890          |
+| timestamp               | datetime   | Fecha y hora de la respuesta a la solicitud de generación del código QR | 2025-12-23T18:16:35.099Z                      |
+| status                  | enum       | Estado de la respuesta. SUCCESS, ERROR                                 | SUCCESS                                       |
+| statusCode              | string     | Código HTTP de la respuesta                                            | 200                                           |
+| statusDesc              | string     | Descripción del código HTTP                                            | OK                                            |
+| **data**                    | **object**     |                                                                       |                                              |
+| id                      | string     | Identificador único del QR en el sistema                               | 123e4567-e89b-12d3-a456-426614174000          |
+| qrStatus                | string     | Estado actual del QR                                                   | ACTIVE                                        |
+| lastModifiedDateTime    | datetime   | Fecha y hora en la que se modificación el estado del QR                | 2026-01-16T01:51:46.706Z                      |
+| **error**                   | **object**     |                                                                       |                                              |
+| code                    | integer    | Código de error generado (cero si no hay errores)                      | 1005                                          |
+| message                 | string     | Mensaje de error (vacío si no hay errores)                             | Fallas técnicas                               |
 
 <CodeGroup>
+
 ```json Response Exitoso
 {
- 
+  "meta": {
+    "requestId": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+    "timestamp": "2026-01-16T01:51:46.706Z",
+    "status": "SUCCESS",
+    "statusCode": "string",
+    "statusDesc": "string"
+  },
+  "data": {
+    "id": "123e4567-e89b-12d3-a456-426614174000",
+    "qrStatus": "ACTIVE",
+    "lastModifiedDateTime": "2026-01-16T01:51:46.706Z"
+  }
 }
 ```
 
-
 ```json Response Error 400
 {
- 
+  "meta": {
+    "requestId": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+    "timestamp": "2026-01-15T00:03:39.558Z",
+    "status": "ERROR",
+    "statusCode": "400",
+    "statusDesc": "Bad Request"
+  },
+  "error": {
+    "code": "1013",
+    "message": "El contenido enviado no es válido o está mal cifrado"
+  }
 }
+```
+
+```json Response Error 500
+
+{
+  "meta": {
+    "requestId": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+    "timestamp": "2026-01-15T00:03:39.558Z",
+    "status": "ERROR",
+    "statusCode": "500",
+    "statusDesc": "Internal Server Error"
+  },
+  "error": {
+    "code": "1005",
+    "message": "Fallas Técnicas"
+  }
+}
+```
 </CodeGroup>
-
-
