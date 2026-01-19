@@ -38,6 +38,46 @@ POST /ach/bk/v1/money-movement/qr
 | idQr                          | Texto    | Identificador único de QR - Debe ser un UUID de máximo 18 caracteres                                                                             | Min 1 - Máx 18 | SI              |
 | channel                       | Lista    | Canal origen. Valore válidos (IM, POS, APP, ECOMM, MPOS, ATM, CB, OFC) - SIN tildes, sin importar mayusculas y minusculas                        | Min 1 - Máx 30 | SI              |
 
+### Nuevo
+
+
+### Campos de Entrada
+
+| **Campo**            | **Tipo** | **Descripción**                                                                                                 | **Formato**                                   | **Obligatorio** |
+|----------------------|----------|---------------------------------------------------------------------------------------------------------------------|-----------------------------------------------|-----------------|
+| meta                 | object   | -                                                                                                                   | -                                             | SI              |
+| requestId            | uuid     | Código generado por la entidad participante para identificar la solicitud                                           | a1b2c3d4-e5f6-7890-abcd-ef1234567890          | SI              |
+| timestamp            | time     | Fecha y hora de la solicitud de generación del código QR                                                            | 2025-12-23T18:16:35.099Z                      | SI              |
+| version              | string   | Versión del esquema. Enviar siempre el valor **"1.0"**                                                              | 1.0                                           | SI              |
+| data                 | object   | -                                                                                                                   | -                                             | SI              |
+| movementType         | enum     | Tipo de operación. Valores válidos: **QR, QRVALIDATE, QRPARSER**                                                    | QR                                            | SI              |
+| amountInformation    | object   | -                                                                                                                   | -                                             | SI              |
+| amount               | decimal  | Valor de la transacción con dos decimales                                                                           | 100.00 / 100.85 / 100.05 / 200.50             | SI              |
+| currency             | string   | Código de moneda. Enviar siempre **"COP"**                                                                          | COP                                           | SI              |
+| target               | object   | -                                                                                                                   | -                                             | SI              |
+| personType           | enum     | Tipo de persona destino. Valores válidos: **NATURAL, LEGAL**                                                        | NATURAL                                       | SI              |
+| merchantCode         | string   | Código del comercio destino. Para persona jurídica según estándar ISO 18245                                          | Min 1 - Máx 20                                | NO              |
+| fullName             | string   | Nombre completo del destino cuando es persona natural                                                               | Min 1 - Máx 25                                | NO              |
+| businessName         | string   | Nombre del comercio o razón social cuando es persona jurídica                                                       | Min 1 - Máx 25                                | NO              |
+| location             | object   | -                                                                                                                   | -                                             | SI              |
+| city                 | string   | Código de ciudad asociada a la persona, comercio o negocio                                                          | Min 1 - Máx 20                                | SI              |
+| postalCode           | string   | Código postal de la persona, comercio o negocio                                                                     | Min 1 - Máx 10                                | SI              |
+| alias                | object   | -                                                                                                                   | -                                             | SI              |
+| aliasType            | enum     | Tipo de llave del destino. Valores válidos: **PHONE, ALPHANUM, EMAIL, NRIC, MERCHANTCODE**                         | PHONE                                         | NO              |
+| aliasValue           | string   | Valor de la llave de identificación. Según el formato regulado Bre-b                                                | Min 1 - Máx 92                                | NO              |
+| purposeInformation   | object   | -                                                                                                                   | -                                             | SI              |
+| transactionPurpose   | enum     | Motivo de la transacción. Valores válidos: **COMPRAS, ANULACIONES, TRANSFERENCIAS, RETIRO, RECAUDO, RECARGAS, DEPOSITO** | TRANSFERENCIAS                                | SI              |
+| useCaseInformation   | object   | -                                                                                                                   | -                                             | SI              |
+| qrType               | enum     | Tipo de QR. Valores válidos: **STATIC, DYNAMIC**                                                                    | DYNAMIC                                       | SI              |
+| categoryCode         | string   | Categoría del comercio destino                                                                                      | Min 1 - Máx 4                                 | SI              |
+| terminal             | string   | Terminal asociada al comercio destino                                                                               | Min 1 - Máx 25                                | SI              |
+| vat                  | decimal  | Valor del IVA con dos decimales                                                                                     | Min 1 - Máx 13                                | NO              |
+| vatBase              | decimal  | Base del IVA con dos decimales                                                                                      | Min 1 - Máx 13                                | NO              |
+| tax                  | decimal  | Valor del impuesto INC con dos decimales                                                                            | Min 1 - Máx 13                                | NO              |
+| channel              | enum     | Canal de origen. Valores válidos: **IM, POS, APP, ECOMM, MPOS, ATM, CB, OFC**                                      | POS                                           | SI              |
+``
+
+
 ### Reglas para los valores de tipo decimal
 
 <Info>
