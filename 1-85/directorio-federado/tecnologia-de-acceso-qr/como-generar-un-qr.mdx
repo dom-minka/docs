@@ -70,7 +70,7 @@ POST /ach/bk/v1/money-movement/qr
 
 <CodeGroup>
 
-```json Request
+```json Request Persona natural
 {
   "meta": {
     "requestId": "a1b2c3d4-e5f6-7890-abcd-ef1234567890",
@@ -97,6 +97,47 @@ POST /ach/bk/v1/money-movement/qr
     },
     "purposeInformation": {
       "transactionPurpose": "COMPRAS"
+    },
+    "useCaseInformation": {
+      "qrType": "STATIC",
+      "categoryCode": "0000",
+      "terminal": "TERM-001",
+      "vat": "0.00",
+      "vatBase": "0.00",
+      "tax": "0.00",
+      "channel": "POS"
+    }
+  }
+}
+```
+
+```json Request Persona jurídica
+{
+  "meta": {
+    "requestId": "a1b2c3d4-e5f6-7890-abcd-ef1234567890",
+    "timestamp": "2025-12-23T18:16:35.099Z",
+    "version": "1.0"
+  },
+  "data": {
+    "movementType": "QR",
+    "amountInformation": {
+      "amount": "0.00",
+      "currency": "COP"
+    },
+    "target": {
+      "personType": "LEGAL",
+      "businessName": "Papelería Mis Papeles",
+      "location": {
+        "city": "11001",
+        "postalCode": "110221"
+      },
+      "alias": {
+        "aliasType": "MERCHANTCODE",
+        "aliasValue": "22445577"
+      }
+    },
+    "purposeInformation": {
+      "transactionPurpose": "TRANSFERENCIAS"
     },
     "useCaseInformation": {
       "qrType": "STATIC",
