@@ -13,9 +13,6 @@ Es posible generar códigos QR estáticos o dinámicos, tanto para personas natu
 POST /ach/bk/v1/money-movement/qr
 ```
 
-### Nuevo
-
-
 ### Campos de Entrada:
 
 | **Campo**            | **Tipo** | **Descripción**                                                                                                 | **Formato**                                   | **Obligatorio** |
@@ -76,33 +73,38 @@ POST /ach/bk/v1/money-movement/qr
 ```json Request
 {
   "meta": {
-    "requestId": "e7b9c1d0-f8a1-4b2c-9d0e-5a6b7c8d9e0f",
-    "version": "1.0.0",
-    "timestamp": "2025-11-12T21:09:00Z"
+    "requestId": "a1b2c3d4-e5f6-7890-abcd-ef1234567890",
+    "timestamp": "2025-12-23T18:16:35.099Z",
+    "version": "1.0"
   },
   "data": {
     "movementType": "QR",
-    "amount": 1000.85,
-    "currency": "COP",
-    "pointOfInitiationMethod": "ESTATICO",
-    "merchantAccountInformation": {
-      "aliasType": "CELULAR",
-      "aliasValue": "3101234567",
-      "merchantCode": "",
-      "merchantName": "Librería Central",
-      "merchantCity": "BOGOTA",
-      "postalCode": "110111",
-      "merchantCategoryCode": "5192"
+    "amountInformation": {
+      "amount": "0.00",
+      "currency": "COP"
     },
-    "additionalMerchantInformation": {
-      "terminal": "POS001",
-      "transactionPorpose": "COMPRAS"
+    "target": {
+      "personType": "NATURAL",
+      "fullName": "Carlos Alberto Valderrama",
+      "location": {
+        "city": "11001",
+        "postalCode": "110221"
+      },
+      "alias": {
+        "aliasType": "PHONE",
+        "aliasValue": "3002627700"
+      }
     },
-    "customData": {
-      "ivaValue": 1000,
-      "ivaBase": 1000.05,
-      "incValue": 1000.5,
-      "qrId": "b7f9a3c4-2e10-47",
+    "purposeInformation": {
+      "transactionPurpose": "COMPRAS"
+    },
+    "useCaseInformation": {
+      "qrType": "STATIC",
+      "categoryCode": "0000",
+      "terminal": "TERM-001",
+      "vat": "0.00",
+      "vatBase": "0.00",
+      "tax": "0.00",
       "channel": "POS"
     }
   }
