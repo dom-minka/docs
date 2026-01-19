@@ -159,13 +159,13 @@ POST /ach/bk/v1/money-movement/qr
 
 | **Campo**           | **Tipo**   | **Descripción**                                                                                     | **Formato**                                    |
 |---------------------|------------|-----------------------------------------------------------------------------------------------------|------------------------------------------------|
-| meta                | object     | -                                                                                                   | -                                              |
+| **meta**                | **object**     |                                                                                                    |                                               |
 | requestId           | uuid       | Código generado por la entidad participante para identificar el paquete                             | a1b2c3d4-e5f6-7890-abcd-ef1234567890           |
 | timestamp           | datetime   | Fecha y hora de la respuesta a la solicitud de generación del código QR                             | 2025-12-23T18:16:35.099Z                       |
 | status              | enum       | Estado de la respuesta. Valores: **SUCCESS, ERROR**                                                 | SUCCESS                                        |
 | statusCode          | string     | Código HTTP de la respuesta                                                                          | 200                                            |
 | statusDesc          | string     | Descripción del código HTTP                                                                          | OK                                             |
-| data                | object     | -                                                                                                   | -                                              |
+| **data**                | **object**     |                                                                                                    |                                               |
 | id                  | uuid       | Identificador único del QR en el sistema                                                            | a1b2c3d4-e5f6-7890-abcd-ef1234567890           |
 | qrCode              | string     | Cadena de texto en formato EMVCo (TLV) que contiene el código QR generado                          | Cadena TLV                                     |
 | creationDateTime    | datetime   | Fecha y hora en la que se generó el QR                                                               | 2025-12-23T18:16:35.099Z                       |
@@ -174,7 +174,7 @@ POST /ach/bk/v1/money-movement/qr
 | duration            | integer    | Vigencia del QR. Indica el tiempo durante el cual el QR es válido                                    | 5                                              |
 | expirationDateTime  | datetime   | Fecha y hora de expiración del QR (ISO 8601, UTC-0 con “Z”)                                          | 2025-12-23T18:16:35.099Z                       |
 | imageB64            | string     | Imagen del QR en base 64                                                                             | Binario de la imagen                           |
-| error               | object     | -                                                                                                   | -                                              |
+| **error**               |            |                                                                                                    |                                               |
 | code                | integer    | Código del error (cero si no hay errores)                                                            | 1005                                           |
 | message             | string     | Mensaje de error (vacío si no hay errores)                                                           | Fallas técnicas                                |
 

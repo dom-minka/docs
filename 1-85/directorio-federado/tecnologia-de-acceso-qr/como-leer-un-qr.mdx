@@ -7,27 +7,85 @@ icon: "pen"
 
 Las Entidades Participantes pueden habilitar la lectura de código  QR a través de Transfiya, por lo cual deberán implementar las siguientes especificaciones:
 
-### Campos de Entrada:
+```json
+POST /ach/bk/v1/money-movement/qr 
+```
 
-| **Campo** | **Tipo** | **Descripción**                                             | **Longitud**     | **Obligatorio** |
-| :-------- | :------- | :---------------------------------------------------------- | :--------------- | :-------------- |
-| qrCode    | Texto    | Cadena de texto con el codigo a consultar, en formato EMVCO | Min 30 - Máx 450 | SI              |
+### Campos de Entrada
+
+| **Campo**             | **Tipo**   | **Descripción**                                                                 | **Formato**                                   | **Obligatorio** |
+|-----------------------|------------|---------------------------------------------------------------------------------|-----------------------------------------------|------------------|
+| **meta**                  | **object**     |                                                                                |                                              | **SI**               |
+| requestId             | uuid       | Código generado por la entidad participante para identificar el paquete         | a1b2c3d4-e5f6-7890-abcd-ef1234567890          | SI               |
+| timestamp             | datetime   | Fecha y hora de la solictud de generación del código QR                         | 2025-12-23T18:16:35.099Z                      | SI               |
+| version               | string     | Versión del esquema, enviar el valor "1.0"                                      | 1.0                                           | SI               |
+| **data**                  | **object**     |                                                                                |                                              | **SI**               |
+| movementType          | enum       | Tipo de operación realizada. [QR, QRVALIDATE, QRPARSER]                         | QRPARSER                                      | SI               |
+| **useCaseInformation**    | **object**     |                                                                                |                                              | **SI**               |
+| qrCode                | string     | Cadena de texto que contiene el código QR generado en formato EMVCO             | Cadena TLV                                    | SI               |
+            |
+
+<CodeGroup>
+
+```json Request 
+
+{
+  "meta": {
+    "requestId": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+    "timestamp": "2026-01-15T00:07:31.512Z",
+    "version": "1.0"
+  },
+  "data": {
+    "movementType": "QRPARSER",
+    "useCaseInformation": {
+      "qrCode": "00020101021126580014br.gov.bcb.pix0136d2905f4-4f6e-4e2e-8c7a-5a7c6c3e8f9f520400005303986540615.005802BR5925Fulano de Tal6037Sao Paulo61080540900062070503***63041D3D"
+    }
+  }
+}
+
+```
+
+</CodeGroup>
 
 ### Campos de Salida:
 
 El sistema Transfiya retornará un JSON con los campos contenidos en la cadena TLV. Esta información es necesaria para que la Entidad Participante Origen ejecute el proceso de resolución de llave y la creación de la transacción.
 
-| **Campo**     | **Tipo** | **Descripcion**                 | **Ejemplo**                      |
-| :------------ | :------- | :------------------------------ | :------------------------------- |
-| Tag number    | objeto   | Numero del tag EMVCO            | 26                               |
-| Id            | Number   | Numero del tag EMVCO            | 26                               |
-| name          | Cadena   | Nombre del campo                | Merchant Account Information     |
-| len           | Number   | Tamaño del campo                | 32                               |
-| data          | objeto   | Contenido del tag               |                                  |
-| SubTag Number | Objeto   | Numero del subTag EMVCO         | 0                                |
-| Id            | Number   | Numero del subTag EMVCO         | 0                                |
-| name          | Number   | Nombre del campo                | Global Unique Identifier         |
-| len           | Cadena   | Tamaño del campo                | 14                               |
-| data          | Number   | Contenido del tag               | CO.COM.ACH.LLA                   |
-| rawdata       | Cadena   | Fragmento del TLV para este TAG | CO.COM.ACH.LLA                   |
-| rawdata       | Cadena   | Fragmento del TLV para este TAG | 0014CO.COM.ACH.LLA02103152466845 |
+
+### Campos de Respuesta
+
+| **Campo**          | **Tipo**   | **Descripción**                                                                | **Formato**                                   |
+|--------------------|------------|--------------------------------------------------------------------------------|-----------------------------------------------|
+| meta               | object     | -                                                                              | -                                             |
+| requestId          | uuid       | Código generado por la entidad participante para identificar el paquete        | a1b2c3d4-e5f6-7890-abcd-ef1234567890          |
+| timestamp          | datetime   | Fecha y hora de la respuesta a la solicitud de generación del código QR        | 2025-12-23T18:16:35.099Z                      |
+| status             | enum       | Estado de la respuesta. SUCCESS, ERROR                                         | SUCCESS                                       |
+| statusCode         | string     | Código HTTP de la respuesta                                                    | 200                                           |
+| statusDesc         | string     | Descripción del código HTTP                                                    | OK                                            |
+
+### data
+
+| **Campo**          | **Tipo**   | **Descripción**                                                                | **Formato**                                   |
+|--------------------|------------|--------------------------------------------------------------------------------|-----------------------------------------------|
+| data               | object     | -                                                                              | -                                             |
+| movementType       | enum       | Tipo de operación a realizar. [QR, QRVALIDATE, QRPARSER]                       | QRPARSER                                      |
+| Tag number         | object     | Número del tag EMVCO                                                           | 26                                            |
+| id                 | string     | Número del tag EMVCO                                                           | 26                                            |
+| name               | string     | Nombre del campo                                                               | Merchant Account Information                  |
+| len                | string     | Tamaño del campo                                                               | 32                                            |
+| data               | object     | Contenido del tag                                                              | -                                             |
+| SubTag Number      | object     | Número del subTag EMVCO                                                        | 26                                            |
+| id                 | string     | Número del subTag EMVCO                                                        | 01                                            |
+| name               | string     | Nombre del campo                                                               | Global Unique Identifier                      |
+| len                | string     | Tamaño del campo                                                               | 14                                            |
+| data               | string     | Contenido del tag                                                              | CO.COM.ACH.LLA                                |
+| rawdata            | string     | Fragmento del TLV para este TAG                                                | CO.COM.ACH.LLA                                |
+| rawdata            | string     | Fragmento del TLV para este TAG                                                | 0014CO.COM.ACH.LLA02103152466845              |
+
+### error
+
+| **Campo**          | **Tipo**   | **Descripción**                                                                | **Formato**                                   |
+|--------------------|------------|--------------------------------------------------------------------------------|-----------------------------------------------|
+| error              | object     | -                                                                              | -                                             |
+| code               | integer    | Código de error generado (cero si no hay errores)                              | 1005                                          |
+| message            | string     | Mensaje de error (vacío si no hay errores)                                     | Fallas técnicas                               |
