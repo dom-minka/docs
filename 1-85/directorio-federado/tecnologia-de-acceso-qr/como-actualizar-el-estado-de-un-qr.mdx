@@ -51,37 +51,22 @@ flowchart TB
 ```
 
 ### Máquina de Estados QR Dinámicos
-```mermaid
+
+<Mermaid chart={`
 flowchart TB
-    %% Definición de estilos
-    classDef state fill:#f3f0ff,stroke:#7a5af8,stroke-width:1.5px,rx:6,ry:6,color:#111;
-    classDef finalNote fill:#fff3cd,stroke:#e0c97f,stroke-width:1px,rx:6,ry:6,color:#111;
+  start(( )) --> ACTIVE
+  ACTIVE -->|cancelar()| CANCELED
+  CANCELED -.-> C_NOTE
+  C_NOTE[[Estado final<br/>Comercio canceló antes de transaccionar]]
+  ACTIVE -->|pagoExitoso()| PAID
+  PAID -.-> P_NOTE
+  P_NOTE[[Estado final<br/>Pago exitoso confirmado; no reutilizable]]
+  ACTIVE -->|expira() (automático)| EXPIRED
+  EXPIRED -.-> E_NOTE
+  E_NOTE[[Estado final<br/>Se superó el tiempo de vigencia]]
+`} />
 
-    %% Inicio
-    start(( )) --> ACTIVE
-    class ACTIVE state
 
-    %% Transición: cancelar()
-    ACTIVE -->|cancelar()| CANCELED
-    class CANCELED state
-    CANCELED -.-> C_NOTE
-    C_NOTE[[Estado final<br/>Comercio canceló antes de transaccionar]]
-    class C_NOTE finalNote
-
-    %% Transición: pagoExitoso()
-    ACTIVE -->|pagoExitoso()| PAID
-    class PAID state
-    PAID -.-> P_NOTE
-    P_NOTE[[Estado final<br/>Pago exitoso confirmado; no reutilizable]]
-    class P_NOTE finalNote
-
-    %% Transición: expira() (automático)
-    ACTIVE -->|expira() (automático)| EXPIRED
-    class EXPIRED state
-    EXPIRED -.-> E_NOTE
-    E_NOTE[[Estado final<br/>Se superó el tiempo de vigencia]]
-    class E_NOTE finalNote
-```
 
 ### Campos de Entrada
 
