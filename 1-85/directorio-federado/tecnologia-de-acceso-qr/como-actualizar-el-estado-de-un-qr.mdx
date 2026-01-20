@@ -48,23 +48,29 @@ flowchart TB
     start(( )) --> A[ACTIVE]
     A -->|inhabilitar()| B[INACTIVE]
     B -.-> C[[Estado final<br/>No disponible para pagos]]
+    
 ```
 
 ### Máquina de Estados QR Dinámicos
 
-<Mermaid chart={`
-flowchart TB
-  start(( )) --> ACTIVE
-  ACTIVE -->|cancelar()| CANCELED
-  CANCELED -.-> C_NOTE
-  C_NOTE[[Estado final<br/>Comercio canceló antes de transaccionar]]
-  ACTIVE -->|pagoExitoso()| PAID
-  PAID -.-> P_NOTE
-  P_NOTE[[Estado final<br/>Pago exitoso confirmado; no reutilizable]]
-  ACTIVE -->|expira() (automático)| EXPIRED
-  EXPIRED -.-> E_NOTE
-  E_NOTE[[Estado final<br/>Se superó el tiempo de vigencia]]
-`} />
+```mermaid
+sequenceDiagram
+  autonumber
+  participant sb as Banco origen
+  participant ty as Transfiya
+  participant tb as Banco destino
+  participant af as Antifraude
+
+  sb ->> ty: Crear transferencia
+  ty ->> sb: Llamar a débito
+  ty ->> ty: Esperar aceptación
+  ty ->> af: Iniciar antifraude
+  ty ->> sb: Llamar a acción
+  ty ->> tb: Llamar a crédito
+  ty ->> sb: Llamar a estado
+  ty ->> tb: Llamar a estado
+  ty ->> af: Finalizar antifraude
+```
 
 
 
