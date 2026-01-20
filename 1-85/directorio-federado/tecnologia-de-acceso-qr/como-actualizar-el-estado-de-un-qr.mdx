@@ -44,11 +44,15 @@ NOTA: Enviar el ID del QR (el que se entregó en la generación del mismo) en el
 ### Máquina de Estados QR Estáticos
 
 ```mermaid
+
 stateDiagram-v2
-[*] --> ACTIVE
-ACTIVE --> INACTIVE : inhibitar()
-INACTIVE --> ESTADO FINAL NO DISPONIBLE PARA PAGOS
-ESTADO FINAL NO DISPONIBLE PARA PAGOS --> [*]
+    [*] --> ACTIVE
+    ACTIVE --> INACTIVE: inhabilitar()
+
+    state "Estado final\nNo disponible para pagos" as FINAL
+    INACTIVE --> FINAL
+    FINAL --> [*]
+
 ```
 
 ### Campos de Entrada
