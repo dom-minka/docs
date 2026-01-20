@@ -41,40 +41,13 @@ NOTA: Enviar el ID del QR (el que se entregó en la generación del mismo) en el
 | ACTIVE            | Expira vigencia                | EXPIRED               |
 
 
-### Transición de Estados
+### Máquina de Estados QR Estáticos
 
-```mermaid
-flowchart TB
-    start(( )) --> A[ACTIVE]
-    A -->|inhabilitar()| B[INACTIVE]
-    B -.-> C[[Estado final<br/>No disponible para pagos]]
-    
-```
-```mermaid
-stateDiagram-v2
-    [*] --> ACTIVE
-    ACTIVE --> CANCELED : cancelar()
-    ACTIVE --> PAID     : pagoExitoso()
-    ACTIVE --> EXPIRED  : expira()\n(automático)
-    CANCELED --> [*] : Estado final\nComercio canceló antes de transaccionar
-    PAID     --> [*] : Estado final\nPago exitoso confirmado;\nno reutilizable
-    EXPIRED  --> [*] : Estado final\nSe superó el tiempo de vigencia
-```
 ```mermaid
 stateDiagram-v2
 [*] --> ACTIVE
 ACTIVE --> INACTIVE : inhibitar()
 INACTIVE --> [*]
-```
-```mermaid
-stateDiagram-v2
-    [*] --> ACTIVE
-    ACTIVE --> PAID : pagoExitoso()
-    ACTIVE --> CANCELED : cancelar()
-    ACTIVE --> EXPIRED : expira()\n(automático)
-    PAID --> "Estado final\nPago exitoso confirmado;\nno reutilizable"
-    CANCELED --> "Estado final\nComercio canceló antes de\ntransaccionar"
-    EXPIRED --> "Estado final\nSe superó el tiempo de\nvigencia"
 ```
 
 ### Campos de Entrada
