@@ -51,29 +51,6 @@ flowchart TB
     
 ```
 
-### Máquina de Estados QR Dinámicos
-
-```mermaid
-sequenceDiagram
-  autonumber
-  participant sb as Banco origen
-  participant ty as Transfiya
-  participant tb as Banco destino
-  participant af as Antifraude
-
-  sb ->> ty: Crear transferencia
-  ty ->> sb: Llamar a débito
-  ty ->> ty: Esperar aceptación
-  ty ->> af: Iniciar antifraude
-  ty ->> sb: Llamar a acción
-  ty ->> tb: Llamar a crédito
-  ty ->> sb: Llamar a estado
-  ty ->> tb: Llamar a estado
-  ty ->> af: Finalizar antifraude
-```
-
-
-
 ### Campos de Entrada
 
 | **Campo**       | **Tipo**   | **Descripción**                                                           | **Formato**                                   | **Obligatorio** |
