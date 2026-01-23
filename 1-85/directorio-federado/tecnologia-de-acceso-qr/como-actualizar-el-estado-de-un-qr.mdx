@@ -64,20 +64,17 @@ stateDiagram-v2
   ACTIVE --> PAID : pagoExitoso()
   ACTIVE --> EXPIRED : expira() (automático)
 
-  %% Marcar estados finales y agregar notas descriptivas
-  CANCELED -->
+  %% Notas descriptivas de estados finales
   note right of CANCELED
     Estado final
     Comercio canceló antes de transaccionar
   end note
 
-  PAID -->
   note right of PAID
     Estado final
     Pago exitoso confirmado; no reutilizable
   end note
 
-  EXPIRED -->
   note right of EXPIRED
     Estado final
     Se superó el tiempo de vigencia
