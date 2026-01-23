@@ -44,7 +44,6 @@ NOTA: Enviar el ID del QR (el que se entregó en la generación del mismo) en el
 ### Máquina de Estados QR Estáticos
 
 ```mermaid
-
 stateDiagram-v2
     [*] --> ACTIVE
     ACTIVE --> INACTIVE: inhabilitar()
@@ -54,6 +53,38 @@ stateDiagram-v2
     FINAL --> [*]
 
 ```
+
+```mermaid
+stateDiagram-v2
+  direction TB
+
+  [*] --> ACTIVE
+
+  ACTIVE --> CANCELED : cancelar()
+  ACTIVE --> PAID : pagoExitoso()
+  ACTIVE --> EXPIRED : expira() (automático)
+
+  %% Marcar estados finales y agregar notas descriptivas
+  CANCELED --> [*]
+  note right of CANCELED
+    Estado final
+    Comercio canceló antes de transaccionar
+  end note
+
+  PAID --> [*]
+  note right of PAID
+    Estado final
+    Pago exitoso confirmado; no reutilizable
+  end note
+
+  EXPIRED --> [*]
+  note right of EXPIRED
+    Estado final
+    Se superó el tiempo de vigencia
+  end note
+```
+
+
 
 ### Campos de Entrada
 
