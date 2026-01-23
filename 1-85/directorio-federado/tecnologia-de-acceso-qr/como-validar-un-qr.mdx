@@ -85,6 +85,7 @@ POST /ach/bk/v1/money-movement/qr
 <CodeGroup>
 
 ```json Response Exitoso
+
 {
   "meta": {
     "requestId": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
@@ -95,177 +96,287 @@ POST /ach/bk/v1/money-movement/qr
   },
   "data": {
     "movementType": "QRPARSER",
-    "qr": {
-      "26": {
-        "id": "26",
-        "name": "Merchant Account Information",
-        "len": 32,
-        "data": {
-          "00": {
-            "id": "00",
-            "name": "Global Unique Identifier",
-            "len": 14,
-            "data": "CO.COM.CRB.LLA",
-            "rawData": "CO.COM.CRB.LLA"
-          },
-          "02": {
-            "id": "02",
-            "name": "Merchant ID",
-            "len": 10,
-            "data": "3152466845",
-            "rawData": "3152466845"
-          }
+    "26": {
+      "id": "26",
+      "name": "Merchant Account Information",
+      "len": 32,
+      "data": {
+        "00": {
+          "id": "00",
+          "name": "Global Unique Identifier",
+          "len": 14,
+          "data": "CO.COM.CRB.LLA",
+          "rawData": "CO.COM.CRB.LLA"
         },
-        "rawData": "0014CO.COM.CRB.LLA02103152466845"
+        "02": {
+          "id": "02",
+          "name": "Merchant ID",
+          "len": 10,
+          "data": "3152466845",
+          "rawData": "3152466845"
+        }
       },
-      "49": {
-        "id": "49",
-        "name": "Merchant Account Information",
-        "len": 25,
-        "data": {
-          "00": {
-            "id": "00",
-            "name": "Global Unique Identifier",
-            "len": 14,
-            "data": "CO.COM.CRB.RED",
-            "rawData": "CO.COM.CRB.RED"
-          },
-          "01": {
-            "id": "01",
-            "name": "Merchat PAN",
-            "len": 3,
-            "data": "CRB",
-            "rawData": "CRB"
-          }
+      "rawData": "0014CO.COM.CRB.LLA02103152466845"
+    },
+    "49": {
+      "id": "49",
+      "name": "Merchant Account Information",
+      "len": 25,
+      "data": {
+        "00": {
+          "id": "00",
+          "name": "Global Unique Identifier",
+          "len": 14,
+          "data": "CO.COM.ACH.RED",
+          "rawData": "CO.COM.ACH.RED"
         },
-        "rawData": "0014CO.COM.CRB.RED0103CRB"
+        "01": {
+          "id": "01",
+          "name": "Merchat PAN",
+          "len": 3,
+          "data": "ACH",
+          "rawData": "ACH"
+        }
       },
-      "52": {
-        "id": "52",
-        "name": "Merchant Category Code",
-        "len": 4,
-        "data": "0000 (No Mcc)",
-        "rawData": "0000"
+      "rawData": "0014CO.COM.ACH.RED0103ACH"
+    },
+    "53": {
+      "id": "53",
+      "name": "Transaction Currency",
+      "len": 3,
+      "data": "170",
+      "rawData": "170"
+    },
+    "54": {
+      "id": "54",
+      "name": "Transaction Amount",
+      "len": 4,
+      "data": "8900",
+      "rawData": "8900"
+    },
+    "58": {
+      "id": "58",
+      "name": "Country Code",
+      "len": 2,
+      "data": "CO (Colombia)",
+      "rawData": "CO"
+    },
+    "59": {
+      "id": "59",
+      "name": "Merchant Name",
+      "len": 13,
+      "data": "Julián Suarez",
+      "rawData": "Julián Suarez"
+    },
+    "60": {
+      "id": "60",
+      "name": "Merchant City",
+      "len": 6,
+      "data": "Bogota",
+      "rawData": "Bogota"
+    },
+    "61": {
+      "id": "61",
+      "name": "Postal Code",
+      "len": 6,
+      "data": "114056",
+      "rawData": "114056"
+    },
+    "62": {
+      "id": "62",
+      "name": "Additional Data Field Template",
+      "len": 11,
+      "data": "07010080200",
+      "rawData": "07010080200"
+    },
+    "63": {
+      "id": "63",
+      "name": "CRC",
+      "len": 4,
+      "data": "2F1E",
+      "rawData": "2F1E"
+    },
+    "80": {
+      "id": "80",
+      "name": "Unreserved Templates",
+      "len": 27,
+      "data": {
+        "00": {
+          "id": "00",
+          "name": "Global Unique Identifier",
+          "len": 16,
+          "data": "CO.COM.ACH.CANAL",
+          "rawData": "CO.COM.ACH.CANAL"
+        },
+        "01": {
+          "id": "01",
+          "len": 3,
+          "data": "POS",
+          "rawData": "POS"
+        }
       },
-      "53": {
-        "id": "53",
-        "name": "Transaction Currency",
-        "len": 3,
-        "data": "170",
-        "rawData": "170"
+      "rawData": "0016CO.COM.ACH.CANAL0103POS"
+    },
+    "81": {
+      "id": "81",
+      "name": "Unreserved Templates",
+      "len": 25,
+      "data": {
+        "00": {
+          "id": "00",
+          "name": "Global Unique Identifier",
+          "len": 15,
+          "data": "CO.COM.ACH.CIVA",
+          "rawData": "CO.COM.ACH.CIVA"
+        },
+        "01": {
+          "id": "01",
+          "len": 2,
+          "data": "03",
+          "rawData": "03"
+        }
       },
-      "54": {
-        "id": "54",
-        "name": "Transaction Amount",
-        "len": 1,
-        "data": "0",
-        "rawData": "0"
+      "rawData": "0015CO.COM.ACH.CIVA010203"
+    },
+    "82": {
+      "id": "82",
+      "name": "Unreserved Templates",
+      "len": 23,
+      "data": {
+        "00": {
+          "id": "00",
+          "name": "Global Unique Identifier",
+          "len": 14,
+          "data": "CO.COM.ACH.IVA",
+          "rawData": "CO.COM.ACH.IVA"
+        },
+        "01": {
+          "id": "01",
+          "len": 1,
+          "data": "0",
+          "rawData": "0"
+        }
       },
-      "58": {
-        "id": "58",
-        "name": "Country Code",
-        "len": 2,
-        "data": "CO (Colombia)",
-        "rawData": "CO"
+      "rawData": "0014CO.COM.ACH.IVA01010"
+    },
+    "83": {
+      "id": "83",
+      "name": "Unreserved Templates",
+      "len": 24,
+      "data": {
+        "00": {
+          "id": "00",
+          "name": "Global Unique Identifier",
+          "len": 15,
+          "data": "CO.COM.ACH.BASE",
+          "rawData": "CO.COM.ACH.BASE"
+        },
+        "01": {
+          "id": "01",
+          "len": 1,
+          "data": "0",
+          "rawData": "0"
+        }
       },
-      "59": {
-        "id": "59",
-        "name": "Merchant Name",
-        "len": 16,
-        "data": "Fernando Guevara",
-        "rawData": "Fernando Guevara"
+      "rawData": "0015CO.COM.ACH.BASE01010"
+    },
+    "84": {
+      "id": "84",
+      "name": "Unreserved Templates",
+      "len": 25,
+      "data": {
+        "00": {
+          "id": "00",
+          "name": "Global Unique Identifier",
+          "len": 15,
+          "data": "CO.COM.ACH.CINC",
+          "rawData": "CO.COM.ACH.CINC"
+        },
+        "01": {
+          "id": "01",
+          "len": 2,
+          "data": "03",
+          "rawData": "03"
+        }
       },
-      "60": {
-        "id": "60",
-        "name": "Merchant City",
-        "len": 6,
-        "data": "BOGOTA",
-        "rawData": "BOGOTA"
+      "rawData": "0015CO.COM.ACH.CINC010203"
+    },
+    "85": {
+      "id": "85",
+      "name": "Unreserved Templates",
+      "len": 23,
+      "data": {
+        "00": {
+          "id": "00",
+          "name": "Global Unique Identifier",
+          "len": 14,
+          "data": "CO.COM.ACH.INC",
+          "rawData": "CO.COM.ACH.INC"
+        },
+        "01": {
+          "id": "01",
+          "len": 1,
+          "data": "0",
+          "rawData": "0"
+        }
       },
-      "61": {
-        "id": "61",
-        "name": "Postal Code",
-        "len": 7,
-        "data": "0852469",
-        "rawData": "0852469"
+      "rawData": "0014CO.COM.ACH.INC01010"
+    },
+    "90": {
+      "id": "90",
+      "name": "Unreserved Templates",
+      "len": 43,
+      "data": {
+        "00": {
+          "id": "00",
+          "name": "Global Unique Identifier",
+          "len": 16,
+          "data": "CO.COM.ACH.TRXID",
+          "rawData": "CO.COM.ACH.TRXID"
+        },
+        "01": {
+          "id": "01",
+          "len": 19,
+          "data": "62FB70176DC0B870F58",
+          "rawData": "62FB70176DC0B870F58"
+        }
       },
-      "63": {
-        "id": "63",
-        "name": "CRC",
-        "len": 4,
-        "data": "58EE",
-        "rawData": "58EE"
+      "rawData": "0016CO.COM.ACH.TRXID011962FB70176DC0B870F58"
+    },
+    "91": {
+      "id": "91",
+      "name": "Unreserved Templates",
+      "len": 86,
+      "data": {
+        "00": {
+          "id": "00",
+          "name": "Global Unique Identifier",
+          "len": 14,
+          "data": "CO.COM.ACH.SEC",
+          "rawData": "CO.COM.ACH.SEC"
+        },
+        "01": {
+          "id": "01",
+          "len": 64,
+          "data": "ac77cb8cc46f1e0aee1b8e3212bc9f27bcb8ec16aaf38d2ce42194a92bfc4d12",
+          "rawData": "ac77cb8cc46f1e0aee1b8e3212bc9f27bcb8ec16aaf38d2ce42194a92bfc4d12"
+        }
       },
-      "80": {
-        "id": "80",
-        "name": "Unreserved Templates",
-        "len": 27,
-        "data": "0016CO.COM.CRB.CANAL0103POS",
-        "rawData": "0016CO.COM.CRB.CANAL0103POS"
-      },
-      "81": {
-        "id": "81",
-        "name": "Unreserved Templates",
-        "len": 25,
-        "data": "0015CO.COM.CRB.CIVA010203",
-        "rawData": "0015CO.COM.CRB.CIVA010203"
-      },
-      "82": {
-        "id": "82",
-        "name": "Unreserved Templates",
-        "len": 26,
-        "data": "0014CO.COM.CRB.IVA01040.00",
-        "rawData": "0014CO.COM.CRB.IVA01040.00"
-      },
-      "83": {
-        "id": "83",
-        "name": "Unreserved Templates",
-        "len": 27,
-        "data": "0015CO.COM.CRB.BASE01040.00",
-        "rawData": "0015CO.COM.CRB.BASE01040.00"
-      },
-      "84": {
-        "id": "84",
-        "name": "Unreserved Templates",
-        "len": 25,
-        "data": "0015CO.COM.CRB.CINC010203",
-        "rawData": "0015CO.COM.CRB.CINC010203"
-      },
-      "85": {
-        "id": "85",
-        "name": "Unreserved Templates",
-        "len": 26,
-        "data": "0014CO.COM.CRB.INC01040.00",
-        "rawData": "0014CO.COM.CRB.INC01040.00"
-      },
-      "90": {
-        "id": "90",
-        "name": "Unreserved Templates",
-        "len": 56,
-        "data": "0016CO.COM.CRB.TRXID0132783c523252644c36bd1fc12c9d902289",
-        "rawData": "0016CO.COM.CRB.TRXID0132783c523252644c36bd1fc12c9d902289"
-      },
-      "91": {
-        "id": "91",
-        "name": "Unreserved Templates",
-        "len": 86,
-        "data": "0014CO.COM.CRB.SEC0164124efbfba7f08162e6048dee671aa1e0cd141fea3dc222b49823e2aecc96f532",
-        "rawData": "0014CO.COM.CRB.SEC0164124efbfba7f08162e6048dee671aa1e0cd141fea3dc222b49823e2aecc96f532"
-      },
-      "00": {
-        "id": "00",
-        "name": "Payload Format Indicator",
-        "len": 2,
-        "data": "01",
-        "rawData": "01"
-      },
-      "01": {
-        "id": "01",
-        "name": "Point of Initiation Method",
-        "len": 2,
-        "data": "11",
-        "rawData": "11"
-      }
+      "rawData": "0014CO.COM.ACH.SEC0164ac77cb8cc46f1e0aee1b8e3212bc9f27bcb8ec16aaf38d2ce42194a92bfc4d12"
+    },
+    "00": {
+      "id": "00",
+      "name": "Payload Format Indicator",
+      "len": 2,
+      "data": "01",
+      "rawData": "01"
+    },
+    "01": {
+      "id": "01",
+      "name": "Point of Initiation Method",
+      "len": 2,
+      "data": "11",
+      "rawData": "11"
     }
   }
 }
