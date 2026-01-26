@@ -20,7 +20,7 @@ POST /ach/bk/v1/money-movement/qr
 | timestamp             | datetime   | Fecha y hora de la solicitud de generación del código QR                        | 2025-12-23T18:16:35.099Z                      | SI               |
 | version               | string     | Versión del esquema, enviar el valor "1.0"                                      | 1.0                                           | SI               |
 | **data**                  | **object**     |                                                                                |                                              | **SI**               |
-| movementType          | enum       | Tipo de operación a realizar. [QR, QRVALIDATE, QRPARSER]                        | QRPARSER                                      | SI               |
+| movementType          | enum       | Tipo de operación a realizar. [QR, QRVALIDATE, QRPARSER]                        | QRVALIDATE                                      | SI               |
 | **useCaseInformation**    | **object**     |                                                                                |                                              | **SI**               |
 | idQr                  | string     | Campo para la identificación de la transacción. (Tag 90)                        | CO.COM.ACH.RED3748349738748374               | SI               |
 | crc                   | string     | Código de redundancia cíclica del QR (Tag 63)                                   | 3A5F                                          | NO               |
