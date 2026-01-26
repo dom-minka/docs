@@ -48,6 +48,18 @@ POST /ach/bk/v1/money-movement/qr
 | tax                  | decimal  | Valor del impuesto INC con dos decimales                                                                            | Min 1 - Máx 13                                | NO              |
 | channel              | enum     | Canal de origen. Valores válidos: **IM, POS, APP, ECOMM, MPOS, ATM, CB, OFC**                                      | POS                                           | SI              |
 
+### Tabla de canales:  
+
+| Código | Descripción              |
+|--------|---------------------------|
+| IM     | POS Manual                |
+| POS    | POS / PINPAD              |
+| APP    | Banca Móvil               |
+| ECOMM  | Internet                  |
+| MPOS   | POS / PINPAD              |
+| ATM    | Cajero Automático         |
+| CB     | Corresponsal Bancario     |
+| OFC    | Oficina                   |
 
 
 ### Reglas para los valores de tipo decimal
