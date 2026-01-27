@@ -37,6 +37,7 @@ A continuación se presenta un ejemplo de creación de una llave tipo 'GENERIC':
      -d '{
        "labels": {
         "type": "GENERIC",
+    	"name": "Signer generico 1",
     	"bankName": "Banco Rojo",
         "routerReference": "$bancorojo",
         "bankBicfi": "7095",
@@ -85,5 +86,6 @@ A continuación se presenta un ejemplo de creación de una llave tipo 'GENERIC':
 | --------------- | -------------------------------------------------- | -------- | ------------------------------------------------------------ | ------------------ |
 | type            | Tipo de signer: GENERIC                            | Texto    | N/A                                                          | Si                 |
 | name            | Nombre para identificación                         | Texto    | 1-140 carácteres                                             | Si                 |
+| bankName        | Nombre del banco                                   | Texto    | 1-140 carácteres                                             | Si                 |
 | routerReference | Identificador de billetera del banco en Transfiya. | Texto    | 1- Máximo 34 caracteres alfanuméricos, debe comenzar con `$` | Si                 |
 | bankBicfi       | Representa el código de compensación del banco.    | Texto    | 1-Máximo 4 caracteres numéricos                              | Si                 |
