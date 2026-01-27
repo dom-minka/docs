@@ -36,12 +36,10 @@ A continuación se presenta un ejemplo de creación de una llave tipo 'GENERIC':
      -H "Content-Type: application/json" \
      -d '{
        "labels": {
-         "type": "GENERIC",
-         "name": "Generico",
-         "proprietary": "NIT",
-         "identification": "111111111",
-         "routerReference": "$bancorojo",
-         "bankId": "111111111",
+        "type": "GENERIC",
+    	"bankName": "Banco Rojo",
+        "routerReference": "$bancorojo",
+        "bankBicfi": "7095",
        },
        "keeper": [{
          "scheme": "ecdsa-ed25519",
@@ -83,11 +81,9 @@ A continuación se presenta un ejemplo de creación de una llave tipo 'GENERIC':
 
 ### Campos de entrada:
 
-| **Etiqueta**    | **Descripción**                                                                                | **Tipo** | **Longitud**                                                 | **Obligatoriedad** |
-| --------------- | ---------------------------------------------------------------------------------------------- | -------- | ------------------------------------------------------------ | ------------------ |
-| type            | Tipo de signer: GENERIC                                                                        | Texto    | N/A                                                          | Si                 |
-| name            | Nombre para identificación                                                                     | Texto    | 1-140 carácteres                                             | Si                 |
-| proprietary     | Tipo de documento, admite: CC,CE,PA,TI,NUIP,NIT,OTR,PPT y PEP                                  | Texto    | 1-4                                                          | Si                 |
-| identification  | Número de identificación                                                                       | Texto    | 1-18 carácteres                                              | Si                 |
-| routerReference | Identificador de billetera del banco en Transfiya.                                             | Texto    | 1- Máximo 34 caracteres alfanuméricos, debe comenzar con `$` | Si                 |
-| bankId          | Representa un número NIT del banco sin dígito de verificación o un código asignado por BanRep. | Texto    | 1-Máximo 9 caracteres numéricos                              | Si                 |
+| **Etiqueta**    | **Descripción**                                    | **Tipo** | **Longitud**                                                 | **Obligatoriedad** |
+| --------------- | -------------------------------------------------- | -------- | ------------------------------------------------------------ | ------------------ |
+| type            | Tipo de signer: GENERIC                            | Texto    | N/A                                                          | Si                 |
+| name            | Nombre para identificación                         | Texto    | 1-140 carácteres                                             | Si                 |
+| routerReference | Identificador de billetera del banco en Transfiya. | Texto    | 1- Máximo 34 caracteres alfanuméricos, debe comenzar con `$` | Si                 |
+| bankBicfi       | Representa el código de compensación del banco.    | Texto    | 1-Máximo 4 caracteres numéricos                              | Si                 |
