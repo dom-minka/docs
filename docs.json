@@ -101,14 +101,14 @@
                 "group": "Guias de uso",
                 "icon": "mask",
                 "pages": [
-                  "1-85/transferencias-bre-b/guias-de-uso/como-reintentar-creditos",
                   "es/v1.85/transfers-mol/guides/how-to-send-mol",
                   "es/v1.85/transfers-mol/guides/how-to-debit-sender",
                   "es/v1.85/transfers-mol/guides/how-to-accept-transfers",
                   "es/v1.85/transfers-mol/guides/how-to-sign-transfer",
                   "es/v1.85/transfers-mol/guides/how-to-credit-receiver",
                   "es/v1.85/transfers-mol/guides/how-to-notify",
-                  "es/v1.85/transfers-mol/guides/how-to-send-timestamps"
+                  "es/v1.85/transfers-mol/guides/how-to-send-timestamps",
+                  "1-85/transferencias-bre-b/guias-de-uso/como-reintentar-creditos"
                 ]
               },
               {
