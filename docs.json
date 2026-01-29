@@ -19,7 +19,7 @@
     },
     "versions": [
       {
-        "version": "1.85",
+        "version": "1.104",
         "tabs": [
           {
             "tab": "Directorio Federado",
@@ -101,6 +101,7 @@
                 "group": "Guias de uso",
                 "icon": "mask",
                 "pages": [
+                  "1-85/transferencias-bre-b/guias-de-uso/como-reintentar-creditos",
                   "es/v1.85/transfers-mol/guides/how-to-send-mol",
                   "es/v1.85/transfers-mol/guides/how-to-debit-sender",
                   "es/v1.85/transfers-mol/guides/how-to-accept-transfers",

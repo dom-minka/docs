@@ -64,16 +64,19 @@ No obstante, documentamos estos mapeos de errores como medida preventiva para ga
 
 La estrategia general de mapeo es la siguiente:
 
-| Categoria                                                      | Descripcion                                                                                                         |
-| -------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------- |
-| `118 - ResourceValidationError`                                | Los errores de validación de campos                                                                                 |
-| `120 - DICE error: Request timeout`                            | No se recibe respuesta del DICE dentro de los tiempos regulatorios.                                                 |
-| `121 - ResourceNotFoundError`                                  | Los errores relacionados con referencias inválidas, por ejemplo, ID de participante inválido                        |
-| `122 - DuplicateKey`                                           | Los errores por intentar ingresar registros duplicados                                                              |
-| `123 - DICE error: Key registered by another financial entity` | La llave se encuentra registrada con otra entidad financiera.                                                       |
-| `123 - DomainRuleViolationError`                               | Todas las reglas de negocio, por ejemplo, el tiempo después del cual se puede volver a utilizar una clave cancelada |
-| `136 - ApiError`                                               | Todos los errores técnicos, por ejemplo, problemas relacionados con una configuración inválida                      |
-| `100 - ForbiddenError`                                         | Los errores de seguridad                                                                                            |
+| Categoria                                                                                            | Descripcion                                                                                                          |
+| ---------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------- |
+| `118 - ResourceValidationError`                                                                      | Los errores de validación de campos.                                                                                 |
+| `118 - DICE error: The participant cannot be determined`                                             | El participante que está intentando realizar la operación no existe en el directorio centralizado.                   |
+| `120 - DICE error: Request timeout`                                                                  | No se recibe respuesta del DICE dentro de los tiempos regulatorios.                                                  |
+| `121 - DICE error: Keys not found or inactive`                                                       | La llave no existe en el directorio federado ni en el centralizado.                                                  |
+| `122 - Signer with alias @ABC123 already exists in database.`                                        | La llave que se intenta registrar solo en directorio federado ya existe.                                             |
+| `123 - DICE error: Duplicate Detected`                                                               | La llave ya se encuentra registrada en el directorio federado y centralizado.                                        |
+| `123 - DICE error: Key registered by another financial entity`                                       | La llave se encuentra registrada con otra entidad financiera.                                                        |
+| `123 - DICE error: Key already registered by the same financial entity but different account number` | La llave ya se encuentra registrada en la misma entidad, pero con una cuenta diferente.                              |
+| `123 - DomainRuleViolationError`                                                                     | Todas las reglas de negocio, por ejemplo, el tiempo después del cual se puede volver a utilizar una clave cancelada. |
+| `136 - ApiError`                                                                                     | Todos los errores técnicos, por ejemplo, problemas relacionados con una configuración inválida.                      |
+| `100 - ForbiddenError`                                                                               | Los errores de seguridad.                                                                                            |
 
 ### Alertas sobre esquemas
 

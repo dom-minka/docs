@@ -1,0 +1,75 @@
+---
+title: "Como reintentar créditos"
+icon: "retweet"
+---
+
+## **Punto de No Retorno en el Proceso de Liquidación – Servicio Bre‑B**
+
+De acuerdo con la normativa aplicable a los procesos de transferencia Bre‑B y los lineamientos operativos del Banco de la República para la compensación y liquidación de transacciones interbancarias, se establece lo siguiente respecto al ciclo operativo y al punto de no retorno:
+
+Una transacción Bre‑B alcanza la fase de **liquidación definitiva** cuando se cumplen de manera secuencial los siguientes hitos operativos:
+
+1. **Confirmación de débito por parte de la entidad de origen:**\
+   La entidad financiera que inicia la transacción confirma que los fondos han sido debitados exitosamente de la cuenta del ordenante.
+2. **Confirmación de disponibilidad por parte de la entidad de destino:**\
+   La entidad receptora valida que se encuentra en la capacidad operativa y contable de **acreditar los recursos** correspondientes al beneficiario.
+3. **Liquidación por parte del Banco de la República:**\
+   Una vez las dos confirmaciones anteriores han sido registradas, el Banco de la República procede con la **liquidación de la operación**, generando la respectiva confirmación de liquidación a las entidades participantes.
+
+### **Punto de No Retorno**
+
+Con la confirmación de liquidación emitida por el Banco de la República, la transacción alcanza el denominado **punto de no retorno**, entendido como el momento a partir del cual:
+
+- La entidad de destino **tiene la obligación de acreditar** los recursos al beneficiario final.
+- **No es procedente ni permitido** generar un rechazo de la transacción.
+- Se considera que la operación ha sido irrevocablemente liquidada en el sistema de pagos administrado por el Banco de la República.
+
+Este comportamiento operativo busca garantizar la integridad del proceso de pagos, la irreversibilidad posterior a la liquidación y la trazabilidad regulatoria de las transferencias interbancarias, evitando excepciones que puedan comprometer la correcta ejecución del servicio Bre‑B.
+
+## **Manejo de Intermitencias y Capacidad de Retomar Transacciones – Funcionalidad de Reintento**
+
+Dentro de las operaciones del servicio Bre‑B, se ha identificado que algunos participantes pueden experimentar **dificultades técnicas intermitentes** en ciertas capas de su infraestructura tecnológica. Estas intermitencias, aunque breves, pueden impedir que una transacción culmine exitosamente aun cuando ya haya sido completado el proceso de liquidación ante el Banco de la República.
+
+Con el propósito de fortalecer la continuidad operativa y asegurar la correcta finalización del flujo transaccional, **Transfiya implementó una capacidad adicional que permite retomar la operación desde el último punto alcanzado**, lanzando un reintento controlado para completar la transacción sin afectar la integridad del proceso.
+
+### **Responsabilidad de las Entidades Participantes**
+
+Es importante resaltar que, aunque Transfiya asegura la ejecución técnica del reintento, **la correcta administración contable y operativa recae en cada entidad financiera**, en particular:
+
+- La entidad debe garantizar que su core bancario **controle y evite dobles (o múltiples) abonos**, especialmente en escenarios donde la operación se reactive tras un evento de intermitencia.
+- La entidad debe asegurarse de identificar y registrar cualquier operación que haya sido **objeto de ajuste manual** durante la reconexión o reintento del proceso.
+- La responsabilidad de conciliar y validar que los abonos se realicen una sola vez en el core es exclusiva de la entidad participante.
+
+El propósito central de esta capacidad es **mantener la armonía transaccional** entre los tres niveles involucrados:
+
+1. Lo **liquidado en el MOL** (Banco de la República).
+2. Lo **registrado y operado en Transfiya**.
+3. Lo **ejecutado en el core** de cada entidad financiera.
+
+Esta sincronización es clave para preservar la integridad del ecosistema de pagos y asegurar que el estado final de cada transacción refleje de manera coherente lo liquidado oficialmente.
+
+## **Reintento Operativo mediante Interfaz Estándar**
+
+La reactivación del proceso se realizará de forma estandarizada mediante un **botón de reintento**. Los pasos para reintentar son los siguientes:
+
+- Se ubica la transacción que se quiere completar y vemos los detalles.
+- Nos ubicamos en el apartado de **Eventos de la transacción **donde encontraremos el error por el cual no se completó el pago, lo analizamos y presionamos el botón "**OPEN**"
+
+  ![Image](/images/image-1.png)
+- Luego de esto obtendremos mas detalles del fallo y aparecerá el botón "**Reintentar**"
+
+  ![Image](/images/image-2.png)
+- A continuación obtendremos el resultado del proceso, si es exitoso se producirán los llamados necesarios para completar la transacción y pasará de aceptada a aprobada.
+
+  ![Image](/images/image-3.png)
+
+<Info>
+  Esto solo se producirá si el Banco de la República confirma a Transfiya mediante el flujo de la transacción que la liquidación procesó forma exitosa, en caso contrario no se podrá visualizar esta opción.
+</Info>
+
+En este esquema operativo:
+
+- El **action principal SENDMOL** sigue siendo responsabilidad exclusiva de la **entidad de origen** de la transacción.
+- El **action de crédito DOWNLOAD** permanece a cargo de la **entidad receptora**.
+
+El mecanismo de reintento tiene como finalidad principal llevar las transacciones al estado **Aprobado**, siempre y cuando exista confirmación oficial del Banco de la República de que la transacción fue 
