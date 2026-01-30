@@ -13,7 +13,7 @@ Esta guia busca asegurar que todas las Entidades involucradas comprendan plename
 ### Paso a paso
 
 1. \*\*Escanear el QR: \*\*La Entidad Particiánte origen, a través de la UX deberá presentar la opción para escanear códigos QR a sus usuarios.
-2. **Lectura de QR:** Una vez realizo el escaneo, la Entidad participante deberá envíar el contenido de la cadena TLV a través del servicio expuesto por Transfiya. El detalle de este proceso podrá ser consultado en el apartado [Cómo leer un QR - Transfiya Guide](https://transfiya.me/1-85/directorio-federado/tecnologia-de-acceso-qr/como-leer-un-qr).
+2. **Lectura de QR:** Una vez realizado el escaneo, la Entidad participante obtiene la cadena TLV y debe enviar esta cadena al servicio expuesto por Transfiya para obtener un objeto JSON estructurado y legible con los datos del QR. El detalle de este proceso podrá ser consultado en el apartado [Cómo leer un QR - Transfiya Guide](https://transfiya.me/1-85/directorio-federado/tecnologia-de-acceso-qr/como-leer-un-qr).
 3. **Resolución de llave:** Con los datos obtenidos en la respuesta al servicio de lectura, la Entidad Participante origen debe identificar el valor de la llave y efectuar el proceso de resolución a través del servicio expuesto por Transfiya, como se detalla en [Cómo resolver llaves - Transfiya Guide](https://transfiya.me/es/v1.85/directory/guides/how-to-resolve-keys).
 
    A continuación se muestra el dato que la entidad debe extraer del JSON para obtener la llave.
