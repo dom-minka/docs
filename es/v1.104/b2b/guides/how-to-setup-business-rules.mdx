@@ -1,14 +1,14 @@
 ---
 title: "¿Cómo actualizar reglas de negocio para una empresa?"
 description: "Se pueden configurar reglas de negocio para firmantes (signers) que sean de tipo business. Las reglas que se pueden parametrizar son las siguientes:"
-icon: 'rotate'
+icon: "rotate"
 ---
 
-| Regla                                | Campo en el objeto `signer`             | Tipo   | Longitud / Validación                                        |
-| ------------------------------------ | --------------------------------------- | ------ | ------------------------------------------------------------ |
-| Monto máximo de transferencia        | `labels.maxAmountOfTransfer`            | Number | Habilitado para recibir el valor máximo para el tipo de dato |
-| Cantidad de transferencias en el día | `labels.dailyCountOfTransfersLimit`     | Number | Habilitado para recibir el valor máximo para el tipo de dato |
-| Monto acumulado en el día            | `labels.dailySumAmountOfTransfersLimit` | Number | Habilitado para recibir el valor máximo para el tipo de dato |
+| Regla                                | Campo en el objeto `signer`             | Tipo   | Longitud / Validación                                                                                     |
+| ------------------------------------ | --------------------------------------- | ------ | --------------------------------------------------------------------------------------------------------- |
+| Monto máximo de transferencia        | `labels.maxAmountOfTransfer`            | Number | Habilitado para recibir el valor máximo para el tipo de dato. Este valor contiene dos decimales al final. |
+| Cantidad de transferencias en el día | `labels.dailyCountOfTransfersLimit`     | Number | Habilitado para recibir el valor máximo para el tipo de dato                                              |
+| Monto acumulado en el día            | `labels.dailySumAmountOfTransfersLimit` | Number | Habilitado para recibir el valor máximo para el tipo de dato. Este valor contiene dos decimales al final. |
 
 ```json
 Request:
@@ -60,10 +60,10 @@ Response:
 
 A continuación se listan los códigos de error asociados a esta operación:
 
-| Código de error | Descripción                                      | HTTP Status |
-|-----------------|--------------------------------------------------|-------------|
-| 99              | Error inesperado del servidor                    | 400         |
-| 100             | No tienes permisos para acceder a este método    | 403         |
-| 102             | Etiquetas inválidas                              | 400         |
-| 118             | Error de validación del esquema del recurso      | 400         |
-| 121             | Firmante no encontrado en la base de datos       | 400         |
+| Código de error | Descripción                                   | HTTP Status |
+| --------------- | --------------------------------------------- | ----------- |
+| 99              | Error inesperado del servidor                 | 400         |
+| 100             | No tienes permisos para acceder a este método | 403         |
+| 102             | Etiquetas inválidas                           | 400         |
+| 118             | Error de validación del esquema del recurso   | 400         |
+| 121             | Firmante no encontrado en la base de datos    | 400         |
