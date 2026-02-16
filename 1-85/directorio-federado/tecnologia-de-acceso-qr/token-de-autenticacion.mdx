@@ -1,0 +1,92 @@
+---
+title: "Token de autenticación"
+icon: "pen"
+---
+
+### Especificaciones para solicitud de token
+
+Las Entidades Participantes deberán implementar la autenticación de token para poder usar los servicios asociados a la tecnología de acceso QR.
+
+```json
+Dominio: https://bank.apihub.crt.achcolombia.com.co
+```
+
+```json
+POST /ach/bk/apihub-bank/oauth2/token
+```
+
+### Campos de Entrada (headers):
+
+| **Campo**     | **Tipo**   | **Descripción**                                                                      | **Obligatorio** |
+| ------------- | ---------- | ------------------------------------------------------------------------------------ | --------------- |
+| **client_id** | **string** | Client id generado a través del Developer Portal                                     | **SI**          |
+| client_secret | string     | Client secret generado a través del Developer Portal                                 | SI              |
+| scope         | string     | Para métodos POST (MoneyMovementsQR) y para método PATCH (MoneyMovementsQR_UpdState) | SI              |
+| grant_type    | string     | Tipo de token: client_credentials                                                    | SI              |
+
+### Solicitud ejemplo:
+
+<CodeGroup>
+
+```json Request
+curl --location 'https://bank.apihub.crt.achcolombia.com.co/ach/bk/apihub-bank/oauth2/token' \
+--header 'Content-Type: application/x-www-form-urlencoded' \
+--header 'Cookie: incap_ses_890_3286497=0uIPUYfyzQxs6s9A2epZDHYdk2kAAAAAk9ZeeTyNHEV58iRw9N3l8A==; nlbi_3286497=mihMNSZn4kHPFoZU7C6EMgAAAADxTfoP6vcW/M90RfjWPszY; visid_incap_3286497=fOkez2awRsiYw88W1QKmTHYdk2kAAAAAQUIPAAAAAAB2uyYNGL6rD0eQYTOzyDnC' \
+--data-urlencode 'client_id=xxxxxxxxx' \
+--data-urlencode 'client_secret=xxxxxxxxx' \
+--data-urlencode 'scope=MoneyMovementsQR' \
+--data-urlencode 'grant_type=client_credentials'
+```
+
+</CodeGroup>
+
+### Campos de Salida
+
+| **Campo**      | **Tipo**   | **Descripción**                                            |
+| -------------- | ---------- | ---------------------------------------------------------- |
+| **token_type** | **string** | Tipo de token:  Bearer                                     |
+| access_token   | string     | Token generado por ACH Colombia                            |
+| scope          | string     | Permiso de la API: MoneyMovementsQR                        |
+| expires_in     | string     | Tiempo vigencia del token. Actualmente en 1 hora (3600 ms) |
+| consented_on   | string     | Indicador asignado por ACH Colombia                        |
+
+<CodeGroup>
+
+```json Response Exitoso
+{
+    "token_type": "Bearer",
+    "access_token": "AAIgNWQ3OTdjZjFhZjliZmE2NjY0MGMzMGRiOWNkNDFkNzcHa5k0p8TwxJWpRtHIY7wV1GKkMgUdAbTljy0G9XCLjhGuoCJC_mYbeklz3CTPMQDBdIm9rcRG1rSp4EAwo5yLLvEewI_V8ynMLDVO2m1pMShXyVTLMSdsEo90Nzb3S8yu2a1nvvnv3tWYW2_LvSQe",
+    "scope": "MoneyMovementsQR",
+    "expires_in": 3600,
+    "consented_on": 1771249253
+}
+```
+
+
+```json Response Error 400
+{
+    "httpCode": "400",
+    "httpMessage": "Bad Request",
+    "moreInformation": "One or more required API parameters are missing in the API request."
+}
+```
+
+
+```json Response Error 500
+{
+  "meta": {
+    "requestId": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+    "timestamp": "2026-01-15T00:03:39.558Z",
+    "status": "ERROR",
+    "statusCode": "500",
+    "statusDesc": "Internal Server Error"
+  },
+  "error": {
+    "code": "1005",
+    "message": "Fallas Técnicas"
+  }
+}
+```
+
+</CodeGroup>
+
