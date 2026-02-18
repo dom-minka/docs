@@ -13,7 +13,7 @@ Esta guia busca asegurar que todas las Entidades involucradas comprendan plename
 
 ### Paso a paso
 
-1. **Escanear el QR:** La Entidad Particiánte origen, a través de la UX deberá presentar la opción para escanear códigos QR a sus usuarios.
+1. **Escanear el QR:** La Entidad Participante origen, a través de la UX deberá presentar la opción para escanear códigos QR a sus usuarios.
 2. **Lectura de QR:** Una vez realizado el escaneo, la Entidad participante obtiene la cadena TLV y debe enviar esta cadena al servicio expuesto por Transfiya para obtener un objeto JSON estructurado y legible con los datos del QR. El detalle de este proceso podrá ser consultado en el apartado [Cómo leer un QR - Transfiya Guide](https://transfiya.me/1-85/directorio-federado/tecnologia-de-acceso-qr/como-leer-un-qr).
 3. **Resolución de llave:** Con los datos obtenidos en la respuesta al servicio de lectura, la Entidad Participante origen debe identificar el valor de la llave y efectuar el proceso de resolución a través del servicio expuesto por Transfiya, como se detalla en [Cómo resolver llaves - Transfiya Guide](https://transfiya.me/es/v1.104/directory/guides/how-to-resolve-keys).
 
@@ -156,4 +156,4 @@ curl -X POST \
 ```
 
 7. **Confirmación de la creación de transacción y procesamiento:** Una vez la Entidad Participante origen solicite la inciación de transferencia en Transfiya. El sistema ejecuta el procesamiento de manera habitual y que las Entidades ya conocen. El detalle podrá ser consultado y revisado en [Como enviar a Bre-B - Transfiya Guide](https://transfiya.me/es/v1.104/transfers-mol/guides/how-to-send-mol).
-7. **Acreditación al usuario receptor:** La Entidad Participante receptora una vez reciba la instrucción de crédito desde Transfiya, deberá ejecutar el proceso habitual para acreditación en el usuario receptor. El flujo se detalla en [Como acreditar al beneficiario - Transfiya Guide](https://transfiya.me/es/v1.104/transfers-mol/guides/how-to-credit-receiver). 
+7. **Acreditación al usuario receptor:** La Entidad Participante receptora una vez reciba la instrucción de crédito desde Transfiya, deberá ejecutar el proceso habitual para acreditación en el usuario receptor. El flujo se detalla en [Como acreditar al beneficiario - Transfiya Guide](https://transfiya.me/es/v1.104/transfers-mol/guides/how-to-credit-receiver).
