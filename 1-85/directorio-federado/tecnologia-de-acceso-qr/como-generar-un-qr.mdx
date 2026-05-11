@@ -19,51 +19,51 @@ POST /ach/bk/v1/money-movement/qr
 
 ### Campos de Entrada:
 
-| **Campo**              | **Tipo**   | **Descripción**                                                                                                                                                | **Formato**                          | **Obligatorio** |
-| ---------------------- | ---------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------ | --------------- |
-| **meta**               | **object** |                                                                                                                                                                |                                      | **SI**          |
-| requestId              | uuid       | Código generado por la entidad participante para identificar la solicitud                                                                                      | a1b2c3d4-e5f6-7890-abcd-ef1234567890 | SI              |
-| timestamp              | time       | Fecha y hora de la solicitud de generación del código QR                                                                                                       | 2025-12-23T18:16:35.099Z             | SI              |
-| version                | string     | Versión del esquema. Enviar siempre el valor **"1.0"**                                                                                                         | 1.0                                  | SI              |
-| **data**               | **object** |                                                                                                                                                                |                                      | **SI**          |
-| movementType           | enum       | Tipo de operación. Valores válidos: **QR(Generación, Atualización de estado), QRVALIDATE(Validación), QRPARSER(Lectura)**                                      | QR                                   | SI              |
-| **amountInformation**  | **object** |                                                                                                                                                                |                                      | **SI**          |
-| amount                 | decimal    | Valor de la transacción con dos decimales                                                                                                                      | 100.00 / 100.85 / 100.05 / 200.50    | SI              |
-| currency               | string     | Código de moneda. Enviar siempre **"COP"**                                                                                                                     | COP                                  | SI              |
-| **target**             | **object** |                                                                                                                                                                |                                      | **SI**          |
-| personType             | enum       | Tipo de persona destino. Valores válidos: **NATURAL, LEGAL**                                                                                                   | NATURAL                              | SI              |
-| merchantCode           | string     | Código del comercio destino. Para persona jurídica según estándar ISO 18245                                                                                    | Min 1 - Máx 20                       | NO              |
-| fullName               | string     | Nombre completo del destino cuando es persona natural                                                                                                          | Min 1 - Máx 25                       | NO              |
-| businnesName           | string     | Nombre del comercio o razón social cuando personType = "LEGAL"                                                                                                 | Min 1 - Máx 25                       | NO              |
-| **location**           | **object** |                                                                                                                                                                |                                      | **SI**          |
-| city                   | string     | Código de ciudad asociada a la persona, comercio o negocio (Código Divipola - DANE)                                                                            | Min 1 - Máx 20                       | SI              |
-| postalCode             | string     | Código postal de la persona, comercio o negocio                                                                                                                | Min 1 - Máx 10                       | SI              |
-| **alias**              | **object** |                                                                                                                                                                |                                      | **SI**          |
-| aliasType              | enum       | Tipo de llave del destino. Valores válidos: **PHONE, ALPHANUM, EMAIL, NRIC, MERCHANTCODE**                                                                     | PHONE                                | NO              |
-| aliasValue             | string     | Valor de la llave de identificación. Según el formato regulado Bre-b                                                                                           | Min 1 - Máx 92                       | NO              |
-| **purposeInformation** | **object** |                                                                                                                                                                |                                      | **SI**          |
-| transactionPurpose     | enum       | Motivo de la transacción. Valores válidos: **COMPRAS, ANULACIONES, TRANSFERENCIAS, RETIRO, RECAUDO, RECARGAS, DEPOSITO**                                       | TRANSFERENCIAS                       | SI              |
-| **useCaseInformation** | **object** |                                                                                                                                                                |                                      | **SI**          |
-| qrType                 | enum       | Tipo de QR. Valores válidos: **STATIC, DYNAMIC**                                                                                                               | DYNAMIC                              | SI              |
-| categoryCode           | string     | Categoría del comercio destino<br />Si el campo personType = "LEGAL", el valor de este campo debe ser diferente de 0000 y va de acuerdo al estándar ISO 18245. | Min 1 - Máx 4                        | SI              |
-| terminal               | string     | Terminal asociada al comercio destino                                                                                                                          | Min 1 - Máx 25                       | SI              |
-| vat                    | decimal    | Valor del IVA con dos decimales<br />Este campo es obligatorio, si el campo personType = "LEGAL"                                                               | Min 1 - Máx 13                       | COND            |
-| vatBase                | decimal    | Base del IVA con dos decimales<br />Este campo es obligatorio, si el campo personType = "LEGAL"                                                                | Min 1 - Máx 13                       | COND            |
-| tax                    | decimal    | Valor del impuesto INC con dos decimales<br />Este campo es obligatorio, si el campo personType = "LEGAL"                                                      | Min 1 - Máx 13                       | COND            |
-| channel                | enum       | Canal de origen. Valores válidos: **IM, POS, APP, ECOMM, MPOS, ATM, CB, OFC**                                                                                  | POS                                  | SI              |
+| **Campo** | **Tipo** | **Descripción** | **Formato** | **Obligatorio** |
+| --- | --- | --- | --- | --- |
+| **meta** | **object** |  |  | **SI** |
+| requestId | uuid | Código generado por la entidad participante para identificar la solicitud | a1b2c3d4-e5f6-7890-abcd-ef1234567890 | SI |
+| timestamp | time | Fecha y hora de la solicitud de generación del código QR | 2025-12-23T18:16:35.099Z | SI |
+| version | string | Versión del esquema. Enviar siempre el valor **"1.0"** | 1.0 | SI |
+| **data** | **object** |  |  | **SI** |
+| movementType | enum | Tipo de operación. Valores válidos: **QR(Generación, Atualización de estado), QRVALIDATE(Validación), QRPARSER(Lectura)** | QR | SI |
+| **amountInformation** | **object** |  |  | **SI** |
+| amount | decimal | Valor de la transacción con dos decimales | 100.00 / 100.85 / 100.05 / 200.50 | SI |
+| currency | string | Código de moneda. Enviar siempre **"COP"** | COP | SI |
+| **target** | **object** |  |  | **SI** |
+| personType | enum | Tipo de persona destino. Valores válidos: **NATURAL, LEGAL** | NATURAL | SI |
+| merchantCode | string | Código del comercio destino. Para persona jurídica según estándar ISO 18245 | Min 1 - Máx 20 | NO |
+| fullName | string | Nombre completo del destino cuando es persona natural | Min 1 - Máx 25 | NO |
+| businnesName | string | Nombre del comercio o razón social cuando personType = "LEGAL" | Min 1 - Máx 25 | NO |
+| **location** | **object** |  |  | **SI** |
+| city | string | Código de ciudad asociada a la persona, comercio o negocio (Código Divipola - DANE) | Min 1 - Máx 20 | SI |
+| postalCode | string | Código postal de la persona, comercio o negocio | Min 1 - Máx 10 | SI |
+| **alias** | **object** |  |  | **SI** |
+| aliasType | enum | Tipo de llave del destino. Valores válidos: **PHONE, ALPHANUM, EMAIL, NRIC, MERCHANTCODE** | PHONE | NO |
+| aliasValue | string | Valor de la llave de identificación. Según el formato regulado Bre-b | Min 1 - Máx 92 | NO |
+| **purposeInformation** | **object** |  |  | **SI** |
+| transactionPurpose | enum | Motivo de la transacción. Valores válidos: **COMPRAS, ANULACIONES, TRANSFERENCIAS, RETIRO, RECAUDO, RECARGAS, DEPOSITO** | TRANSFERENCIAS | SI |
+| **useCaseInformation** | **object** |  |  | **SI** |
+| qrType | enum | Tipo de QR. Valores válidos: **STATIC, DYNAMIC** | DYNAMIC | SI |
+| categoryCode | string | Categoría del comercio destino<br />Si el campo personType = "LEGAL", el valor de este campo debe ser diferente de 0000 y va de acuerdo al estándar ISO 18245. | Min 1 - Máx 4 | SI |
+| terminal | string | Terminal asociada al comercio destino | Min 1 - Máx 25 | SI |
+| vat | decimal | Valor del IVA con dos decimales | Min 1 - Máx 13 | SI |
+| vatBase | decimal | Base del IVA con dos decimales | Min 1 - Máx 13 | SI |
+| tax | decimal | Valor del impuesto INC con dos decimales | Min 1 - Máx 13 | SI |
+| channel | enum | Canal de origen. Valores válidos: **IM, POS, APP, ECOMM, MPOS, ATM, CB, OFC** | POS | SI |
 
 ### Tabla de canales:
 
-| Código | Descripción           |
-| ------ | --------------------- |
-| IM     | POS Manual            |
-| POS    | POS / PINPAD          |
-| APP    | Banca Móvil           |
-| ECOMM  | Internet              |
-| MPOS   | POS / PINPAD          |
-| ATM    | Cajero Automático     |
-| CB     | Corresponsal Bancario |
-| OFC    | Oficina               |
+| Código | Descripción |
+| --- | --- |
+| IM | POS Manual |
+| POS | POS / PINPAD |
+| APP | Banca Móvil |
+| ECOMM | Internet |
+| MPOS | POS / PINPAD |
+| ATM | Cajero Automático |
+| CB | Corresponsal Bancario |
+| OFC | Oficina |
 
 ### Reglas para los valores de tipo decimal
 
@@ -124,7 +124,6 @@ POST /ach/bk/v1/money-movement/qr
 }
 ```
 
-
 ```json Request Persona jurídica
 {
   "meta": {
@@ -170,26 +169,26 @@ POST /ach/bk/v1/money-movement/qr
 
 ### Campos de Salida
 
-| **Campo**          | **Tipo**   | **Descripción**                                                                 | **Formato**                          |
-| ------------------ | ---------- | ------------------------------------------------------------------------------- | ------------------------------------ |
-| **meta**           | **object** |                                                                                 |                                      |
-| requestId          | uuid       | Código generado por la entidad participante para identificar el paquete         | a1b2c3d4-e5f6-7890-abcd-ef1234567890 |
-| timestamp          | datetime   | Fecha y hora de la respuesta a la solicitud de generación del código QR         | 2025-12-23T18:16:35.099Z             |
-| status             | enum       | Estado de la respuesta. Valores: **SUCCESS, ERROR**                             | SUCCESS                              |
-| statusCode         | string     | Código HTTP de la respuesta                                                     | 200                                  |
-| statusDesc         | string     | Descripción del código HTTP                                                     | OK                                   |
-| **data**           | **object** |                                                                                 |                                      |
-| id                 | uuid       | Identificador único del QR en el sistema                                        | a1b2c3d4-e5f6-7890-abcd-ef1234567890 |
-| qrCode             | string     | Cadena de texto en formato EMVCo (TLV) que contiene el código QR generado       | Cadena TLV                           |
-| creationDateTime   | datetime   | Fecha y hora en la que se generó el QR                                          | 2025-12-23T18:16:35.099Z             |
-| qrStatus           | enum       | Estado actual del QR: **HABILITADO, INHABILITADO, CANCELADO, PAGADO, EXPIRADO** | HABILITADO                           |
-| movementType       | enum       | Tipo de operación. Valores: **QR, QRVALIDATE, QRPARSER**                        | QR                                   |
-| duration           | integer    | Vigencia del QR. Indica el tiempo durante el cual el QR es válido               | 5                                    |
-| expirationDateTime | datetime   | Fecha y hora de expiración del QR (ISO 8601, UTC-0 con “Z”)                     | 2025-12-23T18:16:35.099Z             |
-| imageB64           | string     | Imagen del QR en base 64                                                        | Binario de la imagen                 |
-| **error**          |            |                                                                                 |                                      |
-| code               | integer    | Código del error (cero si no hay errores)                                       | 1005                                 |
-| message            | string     | Mensaje de error (vacío si no hay errores)                                      | Fallas técnicas                      |
+| **Campo** | **Tipo** | **Descripción** | **Formato** |
+| --- | --- | --- | --- |
+| **meta** | **object** |  |  |
+| requestId | uuid | Código generado por la entidad participante para identificar el paquete | a1b2c3d4-e5f6-7890-abcd-ef1234567890 |
+| timestamp | datetime | Fecha y hora de la respuesta a la solicitud de generación del código QR | 2025-12-23T18:16:35.099Z |
+| status | enum | Estado de la respuesta. Valores: **SUCCESS, ERROR** | SUCCESS |
+| statusCode | string | Código HTTP de la respuesta | 200 |
+| statusDesc | string | Descripción del código HTTP | OK |
+| **data** | **object** |  |  |
+| id | uuid | Identificador único del QR en el sistema | a1b2c3d4-e5f6-7890-abcd-ef1234567890 |
+| qrCode | string | Cadena de texto en formato EMVCo (TLV) que contiene el código QR generado | Cadena TLV |
+| creationDateTime | datetime | Fecha y hora en la que se generó el QR | 2025-12-23T18:16:35.099Z |
+| qrStatus | enum | Estado actual del QR: **HABILITADO, INHABILITADO, CANCELADO, PAGADO, EXPIRADO** | HABILITADO |
+| movementType | enum | Tipo de operación. Valores: **QR, QRVALIDATE, QRPARSER** | QR |
+| duration | integer | Vigencia del QR. Indica el tiempo durante el cual el QR es válido | 5 |
+| expirationDateTime | datetime | Fecha y hora de expiración del QR (ISO 8601, UTC-0 con “Z”) | 2025-12-23T18:16:35.099Z |
+| imageB64 | string | Imagen del QR en base 64 | Binario de la imagen |
+| **error** |  |  |  |
+| code | integer | Código del error (cero si no hay errores) | 1005 |
+| message | string | Mensaje de error (vacío si no hay errores) | Fallas técnicas |
 
 <CodeGroup>
 
@@ -215,7 +214,6 @@ POST /ach/bk/v1/money-movement/qr
 }
 ```
 
-
 ```json Response Error 400
 {
   "meta": {
@@ -231,7 +229,6 @@ POST /ach/bk/v1/money-movement/qr
   }
 }
 ```
-
 
 ```json Response Error 500
 {
