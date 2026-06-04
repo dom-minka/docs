@@ -20,12 +20,12 @@ Para soportar los modelos de transferencia en Transfiya para Empresas, es necesa
 
 A continuación se listan los tipos de cuenta reconocidos en Transfiya:
 
-| Nombre                        | Valor  |
-| ----------------------------- | ------ |
-| Cuenta de ahorros             | `svgs` |
-| Cuenta corriente              | `cacc` |
-| Depósito de bajo monto        | `dbmo` |
-| Depósito ordinario            | `dord` |
+| Nombre | Valor |
+| --- | --- |
+| Cuenta de ahorros | `svgs` |
+| Cuenta corriente | `cacc` |
+| Depósito de bajo monto | `dbmo` |
+| Depósito ordinario | `dord` |
 | Depósito inclusivo bajo monto | `dbmi` |
 
 <Tip>
@@ -58,131 +58,131 @@ Esta diferencia impacta directamente en los tiempos de procesamiento y en la ló
   <Tab title="Flujo con Signer Registrado">
     ```mermaid
     sequenceDiagram
-      autonumber
-      participant sb as Banco Origen
-      participant ty as Transfiya
-      participant tb as Banco Destino
-    
-      sb ->>+ ty: Crear transferencia
-      ty ->> ty: Validar reglas de negocio
-      ty -->>- sb: Transferencia creada
-    
-      alt Débito (asíncrono)
-        ty ->>+ sb: Llamar a débito
-        sb ->> sb: Procesar débito
-        sb ->> -ty: Continuar transferencia
-      end
-    
-      ty ->> ty: Resolver firmante destino
-      ty ->> ty: Aceptar transferencia
-    
-      alt Acción (síncrona)
-        ty ->>+ sb: Llamar a acción
-        sb ->> sb: Procesar acción
-        sb -->>- ty: Respuesta de acción
-      end
-    
-      alt Crédito (asíncrono)
-        ty ->>+ tb: Llamar a crédito
-        tb ->> tb: Procesar crédito
-        tb ->> tb: Firma con Signer Registrado
-        tb ->> -ty: Continuar transferencia
-      end
-    
-      ty ->>+ sb: Consultar estado
-      sb -->>- ty: Respuesta de estado
-    
-      ty ->>+ tb: Consultar estado
-      tb -->>- ty: Respuesta de estado
+  autonumber
+  participant sb as Banco Origen
+  participant ty as Transfiya
+  participant tb as Banco Destino
+
+  sb ->>+ ty: Crear transferencia
+  ty ->> ty: Validar reglas de negocio
+  ty -->>- sb: Transferencia creada
+
+  alt Débito (asíncrono)
+    ty ->>+ sb: Llamar a débito
+    sb ->> sb: Procesar débito
+    sb ->> -ty: Continuar transferencia
+  end
+
+  ty ->> ty: Resolver firmante destino
+  ty ->> ty: Aceptar transferencia
+
+  alt Acción (síncrona)
+    ty ->>+ sb: Llamar a acción
+    sb ->> sb: Procesar acción
+    sb -->>- ty: Respuesta de acción
+  end
+
+  alt Crédito (asíncrono)
+    ty ->>+ tb: Llamar a crédito
+    tb ->> tb: Procesar crédito
+    tb ->> tb: Firma con Signer Registrado
+    tb ->> -ty: Continuar transferencia
+  end
+
+  ty ->>+ sb: Consultar estado
+  sb -->>- ty: Respuesta de estado
+
+  ty ->>+ tb: Consultar estado
+  tb -->>- ty: Respuesta de estado
     ```
   </Tab>
   <Tab title="Flujo sin Signer Registrado">
     ```mermaid
     sequenceDiagram
-      autonumber
-      participant sb as Banco Origen
-      participant ty as Transfiya
-      participant tb as Banco Destino
-    
-      sb ->>+ ty: Crear transferencia
-      ty ->> ty: Validar reglas de negocio
-      ty -->>- sb: Transferencia creada
-    
-      alt Débito (asíncrono)
-        ty ->>+ sb: Llamar a débito
-        sb ->> sb: Procesar débito
-        sb ->> -ty: Continuar transferencia
-      end
-    
-      ty ->> ty: Resolver firmante destino
-    
-      alt Onboarding (asíncrono)
-        ty ->>+ tb: Consultar estado (PENDING)
-        tb -->> ty: Confirmar recepción
-        tb ->> tb: Validar cuenta
-        tb ->>+ ty: Crear firmante
-        ty -->>- tb: Respuesta de creación
-        tb ->> -ty: Aceptar transferencia
-      end
-    
-      alt Acción (síncrona)
-        ty ->>+ sb: Llamar a acción
-        sb ->> sb: Procesar acción
-        sb -->>- ty: Respuesta de acción
-      end
-    
-      alt Crédito (asíncrono)
-        ty ->>+ tb: Llamar a crédito
-        tb ->> tb: Procesar crédito
-        tb ->> -ty: Continuar transferencia
-      end
-    
-      ty ->>+ sb: Consultar estado
-      sb -->>- ty: Respuesta de estado
-    
-      ty ->>+ tb: Consultar estado
-      tb -->>- ty: Respuesta de estado
+  autonumber
+  participant sb as Banco Origen
+  participant ty as Transfiya
+  participant tb as Banco Destino
+
+  sb ->>+ ty: Crear transferencia
+  ty ->> ty: Validar reglas de negocio
+  ty -->>- sb: Transferencia creada
+
+  alt Débito (asíncrono)
+    ty ->>+ sb: Llamar a débito
+    sb ->> sb: Procesar débito
+    sb ->> -ty: Continuar transferencia
+  end
+
+  ty ->> ty: Resolver firmante destino
+
+  alt Onboarding (asíncrono)
+    ty ->>+ tb: Consultar estado (PENDING)
+    tb -->> ty: Confirmar recepción
+    tb ->> tb: Validar cuenta
+    tb ->>+ ty: Crear firmante
+    ty -->>- tb: Respuesta de creación
+    tb ->> -ty: Aceptar transferencia
+  end
+
+  alt Acción (síncrona)
+    ty ->>+ sb: Llamar a acción
+    sb ->> sb: Procesar acción
+    sb -->>- ty: Respuesta de acción
+  end
+
+  alt Crédito (asíncrono)
+    ty ->>+ tb: Llamar a crédito
+    tb ->> tb: Procesar crédito
+    tb ->> -ty: Continuar transferencia
+  end
+
+  ty ->>+ sb: Consultar estado
+  sb -->>- ty: Respuesta de estado
+
+  ty ->>+ tb: Consultar estado
+  tb -->>- ty: Respuesta de estado
     ```
   </Tab>
   <Tab title="Flujo con Signer Genérico">
     ```mermaid
     sequenceDiagram
-      autonumber
-      participant sb as Banco Origen
-      participant ty as Transfiya
-      participant tb as Banco Destino
-    
-      sb ->>+ ty: Crear transferencia
-      ty ->> ty: Validar reglas de negocio
-      ty -->>- sb: Transferencia creada
-    
-      alt Débito (asíncrono)
-        ty ->>+ sb: Llamar a débito
-        sb ->> sb: Procesar débito
-        sb ->> -ty: Continuar transferencia
-      end
-    
-      ty ->> ty: Resolver signer genérico
-      ty ->> ty: Aceptar transferencia
-    
-      alt Acción (síncrona)
-        ty ->>+ sb: Llamar a acción
-        sb ->> sb: Procesar acción
-        sb -->>- ty: Respuesta de acción
-      end
-    
-      alt Crédito (asíncrono)
-        ty ->>+ tb: Llamar a crédito
-        tb ->> tb: Procesar crédito
-        tb ->> tb: Firma con Signer Genérico
-        tb ->> -ty: Continuar transferencia
-      end
-    
-      ty ->>+ sb: Consultar estado
-      sb -->>- ty: Respuesta de estado
-    
-      ty ->>+ tb: Consultar estado
-      tb -->>- ty: Respuesta de estado
+  autonumber
+  participant sb as Banco Origen
+  participant ty as Transfiya
+  participant tb as Banco Destino
+
+  sb ->>+ ty: Crear transferencia
+  ty ->> ty: Validar reglas de negocio
+  ty -->>- sb: Transferencia creada
+
+  alt Débito (asíncrono)
+    ty ->>+ sb: Llamar a débito
+    sb ->> sb: Procesar débito
+    sb ->> -ty: Continuar transferencia
+  end
+
+  ty ->> ty: Resolver signer genérico
+  ty ->> ty: Aceptar transferencia
+
+  alt Acción (síncrona)
+    ty ->>+ sb: Llamar a acción
+    sb ->> sb: Procesar acción
+    sb -->>- ty: Respuesta de acción
+  end
+
+  alt Crédito (asíncrono)
+    ty ->>+ tb: Llamar a crédito
+    tb ->> tb: Procesar crédito
+    tb ->> tb: Firma con Signer Genérico
+    tb ->> -ty: Continuar transferencia
+  end
+
+  ty ->>+ sb: Consultar estado
+  sb -->>- ty: Respuesta de estado
+
+  ty ->>+ tb: Consultar estado
+  tb -->>- ty: Respuesta de estado
     ```
   </Tab>
 </Tabs>
@@ -196,6 +196,31 @@ Crear una transferencia hacia una cuenta bancaria se realiza de la misma forma q
 <Info>
   Se agregan los atributos de nombre, tipo de identificación e identificación al tipo de transferencia de cuenta a cuenta. Estos serán utilizados por la entidad receptora en caso de que decida usar su signer genérico.
 </Info>
+
+## Campos de entrada - Transfer cuenta a cuenta
+
+| Nombre | Tipo | Descripción | Longitud | Obligatorio | Condiciones adicionales y reglas |
+| --- | --- | --- | --- | --- | --- |
+| source | string | Handle del signer origen <br />ó estructura del cuenta a cuenta si se usará <br />GENERIC signer como origen | Min 1 - <br />Max 50 | SI<br /> | N/A |
+| target | string | Datos del receptor | Min 1 - Max 80 | SI | La estructura debe ser:<br />tipo de cuenta:número de cuenta@código compensación del banco receptor<br />Ej: svgs:88745145@1007<br />Los valores : y @ son fijos |
+| amount | number | Monto de la transacción | Min 1 - Max 13 | SI | Separador del decimal es punto (.)<br />Soporta 2 decimales |
+| symbol | string | Simbolo del sistema | Min 1 - Max 4 | SI | Valor estático "\$tin" |
+| labels | Object |  |  | SI | Objeto que contiene información |
+| type | string | Tipo de transacción | Min 1 - Max 4 | SI | Valo fijo "SEND" |
+| domain | string | Dominio de la transacción | Min 1 - Max 3 | SI | Valor fijo "tin" |
+| description | string | Descripción | Min 1 - Max 80 | NO | N/A |
+| sourceChannel | string | Canal origen de la transacción | Min 1 - Max 3 | SI | Soporta: IM, POS, APP, WEB, ECOMM, ATM, PSE |
+| tx\_id | string | Identificación de la transferencia | Min 1 - Max 36 | NO | Identificador asignado por la Entidad Originadora |
+| transactionPurpose | string | Propósito de la transferencia | Min 1 - Max 13 | SI | Valor fijo "TRANSFER" |
+| source | Object |  |  | SI | Objeto que contiene información |
+| name | string | Nombre del originador | Min 1 Max 160 | SI | Nombre o razón social |
+| proprietary | string | Tipo de documento del originador | Min 1 - Max 4 | SI | Soporta: CC,CE,PA,TI,NUIP,NIT,OTR,PPT,PEP<br />En mayúscula |
+| identification | string | Número de identificación del originador | Min 1 Max 34 | SI | Cuando el tipo de documento es NIT, el valor es sin<br />digito de verificación y sin guion. |
+| target | Object |  |  | SI | Objeto que contiene información |
+| name | string | Nombre del beneficiario | Min 1 Max 160 | SI | Nombre o razón social |
+| proprietary | string | Tipo de documento del beneficiario | Min 1 - Max 4 | SI | Soporta: CC,CE,PA,TI,NUIP,NIT,OTR,PPT,PEP<br />En mayúscula |
+| identification | string | Número de identificación del beneficiario | Min 1 Max 34 | SI | Cuando el tipo de documento es NIT, el valor es sin<br />digito de verificación y sin guion. |
+| deviceFingerPrint | string |  |  | NO | Objeto que contiene información del dispositivo origen<br />Se envia el objeto y el campo si se logra capturar información del <br />dispostivo origen |
 
 <Tabs>
   <Tab title="Request">
@@ -320,9 +345,7 @@ Crear una transferencia hacia una cuenta bancaria se realiza de la misma forma q
 En los flujos de transferencia **cuenta a cuenta**, es posible que la cuenta destino no tenga un _signer_ activo en el sistema. En ese caso, **`Transfiya invoca automáticamente el endpoint /credit de la entidad receptora`**, utilizando un _signer genérico_. Este mecanismo permite acreditar fondos incluso cuando el usuario aún no ha sido registrado formalmente.
 
 <Info>
-  Para que esta funcionalidad funcione correctamente, la entidad receptora debe haber creado previamente un <strong>signer genérico</strong>
-   . Puedes revisar cómo hacerlo en la sección de <a href="./how-to-create-generic-signer">
-   Signers Genéricos</a>
+  Para que esta funcionalidad funcione correctamente, la entidad receptora debe haber creado previamente un <strong>signer genérico</strong> . Puedes revisar cómo hacerlo en la sección de 
 
   .
 </Info>
@@ -339,8 +362,7 @@ Transfiya envía al endpoint `/credit` toda la información necesaria que la ent
 - `bankId`: Identificador del banco (BICFI)
 
 <Warning>
-  Solo deben implementar este proceso aquellas entidades que <strong>no hayan implementado el onboarding automático</strong>
-   para transferencias cuenta a cuenta y hayan configurado previamente un signer genérico.
+  Solo deben implementar este proceso aquellas entidades que <strong>no hayan implementado el onboarding automático</strong> para transferencias cuenta a cuenta y hayan configurado previamente un signer genérico.
 </Warning>
 
 ### 🧪 Ejemplo del endpoint `/credit`
