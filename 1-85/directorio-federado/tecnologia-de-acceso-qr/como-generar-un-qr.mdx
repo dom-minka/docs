@@ -32,7 +32,7 @@ POST /ach/bk/v1/money-movement/qr
 | currency | string | Código de moneda. Enviar siempre **"COP"** | COP | SI |
 | **target** | **object** |  |  | **SI** |
 | personType | enum | Tipo de persona destino. Valores válidos: **NATURAL, LEGAL** | NATURAL | SI |
-| merchantCode | string | Código del comercio destino. Para persona jurídica según estándar ISO 18245 | Min 1 - Máx 20 | NO |
+| merchantCode | string | Código del comercio destino. Para persona jurídica según estándar ISO 18245<br />Si aliasValue y aliasType están vacios, este campo es obligatorio. | Min 1 - Máx 20 | NO |
 | fullName | string | Nombre completo del destino cuando es persona natural | Min 1 - Máx 25 | NO |
 | businnesName | string | Nombre del comercio o razón social cuando personType = "LEGAL" | Min 1 - Máx 25 | NO |
 | **location** | **object** |  |  | **SI** |
