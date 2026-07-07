@@ -105,5 +105,51 @@ El sistema de la entidad debe generar un **par de llaves criptográficas** que s
 
 Ambas llaves se generan con estandares modernos de seguridad **Eddsa25519 - Ecdsa25519,** que es uno de los algoritmos más rápidos y seguros actualmente utilizados para firmas digitales.
 
-Una vez generadas, las dos llaves se convierten a un formato de texto (una cadena de caracteres en formato hexadecimal) para que puedan almacenarse o transmitirse fácilmente dentro del sistema.\
-\
+Una vez generadas, las dos llaves se convierten a un formato de texto (una cadena de caracteres en formato hexadecimal) para que puedan almacenarse o transmitirse fácilmente dentro del sistema.
+
+**Ejemplo generación de keepers en java**
+
+```json
+import java.security.KeyPair;
+import net.i2p.crypto.eddsa.EdDSAPrivateKey;
+import net.i2p.crypto.eddsa.EdDSAPublicKey;
+import net.i2p.crypto.eddsa.KeyPairGenerator;
+import net.i2p.crypto.eddsa.Utils;
+public class KeeperDto {
+    private String publicKey;
+    private String secretKey;
+    private String scheme = "eddsa-ed25519";
+    public KeeperDto() {
+        this.publicKey = "";
+        this.secretKey = "";
+    }
+    public KeeperDto(String publicKey, String secretKey) {
+        this.publicKey = publicKey;
+        this.secretKey = secretKey;
+    }
+    public static KeeperDto GenerateKeys() {
+        KeyPairGenerator keyPairGenerator = new KeyPairGenerator();
+        KeyPair keyPair = keyPairGenerator.generateKeyPair();
+        EdDSAPublicKey publicKey = (EdDSAPublicKey) keyPair.getPublic();
+        EdDSAPrivateKey secretKey = (EdDSAPrivateKey) keyPair.getPrivate();
+        String publicKeyHexStr = Utils.bytesToHex(publicKey.getA().toByteArray());
+        String secretKeyHexStr = Utils.bytesToHex(secretKey.getSeed());
+        return new KeeperDto(publicKeyHexStr, secretKeyHexStr);
+    }
+    public void setPublicKey(String publicKey) {
+        this.publicKey = publicKey;
+    }
+    public String getPublicKey() {
+        return this.publicKey;
+    }
+    public void setSecretKey(String secretKey) {
+        this.secretKey = secretKey;
+    }
+    public String getSecretKey() {
+        return this.secretKey;
+    }
+    public String getScheme() {
+        return this.scheme;
+    }
+}
+```
