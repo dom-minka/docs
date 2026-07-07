@@ -3,9 +3,7 @@ title: "Cómo Firmar Acciones"
 icon: "key"
 ---
 
-**Firmado de Acciones:**
-
-** **El sistema a de la entidad deberá realizar el firmado de las acciones (Upload, Download, SEND, SENDMOL, Withdraw y Claim) generando un hash y enviandolo al siguiente endpoint de Tranfiya **POST /v1/action/:action\_id/sendit**
+**Firmado de Acciones:** El sistema de la entidad deberá realizar el firmado de las acciones (Upload, Download, SEND, SENDMOL, Withdraw y Claim) generando un hash y enviandolo al siguiente endpoint de Tranfiya **POST /v1/action/:action\_id/sendit**
 
  **Ejemplo**: \
 
@@ -59,11 +57,11 @@ icon: "key"
 
  **Proceso de firma:**
 
-- **Preparar el data**\
+- **Preparar la data**\
   Arma el objeto data con los campos acordados (amount, domain, expiry, random, source, symbol, target).
   - **Importante**: normaliza expiry a **UTC con Z** (ej. "2026-02-13T15:32:43.701Z").
-- **Convertir data a JSON canónico**\
-  Serializa data a JSON **determinístico**:
+- **Convertir la data a JSON canónico**\
+  Serializa la data a JSON **determinístico**:
   - **Claves ordenadas alfabéticamente**.
   - **Sin espacios extra** (separators (",", ":")).
   - **Mismos tipos** (ej. amount como _string_ si así lo usas).
@@ -87,7 +85,7 @@ icon: "key"
 
 **Generación de Kepers:**
 
- Las keepers son un par de llaves (pública y privada) utilizadas para crear los signers dentro del servicio y firmar las distintas acciones durante el flujo; para crear las keepers se deberán tener en cuenta las siguientes condiciones dependiendo del lenguaje utilizado:
+Las keepers son un par de llaves (pública y privada) utilizadas para crear los signers dentro del servicio y firmar las distintas acciones durante el flujo; para crear las keepers se deberán tener en cuenta las siguientes condiciones dependiendo del lenguaje utilizado:
 
 <Frame>
   ![Image](/images/image-4.png)
