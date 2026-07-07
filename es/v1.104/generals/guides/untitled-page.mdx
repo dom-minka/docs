@@ -1,3 +1,111 @@
 ---
 title: "Cómo Firmar Acciones"
+icon: "key"
 ---
+
+**Firmado de Acciones:**
+
+** **El sistema a de la entidad deberá realizar el firmado de las acciones (Upload, Download, SEND, SENDMOL, Withdraw y Claim) generando un hash y enviandolo al siguiente endpoint de Tranfiya **POST /v1/action/:action\_id/sendit**
+
+ **Ejemplo**: \
+
+```json
+{
+  "hash": {
+    "types": "sha256:sha256",
+    "steps": "stringify:data",
+    "value": "9f30b856fa06d1f65e9695dcb89302e9ad742cf044a88708a514af2befd2ecc4"
+  },
+  "data": {
+    "amount": "25000.00",
+    "domain": "tin",
+    "expiry": "2026-02-24T15:21:02.742Z",
+    "random": "c83c4326fe0a64dd40f9",
+    "source": "whPHgQnXAXSvk61KwpnNdhE2JuWD97Abqy",
+    "symbol": "wMxKCAzsQBiUURDU3xD3xuSbVo1S9jmf3d",
+    "target": "wRRsRi4j2G15bwMuBqsYw5dpRywhECHVXL"
+  },
+  "meta": {
+    "signatures": [
+      {
+        "scheme": "eddsa-ed25519",
+        "signer": "whPHgQnXAXSvk61KwpnNdhE2JuWD97Abqy",
+        "public": "b8c7cb10858c4ef77f1cf53c0b94aa7ab5e749b4e8973b7a9770e46d766911cd",
+        "string": "fb38f001f82201b4430b8d0c3b180547109ebbffabf2eb2ce8a850fab3bf1fc0efc0487fc8dd2ece495fa597e152e5816f81891304813025a582e6788f7b020a"
+      }
+    ]
+  }
+}
+
+ 
+```
+
+| **Objeto** | **Campo** | **Descripción** | **Valor** |
+| :-- | :-- | :-- | :-- |
+| **hash** | types | Algoritmo(s) usados para calcular el hash final del contenido. | "sha256:sha256" |
+| steps | Método o procedimiento aplicado para preparar los datos antes del hash. | "stringify:data" |
+| value | Resultado del doble proceso de hashing aplicado al objeto data serializado en orden alfabetico. | string hexadecimal de 64 caracteres (SHA‑256 = 32 bytes). |
+| **data** | amount | Monto exacto de la operación expresado como texto decimal. | Obtener de (action.amount) |
+| domain | Identificador del entorno o sistema donde se genera la firma. | "tin" |
+| expiry | Momento límite en que la firma deja de ser válida. | Hora actual \+ 1 minuto en formato ISO8601, ejemplo "2021-11-03T13:50:41.431Z" |
+| random | Nonce - valor único aleatorio usado para evitar reutilización de firmas. | string en hex o base64 |
+| source | Signer del origen que inicia la operación. | Signer de banco / usuario |
+| symbol | Signer del sistema Transfiya | Obtener de (action.snapshot.symbol.signer.handle) |
+| target | Signer del destino afectado por la operación. | Signer de banco / usuario |
+| **meta (signatures)** | scheme | Algoritmo criptográfico utilizado para firmar. | eddsa25519 - ecdsa25519 |
+| signer | Signer del firmante que generó la firma. | Signer de banco / usuario |
+| public | Clave pública asociada al firmante para verificar la firma. | Llave publica del signer |
+| string | Firma digital generada a partir del hash final. | Firma digital |
+
+ **Proceso de firma:**
+
+- **Preparar el data**\
+  Arma el objeto data con los campos acordados (amount, domain, expiry, random, source, symbol, target).
+  - **Importante**: normaliza expiry a **UTC con Z** (ej. "2026-02-13T15:32:43.701Z").
+- **Convertir data a JSON canónico**\
+  Serializa data a JSON **determinístico**:
+  - **Claves ordenadas alfabéticamente**.
+  - **Sin espacios extra** (separators (",", ":")).
+  - **Mismos tipos** (ej. amount como _string_ si así lo usas).
+- **Calcular hash.value (doble SHA‑256)**
+  - **Hash #1** = SHA256( UTF‑8(canonical\_json) ) → (hex).
+  - **Hash #2** = SHA256( bytes.fromhex(Hash #1) ) → (hex).\
+    El **Hash #2** es tu hash.value.
+- **Firmar hash.value**
+  - Convierte hash.value (hex) a **bytes**.
+  - Firma **esos bytes** con **Ed25519 _prehash_ (Ed25519ph)** usando tu **secretKey** (seed Ed25519 de 32 bytes).
+  - Obtén la firma (64 bytes) y conviértela a **HEX (128 caracteres)**.\
+    Ese **HEX** es lo que va en **meta.signatures\[0\].string**.
+- **Armar la firma en el body**\
+  Dentro de meta.signatures\[0\]:
+  - scheme: "eddsa-ed25519"
+  - signer: data.source
+  - string: **firma HEX (128)**
+  - public: **clave pública RAW (32 bytes) en HEX (64)**, derivada de la **misma** secretKey
+
+ **Nota**: Es importante resaltar que las acciones se firman con las llaves de quien origina la petición (source)
+
+**Generación de Kepers:**
+
+ Las keepers son un par de llaves (pública y privada) utilizadas para crear los signers dentro del servicio y firmar las distintas acciones durante el flujo; para crear las keepers se deberán tener en cuenta las siguientes condiciones dependiendo del lenguaje utilizado:
+
+<Frame>
+  ![Image](/images/image-4.png)
+</Frame>
+
+El sistema de la entidad debe generar un **par de llaves criptográficas** que se usan para garantizar la seguridad y autenticidad de la información
+
+ Este proceso produce dos llaves:
+
+1. **Llave pública**
+   - Es la llave que **sí puede compartirse**
+   - Permite verificar que un mensaje o acción realmente proviene de quien dice enviarlo.
+2. **Llave secreta**
+   - Debe **protegerse y mantenerse privada**.
+   - Es la que se utiliza para **firmar digitalmente** información.
+   - Funciona como “la firma personal” del sistema.
+
+Ambas llaves se generan con estandares modernos de seguridad **Eddsa25519 - Ecdsa25519,** que es uno de los algoritmos más rápidos y seguros actualmente utilizados para firmas digitales.
+
+Una vez generadas, las dos llaves se convierten a un formato de texto (una cadena de caracteres en formato hexadecimal) para que puedan almacenarse o transmitirse fácilmente dentro del sistema.\
+\
