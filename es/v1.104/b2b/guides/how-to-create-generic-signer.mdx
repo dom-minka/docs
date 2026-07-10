@@ -9,8 +9,7 @@ icon: "address-card"
 Ahora, el Directorio Federado de Transfiya permite la creación de **signer genérico**, las cuales se utilizan en el flujo de transferencias de **cuenta a cuenta** cuando la entidad receptora **no ha implementado el proceso de onboarding automático**.
 
 <Info>
-  Estos signers permiten ejecutar transferencias sin necesidad de que el signer del receptor sea creado en tiempo real.\
-  **La entidad receptora debe registrar este signer genérico una única vez** y quedará disponible para su uso en futuras operaciones.
+  Estos signers permiten ejecutar transferencias sin necesidad de que el signer del receptor sea creado en tiempo real.<br />**La entidad receptora debe registrar este signer genérico una única vez** y quedará disponible para su uso en futuras operaciones.
 </Info>
 
 ## Ejemplo de creación de Signer
@@ -19,9 +18,9 @@ Para la creación de llaves, se utilizará la interfaz de aplicación destinada 
 
 La plataforma Transfiya utiliza tipos de signers y [esquemas dinámicos](../about/about-validations) para garantizar la integridad y consistencia de los datos en toda la plataforma. Esto incluye reglas de validación para diversos campos dentro del sistema.
 
-| Tipo signer | Schema aplicada | Descripción                                                |
-| ----------- | --------------- | ---------------------------------------------------------- |
-| `GENERIC`   | GENERIC         | Representa una signer genérico de una Entidad Participante |
+| Tipo signer | Schema aplicada | Descripción |
+| --- | --- | --- |
+| `GENERIC` | GENERIC | Representa una signer genérico de una Entidad Participante |
 
 ### Ejemplo de creación: Signer Genérico
 
@@ -82,10 +81,30 @@ A continuación se presenta un ejemplo de creación de una llave tipo 'GENERIC':
 
 ### Campos de entrada:
 
-| **Etiqueta**    | **Descripción**                                    | **Tipo** | **Longitud**                                                 | **Obligatoriedad** |
-| --------------- | -------------------------------------------------- | -------- | ------------------------------------------------------------ | ------------------ |
-| type            | Tipo de signer: GENERIC                            | Texto    | N/A                                                          | Si                 |
-| name            | Nombre para identificación                         | Texto    | 1-140 carácteres                                             | Si                 |
-| bankName        | Nombre del banco                                   | Texto    | 1-140 carácteres                                             | Si                 |
-| routerReference | Identificador de billetera del banco en Transfiya. | Texto    | 1- Máximo 34 caracteres alfanuméricos, debe comenzar con `$` | Si                 |
-| bankBicfi       | Representa el código de compensación del banco.    | Texto    | 1-Máximo 4 caracteres numéricos                              | Si                 |
+| **Etiqueta** | **Descripción** | **Tipo** | **Longitud** | **Obligatoriedad** |
+| --- | --- | --- | --- | --- |
+| type | Tipo de signer: GENERIC | Texto | N/A | Si |
+| name | Nombre para identificación | Texto | 1-140 carácteres | Si |
+| bankName | Nombre del banco | Texto | 1-140 carácteres | Si |
+| routerReference | Identificador de billetera del banco en Transfiya. | Texto | 1- Máximo 34 caracteres alfanuméricos, debe comenzar con `$` | Si |
+| bankBicfi | Representa el código de compensación del banco. | Texto | 1-Máximo 4 caracteres numéricos | Si |
+
+Con base en lo anterior, para la creación de un _signer_ de tipo **GENERIC**, donde el banco origen corresponde a **Source** y el banco destino a **Target**, se deberán crear dos _signers_ independientes entre sí. Una vez creados, ambos deberán asociarse al _wallet_ **\$Banco**, aplicando de manera estricta la configuración estándar definida para este tipo de integración.
+
+## Request:
+
+```text
+PUT https://ach-minka-stg.transferenciasinmediatas.com/v1/wallet/{{walletUser}}
+```
+
+## Body:
+
+```text
+{
+"labels": {
+"bankDomain" :"{{bankBicfi}}",
+"targetGenericSigner": "{{targetGenericSigner}}",
+"sourceGenericSigner": "{{sourceGenericSigner}}"
+}
+}
+```
