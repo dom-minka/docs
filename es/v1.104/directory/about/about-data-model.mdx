@@ -144,3 +144,42 @@ Los **campos de IVA** serán obligatorios, en la generación de QR tanto persona
 "vatBase": 0.00,
 "tax": 0.00
 ```
+
+### Logica Tag 50 QR.
+
+Con el objetivo de asegurar la correcta construcción de la llave tipo _merchant_, se establece el siguiente ajuste en la lógica de lectura:
+
+**Validación de longitud de la etiqueta (len)**
+
+**Caso 1: Longitud mayor a 30**
+
+Cuando el valor de “**len” sea mayor a 30**, se deberá aplicar la siguiente lógica:
+
+- Omitir los primeros **4 caracteres** del campo data.
+- Tomar los siguientes **10 caracteres**, los cuales conformarán la estructura de la llave tipo _merchant_.
+
+**Ejemplo:**
+
+TAG: "50"<br />len: 31<br />data: "[011000911500130013CO.COM.RBM.CU](http://011000911500130013CO.COM.RBM.CU)"
+
+**Resultado esperado (llave merchant):**
+
+0091150013
+
+**Caso 2: Longitud igual a 30**
+
+Cuando el valor de “**len” sea igual a 30**, se deberá aplicar el siguiente tratamiento:
+
+- Omitir los primeros **4 caracteres** (correspondientes a la red adquiriente).
+- El siguiente carácter será siempre **"9"**, el cual deberá ser reemplazado por **"00"**.
+- Los siguientes **8 caracteres** completarán la estructura de la llave tipo _merchant_.
+
+**Ejemplo:**
+
+TAG: "50"<br />len: 30
+
+data: “[01099389706120013CO.COM.RBM.CU](http://01099389706120013CO.COM.RBM.CU)”
+
+**Resultado esperado (llave merchant):**
+
+0038970612
