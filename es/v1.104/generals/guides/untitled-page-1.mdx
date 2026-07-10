@@ -1,0 +1,60 @@
+---
+title: "Como configurar nuevo signer de banco"
+description: "Guia configurar nuevo signer de banco"
+icon: "circle-check"
+---
+
+Para la creación del Signer tipo TROUPE a continuación, se relacionan algunas indicaciones que pueden seguir como guía:
+
+**Configuración según el estándar**
+
+El estándar define una configuración simple y específica:
+
+- _Keeper_ con esquema ecdsa-ed25519.
+- Labels limitados a identificación bancaria y enrutamiento:
+  - bankAccountNumber
+  - bankName
+  - bankBicfi
+  - routerReference
+  - description
+
+En efecto, cualquier atributo adicional queda fuera de la definición esperada.
+
+## Ejemplo Request
+
+```text
+{
+   "keeper": [
+       {
+           "scheme": "ecdsa-ed25519"
+       }
+   ],
+   "labels": {
+       "description": "SignerBank",
+       "bankAccountNumber": "{{cuenta}}",
+       "bankName": "{{bankName}}",
+       "bankBicfi": "{{bankBicfi}}",
+       "routerReference": "{{walletBank}}"
+   }
+}
+```
+
+Con base en lo anterior, se debe crear el signer tipo **TROUPE **y asociarlo al wallet **\$Banco** aplicando estrictamente la configuración estándar descrita.
+
+## Request:
+
+```json
+PUT https://ach-minka-stg.transferenciasinmediatas.com/v1/wallet/{{walletUser}}
+```
+
+## Body:
+
+```json
+{ 
+
+"signer": [ "{{newsigneruser}}" ], 
+
+"default": "{{newsigneruser}}" 
+
+}
+```
