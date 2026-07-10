@@ -1,13 +1,12 @@
 ---
-title: 'Modelo de datos'
-description: 'Descripción detallada sobre el modelo de datos en Transfiya'
-icon: 'table'
+title: "Modelo de datos"
+description: "Descripción detallada sobre el modelo de datos en Transfiya"
+icon: "table"
 ---
 
 ## Modelo de data
 
-La mayoría de los campos establecidos en la regulación ya están siendo registrados en Transfiya.
-El modelo de datos detallado con las diferencias se puede encontrar a continuación:
+La mayoría de los campos establecidos en la regulación ya están siendo registrados en Transfiya. El modelo de datos detallado con las diferencias se puede encontrar a continuación:
 
 | Nombre | Transfiya | Requerido | Condición | Tipo | Validación | Comentario |
 | --- | --- | --- | --- | --- | --- | --- |
@@ -62,8 +61,6 @@ Ejemplo y validaciones de alias label (`labels.aliasValue`):
 | Número de documento | `PR5002499` | Mínimo 3 y máximo 18 caracteres alfanuméricos, no se permiten caracteres especiales. | El número de identificación del documento debe ser único en el sistema, incluso si se repite en Colombia. |
 | ID de comerciante | `0012345678` | Comienza con `00` y tiene 10 dígitos en total. |  |
 
-
-
 ### Status de signers (llaves regulatorias)
 
 Signers van a incluir el estado de las llaves regulatorias asociadas a cada signer.
@@ -73,8 +70,8 @@ Los estados se manejan usando el label staus an nivel de signer (`labels.status`
 | Name | Transfiya | Regulation |
 | --- | --- | --- |
 | Active | ACTIVE | ACTV |
-| Blocked by client | SUSPENDED_BY_CLIENT | SUSP |
-| Blocked by participant | SUSPENDED_BY_PARTICIPANT | SUSB |
+| Blocked by client | SUSPENDED\_BY\_CLIENT | SUSP |
+| Blocked by participant | SUSPENDED\_BY\_PARTICIPANT | SUSB |
 | Inactive (cancelled) | INACTIVE | ICTV |
 
 ### Tipo de documento
@@ -129,3 +126,21 @@ Los campos del keeper se definen a continuación y siguen en el modelo actual:
 | --- | --- | --- | --- | --- |
 | Tipo de llave | scheme | Texto | Requerido | Uno de:`ecdsa-ed25519`, `eddsa-ed25519` |
 | Llave pública | public | Texto | Requerido | 64-130 caracteres |
+
+### Logica campo "amount" para la generación de un QR.
+
+El campo amount en la generación de códigos QR de tipo **ESTATICO**.
+
+- Este campo no debe ser enviado en la generación del QR, permitiendo que el usuario ingrese el valor a pagar.
+- En caso de ser enviado, deberá tener un valor mayor a cero (0) y el QR se considerará como **QR de tipo HÍBRIDO**.
+
+Los **campos de IVA** serán obligatorios, en la generación de QR tanto persona **Natural** como **Jurídica**.
+
+- Sus valores podrán ser **iguales o mayores a cero**, soportando **dos (2) decimales separados por punto** (Base 100).
+- Los campos deberán enviarse de la siguiente forma:
+
+```json
+"vat": 0.00,
+"vatBase": 0.00,
+"tax": 0.00
+```

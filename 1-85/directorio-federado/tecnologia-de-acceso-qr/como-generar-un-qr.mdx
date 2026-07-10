@@ -28,7 +28,7 @@ POST /ach/bk/v1/money-movement/qr
 | **data** | **object** |  |  | **SI** |
 | movementType | enum | Tipo de operación. Valores válidos: **QR(Generación, Atualización de estado), QRVALIDATE(Validación), QRPARSER(Lectura)** | QR | SI |
 | **amountInformation** | **object** |  |  | **SI** |
-| amount | decimal | Valor de la transacción con dos decimales | 100.00 / 100.85 / 100.05 / 200.50 | SI |
+| amount | decimal | Valor de la transacción con dos decimales, Este campo es opcional al generar el QR **ESTATICO**. Si no se envía, el usuario podrá ingresar el valor a pagar. Si se envía, debe ser mayor a 0 y el QR será de tipo **HÍBRIDO**. | 100.00 / 100.85 / 100.05 / 200.50 | SI |
 | currency | string | Código de moneda. Enviar siempre **"COP"** | COP | SI |
 | **target** | **object** |  |  | **SI** |
 | personType | enum | Tipo de persona destino. Valores válidos: **NATURAL, LEGAL** | NATURAL | SI |
@@ -68,10 +68,7 @@ POST /ach/bk/v1/money-movement/qr
 ### Reglas para los valores de tipo decimal
 
 <Info>
-  **Ejemplos de valores permitidos:**\
-  A: 1000.00\
-  B: 1000.85\
-  C: 1000.05
+  **Ejemplos de valores permitidos:**<br />A: 1000.00<br />B: 1000.85<br />C: 1000.05
 
   **Reglas para el dato:**
 
