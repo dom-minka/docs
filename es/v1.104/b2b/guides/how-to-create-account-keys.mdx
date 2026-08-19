@@ -10,15 +10,15 @@ La plataforma Transfiya utiliza tipos de datos y [esquemas dinámicos](../about/
 
 **Tipos de Validaciones:**
 
-| Tipo signer | Schema aplicada | Descripción                                |
-| ----------- | --------------- | ------------------------------------------ |
-| `BUSINESS`  | BUSINESS        | Representa una empresa o persona jurídica. |
+| Tipo signer | Schema aplicada | Descripción |
+| --- | --- | --- |
+| `BUSINESS` | BUSINESS | Representa una empresa o persona jurídica. |
 
 ## Sintaxis de Referencia para el campo _aliasValue_
 
 - **bankAccountType**: tipo de cuenta (en minúsculas), basado en los valores estándar de Transfiya.
 - **bankAccountNumber**: número de cuenta bancaria
-- **routerReference**: código de compensación o Bicfi válido del banco.
+- **bicfi**: código de compensación o Bicfi válido del banco.
 
 <Info>
   Este formato unificado garantiza consistencia y compatibilidad con los mecanismos de enrutamiento de Transfiya, facilitando la interoperabilidad entre participantes.
@@ -28,12 +28,12 @@ La plataforma Transfiya utiliza tipos de datos y [esquemas dinámicos](../about/
 
 A continuación se listan los tipos de cuenta reconocidos en Transfiya:
 
-| Nombre                        | Valor  |
-| :---------------------------- | :----- |
-| Cuenta de ahorros             | `svgs` |
-| Cuenta corriente              | `cacc` |
-| Depósito de bajo monto        | `dbmo` |
-| Depósito ordinario            | `dord` |
+| Nombre | Valor |
+| :-- | :-- |
+| Cuenta de ahorros | `svgs` |
+| Cuenta corriente | `cacc` |
+| Depósito de bajo monto | `dbmo` |
+| Depósito ordinario | `dord` |
 | Depósito inclusivo bajo monto | `dbmi` |
 
 <Tip>
@@ -112,14 +112,14 @@ A continuación se presenta un ejemplo de creación de una llave tipo 'BUSINESS'
 
 ### Campos de entrada:
 
-| **Etiqueta**      | **Descripción**                                               | **Tipo** | **Longitud**                                                 | **Obligatoriedad** |
-| :---------------- | :------------------------------------------------------------ | :------- | :----------------------------------------------------------- | :----------------- |
-| aliasType         | Tipo de llave: ACCOUNT                                        | Texto    | N/A                                                          | Si                 |
-| aliasValue        | Valor de la llave. Ej: svgs:44255107106500@1001               | Texto    | 1-Máximo 34 carácteres                                       | Si                 |
-| type              | Tipo de signer: BUSINESS                                      | Texto    | N/A                                                          | Si                 |
-| name              | Nombre para identificación                                    | Texto    | 1-140 carácteres                                             | Si                 |
-| proprietary       | Tipo de documento, admite: CC,CE,PA,TI,NUIP,NIT,OTR,PPT y PEP | Texto    | 1-4                                                          | Si                 |
-| identification    | Número de identificación                                      | Texto    | 1-18 carácteres                                              | Si                 |
-| bankAccountType   | Número de cuenta, admite: SVGS, TRAS,CACC,DBMO,DORD, DBMI     | Texto    | 1-4                                                          | Si                 |
-| bankAccountNumber | Número de la cuenta                                           | Texto    | 1-Máximo 34 dígitos                                          | Si                 |
-| routerReference   | Identificador de billetera del banco en Transfiya.            | Texto    | 1- Máximo 34 caracteres alfanuméricos, debe comenzar con `$` | Si                 |
+| **Etiqueta** | **Descripción** | **Tipo** | **Longitud** | **Obligatoriedad** |
+| :-- | :-- | :-- | :-- | :-- |
+| aliasType | Tipo de llave: ACCOUNT | Texto | N/A | Si |
+| aliasValue | Valor de la llave. Ej: svgs:44255107106500@1001 | Texto | 1-Máximo 34 carácteres | Si |
+| type | Tipo de signer: BUSINESS | Texto | N/A | Si |
+| name | Nombre para identificación | Texto | 1-140 carácteres | Si |
+| proprietary | Tipo de documento, admite: CC,CE,PA,TI,NUIP,NIT,OTR,PPT y PEP | Texto | 1-4 | Si |
+| identification | Número de identificación | Texto | 1-18 carácteres | Si |
+| bankAccountType | Número de cuenta, admite: SVGS, TRAS,CACC,DBMO,DORD, DBMI | Texto | 1-4 | Si |
+| bankAccountNumber | Número de la cuenta | Texto | 1-Máximo 34 dígitos | Si |
+| routerReference | Identificador de billetera del banco en Transfiya. | Texto | 1- Máximo 34 caracteres alfanuméricos, debe comenzar con `$` | Si |
