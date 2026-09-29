@@ -452,6 +452,23 @@ La entidad receptora debe procesar la acreditación utilizando únicamente los d
   Este flujo permite interoperabilidad con cuentas no registradas, mejorando la experiencia del usuario sin sacrificar seguridad ni trazabilidad.
 </Info>
 
+### Validaciones a realizar por la Entidad Receptora
+
+La Entidad Receptora será responsable de ejecutar las validaciones necesarias sobre la información recibida en cada solicitud transaccional, con el fin de garantizar la consistencia de los datos y el adecuado procesamiento de la operación.
+
+La Entidad Receptora deberá realizar las siguientes validaciones:
+
+1. **Tipo de Cuenta Receptora**
+   - Validar que el tipo de cuenta informado corresponda a un producto válido y habilitado en la Entidad.
+   - Verificar que el tipo de cuenta recibido coincida con la información registrada para el cliente.
+2. **Número de Cuenta Receptora**
+   - Validar la existencia de la cuenta informada.
+   - Verificar que la cuenta se encuentre activa y habilitada para recibir transacciones.
+3. **Número de Identificación**
+   - Validar que el número de identificación corresponda al titular del producto receptor.
+   - Verificar que el documento se encuentre registrado y asociado a la cuenta receptora informada.
+   - Confirmar la consistencia de la información de identificación de acuerdo con las reglas de negocio definidas por la Entidad.
+
 ## 🕵️ ¿Qué hacer si no tengo la información de la cuenta del receptor?
 
 En algunos casos, la entidad originadora puede no tener acceso directo al tipo y número de cuenta del cliente receptor. Para estos escenarios, Transfiya permite realizar una búsqueda utilizando alias registrados, ya sea para personas o empresas, mediante el **Directorio Federado**.
